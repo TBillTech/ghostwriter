@@ -1,2 +1,221 @@
-# ghostwriter
-Provide Background and Chapter outlines to an AI repl to iteratively automate writing a book.
+# Introduction to GhostWriter
+This project is a system for writing a novel using structured YAML logs and AI ghostwriting assistance.
+It provides a meta-prompting system and an iteration loop to generate, verify, and refine prose chapters.
+
+GhostWriter is a domain-specific writing engine with YAML as the structured source and LLM as the prose generator. The challenge is to:
+
+Feed the LLM the right context (Setting + Chapter logs).
+
+Tell the LLM what’s structural vs. what’s prose.
+
+Control emphasis (Touch-Points = must-hit beats, implicit vs. explicit).
+
+Leave room for creativity (so the LLM doesn’t just mechanically list things).
+
+## Emphasis & Importance
+
+The key to making the LLM honor the structure is hierarchy. In the instructions:
+
+Put Touch-Points at the top of the rules section (highest priority).
+
+Put continuity (Story-So-Far + Story-Relative-To) second.
+
+Put Setting third (context, but less “must do”).
+
+Put Suggestions last (soft guidance).
+
+## Iteration Loop
+
+Thu user will kick off the following iteration loop sequence (for a chapter):
+
+1. Construct prompt for next Draft (using the prompt as described in a later section), and write the next draft.
+
+2. Run a Check Prompt afterward, e.g.:
+
+Check the following prose against the "Touch-Points".  
+For each touch-point, state whether it was satisfied explicitly, implicitly, or missing.  
+Suggest improvements where missing.
+
+3. Feed that back in as suggestions, and if anything is missing, return to step 1.
+
+4. Write the the resulting draft version to the next .yaml chapter version.
+
+5. Report status and overview of changes to the User.
+
+## Meta-Prompting System
+
+Pre-processor merges Setting.yaml + Chapter.yaml → one big input.
+
+Standard prompt template applied.
+
+Post-processor checks touch-point coverage (also using a prompt template).
+
+# Architecture
+
+Instead of writing freeform prose from scratch, this system separates story elements into structured YAML files:
+
+SETTING.yaml – A declarative log of the novel’s background.
+
+CHAPTER_xx.yaml – Sequential logs for each chapter that guide prose generation.
+
+These YAML files serve as inputs to an LLM-powered ghostwriter, which produces continuous prose chapters while ensuring that key narrative elements are included.
+
+File Structure
+/project-root
+  ├── SETTING.yaml
+  ├── chapters/
+  │    ├── CHAPTER_01.yaml
+  │    ├── CHAPTER_02.yaml
+  │    └── ...
+  ├── prompts/
+  │    ├── master_prompt.md
+  |    ├── story_so_far_prompt.md
+  |    ├── story_relative_to_prompt.md
+  │    └── check_prompt.md
+  ├── iterations/
+  │    └── CHAPTER_01/
+  |         ├── story_so_far.txt
+  |         ├── story_relative_to.txt
+  |         ├── suggestions_v1.txt
+  │         ├── draft_v1.txt
+  │         ├── check_v1.txt
+  |         ├── suggestions_v2.txt 
+  │         └── draft_v2.txt
+  ├── README.md
+  └── scripts/ (Python helpers)
+
+# YAML Format
+## Setting Log (SETTING.yaml)
+```yaml
+Factoids:
+    - name: "Time Period"
+        description: "The Civil war was a time of industrialization and strained social fabrics"
+
+Scenes:
+    - name: "Battlefield"
+        description: "Rolling fields, littered with smoke and the echoes of artillery."
+
+Characters:
+    - name: "Henry"
+        traits:
+            - fearful
+            - inexperienced
+            - yearning for glory
+
+Props:
+    - name: "Bloody Shirt"
+        active: true
+        significance: "Symbol of sacrifice; implicit metaphor for courage"
+```
+
+Factoids: General statements or explanations that do not fit into the remaining categories.
+
+Scenes: Backgrounds for story action. Should usually be described indirectly (e.g. through character impressions), but some narrator expositions are allowable if it doesn't easily fit into dialog.
+
+Characters: Dialog generators with traits and personality anchors.
+
+Props: Active (interactable) or inactive (background/foreshadowing).
+
+## Chapter Log (CHAPTER_xx.yaml)
+```yaml
+Touch-Points:
+    - explicit: "Henry sees the wounded soldier with the bloody shirt"
+    - implicit: "The battlefield described only through Henry’s impressions"
+    - explicit: "The ridiculousness of shelling an entire continent"
+
+Story-So-Far: |
+    Henry has fled battle once, ashamed of his cowardice.
+
+Story-Relative-To:
+    Henry: "Haunted by his flight, eager to prove himself."
+    Battlefield: "Still chaotic, still alive with artillery."
+    Bloody Shirt: "About to be discovered."
+```
+
+Touch-Points: Mandatory beats the chapter must include.
+
+Story-So-Far: Summary of past chapters.
+
+Story-Relative-To: Contextualizes each character/scene/prop for this chapter.
+
+# Prompting System
+
+# Main Prompts
+
+1. Master Initial Prompt
+
+The Master initial prompt is constructed from the master initial prompt template at ```prompts/master_initial_prompt.md```
+
+The template has a placeholder for the SETTING.yaml, story_so_far.txt, story_relative_to.txt, the CHAPTER_xx.yaml, but does not have the most recent suggestions_v0.txt, and draft_v0.txt because this prompt is designed to write the initial v1 files to seed the following process. 
+
+2. Master Prompt
+
+The Master prompt is constructed from the master prompt template at ```prompts/master_prompt.md```
+
+The template has a placeholder for the SETTING.yaml, story_so_far.txt, story_relative_to.txt, the CHAPTER_xx.yaml, and the most recent suggestions_vn.txt, and draft_vn.txt (where n is the integer sequence number of the version being currently generated). 
+
+3. Verification Prompt 
+
+The Verification Prompt is constructed from the verification prompt template at ```prompts/check_prompt.md```.
+
+The template has a placeholder for the SETTING.yaml, CHAPTER_xx.yaml, and the predraft_v? text as generated by the master prompt.
+
+4. Story-So-Far prompt
+
+The Story-So-Far Prompt is constructed from the story-so-far template at ```prompts/story_so_far_prompt.md```.
+
+The results of this prompt will be used to create the story_so_far for the next chapter.
+
+5. Story-Relative-To prompt
+
+The Story-Relative-To Prompt is constructed from teh story-relative-to template at ```prompts/story_relative_to_prompt.md```.
+
+The results of this prompt will be used to create the story_relative_to for the next chapter.
+
+# Iteration Loop
+
+The system supports an iteration workflow. For a given Chapter_xx:
+
+EITHER: 
+1.1. Version 1 Draft Generation will use Master Initial Prompt Template ```prompts/master_initial_prompt.md```.
+
+1.2. Feed files into prompt template.
+
+1.3. Send to LLM and save output as draft_v1.txt.
+
+OR: 
+1.1. If Version N Draft Generation has already been completed, use Master Prompt Template ```prompts/master_prompt.md```.
+
+1.2. Feed files into prompt template
+
+1.3. Send to LLM and save output as draft_vn.txt, where N is the current version.
+
+Verification
+
+2.1. Verification will use ```prompts/check_prompt.md``` Prompt Template.
+
+2.2. Feed files into prompt template.
+
+2.3. Send to LLM, and save results as check_vN.txt, where N is the current version.
+
+Verification Check
+
+3.1. If Verification resulted in a "missing" case, go to step 1.1 where the check_vN will be added into a re-draft. Repeat until all touch-points are satisfied.
+
+# Future Extensions
+
+Tasks: Add a VS Code task (.vscode/tasks.json) to run the script with one click (e.g. Run Draft Generator).
+
+CodeLens / Comments: You can write custom commands to highlight missing touch-points after verification.
+
+Visualization tools (e.g. graph of character/prop interactions).
+
+Integration with GitHub Actions for automated iteration loops.
+
+# Goals
+
+Maintain creative flexibility while enforcing structural discipline.
+
+Ensure chapters are both artistically written and narratively complete.
+
+Provide a framework that scales to a full novel-length work.
