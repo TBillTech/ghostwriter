@@ -96,11 +96,25 @@ Scenes:
         description: "Rolling fields, littered with smoke and the echoes of artillery."
 
 Characters:
-    - name: "Henry"
+    - id: "henry"
+        name: "Henry"
         traits:
-            - fearful
-            - inexperienced
-            - yearning for glory
+        - fearful
+        - sentimental
+        - avoids direct confrontation
+        cadence: "short sentences with an inward stutter"
+        lexicon: "Poor, uneducated, 1860 background"
+        prefer: ["shudder", "ashamed", "light"]
+        avoid: ["cool", "awesome"]
+        mannerisms:
+        - "touches his left sleeve when unsure"
+        sample_lines:
+        - "I— I don't know if I can do it."
+        - "The light hit the field like a wound."
+        forbidden:
+        - "use military jargon beyond what's established"
+        temperature_hint: 0.25
+        max_tokens_line: 90
 
 Props:
     - name: "Bloody Shirt"
@@ -112,7 +126,7 @@ Factoids: General statements or explanations that do not fit into the remaining 
 
 Scenes: Backgrounds for story action. Should usually be described indirectly (e.g. through character impressions), but some narrator expositions are allowable if it doesn't easily fit into dialog.
 
-Characters: Dialog generators with traits and personality anchors.
+Characters: Dialog generators with traits and personality anchors.  This system works with a higher level more intelligent Director agent, which spawns off calls to individual sub-agent calls for the dialog.  The sub agents therefore need a full description of the voice, lexicon, traits, etc. for the best personality prompting. 
 
 Props: Active (interactable) or inactive (background/foreshadowing).
 
@@ -148,11 +162,21 @@ The Master initial prompt is constructed from the master initial prompt template
 
 The template has a placeholder for the SETTING.yaml, story_so_far.txt, story_relative_to.txt, the CHAPTER_xx.yaml, but does not have the most recent suggestions_v0.txt, and draft_v0.txt because this prompt is designed to write the initial v1 files to seed the following process. 
 
+This actually will output a pre-prose document with CHARACTER TEMPLATES and CHARACTER "calls" to generate dialog progressviely via an LLM.
+
 2. Master Prompt
 
 The Master prompt is constructed from the master prompt template at ```prompts/master_prompt.md```
 
 The template has a placeholder for the SETTING.yaml, story_so_far.txt, story_relative_to.txt, the CHAPTER_xx.yaml, and the most recent suggestions_vn.txt, and draft_vn.txt (where n is the integer sequence number of the version being currently generated). 
+
+This actually will output a pre-prose document with CHARACTER TEMPLATES and CHARACTER "calls" to generate dialog progressviely via an LLM.
+
+3. Polish Prose Prompt
+
+The result of the Master prompt will be processed by substituting in CHARACTER "calls" with the response from an LLM prompt.  Thus, the results might be coarse, mal-formatted, or otherwise not polished.
+
+The Polish Prose Prompt is constructed from the polish_prose_prompt template at ```prompts/polish_prose_prompt.md```.
 
 3. Verification Prompt 
 
@@ -168,7 +192,7 @@ The results of this prompt will be used to create the story_so_far for the next 
 
 5. Story-Relative-To prompt
 
-The Story-Relative-To Prompt is constructed from teh story-relative-to template at ```prompts/story_relative_to_prompt.md```.
+The Story-Relative-To Prompt is constructed from the story-relative-to template at ```prompts/story_relative_to_prompt.md```.
 
 The results of this prompt will be used to create the story_relative_to for the next chapter.
 
@@ -181,14 +205,20 @@ EITHER:
 
 1.2. Feed files into prompt template.
 
-1.3. Send to LLM and save output as draft_v1.txt.
+1.3. Send to LLM and save output as pre_draft_v1.txt.
 
 OR: 
 1.1. If Version N Draft Generation has already been completed, use Master Prompt Template ```prompts/master_prompt.md```.
 
 1.2. Feed files into prompt template
 
-1.3. Send to LLM and save output as draft_vn.txt, where N is the current version.
+1.3. Send to LLM and save output as pre_draft_vn.txt, where N is the current version.
+
+Template Substitution
+
+2.1. The program will load pre_draft_vn.txt, where N is the current version, and load in each <CHARACTER TEMPLATE> structure (see master_prompt.md for detailed structure).  Then, for each <CHARACTER> template "call", the framework will send a LLM prompt for that character to get a narrowed and accurate voice and dialog response.  The reponse will be substituted in.
+
+2.2. The program will insert the fully substituted <CHARACTER> template response text into the polish_prose_prompt template, and write the response of this prompt to the file draft_vn.txt, where N is the current version.
 
 Verification
 

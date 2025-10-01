@@ -38,19 +38,29 @@ This document outlines the tasks necessary to get the driver.py working correctl
      - `[suggestions_v?.txt]` - read most recent suggestions
      - `[check_v?.txt]` - read most recent check results
      - `[predraft_v?.txt]` - current draft being evaluated
-   - Create separate functions for each prompt type (initial, master, check, story-so-far, story-relative-to)
+     - Create separate functions for each prompt type (initial, master, polish, check, story-so-far, story-relative-to)
+     - Add support for CHARACTER TEMPLATE and CHARACTER "call" blocks emitted by the master prompts.
+         - Define a canonical block syntax and delimiters to avoid prompt injection and ensure robust parsing.
+         - Include per-character controls (cadence, lexicon, prefer/avoid, mannerisms, sample_lines, max_tokens_line, temperature_hint).
 
 6. **Implement Complete Iteration Loop**
-   - Add logic to determine if this is the first iteration (use master_initial_prompt.md) or subsequent (use master_prompt.md)
-   - Implement version numbering system (v1, v2, v3, etc.)
-   - Add automatic iteration based on verification results ("missing" touch-points trigger re-draft)
-   - Create functions for story-so-far and story-relative-to generation between chapters
+    - Add logic to determine if this is the first iteration (use master_initial_prompt.md) or subsequent (use master_prompt.md)
+    - Implement version numbering system (v1, v2, v3, etc.)
+    - Add automatic iteration based on verification results ("missing" touch-points trigger re-draft)
+    - Create functions for story-so-far and story-relative-to generation between chapters
+    - Insert a two-phase generation flow:
+      1) Generate `pre_draft_vN.txt` from master prompt containing CHARACTER TEMPLATEs and CHARACTER calls.
+      2) Execute per-character LLM calls and substitute results; then run a Polish Prose prompt to produce `draft_vN.txt`.
 
 7. **Add Missing Core Functions**
-   - `generate_story_so_far()` - uses story_so_far_prompt.md to create summary
-   - `generate_story_relative_to()` - uses story_relative_to_prompt.md for character perspectives
-   - `check_iteration_complete()` - determines if all touch-points are satisfied
-   - `get_latest_version()` - finds the highest version number for a chapter
+    - `generate_story_so_far()` - uses story_so_far_prompt.md to create summary
+    - `generate_story_relative_to()` - uses story_relative_to_prompt.md for character perspectives
+    - `check_iteration_complete()` - determines if all touch-points are satisfied
+    - `get_latest_version()` - finds the highest version number for a chapter
+    - `parse_character_blocks()` - extracts CHARACTER TEMPLATE definitions and in-text CHARACTER call sites from `pre_draft_vN.txt`.
+    - `render_character_call(character_id, call_context)` - constructs and sends a focused LLM prompt using the character’s template.
+    - `substitute_character_calls(pre_draft_text, responses)` - replaces call sites with generated dialog.
+    - `polish_prose(text)` - sends the substituted text to `polish_prose_prompt.md` and returns polished prose.
 
 8. **Improve File and Directory Management**
    - Add validation for required input files (SETTING.yaml, CHAPTER_XX.yaml)
@@ -74,6 +84,15 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - Create config.yaml for system settings (API endpoints, model parameters, retry limits)
     - Add command-line argument parsing for better CLI interface
     - Implement logging configuration for debugging and monitoring
+    - Add character-render settings (max parallel calls, per-character token/temperature caps, refusal policy if template is missing)
+    - Add safety filters for dialog substitution (max line length, allowed character set, profanity filter toggle)
+
+11a. **Add Prompt Templates for New Flow**
+    - Create `prompts/polish_prose_prompt.md` (used after substitution)
+    - Update `prompts/master_initial_prompt.md` and `prompts/master_prompt.md` to emit:
+      - A top section with all CHARACTER TEMPLATE blocks (for any characters needed in the chapter)
+      - In-line CHARACTER call placeholders in the pre-prose body
+    - Document the exact placeholder syntax in README and ensure unit tests cover parsing.
 
 ## Testing and Quality Assurance
 
@@ -83,16 +102,20 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - Test file I/O operations with temporary directories
     - Test error handling for missing files and invalid YAML
     - Test version numbering and iteration logic
+    - Test CHARACTER parsing and substitution logic (happy path and malformed blocks)
+    - Test polish step integration: given substituted text, ensure polish prompt is built and called correctly
 
 13. **Create Integration Tests**
     - Test complete workflow from YAML to draft generation (with mocked LLM)
     - Test iteration loop with simulated verification results
     - Test story-so-far and story-relative-to generation
     - Test multi-chapter workflow
+    - Test the two-phase pre-draft → substitution → polish pipeline end-to-end with a Mock LLM
 
 14. **Add Mock LLM for Testing**
     - Create MockLLM class that returns predictable responses
     - Implement different response scenarios (successful, missing touch-points, API errors)
+    - Add per-character response fixtures to simulate distinct voices/cadences
     - Use for unit testing without requiring actual API calls
 
 15. **Create Test Data**
@@ -117,6 +140,14 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - Add code comments explaining complex logic
     - Create troubleshooting guide for common issues
     - Document the prompt engineering approach
+    - Document Character Template schema and CHARACTER call syntax with examples
+    - Add a README section for the two-phase generation and how to add new characters
+
+19. **Security and Safety Considerations**
+    - Ensure `.env` is ignored (already in .gitignore) and provide `.env.example`
+    - Avoid leaking API keys in logs; redact sensitive fields in debug mode
+    - Validate CHARACTER blocks to prevent prompt injection via templates or call sites
+    - Add rate limit/backoff strategies for per-character calls; batch when possible
 
 ## Future Enhancements (Optional)
 
@@ -131,6 +162,7 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - Check for required fields in SETTING.yaml and CHAPTER files
     - Warn about potential issues (empty touch-points, missing characters)
     - Add prose quality metrics (word count, readability scores)
+    - Add style/voice conformance checks per-character (e.g., lexicon hits/misses)
 
 ## Completion Criteria
 
