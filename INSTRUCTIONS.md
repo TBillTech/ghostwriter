@@ -8,7 +8,7 @@ Follow instructions
 
 ## Next steps
 
-Focus: Work on task 1.
+Focus: Environment setup complete. Next: Start task 4–6 (LLM integration, prompt system fixes, iteration loop basics).
 
 Relevant `TODO.md` is in the project root
 Relevant `README.md` is in the project root
@@ -49,5 +49,5 @@ Relevant `README.md` is in the project root
 - If you made any code changes, update the TODO.md and check all completed tasks.
 - Update the session conversation summary at the end of TODO.md.
 - Update the README.md with any findings that appeared during the session which are worth remarking on.  Be sure to preserve any solutions to command line issues, so we don't have to repeat broken command lines in the future.
-- Update these `INSTRUCTIONS.md` by replacing the "During this Session" with a concise and simple guess for the most reasonable next steps. This should usually direct the agent to the matching section in `TODO.md`. If there is no matching section in `TODO.md`, instead add a warning.
+- Update these `INSTRUCTIONS.md` by setting "Focus" to the next actionable tasks in `TODO.md` (e.g., move from Environment Setup to Core Functionality Implementation).
 - Finally, commit all file changes.

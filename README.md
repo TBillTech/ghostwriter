@@ -219,3 +219,73 @@ Maintain creative flexibility while enforcing structural discipline.
 Ensure chapters are both artistically written and narratively complete.
 
 Provide a framework that scales to a full novel-length work.
+
+## Prerequisites
+
+- Python 3.10+ (project verified with Python 3.13)
+- Git (optional but recommended)
+
+## Installation
+
+1) Create and activate a virtual environment
+
+- Linux/macOS
+    - Create: `python3 -m venv venv`
+    - Activate: `source venv/bin/activate`
+
+- Windows (PowerShell)
+    - Create: `python -m venv venv`
+    - Activate: `venv\Scripts\Activate.ps1`
+
+2) Install dependencies
+
+- With the venv active: `pip install -r requirements.txt`
+
+3) (Optional) Configure environment variables
+
+- Create a `.env` file (use `.env.example` as a starting point) and set:
+    - `OPENAI_API_KEY=...` (required when LLM integration is implemented in later tasks)
+
+## Dependencies
+
+Runtime/testing dependencies are pinned in `requirements.txt`. Key libraries:
+
+- PyYAML — YAML loading/writing
+- openai — LLM client (to be used when core integration is implemented)
+- python-dotenv — environment variable loading from `.env`
+- pytest, pytest-mock — test framework and mocking utilities
+
+## Usage
+
+Basic CLI to generate a draft and run a check for a chapter:
+
+- Ensure you have the expected inputs: `SETTING.yaml`, a chapter file like `chapters/CHAPTER_01.yaml`, and prompt templates under `prompts/`.
+- Activate your venv, then run:
+
+```
+python scripts/driver.py chapters/CHAPTER_01.yaml v1
+```
+
+- Outputs will be written under `iterations/CHAPTER_01/` as `draft_v1.txt` and `check_v1.txt`.
+
+Notes:
+
+- The current implementation uses placeholders for LLM calls; tasks 4–8 in `TODO.md` will wire up real API usage and the full iteration loop.
+- For Windows, replace `python`/activation commands per the Installation section above.
+
+## Running Tests
+
+When tests are added (tasks 12–15), run them with:
+
+```
+pytest -q
+```
+
+## Troubleshooting
+
+- If `python` isn’t found, try `python3`.
+- If packages fail to install, upgrade tooling inside the venv:
+
+```
+python -m pip install --upgrade pip setuptools wheel
+```
