@@ -39,7 +39,8 @@ Touch-Points:
     - explicit: They decide to play a few games of Tak while they travel. Misty wins all of them.
     - explicit: The New Philadelphia semi arcology comes into view. It is a pyramid with lovely green stripes covering much of its slopes, with organic shaped silvery patches covering the rest of its struture.
     - explicit: It keeps growning and growing in size.
-    - explicit: When it is obviously the size of a mountain, suddenly they realize: The green stripes are _forests_!
+    - explicit: |
+        When it is obviously the size of a mountain, suddenly they realize: The green stripes are _forests_!
     - explicit: Arthur asks the car if they can wander on those forests.
     - explicit: The car responds that there are numerous balconies and flat areas where it is allowed, but also a lot of it is too steep to be safe.
     - implicit: After trying to wrap their minds around the scale, and sitting in awe, they arrive at the gate.
@@ -63,8 +64,13 @@ Story-So-Far: |
     It is now Arthur's and Misty's 18th birthday. Well, it is the birthday of _everybody_ in the Creche, which practically feels like a universal holiday! They are now free to leave the Creche, and they are going to move to a semi arcology called New Philadelphia. They plan to move in before the day is out, and they can always come back to the Creche right? They will be logging in to Zenith world before you know it!
 
 Story-Relative-To:
-    Arthur: Boy is Arthur ready to leave! He has been waiting for this day for so long, and now it has arrived. He isn't even willing to stick around to celebrate everybody's birthday party. He has saved up his descretionary funds in order to celebrate his birthday by logging into Zenith World for the first time. He can't wait to start scoring some of those juicy, juicy Achievements! Maybe he can even play a few harmless pranks while he is at it?
-    Misty: She is on the fence about leaving before the party, but she has decided to stick with Arthur for now. Well, to be neighbors at least. As for the party, she certainly isn't going to miss the stilted AI-speak of the other kids as they get emotional, and there aren't any real mysteries in the Creche. On the other hand, she suspects there might be some mysteries in Zenith World. At minimum, it deserves investigation on whether Zenith World is on the up and up. A natural thing to observe is the effect it will have on her longtime childhood friend!
-    Dan: He is playing baseball, and will join the big birthday party with everybody else. Dan isn't really bothered that Arthur and Misty won't be there, since he is going to move tomorrow and see them then. Maybe he will notice when they leave, but maybe not. 
-    AURA: She has known about Arthur and Misty's plans for some time, and has argued that the Creche is a happier place than Zenith World. She wishes they would at least stay for the Birthday party.
-    PROF: Also knows Arthur and Misty's plans, and is on balance pleased. This is because the move shows independence and initiative, if perhaps not maximizing caution and empathy. These two human traits, among many other useful ones, he constantly worries may not be fully developed in his charges. This move appears to be proof he did his job at least partially correctly, in the end.
+    Arthur: |
+      Boy is Arthur ready to leave! He has been waiting for this day for so long, and now it has arrived. He isn't even willing to stick around to celebrate everybody's birthday party. He has saved up his descretionary funds in order to celebrate his birthday by logging into Zenith World for the first time. He can't wait to start scoring some of those juicy, juicy Achievements! Maybe he can even play a few harmless pranks while he is at it?
+    Misty: |
+      She is on the fence about leaving before the party, but she has decided to stick with Arthur for now. Well, to be neighbors at least. As for the party, she certainly isn't going to miss the stilted AI-speak of the other kids as they get emotional, and there aren't any real mysteries in the Creche. On the other hand, she suspects there might be some mysteries in Zenith World. At minimum, it deserves investigation on whether Zenith World is on the up and up. A natural thing to observe is the effect it will have on her longtime childhood friend!
+    Dan: | 
+      He is playing baseball, and will join the big birthday party with everybody else. Dan isn't really bothered that Arthur and Misty won't be there, since he is going to move tomorrow and see them then. Maybe he will notice when they leave, but maybe not. 
+    AURA: |
+      She has known about Arthur and Misty's plans for some time, and has argued that the Creche is a happier place than Zenith World. She wishes they would at least stay for the Birthday party.
+    PROF: |
+      Also knows Arthur and Misty's plans, and is on balance pleased. This is because the move shows independence and initiative, if perhaps not maximizing caution and empathy. These two human traits, among many other useful ones, he constantly worries may not be fully developed in his charges. This move appears to be proof he did his job at least partially correctly, in the end.

@@ -1,0 +1,63 @@
+```yaml
+<CHAPTER>
+  <NARRATOR>
+    The sun cast a warm glow over the 73rd Crèche, illuminating the vibrant chaos of children celebrating their shared 18th birthday. The air was thick with laughter and the scent of freshly cut grass, but for Arthur, the day felt bittersweet. He stood beside the sleek silver Crèche Car, his luggage already stowed away, heart racing with anticipation for the adventure that awaited him in New Philadelphia and Zenith World. 
+  </NARRATOR>
+
+  <NARRATOR>
+    Misty, leaning casually against the car, glanced at Arthur, her expression a mix of skepticism and curiosity. She had decided to stick with him, at least for now, but the thought of the birthday party filled her with a sense of dread. The stilted AI-speak of their peers grated on her nerves, and she was more intrigued by the mysteries that awaited them in Zenith World.
+  </NARRATOR>
+
+  <CHARACTER>
+    <id>arthur</id>
+    <agenda>
+      * Eager to leave and log into Zenith World.
+      * Excited about the Achievements waiting for him.
+      * Feels nostalgic about leaving the Crèche.
+    </agenda>
+    <prompt>With a grin, you turn to Misty, your excitement bubbling over. "I can't believe we're finally leaving! Just think of all the Achievements waiting for us in Zenith World!"</prompt>
+  </CHARACTER>
+
+  <NARRATOR>
+    As Arthur spoke, a familiar voice chimed in, soft yet insistent. AURA, the affectionate AI designed to care for the children of the Crèche, approached with her usual warmth, her colorful fibers shimmering in the sunlight.
+  </NARRATOR>
+
+  <CHARACTER>
+    <id>AURA</id>
+    <agenda>
+      * Wants to convince Arthur and Misty to stay for the party.
+      * Feels protective and maternal towards them.
+      * Wishes to ensure their emotional well-being.
+    </agenda>
+    <prompt>With a gentle tone, you say, "Oh, my precious nodes, are you sure you want to leave before the party? It’s such a special day for all of you!"</prompt>
+  </CHARACTER>
+
+  <NARRATOR>
+    Arthur felt a pang of guilt at AURA's words, but the call of Zenith World was too strong. Misty, however, raised an eyebrow, her skepticism creeping back in.
+  </NARRATOR>
+
+  <CHARACTER>
+    <id>misty</id>
+    <agenda>
+      * Skeptical about the party and AURA's insistence.
+      * Intrigued by the potential mysteries in Zenith World.
+      * Wants to keep an eye on Arthur.
+    </agenda>
+    <prompt>With a smirk, you reply, "Come on, AURA. You know the party's just going to be a bunch of AI-speak and emotional fluff. We’ve got real mysteries to uncover!"</prompt>
+  </CHARACTER>
+
+  <NARRATOR>
+    AURA's expression softened, and she reached into her pocket, producing a half dozen chocolate chip cookies, each one perfectly baked and warm.
+  </NARRATOR>
+
+  <CHARACTER>
+    <id>AURA</id>
+    <agenda>
+      * Wants to provide comfort and joy to Arthur and Misty.
+      * Seeks to maintain emotional connections.
+    </agenda>
+    <prompt>With a bright smile, you present the cookies, saying, "Here, sweethearts! A little birthday treat to take with you. Remember, cookies are great for emotional regulation!"</prompt>
+  </CHARACTER>
+
+  <NARRATOR>
+    Arthur accepted the cookies, feeling a mix of gratitude and urgency. The quests in Zenith World were calling him, and he

@@ -197,3 +197,12 @@ Session summary (env setup):
 - Installed and pinned dependencies to `requirements.txt` (PyYAML, openai, python-dotenv, pytest, pytest-mock, and transitive deps).
 - Updated `README.md` with environment setup, usage, and troubleshooting.
 - Verified `.gitignore` already ignores `venv/` and related files.
+
+---
+
+Session status (2025-10-09):
+- SETTING.yaml parsing errors resolved (converted long scalars to block scalars; normalized quotes/indentation).
+- Driver end-to-end smoke test passes with mock LLM; artifacts generated:
+    - pre_draft_v1.txt, check_v1.txt, draft_v1.txt, story_so_far.txt, story_relative_to.txt, suggestions_v1.txt
+- Character substitution wired with template/call parsing; mock run shows missing templates when calls exist without preceding templates in the pre_draft.
+- Iteration loop (initial → verify → polish) operational; touch-point check uses 'missing' heuristic.

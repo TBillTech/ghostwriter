@@ -24,6 +24,9 @@ Relevant `README.md` is in the project root
 - Validate changes: build, run tests/linters, and report PASS/FAIL succinctly with key deltas only.
 - After ~3–5 tool calls or when editing >3 files, post a compact progress checkpoint (what changed, what’s next).
 - Use delta updates in conversation—avoid repeating unchanged plans.
+- Always run scripts and tests using the repository virtual environment:
+	- Activate first: `source venv/bin/activate` then `python ...`
+	- Or call directly: `./venv/bin/python ...`
 
 ## Prioritization
 - Prioritize items in `TODO.md` matching what we are working on during this session. If unclear, suggest small, high-impact fixes or docs/tests that clarify behavior, and get confirmation from the user. 
@@ -45,6 +48,9 @@ Relevant `README.md` is in the project root
 
 - If you made any code changes, ALWAYS run linter, and fix all errors and warnings UNLESS the prior instruction details specifically say otherwise.
 - If you made any code changes, ALWAYS run unit tests.
+- Run tests via the venv:
+	- Activated: `pytest -q`
+	- Or direct: `./venv/bin/python -m pytest -q`
 - If there are ANY unit test failures, try hard to fix them all. If this seems too difficult consult with the user and get detailed about debugging.
 - If you made any code changes, update the TODO.md and check all completed tasks.
 - Update the session conversation summary at the end of TODO.md.

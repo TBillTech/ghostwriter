@@ -56,7 +56,7 @@ Instead of writing freeform prose from scratch, this system separates story elem
 
 SETTING.yaml – A declarative log of the novel’s background.
 
-CHAPTER_xx.yaml – Sequential logs for each chapter that guide prose generation.
+CHAPTER_xxx.yaml – Sequential logs for each chapter that guide prose generation.
 
 These YAML files serve as inputs to an LLM-powered ghostwriter, which produces continuous prose chapters while ensuring that key narrative elements are included.
 
@@ -64,8 +64,8 @@ File Structure
 /project-root
   ├── SETTING.yaml
   ├── chapters/
-  │    ├── CHAPTER_01.yaml
-  │    ├── CHAPTER_02.yaml
+  │    ├── CHAPTER_001.yaml
+  │    ├── CHAPTER_002.yaml
   │    └── ...
   ├── prompts/
   │    ├── master_prompt.md
@@ -77,12 +77,33 @@ File Structure
   |         ├── story_so_far.txt
   |         ├── story_relative_to.txt
   |         ├── suggestions_v1.txt
+   - `character_dialog_prompt.md` — template used for each CHARACTER dialog call (see below)
   │         ├── draft_v1.txt
   │         ├── check_v1.txt
   |         ├── suggestions_v2.txt 
   │         └── draft_v2.txt
   ├── README.md
   └── scripts/ (Python helpers)
+  ### Tuning the character dialog template
+
+  The template used to generate each character’s dialog is now editable at:
+
+  `prompts/character_dialog_prompt.md`
+
+  Supported tokens inside this template:
+
+  - `<id/>` — replaced with `<id>{character_id}</id>`
+  - `<character_yaml/>` — inlined YAML for the character from `SETTING.yaml`
+  - `<agenda/>` — optional per-call agenda text (or blank)
+  - `<dialog>N</dialog>` — replaced by the last N lines of surrounding dialog context
+    - You can also write a number instead of `N`, e.g. `<dialog>6</dialog>`
+    - If the call includes `<dialog>k</dialog>`, that overrides the default N for that call
+    - Default N is controlled by env var `GW_DIALOG_CONTEXT_LINES` (default: 8)
+  - `<prompt/>` — the per-call prompt content
+
+  Notes:
+  - If your visible text contains the phrase `The last N lines of dialog`, the `N` will be replaced by the actual number chosen for that call.
+  - If `prompts/character_dialog_prompt.md` is missing, the code falls back to a sensible built-in default.
 
 # YAML Format
 ## Setting Log (SETTING.yaml)
@@ -168,7 +189,7 @@ This actually will output a pre-prose document with CHARACTER TEMPLATES and CHAR
 
 The Master prompt is constructed from the master prompt template at ```prompts/master_prompt.md```
 
-The template has a placeholder for the SETTING.yaml, story_so_far.txt, story_relative_to.txt, the CHAPTER_xx.yaml, and the most recent suggestions_vn.txt, and draft_vn.txt (where n is the integer sequence number of the version being currently generated). 
+The template has a placeholder for the SETTING.yaml, story_so_far.txt, story_relative_to.txt, the CHAPTER_xxx.yaml, and the most recent suggestions_vn.txt, and draft_vn.txt (where n is the integer sequence number of the version being currently generated). 
 
 This actually will output a pre-prose document with CHARACTER TEMPLATES and CHARACTER "calls" to generate dialog progressviely via an LLM.
 
@@ -246,12 +267,20 @@ Integration with GitHub Actions for automated iteration loops.
 
 Maintain creative flexibility while enforcing structural discipline.
 
-Ensure chapters are both artistically written and narratively complete.
+- Ensure you have the expected inputs: `SETTING.yaml`, a chapter file like `chapters/CHAPTER_001.yaml`, and prompt templates under `prompts/`.
 
+- Use the project virtual environment when running. Either activate it first:
+
+```bash
+source venv/bin/activate
+python scripts/driver.py chapters/CHAPTER_001.yaml v1
+```
+
+- Or, without activating, call the venv’s Python directly:
 Provide a framework that scales to a full novel-length work.
-
-## Prerequisites
-
+```bash
+./venv/bin/python scripts/driver.py chapters/CHAPTER_001.yaml v1
+```
 - Python 3.10+ (project verified with Python 3.13)
 - Git (optional but recommended)
 
@@ -289,26 +318,69 @@ Runtime/testing dependencies are pinned in `requirements.txt`. Key libraries:
 
 Basic CLI to generate a draft and run a check for a chapter:
 
-- Ensure you have the expected inputs: `SETTING.yaml`, a chapter file like `chapters/CHAPTER_01.yaml`, and prompt templates under `prompts/`.
+- Ensure you have the expected inputs: `SETTING.yaml`, a chapter file like `chapters/CHAPTER_001.yaml`, and prompt templates under `prompts/`.
 - Activate your venv, then run:
 
 ```
 python scripts/driver.py chapters/CHAPTER_01.yaml v1
 ```
 
-- Outputs will be written under `iterations/CHAPTER_01/` as `draft_v1.txt` and `check_v1.txt`.
+- Outputs will be written under `iterations/CHAPTER_001/` as `draft_v1.txt` and `check_v1.txt`.
 
 Notes:
 
 - The current implementation uses placeholders for LLM calls; tasks 4–8 in `TODO.md` will wire up real API usage and the full iteration loop.
 - For Windows, replace `python`/activation commands per the Installation section above.
 
+### Iteration mode (auto) and limits
+
+- Instead of specifying an explicit version like `v1`, you can pass `auto` to let the driver iterate drafts until all touch-points are satisfied (i.e., no "missing" found in the verification step) or until the maximum cycles is reached.
+- Maximum cycles are controlled by the `GW_MAX_ITERATIONS` environment variable (default: `2`).
+
+Example:
+
+```
+python scripts/driver.py chapters/CHAPTER_001.yaml auto
+```
+
+Artifacts produced per version include:
+
+- `pre_draft_vN.txt` — pre-prose with CHARACTER TEMPLATES and <CHARACTER> call sites
+- `check_vN.txt` — verification output for touch-points
+- `suggestions_vN.txt` — suggestions derived from the check output
+- `draft_vN.txt` — polished prose after dialog substitution and cleanup
+
+### Dialog prompt logging (--show-dialog)
+
+To debug per-character dialog generation, use the `--show-dialog` flag. When enabled, every <CHARACTER> call made during the polishing phase is captured (system prompt, user prompt, and the LLM response) as plain text files.
+
+Where logs go:
+
+- `iterations/CHAPTER_xxx/dialog_prompts_vN/`
+- Each call is saved as `NN_<characterId>.txt`, where `NN` is the call index for that version.
+- Each file contains labeled sections:
+  - `=== SYSTEM ===`
+  - `=== USER ===`
+  - `=== RESPONSE ===`
+
+Example:
+
+```
+python scripts/driver.py chapters/CHAPTER_001.yaml auto --show-dialog
+```
+
+This is useful for reviewing exactly how the character template and call prompt were presented to the LLM and what response was returned.
+
 ## Running Tests
 
 When tests are added (tasks 12–15), run them with:
 
-```
+```bash
+# If activated
 pytest -q
+
+# Or without activating
+./venv/bin/python -m pytest -q
 ```
 
 ## Troubleshooting
@@ -316,6 +388,10 @@ pytest -q
 - If `python` isn’t found, try `python3`.
 - If packages fail to install, upgrade tooling inside the venv:
 
-```
+```bash
+# With venv activated
 python -m pip install --upgrade pip setuptools wheel
+
+# Or directly via the venv interpreter
+./venv/bin/python -m pip install --upgrade pip setuptools wheel
 ```
