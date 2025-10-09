@@ -30,18 +30,30 @@ This document outlines the tasks necessary to get the driver.py working correctl
    - Implement error handling for API failures, rate limits, and network issues
    - Add retry logic with exponential backoff for robust API interactions
 
-5. **Fix Prompt Template System**
-   - Update `build_prompt()` function to handle all placeholder replacements:
-     - `[story_so_far.txt]` - read from iterations/CHAPTER_XX/story_so_far.txt
-     - `[story_relative_to.txt]` - read from iterations/CHAPTER_XX/story_relative_to.txt
-     - `[draft_v?.txt]` - read most recent draft version
-     - `[suggestions_v?.txt]` - read most recent suggestions
-     - `[check_v?.txt]` - read most recent check results
-     - `[predraft_v?.txt]` - current draft being evaluated
+5. **Fix Prompt Template System (with Templating Loop + Polish)**
+     - Update `build_prompt()` function to handle all placeholder replacements:
+         - `[story_so_far.txt]` - read from iterations/CHAPTER_XXX/story_so_far.txt
+         - `[story_relative_to.txt]` - read from iterations/CHAPTER_XXX/story_relative_to.txt
+         - `[draft_v?.txt]` - read most recent draft version
+         - `[suggestions_v?.txt]` - read most recent suggestions
+         - `[check_v?.txt]` - read most recent check results
+         - `[predraft_v?.txt]` - current draft being evaluated
      - Create separate functions for each prompt type (initial, master, polish, check, story-so-far, story-relative-to)
-     - Add support for CHARACTER TEMPLATE and CHARACTER "call" blocks emitted by the master prompts.
-         - Define a canonical block syntax and delimiters to avoid prompt injection and ensure robust parsing.
-         - Include per-character controls (cadence, lexicon, prefer/avoid, mannerisms, sample_lines, max_tokens_line, temperature_hint).
+     - Ensure master prompts output a pre-prose document (pre_draft) that includes:
+         - A top section of CHARACTER TEMPLATE blocks for all characters needed this chapter
+         - In-line CHARACTER call placeholders embedded in the pre-prose body
+     - Implement the templating loop:
+         - Parse CHARACTER TEMPLATE definitions and scan the pre-draft for CHARACTER call sites
+         - For each call, build a focused character prompt (using cadence, lexicon, prefer/avoid, mannerisms, sample_lines, max_tokens_line, temperature_hint) and get the dialog via LLM
+         - Substitute each CHARACTER call with the generated dialog, preserving surrounding narrative formatting
+         - Use robust, explicit delimiters for templates and calls to avoid accidental matches and reduce prompt-injection risk (match README syntax)
+         - Handle missing/unknown character templates gracefully (configurable: warn/skip/fail)
+     - Add the polish prose step:
+         - Feed the fully substituted text into `prompts/polish_prose_prompt.md`
+         - Return a cleaned, well-formatted `draft_vN.txt` with consistent style and transitions
+     - Logging and observability:
+         - Log discovered templates and number of call sites; optionally provide a `--dry-run` to preview substitutions
+         - Support configurable parallelism and timeouts for per-character calls
 
 6. **Implement Complete Iteration Loop**
     - Add logic to determine if this is the first iteration (use master_initial_prompt.md) or subsequent (use master_prompt.md)

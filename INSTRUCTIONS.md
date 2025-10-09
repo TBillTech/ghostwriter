@@ -8,7 +8,7 @@ Follow instructions
 
 ## Next steps
 
-Focus: Environment setup complete. Next: Start task 4–6 (LLM integration, prompt system fixes, iteration loop basics).
+Focus: Start task 4–6 (LLM integration, prompt system fixes, iteration loop basics).
 
 Relevant `TODO.md` is in the project root
 Relevant `README.md` is in the project root

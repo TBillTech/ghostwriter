@@ -89,37 +89,37 @@ File Structure
 ```yaml
 Factoids:
     - name: "Time Period"
-        description: "The Civil war was a time of industrialization and strained social fabrics"
+      description: "The Civil war was a time of industrialization and strained social fabrics"
 
 Scenes:
     - name: "Battlefield"
-        description: "Rolling fields, littered with smoke and the echoes of artillery."
+      description: "Rolling fields, littered with smoke and the echoes of artillery."
 
 Characters:
     - id: "henry"
-        name: "Henry"
-        traits:
+      name: "Henry"
+      traits:
         - fearful
         - sentimental
         - avoids direct confrontation
-        cadence: "short sentences with an inward stutter"
-        lexicon: "Poor, uneducated, 1860 background"
-        prefer: ["shudder", "ashamed", "light"]
-        avoid: ["cool", "awesome"]
-        mannerisms:
+      cadence: "short sentences with an inward stutter"
+      lexicon: "Poor, uneducated, 1860 background"
+      prefer: ["shudder", "ashamed", "light"]
+      avoid: ["cool", "awesome"]
+      mannerisms:
         - "touches his left sleeve when unsure"
-        sample_lines:
+      sample_lines:
         - "I— I don't know if I can do it."
         - "The light hit the field like a wound."
-        forbidden:
+      forbidden:
         - "use military jargon beyond what's established"
-        temperature_hint: 0.25
-        max_tokens_line: 90
+      temperature_hint: 0.25
+      max_tokens_line: 90
 
 Props:
     - name: "Bloody Shirt"
-        active: true
-        significance: "Symbol of sacrifice; implicit metaphor for courage"
+      active: true
+      significance: "Symbol of sacrifice; implicit metaphor for courage"
 ```
 
 Factoids: General statements or explanations that do not fit into the remaining categories.
@@ -130,7 +130,7 @@ Characters: Dialog generators with traits and personality anchors.  This system 
 
 Props: Active (interactable) or inactive (background/foreshadowing).
 
-## Chapter Log (CHAPTER_xx.yaml)
+## Chapter Log (CHAPTER_xxx.yaml)
 ```yaml
 Touch-Points:
     - explicit: "Henry sees the wounded soldier with the bloody shirt"
