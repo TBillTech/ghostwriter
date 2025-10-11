@@ -105,6 +105,30 @@ File Structure
   - If your visible text contains the phrase `The last N lines of dialog`, the `N` will be replaced by the actual number chosen for that call.
   - If `prompts/character_dialog_prompt.md` is missing, the code falls back to a sensible built-in default.
 
+  ## Configuration: token limits and models
+
+  You can control output lengths and models per stage via environment variables (copy `.env.example` to `.env`).
+
+  Token limits (max_tokens) per stage:
+  - `GW_MAX_TOKENS_DIALOG` — each CHARACTER call
+  - `GW_MAX_TOKENS_PRE_DRAFT` — pre-draft generation
+  - `GW_MAX_TOKENS_CHECK` — touch-point check
+  - `GW_MAX_TOKENS_SUGGESTIONS` — suggestions list
+  - `GW_MAX_TOKENS_DRAFT` — polished draft
+  - `GW_MAX_TOKENS_STORY_SO_FAR` — story_so_far summary
+  - `GW_MAX_TOKENS_STORY_RELATIVE` — story_relative_to summary
+
+  Model overrides per stage (optional):
+  - `GW_MODEL_DIALOG`
+  - `GW_MODEL_PRE_DRAFT`
+  - `GW_MODEL_CHECK`
+  - `GW_MODEL_SUGGESTIONS`
+  - `GW_MODEL_DRAFT`
+  - `GW_MODEL_STORY_SO_FAR`
+  - `GW_MODEL_STORY_RELATIVE`
+
+  If a per-stage model is not set, `OPENAI_MODEL` is used.
+
 # YAML Format
 ## Setting Log (SETTING.yaml)
 ```yaml

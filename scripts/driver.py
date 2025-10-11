@@ -72,7 +72,14 @@ def with_backoff(fn, *, retries=3, base_delay=1.0, jitter=0.2):
     if last_err:
         raise last_err
 
-def llm_complete(prompt: str, *, system: Optional[str] = None, temperature: float = 0.2, max_tokens: int = 800) -> str:
+def llm_complete(
+    prompt: str,
+    *,
+    system: Optional[str] = None,
+    temperature: float = 0.2,
+    max_tokens: int = 800,
+    model: Optional[str] = None,
+) -> str:
     """Call OpenAI if configured; else return a deterministic mock response."""
     client = get_client()
     if client is None:
@@ -80,10 +87,12 @@ def llm_complete(prompt: str, *, system: Optional[str] = None, temperature: floa
         head = (prompt[:220] + "...") if len(prompt) > 220 else prompt
         return f"[MOCK LLM RESPONSE]\nSystem: {system or 'n/a'}\nTemp: {temperature}\n---\n{head}"
 
+    model_name = model or get_model()
+
     def _do_call():
         # Prefer chat.completions for richer prompting
         resp = client.chat.completions.create(
-            model=get_model(),
+            model=model_name,
             messages=[
                 {"role": "system", "content": system or "You are a helpful writing assistant."},
                 {"role": "user", "content": prompt},
@@ -94,6 +103,31 @@ def llm_complete(prompt: str, *, system: Optional[str] = None, temperature: floa
         return resp.choices[0].message.content or ""
 
     return with_backoff(_do_call)
+
+def _env_int(name: str, default: int) -> int:
+    """Read integer from environment with a default; ignores invalid values."""
+    try:
+        v = int(os.getenv(name, str(default)))
+        if v <= 0:
+            return default
+        return v
+    except Exception:
+        return default
+
+def _env_str(name: str) -> Optional[str]:
+    """Read string from environment; returns None if not set or empty."""
+    val = os.getenv(name)
+    if val is None or str(val).strip() == "":
+        return None
+    return val
+
+def _env_float(name: str, default: float) -> float:
+    """Read float from environment with a default; ignores invalid values."""
+    try:
+        v = float(os.getenv(name, str(default)))
+        return v
+    except Exception:
+        return default
 
 # ---------------------------
 # Prompt builders and I/O helpers
@@ -376,7 +410,19 @@ def render_character_call(
         f"You are the character with id '{character_id}'. "
         f"Return only the character's dialog or inner monologue; no notes or brackets."
     )
-    response = llm_complete(user, system=system, temperature=temperature, max_tokens=max_tokens_line)
+    # Allow env overrides for dialog output length and model; temperature prioritizes character/template hints
+    dialog_max_tokens = _env_int("GW_MAX_TOKENS_DIALOG", max_tokens_line)
+    dialog_model = _env_str("GW_MODEL_DIALOG")
+    dialog_temp_env = _env_float("GW_TEMP_DIALOG", temperature)
+    # Use the passed-in temperature (from template or character hints) if provided; otherwise env
+    effective_temp = temperature if temperature is not None else dialog_temp_env
+    response = llm_complete(
+        user,
+        system=system,
+        temperature=effective_temp,
+        max_tokens=dialog_max_tokens,
+        model=dialog_model,
+    )
     if log_file is not None:
         log_file.parent.mkdir(parents=True, exist_ok=True)
         try:
@@ -533,7 +579,16 @@ def generate_pre_draft(chapter_path: str, version_num: int) -> Tuple[str, Path, 
     else:
         prompt = build_master_prompt(setting, chapter, chapter_id, version_num)
 
-    pre_draft = llm_complete(prompt, system="You are a Director creating pre-prose with character templates and call sites.")
+    pre_max_tokens = _env_int("GW_MAX_TOKENS_PRE_DRAFT", 800)
+    pre_model = _env_str("GW_MODEL_PRE_DRAFT")
+    pre_temp = _env_float("GW_TEMP_PRE_DRAFT", 0.2)
+    pre_draft = llm_complete(
+        prompt,
+        system="You are a Director creating pre-prose with character templates and call sites.",
+        max_tokens=pre_max_tokens,
+        temperature=pre_temp,
+        model=pre_model,
+    )
 
     out_path = iter_dir_for(chapter_id) / f"pre_draft_v{version_num}.txt"
     save_text(out_path, pre_draft)
@@ -547,7 +602,16 @@ def polish_prose(text_to_polish: str, chapter_path: str, version_num: int) -> Tu
 
     # Polish only; assumes dialog substitution already applied
     polish_prompt = build_polish_prompt(setting, chapter, chapter_id, version_num, text_to_polish)
-    polished = llm_complete(polish_prompt, system="You are a ghostwriter polishing and cleaning prose.", temperature=0.2, max_tokens=2000)
+    draft_max_tokens = _env_int("GW_MAX_TOKENS_DRAFT", 2000)
+    draft_model = _env_str("GW_MODEL_DRAFT")
+    draft_temp = _env_float("GW_TEMP_DRAFT", 0.2)
+    polished = llm_complete(
+        polish_prompt,
+        system="You are a ghostwriter polishing and cleaning prose.",
+        temperature=draft_temp,
+        max_tokens=draft_max_tokens,
+        model=draft_model,
+    )
 
     out_path = iter_dir_for(chapter_id) / f"draft_v{version_num}.txt"
     save_text(out_path, polished)
@@ -560,16 +624,44 @@ def verify_predraft(pre_draft_text: str, chapter_path: str, version_num: int) ->
     chapter_id = chapter_id_from_path(chapter_path)
 
     check_prompt = build_check_prompt(setting, chapter, chapter_id, version_num, pre_draft_text)
-    check_results = llm_complete(check_prompt, system="You are an evaluator checking touch-point coverage.", temperature=0.0, max_tokens=1200)
+    check_max_tokens = _env_int("GW_MAX_TOKENS_CHECK", 1200)
+    check_model = _env_str("GW_MODEL_CHECK")
+    check_temp = _env_float("GW_TEMP_CHECK", 0.0)
+    check_results = llm_complete(
+        check_prompt,
+        system="You are an evaluator checking touch-point coverage.",
+        temperature=check_temp,
+        max_tokens=check_max_tokens,
+        model=check_model,
+    )
 
     # Save check results
     check_path = iter_dir_for(chapter_id) / f"check_v{version_num}.txt"
     save_text(check_path, check_results)
     print(f"check saved to {check_path}")
 
-    # Save suggestions artifact as well (basic: mirror check output)
+    # Save suggestions artifact as well; allow independent generation/length
     suggestions_path = iter_dir_for(chapter_id) / f"suggestions_v{version_num}.txt"
-    save_text(suggestions_path, check_results)
+    try:
+        sugg_max_tokens = _env_int("GW_MAX_TOKENS_SUGGESTIONS", 800)
+        # Minimal suggestions generation: reuse the check prompt to ask for actionable items only
+        suggestions_prompt = (
+            check_prompt
+            + "\n\n---\nNow produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions."
+        )
+        sugg_model = _env_str("GW_MODEL_SUGGESTIONS")
+        sugg_temp = _env_float("GW_TEMP_SUGGESTIONS", 0.0)
+        suggestions = llm_complete(
+            suggestions_prompt,
+            system="You are an evaluator extracting actionable suggestions only.",
+            temperature=sugg_temp,
+            max_tokens=sugg_max_tokens,
+            model=sugg_model,
+        )
+    except Exception:
+        # Fallback to mirroring the check output if generation fails
+        suggestions = check_results
+    save_text(suggestions_path, suggestions)
     # Keep log concise; suggestions often duplicate check content
 
     return check_results, check_path
@@ -586,12 +678,30 @@ def generate_story_so_far_and_relative(pre_draft_text: str, chapter_path: str, v
 
     # Story so far
     ssf_prompt = build_story_so_far_prompt(setting, chapter, chapter_id, version_num, pre_draft_text)
-    ssf = llm_complete(ssf_prompt, system="You summarize story so far.", temperature=0.2, max_tokens=1200)
+    ssf_max_tokens = _env_int("GW_MAX_TOKENS_STORY_SO_FAR", 1200)
+    ssf_model = _env_str("GW_MODEL_STORY_SO_FAR")
+    ssf_temp = _env_float("GW_TEMP_STORY_SO_FAR", 0.2)
+    ssf = llm_complete(
+        ssf_prompt,
+        system="You summarize story so far.",
+        temperature=ssf_temp,
+        max_tokens=ssf_max_tokens,
+        model=ssf_model,
+    )
     save_text(iter_dir_for(chapter_id) / "story_so_far.txt", ssf)
 
     # Story relative to
     srt_prompt = build_story_relative_to_prompt(setting, chapter, chapter_id, version_num, pre_draft_text)
-    srt = llm_complete(srt_prompt, system="You summarize story relative to each character.", temperature=0.2, max_tokens=1400)
+    srt_max_tokens = _env_int("GW_MAX_TOKENS_STORY_RELATIVE", 1400)
+    srt_model = _env_str("GW_MODEL_STORY_RELATIVE")
+    srt_temp = _env_float("GW_TEMP_STORY_RELATIVE", 0.2)
+    srt = llm_complete(
+        srt_prompt,
+        system="You summarize story relative to each character.",
+        temperature=srt_temp,
+        max_tokens=srt_max_tokens,
+        model=srt_model,
+    )
     save_text(iter_dir_for(chapter_id) / "story_relative_to.txt", srt)
 
 # ---------------------------
