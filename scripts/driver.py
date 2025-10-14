@@ -1199,33 +1199,135 @@ def generate_story_so_far_and_relative(pre_draft_text: str, chapter_path: str, v
 # CLI Entrypoint
 # ---------------------------
 
+def _generate_final_txt_from_records(chapter_id: str, records: List[Tuple[str, str, str, str]]) -> Path:
+    """Create final.txt that concatenates only polished text results in sequence."""
+    final_text = []
+    for (_tpid, _tptype, _touch, polished) in records:
+        if polished is None:
+            continue
+        final_text.append(polished.strip())
+    out_path = iter_dir_for(chapter_id) / "final.txt"
+    save_text(out_path, "\n\n".join([t for t in final_text if t]))
+    return out_path
+
+def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: bool = False) -> None:
+    """Execute deterministic pipelines per touch-point and write artifacts for vN."""
+    setting = load_yaml("SETTING.yaml")
+    chapter = load_yaml(chapter_path)
+    chapter_id = chapter_id_from_path(chapter_path)
+
+    # Decide branch based on prior drafts
+    latest = get_latest_version(chapter_id)
+    branch_b = latest > 0  # if any prior draft/suggestions exist, treat as edit branch
+    prior_draft = read_latest(chapter_id, "draft") or ""
+    prior_suggestions = read_latest(chapter_id, "suggestions") or ""
+
+    # Parse touch-points and init state
+    tps = parse_touchpoints_from_chapter(chapter)
+    if not tps:
+        print("No Touch-Points found; nothing to do.")
+        return
+    try:
+        dialog_ctx_n = int(os.getenv("GW_DIALOG_CONTEXT_LINES", "8"))
+    except Exception:
+        dialog_ctx_n = 8
+    state = ChapterState(dialog_context_lines=dialog_ctx_n)
+
+    # Logging
+    base_log_dir = None
+    if log_llm:
+        base_log_dir = iter_dir_for(chapter_id) / f"pipeline_v{version_num}"
+
+    # Iterate touch-points and run pipelines
+    total = len(tps)
+    records: List[Tuple[str, str, str, str]] = []
+    for i, tp in enumerate(tps, start=1):
+        tp_type = tp.get("type", "")
+        tp_id = tp.get("id", str(i))
+        raw = tp.get("raw") or tp.get("content") or ""
+        print(f"[v{version_num}] Touch-point {i}/{total} – {tp_type}: {tp.get('content','')[:60]}")
+        tp_log_dir = (base_log_dir / f"{i:02d}_{tp_type}") if base_log_dir else None
+
+        polished_text = ""
+        if tp_type == "actors":
+            state.set_actors(tp.get("content", ""))
+        elif tp_type == "scene":
+            state.set_scene(tp.get("content", ""))
+        elif tp_type == "foreshadowing":
+            state.add_foreshadowing(tp.get("content", ""))
+        elif tp_type in ("narration", "explicit", "implicit"):
+            if tp_type == "narration":
+                if branch_b:
+                    polished_text = run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, prior_polished=prior_draft, prior_suggestions=prior_suggestions, log_dir=tp_log_dir)
+                else:
+                    polished_text = run_narration_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, log_dir=tp_log_dir)
+            elif tp_type == "explicit":
+                if branch_b:
+                    polished_text = run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, prior_polished=prior_draft, prior_suggestions=prior_suggestions, log_dir=tp_log_dir)
+                else:
+                    polished_text = run_explicit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, log_dir=tp_log_dir)
+            else:  # implicit
+                if branch_b:
+                    polished_text = run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, prior_polished=prior_draft, prior_suggestions=prior_suggestions, log_dir=tp_log_dir)
+                else:
+                    polished_text = run_implicit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, log_dir=tp_log_dir)
+        else:
+            # Unknown types treated as narration by default
+            if branch_b:
+                polished_text = run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, prior_polished=prior_draft, prior_suggestions=prior_suggestions, log_dir=tp_log_dir)
+            else:
+                polished_text = run_narration_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, log_dir=tp_log_dir)
+
+        # Record (for actors/scene/foreshadowing, polished_text may be empty)
+        records.append((tp_id, tp_type, raw, polished_text))
+
+    # Write draft_vN.txt (parseable)
+    out_path = write_draft_records(chapter_id, version_num, records)
+    print(f"draft saved to {out_path}")
+
+    # Write final.txt (polished only)
+    final_path = _generate_final_txt_from_records(chapter_id, records)
+    print(f"final saved to {final_path}")
+
+    # Regenerate summaries using final text
+    if os.getenv("GW_SKIP_SUMMARIES", "0") != "1":
+        full_text = (final_path.read_text(encoding="utf-8") if Path(final_path).exists() else "")
+        generate_story_so_far_and_relative(full_text, chapter_path, version_num)
+        print("Regenerated story_so_far.txt and story_relative_to.txt")
+
 def main():
     load_env()
     if len(sys.argv) < 2:
-        print("Usage: python scripts/driver.py chapters/CHAPTER_xx.yaml [vN or auto] [--show-dialog]")
+        print("Usage: python scripts/driver.py chapters/CHAPTER_xx.yaml [vN or auto] [--show-dialog] [--log-llm]")
         sys.exit(1)
 
-    # Simple flag parsing for --show-dialog
     args = [a for a in sys.argv[1:]]
-    show_dialog = False
+    log_llm = False
+    # Backcompat flag
     if "--show-dialog" in args:
-        show_dialog = True
+        log_llm = True
         args.remove("--show-dialog")
+    if "--log-llm" in args:
+        log_llm = True
+        args.remove("--log-llm")
 
     if not args:
-        print("Usage: python scripts/driver.py chapters/CHAPTER_xx.yaml [vN or auto] [--show-dialog]")
+        print("Usage: python scripts/driver.py chapters/CHAPTER_xx.yaml [vN or auto] [--show-dialog] [--log-llm]")
         sys.exit(1)
 
     chapter_path = args[0]
     chapter_id = chapter_id_from_path(chapter_path)
 
     # Determine version number
+    version_num: Optional[int] = None
     if len(args) > 1 and args[1].startswith("v"):
         try:
             version_num = int(args[1][1:])
         except ValueError:
             print("Invalid version format. Use v1, v2, ...")
             sys.exit(1)
+    elif len(args) > 1 and args[1] == "auto":
+        version_num = get_latest_version(chapter_id) + 1
     else:
         version_num = get_latest_version(chapter_id) + 1
 
@@ -1233,46 +1335,11 @@ def main():
     try:
         _validate_inputs_and_prepare(chapter_path)
     except GWError as e:
-        # Print friendly error and exit
         print(f"Error: {e}")
         sys.exit(2)
 
-    max_cycles = int(os.getenv("GW_MAX_ITERATIONS", "2"))
-
-    skip_summaries = os.getenv("GW_SKIP_SUMMARIES", "0") == "1"
-
-    for cycle in range(max_cycles):
-        print(f"\n=== Iteration v{version_num} (cycle {cycle+1}/{max_cycles}) ===")
-        pre_draft_text, pre_path, _ = generate_pre_draft(chapter_path, version_num)
-        # Perform dialog substitution BEFORE verification
-        log_dir = iter_dir_for(chapter_id) / f"dialog_prompts_v{version_num}" if show_dialog else None
-        substituted_text, stats = substitute_character_calls(pre_draft_text, log_dir=log_dir)
-        print(f"Character substitution: {json.dumps(stats)}")
-
-        # Verify the substituted (rough) draft
-        check_text, check_path = verify_predraft(substituted_text, chapter_path, version_num)
-        if check_iteration_complete(check_text):
-            print("All touch-points satisfied (no 'missing' detected). Proceeding to polish.")
-            polished_text, draft_path = polish_prose(substituted_text, chapter_path, version_num)
-            # Optionally evolve summaries for next chapter
-            if not skip_summaries:
-                generate_story_so_far_and_relative(polished_text, chapter_path, version_num)
-            print("Done.")
-            break
-        else:
-            print("Missing touch-points detected. Incrementing version and retrying master prompt.")
-            version_num += 1
-            # Continue loop to re-draft
-    else:
-        # If loop exhausted without a clean pass, still attempt polish of last pre_draft
-        print("Max iteration cycles reached; polishing latest pre_draft anyway.")
-        # Ensure we at least apply substitution once before polishing
-        log_dir = iter_dir_for(chapter_id) / f"dialog_prompts_v{version_num}" if show_dialog else None
-        substituted_text, stats = substitute_character_calls(pre_draft_text, log_dir=log_dir)
-        print(f"Character substitution: {json.dumps(stats)}")
-        polished_text, draft_path = polish_prose(substituted_text, chapter_path, version_num)
-        if not skip_summaries:
-            generate_story_so_far_and_relative(polished_text, chapter_path, version_num)
+    # Execute the deterministic pipeline once for vN
+    run_pipelines_for_chapter(chapter_path, version_num, log_llm=log_llm)
 
 # ---------------------------
 # Validation & Setup (Task 8)

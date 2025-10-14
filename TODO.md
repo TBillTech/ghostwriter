@@ -61,9 +61,9 @@ The following tasks capture requirements introduced in INSTRUCTIONS.md and exten
     - [ ] Fallback to global defaults when unset
 
 8. Driver integration and CLI
-    - [ ] Update `scripts/driver.py` to implement branch selection and pipelines
-    - [ ] Add `--log-llm` (or expand `--show-dialog`) to capture logs for all steps
-    - [ ] Keep existing input validation and directory scaffolding
+    - [x] Update `scripts/driver.py` to implement branch selection and pipelines
+    - [x] Add `--log-llm` (or expand `--show-dialog`) to capture logs for all steps
+    - [x] Keep existing input validation and directory scaffolding
 
 9. Documentation
     - [ ] README: add deterministic architecture section, pipelines, formats, env vars (done)
