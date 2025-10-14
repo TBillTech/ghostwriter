@@ -404,6 +404,221 @@ def write_suggestions_records(chapter_id: str, version: int, records: Iterable[T
 def read_suggestions_records(path: str) -> List[Dict[str, str]]:
     return read_draft_records(path)
 
+# ---------------------------
+# Pipeline execution (Task 2)
+# ---------------------------
+
+def _build_pipeline_replacements(setting: dict, chapter: dict, chapter_id: str, version: int, tp: TouchPoint, state: ChapterState) -> Dict[str, str]:
+    reps = build_common_replacements(setting, chapter, chapter_id, version)
+    # touch-point variants for templates
+    touch_text = tp.get("content", "")
+    tp_type = tp.get("type", "")
+    extra = {
+        "[TOUCH_POINT]": touch_text,
+        "[touch_point]": touch_text,
+        "[TOUCHPOINT]": touch_text,
+        "[touchpoint]": touch_text,
+        "[TOUCH_POINT_TYPE]": tp_type,
+        "[ACTIVE_ACTORS]": ", ".join(state.active_actors),
+        "[SCENE]": state.current_scene or "",
+        "[FORESHADOWING]": ", ".join(state.foreshadowing),
+    }
+    # Provide dialog history as YAML-ish for all known actors
+    try:
+        dialog_map = {a: state.recent_dialog(a) for a in (state.active_actors or [])}
+        extra["[DIALOG_HISTORY]"] = _yaml_dump_py(dialog_map)
+    except Exception:
+        extra["[DIALOG_HISTORY]"] = ""
+    reps.update(extra)
+    return reps
+
+def _apply_step(template_filename: str, reps: Dict[str, str]) -> str:
+    path = Path("prompts") / template_filename
+    if path.exists():
+        return apply_template(str(path), reps)
+    # Fallback: return a generic prompt made from replacements
+    return (f"Context follows.\n\n{reps.get('[SETTING.yaml]', '')}\n\n{reps.get('[CHAPTER_xx.yaml]', '')}\n\n"
+            f"Touch-Point ({reps.get('[TOUCH_POINT_TYPE]', '')}): {reps.get('[TOUCH_POINT]', '')}\nState: actors={reps.get('[ACTIVE_ACTORS]', '')}, scene={reps.get('[SCENE]', '')}\n")
+
+def _env_for(step_key: str, *, default_temp: float = 0.2, default_max_tokens: int = 800) -> Tuple[Optional[str], float, int]:
+    """Resolve per-prompt env: returns (model, temperature, max_tokens). step_key examples: BRAIN_STORM, ORDERING, GENERATE_NARRATION, ACTOR_ASSIGNMENT, BODY_LANGUAGE, AGENDA, CHARACTER_DIALOG, SUBTLE_EDIT, POLISH_PROSE.
+    """
+    model = _env_str(f"GW_MODEL_{step_key}")
+    temp = _env_float(f"GW_TEMP_{step_key}", default_temp)
+    max_tokens = _env_int(f"GW_MAX_TOKENS_{step_key}", default_max_tokens)
+    return model, temp, max_tokens
+
+def _llm_call_with_validation(system: str, user: str, *, model: Optional[str], temperature: float, max_tokens: int, validator, log_file: Optional[Path] = None) -> str:
+    def _call():
+        out = llm_complete(user, system=system, temperature=temperature, max_tokens=max_tokens, model=model)
+        # Log prompt+response if requested
+        if log_file is not None:
+            try:
+                log_file.parent.mkdir(parents=True, exist_ok=True)
+                with log_file.open("w", encoding="utf-8") as f:
+                    f.write("=== SYSTEM ===\n" + (system or "") + "\n\n")
+                    f.write("=== USER ===\n" + user + "\n\n")
+                    f.write("=== RESPONSE ===\n" + out + "\n")
+            except Exception:
+                pass
+        return out
+    return _retry_with_validation(_call, validator)
+
+def _polish_snippet(text: str, setting: dict, chapter: dict, chapter_id: str, version: int) -> str:
+    prompt = build_polish_prompt(setting, chapter, chapter_id, version, text)
+    model, temp, max_tokens = _env_for("POLISH_PROSE", default_temp=0.2, default_max_tokens=2000)
+    return llm_complete(prompt, system="You are a ghostwriter polishing and cleaning prose.", temperature=temp, max_tokens=max_tokens, model=model)
+
+def _parse_actor_lines(actor_list_text: str) -> List[Tuple[str, str]]:
+    """Return list of (actor_id, line_hint) from actor list text."""
+    pairs: List[Tuple[str, str]] = []
+    for ln in actor_list_text.splitlines():
+        m = _ACTOR_LINE_RE.match(ln)
+        if not m:
+            continue
+        actor_id = m.group(1)
+        # Extract text after first ':'
+        _, _, rest = ln.partition(":")
+        pairs.append((actor_id.strip(), rest.strip()))
+    return pairs
+
+def run_narration_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict, chapter: dict, chapter_id: str, version: int, log_dir: Optional[Path] = None) -> str:
+    reps = _build_pipeline_replacements(setting, chapter, chapter_id, version, tp, state)
+    # 1) Brainstorm → bullet list
+    sys1 = "You are brainstorming narrative beats as concise bullet points."
+    user1 = _apply_step("brain_storm_prompt.md", reps)
+    model, temp, max_toks = _env_for("BRAIN_STORM", default_temp=0.4, default_max_tokens=600)
+    brainstorm = _llm_call_with_validation(sys1, user1, model=model, temperature=temp, max_tokens=max_toks, validator=validate_bullet_list, log_file=(log_dir / "01_brainstorm.txt") if log_dir else None)
+
+    # 2) Ordering → bullet list
+    reps2 = dict(reps)
+    reps2["[BULLET_IDEAS]"] = brainstorm
+    sys2 = "You will order and refine brainstormed bullet points for coherent flow."
+    user2 = _apply_step("ordering_prompt.md", reps2)
+    model2, temp2, max2 = _env_for("ORDERING", default_temp=0.2, default_max_tokens=600)
+    ordered = _llm_call_with_validation(sys2, user2, model=model2, temperature=temp2, max_tokens=max2, validator=validate_bullet_list, log_file=(log_dir / "02_ordering.txt") if log_dir else None)
+
+    # 3) Generate narration → text (fallback template name if missing)
+    reps3 = dict(reps2)
+    reps3["[ORDERED_BULLETS]"] = ordered
+    sys3 = "You write narrative prose from ordered bullets, keeping voice consistent."
+    user3 = _apply_step("generate_narration_prompt.md", reps3)
+    model3, temp3, max3 = _env_for("GENERATE_NARRATION", default_temp=0.35, default_max_tokens=1000)
+    narration = _llm_call_with_validation(sys3, user3, model=model3, temperature=temp3, max_tokens=max3, validator=validate_text, log_file=(log_dir / "03_generate_narration.txt") if log_dir else None)
+
+    # Polish
+    polished = _polish_snippet(narration, setting, chapter, chapter_id, version)
+    return polished
+
+def run_explicit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict, chapter: dict, chapter_id: str, version: int, log_dir: Optional[Path] = None) -> str:
+    reps = _build_pipeline_replacements(setting, chapter, chapter_id, version, tp, state)
+    # Brainstorm
+    sys1 = "Brainstorm explicit dialog beats as bullet points."
+    user1 = _apply_step("brain_storm_prompt.md", reps)
+    m1, t1, k1 = _env_for("BRAIN_STORM", default_temp=0.45, default_max_tokens=600)
+    brainstorm = _llm_call_with_validation(sys1, user1, model=m1, temperature=t1, max_tokens=k1, validator=validate_bullet_list, log_file=(log_dir / "01_brainstorm.txt") if log_dir else None)
+    # Ordering
+    reps2 = dict(reps); reps2["[BULLET_IDEAS]"] = brainstorm
+    sys2 = "Order explicit dialog beats for flow."
+    user2 = _apply_step("ordering_prompt.md", reps2)
+    m2, t2, k2 = _env_for("ORDERING", default_temp=0.25, default_max_tokens=600)
+    ordered = _llm_call_with_validation(sys2, user2, model=m2, temperature=t2, max_tokens=k2, validator=validate_bullet_list, log_file=(log_dir / "02_ordering.txt") if log_dir else None)
+    # Actor assignment → actor list
+    reps3 = dict(reps2); reps3["[ORDERED_BULLETS]"] = ordered
+    sys3 = "Assign dialog lines to actors as 'id: line' entries."
+    user3 = _apply_step("actor_assignment_prompt.md", reps3)
+    m3, t3, k3 = _env_for("ACTOR_ASSIGNMENT", default_temp=0.25, default_max_tokens=600)
+    actor_list = _llm_call_with_validation(sys3, user3, model=m3, temperature=t3, max_tokens=k3, validator=validate_actor_list, log_file=(log_dir / "03_actor_assignment.txt") if log_dir else None)
+    # Parallel: body language + agenda (sequential in code)
+    reps4 = dict(reps3); reps4["[ACTOR_LIST]"] = actor_list
+    sys4a = "List body language cues as bullet points."
+    user4a = _apply_step("body_language_prompt.md", reps4)
+    m4a, t4a, k4a = _env_for("BODY_LANGUAGE", default_temp=0.3, default_max_tokens=300)
+    body_lang = _llm_call_with_validation(sys4a, user4a, model=m4a, temperature=t4a, max_tokens=k4a, validator=validate_bullet_list, log_file=(log_dir / "04a_body_language.txt") if log_dir else None)
+    sys4b = "Produce an agenda list aligned to the dialog."
+    user4b = _apply_step("agenda_prompt.md", reps4)
+    m4b, t4b, k4b = _env_for("AGENDA", default_temp=0.3, default_max_tokens=300)
+    agenda = _llm_call_with_validation(sys4b, user4b, model=m4b, temperature=t4b, max_tokens=k4b, validator=validate_agenda_list, log_file=(log_dir / "04b_agenda.txt") if log_dir else None)
+    # Join and render character dialog lines
+    outputs: List[str] = []
+    for actor_id, line_hint in _parse_actor_lines(actor_list):
+        # Build a per-line prompt combining hints
+        combined_prompt = f"Line intent: {line_hint}\nBody language: {body_lang}\nAgenda: {agenda}\n"
+        dialog_lines_ctx = state.recent_dialog(actor_id)
+        resp = render_character_call(
+            actor_id,
+            combined_prompt,
+            dialog_lines_ctx,
+            temperature=0.35,
+            max_tokens_line=120,
+            log_file=(log_dir / f"05_{actor_id}.txt") if log_dir else None,
+            agenda=agenda,
+        )
+        outputs.append(resp.strip())
+        if resp.strip():
+            state.add_dialog_line(actor_id, resp.strip())
+    text = "\n".join(outputs)
+    return _polish_snippet(text, setting, chapter, chapter_id, version)
+
+def run_implicit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict, chapter: dict, chapter_id: str, version: int, log_dir: Optional[Path] = None) -> str:
+    reps = _build_pipeline_replacements(setting, chapter, chapter_id, version, tp, state)
+    # Implicit brainstorm
+    sys1 = "Brainstorm implicit dialog beats (indirect, subtext) as bullet points."
+    user1 = _apply_step("implicit_brain_storm_prompt.md", reps)
+    m1, t1, k1 = _env_for("BRAIN_STORM", default_temp=0.5, default_max_tokens=600)
+    brainstorm = _llm_call_with_validation(sys1, user1, model=m1, temperature=t1, max_tokens=k1, validator=validate_bullet_list, log_file=(log_dir / "01_brainstorm_implicit.txt") if log_dir else None)
+    # Ordering
+    reps2 = dict(reps); reps2["[BULLET_IDEAS]"] = brainstorm
+    sys2 = "Order implicit dialog beats for flow."
+    user2 = _apply_step("ordering_prompt.md", reps2)
+    m2, t2, k2 = _env_for("ORDERING", default_temp=0.25, default_max_tokens=600)
+    ordered = _llm_call_with_validation(sys2, user2, model=m2, temperature=t2, max_tokens=k2, validator=validate_bullet_list, log_file=(log_dir / "02_ordering.txt") if log_dir else None)
+    # Actor assignment → actor list
+    reps3 = dict(reps2); reps3["[ORDERED_BULLETS]"] = ordered
+    sys3 = "Assign dialog lines to actors as 'id: line' entries."
+    user3 = _apply_step("actor_assignment_prompt.md", reps3)
+    m3, t3, k3 = _env_for("ACTOR_ASSIGNMENT", default_temp=0.25, default_max_tokens=600)
+    actor_list = _llm_call_with_validation(sys3, user3, model=m3, temperature=t3, max_tokens=k3, validator=validate_actor_list, log_file=(log_dir / "03_actor_assignment.txt") if log_dir else None)
+    # Parallel helpers
+    reps4 = dict(reps3); reps4["[ACTOR_LIST]"] = actor_list
+    sys4a = "List body language cues as bullet points."
+    user4a = _apply_step("body_language_prompt.md", reps4)
+    m4a, t4a, k4a = _env_for("BODY_LANGUAGE", default_temp=0.3, default_max_tokens=300)
+    body_lang = _llm_call_with_validation(sys4a, user4a, model=m4a, temperature=t4a, max_tokens=k4a, validator=validate_bullet_list, log_file=(log_dir / "04a_body_language.txt") if log_dir else None)
+    sys4b = "Produce an agenda list aligned to the dialog."
+    user4b = _apply_step("agenda_prompt.md", reps4)
+    m4b, t4b, k4b = _env_for("AGENDA", default_temp=0.3, default_max_tokens=300)
+    agenda = _llm_call_with_validation(sys4b, user4b, model=m4b, temperature=t4b, max_tokens=k4b, validator=validate_agenda_list, log_file=(log_dir / "04b_agenda.txt") if log_dir else None)
+    # Join and render dialog
+    outputs: List[str] = []
+    for actor_id, line_hint in _parse_actor_lines(actor_list):
+        combined_prompt = f"(Implicit) Line intent: {line_hint}\nBody language: {body_lang}\nAgenda: {agenda}\n"
+        dialog_lines_ctx = state.recent_dialog(actor_id)
+        resp = render_character_call(
+            actor_id,
+            combined_prompt,
+            dialog_lines_ctx,
+            temperature=0.35,
+            max_tokens_line=120,
+            log_file=(log_dir / f"05_{actor_id}.txt") if log_dir else None,
+            agenda=agenda,
+        )
+        outputs.append(resp.strip())
+        if resp.strip():
+            state.add_dialog_line(actor_id, resp.strip())
+    text = "\n".join(outputs)
+    return _polish_snippet(text, setting, chapter, chapter_id, version)
+
+def run_subtle_edit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict, chapter: dict, chapter_id: str, version: int, prior_polished: str, prior_suggestions: str, log_dir: Optional[Path] = None) -> str:
+    reps = _build_pipeline_replacements(setting, chapter, chapter_id, version, tp, state)
+    reps["[PRIOR_POLISHED]"] = prior_polished
+    reps["[SUGGESTIONS]"] = prior_suggestions
+    sys1 = "Apply subtle edits to the provided prose respecting suggestions and style."
+    user1 = _apply_step("subtle_edit_prompt.md", reps)
+    m1, t1, k1 = _env_for("SUBTLE_EDIT", default_temp=0.2, default_max_tokens=1000)
+    edited = _llm_call_with_validation(sys1, user1, model=m1, temperature=t1, max_tokens=k1, validator=validate_text, log_file=(log_dir / "01_subtle_edit.txt") if log_dir else None)
+    return _polish_snippet(edited, setting, chapter, chapter_id, version)
+
 
 # ---------------------------
 # Prompt builders and I/O helpers

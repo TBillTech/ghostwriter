@@ -9,8 +9,8 @@ This document outlines the tasks necessary to get the driver.py working correctl
 The following tasks capture requirements introduced in INSTRUCTIONS.md and extend the plan for the next implementation phase.
 
 1. Architecture and State Machine
-    - [ ] Parse touch-points into commands: `actors`, `scene`, `foreshadowing`, `narration`, `explicit`, `implicit`
-    - [ ] Implement chapter processing state:
+    - [x] Parse touch-points into commands: `actors`, `scene`, `foreshadowing`, `narration`, `explicit`, `implicit`
+    - [x] Implement chapter processing state:
          - `active_actors: list[str]`
          - `current_scene: Optional[str]`
          - `foreshadowing: set[str]`
@@ -22,27 +22,27 @@ The following tasks capture requirements introduced in INSTRUCTIONS.md and exten
     - [ ] Generate artifacts per branch: `draft_vN.txt`, `suggestions_vN.txt`, `story_so_far.txt`, `story_relative_to.txt`, `final.txt`
 
 2. Pipelines
-    - [ ] Narration pipeline: Brainstorm → Ordering → Generate Narration → Polish
-    - [ ] Explicit pipeline: Brainstorm → Ordering → Actor Assignment → (Body Language || Agenda) → Join → Character Dialog per actor line → Polish
-    - [ ] Implicit pipeline: Implicit Brainstorm → Ordering → Actor Assignment → (Body Language || Agenda) → Join → Character Dialog per actor line → Polish
-    - [ ] Subtle Edit pipeline: Subtle Edit → Polish
+    - [x] Narration pipeline: Brainstorm → Ordering → Generate Narration → Polish (functions implemented)
+    - [x] Explicit pipeline: Brainstorm → Ordering → Actor Assignment → (Body Language || Agenda) → Join → Character Dialog per actor line → Polish (functions implemented)
+    - [x] Implicit pipeline: Implicit Brainstorm → Ordering → Actor Assignment → (Body Language || Agenda) → Join → Character Dialog per actor line → Polish (functions implemented)
+    - [x] Subtle Edit pipeline: Subtle Edit → Polish (functions implemented)
 
 3. Output format validators and retries
-    - [ ] bullet list: each line starts with `*`, min 2 bullets
-    - [ ] actor list: lines begin with `<actor_id>:`; min 2 actor attributions; allow narrative lines
-    - [ ] agenda list: conform to `prompts/agenda_prompt.md`
-    - [ ] text: accept any string
-    - [ ] Retry invalid outputs up to 3 attempts; on third failure, abort with error
+    - [x] bullet list: each line starts with `*`, min 2 bullets
+    - [x] actor list: lines begin with `<actor_id>:`; min 2 actor attributions; allow narrative lines
+    - [x] agenda list: conform to `prompts/agenda_prompt.md`
+    - [x] text: accept any string
+    - [x] Retry invalid outputs up to 3 attempts; on third failure, abort with error
 
 4. Per-touch-point checking and suggestions
     - [ ] Use `check_narration_prompt.md`, `check_explicit_prompt.md`, `check_implicit_prompt.md`
     - [ ] Build a parseable `suggestions_vN.txt` with one record per touch-point
 
 5. Parseable artifact formats
-    - [ ] Define sentinel-based records:
+    - [x] Define sentinel-based records:
          - `BEGIN_TOUCHPOINT id=... type=...` / `END_TOUCHPOINT`
          - `BEGIN_RESULT` / `END_RESULT`
-    - [ ] Implement read/write helpers for `draft_vN.txt` and `suggestions_vN.txt`
+    - [x] Implement read/write helpers for `draft_vN.txt` and `suggestions_vN.txt`
     - [ ] Implement `final.txt` generator (polished-only)
 
 6. LLM logging
