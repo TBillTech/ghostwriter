@@ -6,7 +6,7 @@ import json
 import random
 import datetime
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple, Optional, Iterable
 
 from dotenv import load_dotenv
 import os
@@ -32,6 +32,9 @@ class MissingFileError(GWError):
 
 
 class InvalidYAMLError(GWError):
+    pass
+
+class ValidationError(GWError):
     pass
 
 def _yaml_load_py(content: str):
@@ -189,6 +192,218 @@ def _env_float(name: str, default: float) -> float:
         return v
     except Exception:
         return default
+
+# ---------------------------
+# Deterministic pipeline scaffolding (Tasks 1, 2, 3, 5)
+# ---------------------------
+
+TouchPoint = Dict[str, str]
+
+def parse_touchpoints_from_chapter(chapter: dict) -> List[TouchPoint]:
+    """Parse chapter['Touch-Points'] into a normalized list of touch-points with command and text.
+
+    Accepts flexible YAML item shapes like:
+      - explicit: "..."
+      - implicit: "..."
+      - narration: "..."
+      - actors: ["henry", "jim"]   (stored as comma-separated string)
+      - scene: "Battlefield"
+      - foreshadowing: "Storm"
+      - "explicit: Henry meets Jim" (string with 'key: value')
+
+    Returns list of dicts with keys: id (1-based), type, content (string), raw (original-ish).
+    """
+    tps_raw = chapter.get("Touch-Points") or chapter.get("TouchPoints") or []
+    result: List[TouchPoint] = []
+    if not isinstance(tps_raw, list):
+        return result
+    allowed = {"actors", "scene", "foreshadowing", "narration", "explicit", "implicit"}
+
+    def _normalize(item) -> List[TouchPoint]:
+        # Dict form: {key: value}
+        if isinstance(item, dict) and len(item) == 1:
+            k = str(next(iter(item.keys()))).strip().lower()
+            v = next(iter(item.values()))
+            if k in allowed:
+                if k == "actors" and isinstance(v, list):
+                    content = ", ".join([str(x) for x in v])
+                else:
+                    content = str(v)
+                return [{"type": k, "content": content, "raw": _yaml_dump_py(item).strip()}]
+        # String form: "key: value"
+        if isinstance(item, str):
+            m = re.match(r"^\s*([A-Za-z_\-]+)\s*:\s*(.*)$", item.strip())
+            if m:
+                k = m.group(1).strip().lower()
+                v = m.group(2).strip()
+                if k in allowed:
+                    return [{"type": k, "content": v, "raw": item}]
+                # default to narration if unknown key
+                return [{"type": "narration", "content": item.strip(), "raw": item}]
+            # fallback: treat as narration
+            return [{"type": "narration", "content": item.strip(), "raw": item}]
+        # Other types: YAML scalars/seqs
+        try:
+            return [{"type": "narration", "content": str(item), "raw": _yaml_dump_py(item).strip()}]
+        except Exception:
+            return [{"type": "narration", "content": str(item), "raw": str(item)}]
+
+    for idx, item in enumerate(tps_raw, start=1):
+        for tp in _normalize(item):
+            tp["id"] = str(idx)
+            result.append(tp)
+    return result
+
+class ChapterState:
+    """Processing state shared across touch-points."""
+    def __init__(self, *, dialog_context_lines: int = 8) -> None:
+        from collections import defaultdict, deque
+        self.active_actors: List[str] = []
+        self.current_scene: Optional[str] = None
+        self.foreshadowing: List[str] = []
+        self.dialog_history = defaultdict(lambda: deque(maxlen=dialog_context_lines))  # id -> deque[str]
+        self.prior_context: Dict[str, Dict[str, str]] = {}  # touchpoint_id -> {polished_text, suggestions}
+        self._dialog_maxlen = dialog_context_lines
+
+    def set_actors(self, actors_csv: str) -> None:
+        self.active_actors = [a.strip() for a in re.split(r",|\s+", actors_csv) if a.strip()]
+
+    def set_scene(self, scene: str) -> None:
+        self.current_scene = scene.strip()
+
+    def add_foreshadowing(self, item: str) -> None:
+        val = item.strip()
+        if val:
+            self.foreshadowing.append(val)
+
+    def add_dialog_line(self, actor_id: str, line: str) -> None:
+        if not actor_id:
+            return
+        self.dialog_history[str(actor_id).strip().lower()].append(line)
+
+    def recent_dialog(self, actor_id: str) -> List[str]:
+        key = str(actor_id).strip().lower()
+        return list(self.dialog_history.get(key, []))
+
+# ---- Output validators (Task 3)
+
+def validate_text(output: str) -> Tuple[bool, str]:
+    return (True, "ok")
+
+def validate_bullet_list(output: str) -> Tuple[bool, str]:
+    lines = [ln.rstrip() for ln in output.splitlines() if ln.strip()]
+    bullets = [ln for ln in lines if ln.lstrip().startswith("*")]
+    if len(bullets) >= 2:
+        return True, "ok"
+    return False, "Expected a bullet list with at least 2 lines starting with '*'"
+
+_ACTOR_LINE_RE = re.compile(r"^\s*([A-Za-z0-9_.\-]+)\s*:\s+.+")
+
+def validate_actor_list(output: str) -> Tuple[bool, str]:
+    lines = [ln for ln in output.splitlines() if ln.strip()]
+    count = 0
+    for ln in lines:
+        if _ACTOR_LINE_RE.match(ln):
+            count += 1
+    if count >= 2:
+        return True, "ok"
+    return False, "Expected an actor list with at least 2 actor-attributed lines like 'id: ...'"
+
+def validate_agenda_list(output: str) -> Tuple[bool, str]:
+    # Heuristic: at least 2 structured lines (bullets or 'id: goal' style)
+    lines = [ln for ln in output.splitlines() if ln.strip()]
+    bullets = [ln for ln in lines if ln.lstrip().startswith(('*', '-'))]
+    if len(bullets) >= 2:
+        return True, "ok"
+    # Fallback: check for at least two 'x: y' lines
+    colon = [ln for ln in lines if re.search(r"\w\s*:\s+.+", ln)]
+    if len(colon) >= 2:
+        return True, "ok"
+    return False, "Expected an agenda list (>=2 items as bullets or 'key: value' lines)"
+
+def _retry_with_validation(callable_fn, validator, *, max_attempts: int = 3) -> str:
+    """Call callable_fn repeatedly until validator passes or attempts exhausted.
+    Raises ValidationError on persistent failure.
+    """
+    last_err = ""
+    for attempt in range(1, max_attempts + 1):
+        out = callable_fn()
+        ok, reason = validator(out)
+        if ok:
+            return out
+        last_err = reason
+    raise ValidationError(f"Output validation failed after {max_attempts} attempts: {last_err}")
+
+# ---- Parseable artifact helpers (Task 5)
+
+BEGIN_TP = "BEGIN_TOUCHPOINT"
+END_TP = "END_TOUCHPOINT"
+BEGIN_RES = "BEGIN_RESULT"
+END_RES = "END_RESULT"
+
+def format_draft_record(tp_id: str, tp_type: str, touchpoint_text: str, polished_text: str) -> str:
+    return (
+        f"{BEGIN_TP} id={tp_id} type={tp_type}\n"
+        f"{touchpoint_text}\n"
+        f"{END_TP}\n"
+        f"{BEGIN_RES}\n"
+        f"{polished_text}\n"
+        f"{END_RES}\n\n"
+    )
+
+def write_draft_records(chapter_id: str, version: int, records: Iterable[Tuple[str, str, str, str]]) -> Path:
+    """Write a parseable draft file consisting of touch-point/result pairs.
+    records: iterable of (tp_id, tp_type, touchpoint_text, polished_text)
+    """
+    out_path = iter_dir_for(chapter_id) / f"draft_v{version}.txt"
+    chunks = [format_draft_record(*r) for r in records]
+    save_text(out_path, "".join(chunks))
+    return out_path
+
+def read_draft_records(path: str) -> List[Dict[str, str]]:
+    text = read_file(path)
+    # Split by BEGIN_TP markers
+    blocks = re.split(rf"(?m)^\s*{BEGIN_TP}\s+", text)
+    results: List[Dict[str, str]] = []
+    for blk in blocks:
+        blk = blk.strip()
+        if not blk:
+            continue
+        # Expect 'id=.. type=..\n...END_TP\nBEGIN_RESULT\n...END_RESULT'
+        header_line, _, rest = blk.partition("\n")
+        m = re.search(r"id=([^\s]+)\s+type=([^\s]+)", header_line)
+        if not m:
+            # Skip malformed block
+            continue
+        tp_id, tp_type = m.group(1), m.group(2)
+        content, _, rest2 = rest.partition(f"\n{END_TP}\n")
+        if not rest2:
+            continue
+        if BEGIN_RES not in rest2:
+            continue
+        _, _, after_begin = rest2.partition(f"{BEGIN_RES}\n")
+        polished, _, _ = after_begin.partition(f"\n{END_RES}")
+        results.append({
+            "id": tp_id,
+            "type": tp_type,
+            "touchpoint": content,
+            "result": polished,
+        })
+    return results
+
+def format_suggestions_record(tp_id: str, tp_type: str, touchpoint_text: str, suggestions_text: str) -> str:
+    # Reuse same sentinels for consistency
+    return format_draft_record(tp_id, tp_type, touchpoint_text, suggestions_text)
+
+def write_suggestions_records(chapter_id: str, version: int, records: Iterable[Tuple[str, str, str, str]]) -> Path:
+    out_path = iter_dir_for(chapter_id) / f"suggestions_v{version}.txt"
+    chunks = [format_suggestions_record(*r) for r in records]
+    save_text(out_path, "".join(chunks))
+    return out_path
+
+def read_suggestions_records(path: str) -> List[Dict[str, str]]:
+    return read_draft_records(path)
+
 
 # ---------------------------
 # Prompt builders and I/O helpers
