@@ -12,15 +12,11 @@ This is the synopsis of the book up to the current chapter:
 These are the stories so far for each individual character for context of their point of view:
 [story_relative_to.txt]
 
-# Specifics in the Chapter
-Please carefully read and understand each Touch-Point, since these are the keys to writing a good chapter.
-[CHAPTER_xx.yaml]
-
 # Previous rough version
 Please clean up the following text:
 [rough_draft]
 
 # Rules for generation:
-1. Produce **continuous prose only** (no lists or notes).  
+1. Produce **continuous prose only** (no lists or notes or markup or obnoxious formatting unless central to the text like litRPG stats).  
 
-Now, draft the chapter prose.
+Now, draft the chapter prose, sticking as close to possible to the words and sentences in the rough_draft, only adding words and filler where absolutely necessary.

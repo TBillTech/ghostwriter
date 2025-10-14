@@ -20,8 +20,19 @@ except Exception:  # pragma: no cover
     OpenAI = None  # type: ignore
 
 # ---------------------------
-# Helpers
+# Helpers & Error Types
 # ---------------------------
+
+class GWError(Exception):
+    """Base error for GhostWriter driver."""
+
+
+class MissingFileError(GWError):
+    pass
+
+
+class InvalidYAMLError(GWError):
+    pass
 
 def _yaml_load_py(content: str):
     """Pure-Python YAML load using SafeLoader to avoid C-accelerated libyaml crashes."""
@@ -32,9 +43,53 @@ def _yaml_dump_py(obj) -> str:
     return yaml.dump(obj, sort_keys=False, Dumper=_PySafeDumper)
 
 def load_yaml(path):
-    with open(path, "r", encoding="utf-8") as f:
-        content = f.read()
-    return _yaml_load_py(content)
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            content = f.read()
+    except FileNotFoundError:
+        raise MissingFileError(f"Required file not found: {path}")
+    except Exception as e:
+        raise GWError(f"Unable to read file {path}: {e}")
+
+    def _format_yaml_snippet(text: str, line: int, col: int, context: int = 2) -> str:
+        try:
+            lines = text.splitlines()
+            if not lines:
+                return ""
+            idx = max(0, min(line, len(lines) - 1))
+            start = max(0, idx - context)
+            end = min(len(lines), idx + context + 1)
+            out_lines = []
+            for i in range(start, end):
+                prefix = ">" if i == idx else " "
+                out_lines.append(f"{prefix} {i+1:4}: {lines[i]}")
+                if i == idx:
+                    caret_pad = " " * (col + 8)
+                    out_lines.append(f"          {caret_pad}^")
+            return "\n".join(out_lines)
+        except Exception:
+            return ""
+
+    try:
+        return _yaml_load_py(content)
+    except yaml.YAMLError as e:  # type: ignore[attr-defined]
+        # Try to include line/column info
+        mark = getattr(e, "problem_mark", None) or getattr(e, "context_mark", None)
+        if mark is not None and hasattr(mark, "line") and hasattr(mark, "column"):
+            line = int(getattr(mark, "line", 0))
+            col = int(getattr(mark, "column", 0))
+            snippet = _format_yaml_snippet(content, line, col)
+            msg = (
+                f"Invalid YAML in {path} at line {line+1}, column {col+1}: {getattr(e, 'problem', e)}"
+            )
+            if snippet:
+                msg += f"\n{snippet}"
+            raise InvalidYAMLError(msg)
+        else:
+            raise InvalidYAMLError(f"Invalid YAML in {path}: {e}")
+    except Exception as e:
+        # Catch non-YAML exceptions (e.g., IndexError from loader) and rethrow consistently
+        raise InvalidYAMLError(f"Invalid YAML in {path}: {e}")
 
 def save_text(path, content):
     Path(path).parent.mkdir(parents=True, exist_ok=True)
@@ -42,7 +97,13 @@ def save_text(path, content):
         f.write(content)
 
 def read_file(path):
-    return Path(path).read_text(encoding="utf-8")
+    p = Path(path)
+    if not p.exists():
+        raise MissingFileError(f"Required file not found: {path}")
+    try:
+        return p.read_text(encoding="utf-8")
+    except Exception as e:
+        raise GWError(f"Unable to read file {path}: {e}")
 
 def load_env():
     # Load .env if present
@@ -738,6 +799,14 @@ def main():
     else:
         version_num = get_latest_version(chapter_id) + 1
 
+    # Validate required inputs early and ensure iteration directory exists
+    try:
+        _validate_inputs_and_prepare(chapter_path)
+    except GWError as e:
+        # Print friendly error and exit
+        print(f"Error: {e}")
+        sys.exit(2)
+
     max_cycles = int(os.getenv("GW_MAX_ITERATIONS", "2"))
 
     skip_summaries = os.getenv("GW_SKIP_SUMMARIES", "0") == "1"
@@ -774,6 +843,63 @@ def main():
         polished_text, draft_path = polish_prose(substituted_text, chapter_path, version_num)
         if not skip_summaries:
             generate_story_so_far_and_relative(polished_text, chapter_path, version_num)
+
+# ---------------------------
+# Validation & Setup (Task 8)
+# ---------------------------
+
+# Required prompt templates for the pipeline
+_REQUIRED_PROMPTS = [
+    "prompts/master_initial_prompt.md",
+    "prompts/master_prompt.md",
+    "prompts/polish_prose_prompt.md",
+    "prompts/check_prompt.md",
+    "prompts/story_so_far_prompt.md",
+    "prompts/story_relative_to_prompt.md",
+]
+
+
+def _validate_inputs_and_prepare(chapter_path: str) -> None:
+    """Validate presence of required files and create iteration directory.
+
+    Checks:
+    - SETTING.yaml exists and parses as YAML
+    - Chapter file exists and parses as YAML
+    - Required prompt templates exist
+    - Creates iterations/<CHAPTER_ID>/ directory
+    """
+    # Validate chapter file early for clearer errors before any work
+    ch_path = Path(chapter_path)
+    if not ch_path.exists():
+        raise MissingFileError(
+            f"Chapter file not found: {chapter_path}. Expected a path like 'chapters/CHAPTER_001.yaml'."
+        )
+    # Load to validate YAML
+    _ = load_yaml(str(ch_path))
+
+    # Validate SETTING.yaml
+    if not Path("SETTING.yaml").exists():
+        raise MissingFileError("Missing required SETTING.yaml at project root.")
+    _ = load_yaml("SETTING.yaml")
+
+    # Validate required prompt templates
+    missing = [p for p in _REQUIRED_PROMPTS if not Path(p).exists()]
+    if missing:
+        joined = "\n  - " + "\n  - ".join(missing)
+        raise MissingFileError(
+            "Missing required prompt template(s):" + joined +
+            "\nPlease add these files under the 'prompts/' directory. See README.md for details."
+        )
+
+    # Character dialog prompt is optional (we fallback to a built-in template)
+
+    # Ensure iterations directory exists for this chapter
+    chapter_id = chapter_id_from_path(chapter_path)
+    out_dir = iter_dir_for(chapter_id)
+    try:
+        out_dir.mkdir(parents=True, exist_ok=True)
+    except Exception as e:
+        raise GWError(f"Unable to create iterations directory '{out_dir}': {e}")
 
 if __name__ == "__main__":
     main()

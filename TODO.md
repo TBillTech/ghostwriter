@@ -2,109 +2,7 @@
 
 This document outlines the tasks necessary to get the driver.py working correctly and establish a complete development environment for the GhostWriter novel generation system.
 
-## Environment Setup
 
-1. **Create Python Virtual Environment**
-    - [x] Create a virtual environment in the project root: `python -m venv venv` (created with `python3` where needed)
-    - [x] Document activation commands for different platforms (Linux/macOS: `source venv/bin/activate`, Windows: `venv\Scripts\activate`)
-    - [x] `.gitignore` already excludes common env directories including `venv/`
-
-2. **Install Required Python Dependencies**
-    - [x] Install PyYAML for YAML file processing: `pip install PyYAML`
-    - [x] Install OpenAI Python client for LLM integration: `pip install openai`
-    - [x] Install python-dotenv for environment variable management: `pip install python-dotenv`
-    - [x] Install pytest for unit testing: `pip install pytest pytest-mock`
-    - [x] Create `requirements.txt` file with all dependencies and pinned versions
-
-3. **Update README.md with Python Environment Section**
-    - [x] Add "Prerequisites" section with Python version requirements
-    - [x] Add "Installation" section with virtual environment setup instructions
-    - [x] Add "Dependencies" section listing all required Python libraries
-    - [x] Add usage examples and command-line interface documentation
-
-## Core Functionality Implementation
-
-4. **Implement LLM Integration in driver.py**
-   - Replace placeholder comments with actual OpenAI API calls
-   - Add API key configuration via environment variables (.env file)
-   - Implement error handling for API failures, rate limits, and network issues
-   - Add retry logic with exponential backoff for robust API interactions
-
-5. **Fix Prompt Template System (with Templating Loop + Polish)**
-     - Update `build_prompt()` function to handle all placeholder replacements:
-         - `[story_so_far.txt]` - read from iterations/CHAPTER_XXX/story_so_far.txt
-         - `[story_relative_to.txt]` - read from iterations/CHAPTER_XXX/story_relative_to.txt
-         - `[draft_v?.txt]` - read most recent draft version
-         - `[suggestions_v?.txt]` - read most recent suggestions
-         - `[check_v?.txt]` - read most recent check results
-         - `[predraft_v?.txt]` - current draft being evaluated
-     - Create separate functions for each prompt type (initial, master, polish, check, story-so-far, story-relative-to)
-     - Ensure master prompts output a pre-prose document (pre_draft) that includes:
-         - A top section of CHARACTER TEMPLATE blocks for all characters needed this chapter
-         - In-line CHARACTER call placeholders embedded in the pre-prose body
-     - Implement the templating loop:
-         - Parse CHARACTER TEMPLATE definitions and scan the pre-draft for CHARACTER call sites
-         - For each call, build a focused character prompt (using cadence, lexicon, prefer/avoid, mannerisms, sample_lines, max_tokens_line, temperature_hint) and get the dialog via LLM
-         - Substitute each CHARACTER call with the generated dialog, preserving surrounding narrative formatting
-         - Use robust, explicit delimiters for templates and calls to avoid accidental matches and reduce prompt-injection risk (match README syntax)
-         - Handle missing/unknown character templates gracefully (configurable: warn/skip/fail)
-     - Add the polish prose step:
-         - Feed the fully substituted text into `prompts/polish_prose_prompt.md`
-         - Return a cleaned, well-formatted `draft_vN.txt` with consistent style and transitions
-     - Logging and observability:
-         - Log discovered templates and number of call sites; optionally provide a `--dry-run` to preview substitutions
-         - Support configurable parallelism and timeouts for per-character calls
-
-6. **Implement Complete Iteration Loop**
-    - Add logic to determine if this is the first iteration (use master_initial_prompt.md) or subsequent (use master_prompt.md)
-    - Implement version numbering system (v1, v2, v3, etc.)
-    - Add automatic iteration based on verification results ("missing" touch-points trigger re-draft)
-    - Create functions for story-so-far and story-relative-to generation between chapters
-    - Insert a two-phase generation flow:
-      1) Generate `pre_draft_vN.txt` from master prompt containing CHARACTER TEMPLATEs and CHARACTER calls.
-      2) Execute per-character LLM calls and substitute results; then run a Polish Prose prompt to produce `draft_vN.txt`.
-
-7. **Add Missing Core Functions**
-    - `generate_story_so_far()` - uses story_so_far_prompt.md to create summary
-    - `generate_story_relative_to()` - uses story_relative_to_prompt.md for character perspectives
-    - `check_iteration_complete()` - determines if all touch-points are satisfied
-    - `get_latest_version()` - finds the highest version number for a chapter
-    - `parse_character_blocks()` - extracts CHARACTER TEMPLATE definitions and in-text CHARACTER call sites from `pre_draft_vN.txt`.
-    - `render_character_call(character_id, call_context)` - constructs and sends a focused LLM prompt using the character’s template.
-    - `substitute_character_calls(pre_draft_text, responses)` - replaces call sites with generated dialog.
-    - `polish_prose(text)` - sends the substituted text to `polish_prose_prompt.md` and returns polished prose.
-
-8. **Improve File and Directory Management**
-   - Add validation for required input files (SETTING.yaml, CHAPTER_XX.yaml)
-   - Create iterations directory structure automatically
-   - Add file existence checks before attempting to read files
-   - Implement proper error messages for missing files
-
-## Data Structure and Configuration
-
-9. **Create Example SETTING.yaml**
-   - Create a sample SETTING.yaml file with proper structure (Factoids, Scenes, Characters, Props)
-   - Include comprehensive examples for each section
-   - Document the YAML schema and validation rules
-
-10. **Create Example Chapter Files**
-    - Create CHAPTER_01.yaml with proper Touch-Points, Story-So-Far, and Story-Relative-To structure
-    - Create CHAPTER_02.yaml to demonstrate chapter progression
-    - Include examples of explicit and implicit touch-points
-
-11. **Add Configuration Management**
-    - Create config.yaml for system settings (API endpoints, model parameters, retry limits)
-    - Add command-line argument parsing for better CLI interface
-    - Implement logging configuration for debugging and monitoring
-    - Add character-render settings (max parallel calls, per-character token/temperature caps, refusal policy if template is missing)
-    - Add safety filters for dialog substitution (max line length, allowed character set, profanity filter toggle)
-
-11a. **Add Prompt Templates for New Flow**
-    - Create `prompts/polish_prose_prompt.md` (used after substitution)
-    - Update `prompts/master_initial_prompt.md` and `prompts/master_prompt.md` to emit:
-      - A top section with all CHARACTER TEMPLATE blocks (for any characters needed in the chapter)
-      - In-line CHARACTER call placeholders in the pre-prose body
-    - Document the exact placeholder syntax in README and ensure unit tests cover parsing.
 
 ## Testing and Quality Assurance
 
@@ -206,3 +104,12 @@ Session status (2025-10-09):
     - pre_draft_v1.txt, check_v1.txt, draft_v1.txt, story_so_far.txt, story_relative_to.txt, suggestions_v1.txt
 - Character substitution wired with template/call parsing; mock run shows missing templates when calls exist without preceding templates in the pre_draft.
 - Iteration loop (initial → verify → polish) operational; touch-point check uses 'missing' heuristic.
+
+---
+
+Session status (2025-10-13):
+- Implemented Task 8 validations and directory management in `scripts/driver.py`:
+    - Early validation for `SETTING.yaml`, chapter YAML, and required prompt templates.
+    - Automatic creation of `iterations/CHAPTER_xxx/` directory.
+    - Clear, user-friendly error messages with custom exceptions.
+    - Guarded file reads to avoid confusing stack traces for common issues.

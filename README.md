@@ -356,6 +356,22 @@ Notes:
 - The current implementation uses placeholders for LLM calls; tasks 4–8 in `TODO.md` will wire up real API usage and the full iteration loop.
 - For Windows, replace `python`/activation commands per the Installation section above.
 
+### File validation and auto-directories
+
+- The driver now validates required inputs up front and exits with a clear message if something is missing:
+  - `SETTING.yaml` at project root
+  - A chapter file under `chapters/`, e.g. `chapters/CHAPTER_001.yaml`
+  - Prompt templates under `prompts/`:
+    - `master_initial_prompt.md`
+    - `master_prompt.md`
+    - `polish_prose_prompt.md`
+    - `check_prompt.md`
+    - `story_so_far_prompt.md`
+    - `story_relative_to_prompt.md`
+  - `prompts/character_dialog_prompt.md` is optional; a built-in default is used if missing.
+
+- On first run for a chapter, the driver auto-creates `iterations/CHAPTER_xxx/` (and dialog log folders when `--show-dialog` is used).
+
 ### Iteration mode (auto) and limits
 
 - Instead of specifying an explicit version like `v1`, you can pass `auto` to let the driver iterate drafts until all touch-points are satisfied (i.e., no "missing" found in the verification step) or until the maximum cycles is reached.

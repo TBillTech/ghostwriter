@@ -1,17 +1,25 @@
 Touch-Points:
-    - explicit: The Scene is 73rd Crèche, Moving Day.
+    - scene: 
+      name: "73rd Crèche, Moving Day"
+      description: |
+        This is also the 18th Birthday of Arthur and Misty. The 73rd Crèche appears almost unreal under the morning sun — a miniature city of glass and greenery, built on a scale that dwarfs its inhabitants. The central yard stretches out like a living map, divided into zones of motion and stillness: half of it an explosion of organized chaos — fields, pools, and archery lanes alive with shouts and splashes — and the other half a quiet parkland of trees, benches, and broad lawns where remaining members of the cohort play pastoral games. From above, the whole 200-acre complex resembles a great neural net — paths and transit lines connecting the tall residential towers that rise around the perimeter, each tower home to thousands of children raised together under the same patient machinery of care. Futuristic golf-carts hum along the walkways, their transparent roofs glinting. They ferry children, boxes, and farewell hugs from dorm to dorm. The air carries the smell of wet grass and the faint metallic tang of distant irrigation drones.
+        Near one of the loading bays, Arthur and Misty stand beside a sleek silver Creche Car, their luggage already stacked inside. Around them, the ambient hum of the crèche was oddly emotional: laughter from somewhere in the park, a farewell whistle, the soft voice of AURA murmuring something in the distance. The high-rises cast long, lattice-like shadows across the yard as they cast their gaze toward the pickup point. Above the noise, they can hear the rhythmic chime that meant the midmorning shift — signaling the next rotation of games, classes, and meals for those who stay behind. For Arthur and Misty, it is the sound of the world continuing without them. Above them, across the path which curves through a corridor of trees flys a bright synthetic banners fluttering an aspirational message: “Cohort 73 — Dream, Build, Explore.” A few kids wave from balconies above as the two figures wait the last few minutes, half hero, half ghost — leaving the only home they had ever known for the city that waits beyond.
+    - actors: [Arthur, Misty]
+    - narration: The Scene is 73rd Crèche, Moving Day.
     - explicit: Moving Day is also the birthday of all 10000 in the cohort.
     - implicit: A birthday is not as special when it is shared by 9999 other kids at the same time!
     - implicit: Arthur and Misty notice that they feel a nostalgic and slighly reluctant to go.
     - explicit: Arthur has only to think about Zenith World, and he is eager to move! 
     - implicit: Is logging into Zenith World really going to go as smoothly as Arthur hopes?
     - explicit: Arthur and Misty are waiting a few more minutes before riding the Creche car to meet with ground transportation to New Philadelphia.
+    - actors: [Arthur, Misty, AURA]
     - explicit: AURA enters the scene.
     - explicit: AURA tries one more time to convince them to stay for the party.
     - explicit: AURA gives them each a half dozen chocolate chip cookies as a birthday gift.
     - implicit: Arthur feels the quests calling him NOW!
     - explicit: Misty thinks there is something afoot with Zenith World, and she is not going to let Arthur get sucked in without an objective observer present.
     - implicit: What if Zenith World hides dark secrets that Misty only thinks she is ready for?
+    - actors: [Arthur, Misty, AURA, PROF]
     - explicit: PROF enters the scene.
     - explicit: PROF states how he is proud of them.
     - explicit: PROF and AURA both warn the kids about a laundry list of things.
@@ -23,10 +31,16 @@ Touch-Points:
     - explicit: PROF notices that the time has come to go.
     - explicit: Arthur and Misty say their goodbyes to AURA and PROF.
     - implicit: As usual, AURA is more prone to hugging, and definitely more prone to strange pet names, than an 18 year old might prefer.
+    - actors: [Arthur, Misty]
     - implicit: Arthur and Misty embark in the Creche car, and watch the park scenery go by. 
     - implicit: Arthur and Misty see one of thier close friends, Dan, playing baseball.
     - explicit: Dan is not leaving until after the party, but is also going to join them in New Philadelphia and Zenith World.
     - explicit: Arthur and Misty load their luggage into the ground car, but Arthur grabs a package from his before they climb in.
+    - scene: 
+      name: "Drive to New Philadelphia"
+      description: |
+        The drive to New Philadelphia in the autonomous car takes the pair past acres and architectures both old and new. Roughly this is Charlottesville -> Staunton -> Harrisburg -> Philadelphia (to avoid travel through the Washington-Baltimore Magacity). They see anachronistic homesteads (some with nearly dissolved ancient internal combustion vehicles), run down appearance, and occasionally some very rustic appearing individuals in or about. They see fields full of "new" crops like supermaize and vitamin-lettuce. They also see the appalachian mountains off to the west for the main leg of the journey. Highways of the future are not completely different from today. In Philadelphia though, the highway is essentially a megastructure itself with many levels built into the sky, passing by a bewildering array of sky scrapers and other architectural wonders. None of these wonders compare to the New Philadelphia arcology they approach at the end of their journey.
+    - actors: [Arthur, Misty, Car]
     - implicit: Cars in 2222 are all fully autonomous.
     - explicit: They silently watch the Creche recede in the distance.
     - explicit: Thier trip is about 150 miles to the north.
@@ -44,6 +58,11 @@ Touch-Points:
     - explicit: Arthur asks the car if they can wander on those forests.
     - explicit: The car responds that there are numerous balconies and flat areas where it is allowed, but also a lot of it is too steep to be safe.
     - implicit: After trying to wrap their minds around the scale, and sitting in awe, they arrive at the gate.
+    - scene: 
+      name: "New Philadelphia Arcology"
+      description: |
+        The New Philadelphia Arcology is roughly 5 km square at the base, and just as high.  It is pyramid shaped, covered about half with forest, and the other half silver windows allowing light to enter the arcology.  The massive building is hollow, as if another pyramid were removed from the inside, with a 3 km square "Mall" on the inside floor. The 1 km thick walls sloping up inside also have endless windows and balconies. Arthur, Misty, and Dan's level is 408, roughly 1/3 the way up, at oclock 501 (there are 1200 minutes around the circumference), block 7 out from the middle, apartments 7, 8 and 9. The mall is filled with parks, fountains, food and pastime vendors with a large number of roller coasters and water parks.  Slightly more serious shops for all sorts of immediate use are arrayed around the outside of the mall. Beyond those shops are the elevators and the circumferential motorized walkways. There is one elevator per minute going up and down, at the base, 2/3 of those go 1/3 up, 1/3 go 2/3 up, and only 1/20 go all the way to the top.  
+    - actors: [Arthur, Misty, drone]
     - explicit: Arthur and Misty disembark through a security gate, and ride a moving walkway which runs quickly through a suprisingly long tunnel.
     - explicit: They are awed again by the massive mall they find inside, interspersed with tropical tree parks with a large variety of colorful birds.
     - explicit: The pyramid is partially hollow, with living areas interpersed with agricultural levels in the thick outer shell of the pyramid.  The layers can be observed from the ground mall level.
