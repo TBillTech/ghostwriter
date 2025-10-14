@@ -1347,12 +1347,18 @@ def main():
 
 # Required prompt templates for the pipeline
 _REQUIRED_PROMPTS = [
-    "prompts/master_initial_prompt.md",
-    "prompts/master_prompt.md",
+    # Core polishing and summaries
     "prompts/polish_prose_prompt.md",
-    "prompts/check_prompt.md",
     "prompts/story_so_far_prompt.md",
     "prompts/story_relative_to_prompt.md",
+    # Deterministic pipeline steps
+    "prompts/brain_storm_prompt.md",
+    "prompts/ordering_prompt.md",
+    "prompts/implicit_brain_storm_prompt.md",
+    "prompts/actor_assignment_prompt.md",
+    "prompts/body_language_prompt.md",
+    "prompts/agenda_prompt.md",
+    "prompts/subtle_edit_prompt.md",
 ]
 
 
