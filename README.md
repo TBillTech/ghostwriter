@@ -56,6 +56,107 @@ Instead of writing freeform prose from scratch, this system separates story elem
 
 SETTING.yaml – A declarative log of the novel’s background.
 
+## New architecture (deterministic pipelines)
+
+The system is moving to a deterministic, sequential pipeline driven by touch-points with zero automatic looping. Two operating branches exist depending on whether a previous draft is present.
+
+- Removed from sequence for now: master_initial_prompt, master_prompt, and the single monolithic check prompt. Instead, the system uses specialized prompts per step and per touch-point.
+- All steps are strictly sequential and deterministic (no auto-iterate), except for the implied per–touch-point loop and a local retry mechanism for output-format validation.
+
+### Two branches
+
+1) When no prior draft exists (no `draft_v1.txt`):
+   - Read and parse chapter touch-points as commands: `actors`, `scene`, `foreshadowing`, `narration`, `explicit`, `implicit`.
+   - Maintain state across touch-points: active actors, current scene, foreshadowing flags, and dialog history per actor (latest few lines).
+   - For each touch-point:
+     - `actors`/`scene`/`foreshadowing`: update state only.
+     - `narration`: run Narration pipeline.
+     - `explicit`: run Explicit pipeline.
+     - `implicit`: run Implicit pipeline.
+   - Polish each pipeline’s output via `polish_prose_prompt.md`.
+   - Write `draft_v1.txt` as a parseable sequence of pairs: original touch-point + polished output.
+   - For each touch-point, run the corresponding check prompt (`check_narration_prompt.md`, `check_explicit_prompt.md`, `check_implicit_prompt.md`) and aggregate into a parseable `suggestions_v1.txt`.
+   - Generate `story_relative_to.txt` and `story_so_far.txt`.
+   - Write `final.txt` as a clean, publishable text containing only polished prose (no touch-points/markdown).
+
+2) When a prior version exists (largest N where `draft_vN.txt` and `suggestions_vN.txt` are present):
+   - Load prior polished texts and suggestions into state so the edit pipeline can reference them by touch-point.
+   - For each touch-point that yields prose (`narration`, `explicit`, `implicit`), run the Subtle Edit pipeline instead of generating from scratch.
+   - Polish each result; write a parseable `draft_v(N+1).txt`.
+   - Re-run per-touch-point checks and write a parseable `suggestions_v(N+1).txt`.
+   - Regenerate and overwrite `story_relative_to.txt`, `story_so_far.txt`, and `final.txt`.
+
+### Pipelines
+
+- Narration pipeline
+  - `(brain_storm_prompt.md → bullet list)`
+  - `(ordering_prompt.md → bullet list)`
+  - `(generate_narration_prompt.md → text)`
+
+- Explicit pipeline
+  - `(brain_storm_prompt.md → bullet list)`
+  - `(ordering_prompt.md → bullet list)`
+  - `(actor_assignment_prompt.md → actor list)`
+  - In parallel: `(body_language_prompt.md → bullet list)` and `(agenda_prompt.md → agenda list)`
+  - Join actor lines + body language + agendas. For each actor line, fill `character_dialog_prompt.md`; concatenate into output text.
+  - The actor list is stored in state and re-used for downstream templates.
+
+- Implicit pipeline
+  - `(implicit_brain_storm_prompt.md → bullet list)`
+  - `(ordering_prompt.md → bullet list)`
+  - `(actor_assignment_prompt.md → actor list)`
+  - In parallel: `(body_language_prompt.md → bullet list)` and `(agenda_prompt.md → agenda list)`
+  - Join as in Explicit pipeline; produce output text via `character_dialog_prompt.md` per actor line.
+
+- Subtle Edit pipeline
+  - `(subtle_edit_prompt.md → text)`
+
+### Output formats and validation
+
+Each pipeline step has an expected output format. The framework validates output; if invalid, it retries up to two more times (total 3 attempts). On third failure, the program stops and reports the error.
+
+- text — freeform text, no parsing required.
+- bullet list — each bullet must be a separate line beginning with `*`; at least 2 bullets required.
+- actor list — dialog lines prefixed by a character id; at least 2 actor attributions (actors may repeat). Non-dialog narrative lines are allowed between dialog lines.
+- agenda list — structured list as described in `prompts/agenda_prompt.md`.
+
+### State tracking and dialog history
+
+- Track current `actors`, `scene`, and `foreshadowing` (updated by their commands).
+- Track recent dialog per actor (last N lines) so `explicit`/`implicit` pipelines can feed rich context to `character_dialog_prompt.md`.
+
+### Artifacts and logging
+
+Per chapter iteration folder: `iterations/CHAPTER_xxx/`
+
+- `draft_vN.txt` — parseable list of (touch-point, polished output) pairs.
+- `suggestions_vN.txt` — parseable list of (touch-point, per-touch-point checks) results.
+- `story_so_far.txt`, `story_relative_to.txt` — regenerated each run.
+- `final.txt` — stripped, publish-ready prose (polished only).
+- LLM logs — every prompt+response round-trip is saved under a subdirectory with descriptive filenames; logs include fully substituted prompts and raw outputs for traceability.
+
+### Configuration: per-prompt environment variables
+
+Each prompt can be configured with model, temperature, and max tokens (defaults fall back to general settings):
+
+- Brainstorm: `GW_MODEL_BRAIN_STORM`, `GW_TEMP_BRAIN_STORM`, `GW_MAX_TOKENS_BRAIN_STORM`
+- Ordering: `GW_MODEL_ORDERING`, `GW_TEMP_ORDERING`, `GW_MAX_TOKENS_ORDERING`
+- Generate narration: `GW_MODEL_GENERATE_NARRATION`, `GW_TEMP_GENERATE_NARRATION`, `GW_MAX_TOKENS_GENERATE_NARRATION`
+- Actor assignment: `GW_MODEL_ACTOR_ASSIGNMENT`, `GW_TEMP_ACTOR_ASSIGNMENT`, `GW_MAX_TOKENS_ACTOR_ASSIGNMENT`
+- Body language: `GW_MODEL_BODY_LANGUAGE`, `GW_TEMP_BODY_LANGUAGE`, `GW_MAX_TOKENS_BODY_LANGUAGE`
+- Agenda: `GW_MODEL_AGENDA`, `GW_TEMP_AGENDA`, `GW_MAX_TOKENS_AGENDA`
+- Character dialog: `GW_MODEL_CHARACTER_DIALOG`, `GW_TEMP_CHARACTER_DIALOG`, `GW_MAX_TOKENS_CHARACTER_DIALOG`
+- Subtle edit: `GW_MODEL_SUBTLE_EDIT`, `GW_TEMP_SUBTLE_EDIT`, `GW_MAX_TOKENS_SUBTLE_EDIT`
+- Polish prose: `GW_MODEL_POLISH_PROSE`, `GW_TEMP_POLISH_PROSE`, `GW_MAX_TOKENS_POLISH_PROSE`
+- Checks (per kind):
+  - Narration: `GW_MODEL_CHECK_NARRATION`, `GW_TEMP_CHECK_NARRATION`, `GW_MAX_TOKENS_CHECK_NARRATION`
+  - Explicit: `GW_MODEL_CHECK_EXPLICIT`, `GW_TEMP_CHECK_EXPLICIT`, `GW_MAX_TOKENS_CHECK_EXPLICIT`
+  - Implicit: `GW_MODEL_CHECK_IMPLICIT`, `GW_TEMP_CHECK_IMPLICIT`, `GW_MAX_TOKENS_CHECK_IMPLICIT`
+- Summaries (existing):
+  - `GW_MODEL_STORY_SO_FAR`, `GW_TEMP_STORY_SO_FAR`, `GW_MAX_TOKENS_STORY_SO_FAR`
+  - `GW_MODEL_STORY_RELATIVE`, `GW_TEMP_STORY_RELATIVE`, `GW_MAX_TOKENS_STORY_RELATIVE`
+
+If a per-prompt variable is not set, the stage falls back to defaults (e.g., `OPENAI_MODEL`, a global default temperature, and a global max tokens if configured).
 CHAPTER_xxx.yaml – Sequential logs for each chapter that guide prose generation.
 
 These YAML files serve as inputs to an LLM-powered ghostwriter, which produces continuous prose chapters while ensuring that key narrative elements are included.
@@ -68,7 +169,7 @@ File Structure
   │    ├── CHAPTER_002.yaml
   │    └── ...
   ├── prompts/
-  │    ├── master_prompt.md
+See “New architecture (deterministic pipelines)” for the step-by-step behavior for both branches: first-draft generation and subsequent subtle edits.
   |    ├── story_so_far_prompt.md
   |    ├── story_relative_to_prompt.md
   │    └── check_prompt.md
@@ -104,6 +205,7 @@ File Structure
   Notes:
   - If your visible text contains the phrase `The last N lines of dialog`, the `N` will be replaced by the actual number chosen for that call.
   - If `prompts/character_dialog_prompt.md` is missing, the code falls back to a sensible built-in default.
+- The driver is being updated to the deterministic per–touch-point pipelines described above. Some legacy sections are retained in the README for context; the new design takes precedence.
 
   ## Configuration: token limits and models
 
