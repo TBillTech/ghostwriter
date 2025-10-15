@@ -3,12 +3,15 @@ The overall goal is to produce polished prose to go into a novel.
 Your job is to tell the actors what to say.  The actors know what their characters are like, but they need to be prompted as if they forgot their lines.
 The writer has already given you each line that needs to be said, but didn't tell us which actors should say what, and the voice should be cast to second person.  Each line (bullet point) which needs to be spoken by an actor starts with a '*' character.
 
-# Setting for the book in general 
-[SETTING.yaml]
+# Setting for this chapter general 
+[SETTING]
+
+# Characters in this chapter
+[CHARACTERS]
 
 # Specifics in the Chapter
 Here is central theme of the dialog lines being "filmed"/"recorded":
-[touch-point]
+[TOUCH_POINT]
 
 # Rules for generation:
 1. **Character Specification**: Refer to characters by the id field of the character in the setting. Each line must start with the id of the best character to speak it.  

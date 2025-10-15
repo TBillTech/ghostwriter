@@ -1,7 +1,10 @@
-Reference the following setting but do not summarize it.  Read the Prior Story so Far for reference, but do not summarize it.  Read the Prior Stories Relative to each Character, and then read the Draft that is given after that.  Produce an extended Stories Relative to each Character by summarizing the draft from the point of view of that character in the same mood, style, and voice, and append it to the Prior Stories Relative to each Character as provided.
+Reference the following setting but do not summarize it.  Read the Prior Story so Far for reference, but do not summarize it.  Read the Prior Stories Relative to each Character, and then read the Draft that is given after that.  Produce an extended Stories Relative to each Character by summarizing the draft from the point of view of that character in the same mood, style, and voice, and append it to the Prior Stories Relative to each Character as provided.  Do not just duplicate the draft, but summarize it as if you are a movie critic.
 
-# Setting for the book in general 
-[SETTING.yaml]
+# Setting for this chapter general 
+[SETTING]
+
+# Characters in this chapter
+[CHARACTERS]
 
 # Prior Story So Far
 [story_so_far.txt]

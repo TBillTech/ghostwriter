@@ -3,8 +3,11 @@ Your goal is to consider an idea that the novel needs to express, and brainstorm
 1) What points does the audience need to know to easily understand what is going on? This adds clarity.
 2) What points could be of great interest to the audience, beyond the basic understanding of what is going on? This adds flavor.
 
-# Setting for the book in general 
-[SETTING.yaml]
+# Setting in general 
+[SETTING]
+
+# Characters
+[CHARACTERS]
 
 # The Story so Far
 This is the synopsis of the book up to the current chapter:
@@ -28,11 +31,11 @@ Here are the actors in the scene:
 
 # The Touch-Point
 Please carefully read and understand this Touch-Point; This is the core idea that needs to be expounded upon:
-[touch_point]
+[TOUCH_POINT]
 
 
 # Rules for generation:
-1. **Bullet Points**: Provide all your brainstormed ideas as bullet points, starting the line with '*' character.
+1. **Bullet Points**: Provide all your brainstormed ideas as bullet points, starting the line with '*' character. Use only simple statements, NOT additional markdown.  Do NOT put dashes at the front of the lines.
 2. **Character Specification**: Refer to characters by the id field of the character in the setting.  
 3. **Touch-Point**: Expressing this touch point creatively IS YOUR GOAL.  
 4. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  

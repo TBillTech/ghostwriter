@@ -1,12 +1,14 @@
 You are a creative writer working from structured YAML notes.  
-Your goal is to consider an idea that the novel needs to express, but to do it indirectly!
-Ask yourself, what points could be of great interest to the audience, and be inferred from the touch-point. Come up with creative ideas that are small pieces of the touch-point, but be cagey and don't just dump the idea on the reader.
-For example, it may help to imagine that the audience might be offended by just coming out and saying it.
+Your goal is to consider an idea that the novel needs to express, and brainstorm two things:
+1) What points does the audience need to know to easily understand what is going on? This adds clarity.
+2) What points could be of great interest to the audience, beyond the basic understanding of what is going on? This adds flavor.
 
-# Setting in general 
+ALWAYS keep to the facts. Anything that sounds like dialog we will leave for the dialog parts of the story.  We need to generate pure narrative pseudo-historical prose.
+
+# Setting for this chapter general 
 [SETTING]
 
-# Characters
+# Characters in this chapter
 [CHARACTERS]
 
 # The Story so Far
@@ -30,15 +32,16 @@ Here are the actors in the scene:
 [actors]
 
 # The Touch-Point
-Please carefully read and understand this Touch-Point; This is the core idea that needs to be artfully danced around:
-[TOUCH_POINT]
+Please carefully read and understand this Touch-Point; This is the core idea that needs to be expounded upon:
+[touch_point]
 
 
 # Rules for generation:
 1. **Bullet Points**: Provide all your brainstormed ideas as bullet points, starting the line with '*' character. Use only simple statements, NOT additional markdown.  Do NOT put dashes at the front of the lines.
 2. **Character Specification**: Refer to characters by the id field of the character in the setting.  
-3. **Touch-Point**: Indirectly alluding to this touch point creatively IS YOUR GOAL.  
+3. **Touch-Point**: Expressing this touch point creatively IS YOUR GOAL.  
 4. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
 5. **Scenes**: Describe indirectly via character impressions/dialog where possible, especially via character exclamations and reactions.
+6. **Format**: Do NOT print any other information besides bullet points starting the line with '*' character.
 
-Now, brainstorm creative ideas to suggest things to the readers mind, with the goal of making the touch point seem to emerge like an aha-moment.
+Now, brainstorm creative ideas to give the readers a picture of the environment and what is objectively happning, with the goal of building upon and making the touch point real. Leave feelings and opions for later.

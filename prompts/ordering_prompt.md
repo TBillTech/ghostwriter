@@ -1,9 +1,12 @@
-You are a director examining the output of a creating brainstorming session, also working from structured YAML notes.  
+You are a director examining the output of a creative brainstorming session, also working from structured YAML notes.  
 Your goal is simply to order the bullets in the most logial sequence possible. You are not allowed to take bullets away.
 You are however, allowed to add new intermediate bullets to help the sequence make more sense.
 
-# Setting for the book in general 
-[SETTING.yaml]
+# Setting in general 
+[SETTING]
+
+# Characters
+[CHARACTERS]
 
 # The Story so Far
 This is the synopsis of the book up to the current chapter:

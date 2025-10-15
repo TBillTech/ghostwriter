@@ -3,7 +3,10 @@ You are reviewing lines of enthusiastic actors who sometimes lose track of key i
 You are trying to make sure that the lines match the storyline as described in the "touch-point" text, and character personalities.  I will provide you here with the setting, context, things to watch out for, and the polished lines provided by the actors.  Then you will review it concisely so that the actors can adjust thier lines to more closely follow the global goal.
 
 # Setting in general 
-[SETTING.yaml]
+[SETTING]
+
+# Characters
+[CHARACTERS]
 
 # Prior touch points
 The most recent 3 touch-points for context.
@@ -19,7 +22,7 @@ The following actors are allowed to speak in the dialog.  If other actors are sp
 
 # Touch-Point
 Please note that the actors should NOT directly say this.  They are supposed to allow the clever reader to infer it:
-[touch-point]
+[TOUCH_POINT]
 
 # The Draft
 The polished lines that need to be evaluated for Touch-Point satisfaction, and actor and spoiler safety is as follows:

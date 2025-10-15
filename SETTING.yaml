@@ -285,16 +285,3 @@ Characters:
       - 'Occasionally gets defensive if teased too hard for being ‘synthetic.’'  
       temperature_hint: 0.35  
       max_tokens_line: 90
-
-
-Props:
-    - name: "Crèche Car"
-      active: true
-      significance: "Symbol of motion and departure; implicit metaphor for change"
-      description: The Crèche Car is a vehicle used by AIs and children to commute around the vast 73rd Crèche complex, are limited to 20 mph, but are otherwise sleek and shiny.  One unusual aspect of these cars is that they are hovecraft, which prevent damage to grass and sidewalks, and can even cross ponds when necessary.  This was a useful innovation for maintaining the grounds while allowing children direct access to almost any location on the campus.  They do not leave the complex, but can provide a ride to meet with true ground transportation to commute elsewhere.
-
-    - name: "Luggage"
-      active: false
-      significance: "Symbol of learned personality quirks, memories, and motivations; implicit metaphor for the past shaping the future"
-      description: The luggage of Arthur is a seemingly old Trunk, as if picked from middles ages. The luggage of Misty looks like something from a 1950s airplane. Yet, the luggage also carries communication devices which have direct links to AURA and PROF. And yes, it does cross their minds to leave those behind, but they ultimately won't.
-
