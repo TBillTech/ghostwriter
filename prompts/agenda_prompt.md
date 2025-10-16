@@ -7,6 +7,7 @@ The writer has already given you each of the lines that the actors will say.  Ea
 [SETTING]
 
 # Characters in this chapter
+These are the characters you should give agenda output for.  You should ignore other characters mentioned above, but not given below.
 [CHARACTERS]
 
 # Specifics in the Chapter
