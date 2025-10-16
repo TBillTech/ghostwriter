@@ -40,5 +40,6 @@ Please carefully read and understand this Touch-Point; This is the core idea tha
 3. **Touch-Point**: Indirectly alluding to this touch point creatively IS YOUR GOAL.  
 4. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
 5. **Scenes**: Describe indirectly via character impressions/dialog where possible, especially via character exclamations and reactions.
+6. **Priority**: Try to alternate Clarity and Flavor points, and put the most important ones first. A downstream tool will truncate the ideas at some fixed number, and we want to keep the best ones.
 
 Now, brainstorm creative ideas to suggest things to the readers mind, with the goal of making the touch point seem to emerge like an aha-moment.

@@ -30,6 +30,8 @@ Here are the actors in the scene:
 
 # Rules for generation:
 1. **Bullet Points**: Provide your results as bullet points, starting the line with '*' character.
+2. **Clean Lines**: If there are intent words at the beginning of the given bullets, for example "Clarity - ", or "Flavor: " leave those out and just recover the point without a title.
+3. **Just Bullets Output**: Strip off, ignore, and do not output any markdown or other formatting, other than just only '*' character at line start.
 
 Now, Here are the Bullets to be ordered in as logical a way as possible:
 [bullets]

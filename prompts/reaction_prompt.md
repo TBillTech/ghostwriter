@@ -15,7 +15,7 @@ Here is central theme of the dialog lines being "filmed"/"recorded":
 
 # Rules for generation:
 1. **Continuity**: Respect "Story-So-Far" and especially "Story-Relative-To".  
-2. **Reactions**: Supply a description of the reaction the character has to the previous line.  Note that if the previous line was said by the same actor, you need to provide the reaction of the character to the character's own line, as shown in the example. 
+2. **Reactions**: Supply a description of the reaction the character has to the previous line.  Note that if the previous line was said by the same actor, you need to provide the reaction of the character to the character's own line, as shown in the example. Focus entirely on what the other character said, and DO NOT say anything about the current character.
 3. **Format**: Each actor line should generate a similiar line corresponding to it, describing the reaction of the character to the previous line.  Always put this in second person using the pronoun "you". For the first line, put: 
    You wonder what response you will get from your next words. 
 

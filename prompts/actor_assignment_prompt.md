@@ -7,17 +7,18 @@ The writer has already given you each line that needs to be said, but didn't tel
 [SETTING]
 
 # Characters in this chapter
-[CHARACTERS]
+[STATE_CHARACTERS]
 
 # Specifics in the Chapter
 Here is central theme of the dialog lines being "filmed"/"recorded":
 [TOUCH_POINT]
 
 # Rules for generation:
-1. **Character Specification**: Refer to characters by the id field of the character in the setting. Each line must start with the id of the best character to speak it.  
+1. **Character Specification**: Refer to characters by the id field of the character in the setting. Each line must start with the id of the best character to speak it.
 2. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
 3. **Character Dialog**: When you tell the actor what to say, be sure to transform the words into second person, using the "you" pronoun. This helps the character role play and not get distracted by other points of view. 
 4. **Multi-way Dialog**: Prefer switching which character says what on each successive line, if possible.  Sometimes, a character has to have two lines in a row, but this can get confusing for the reader.
+5. **Avoid**: DO NOT put - or * at the beginning of the line. DO NOT add any other text or markdown other than the name, colon, and line. 
 
 ## Examples of actor prompt lines
 

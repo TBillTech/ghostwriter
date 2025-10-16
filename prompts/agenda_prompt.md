@@ -19,6 +19,7 @@ Here is central theme of the dialog lines being "filmed"/"recorded":
 3. **Desires**: List out things that the actor wants. Specifically explain if the actor is trying to hide a motive.
 4. **Current Mood**: Explain the actors mood. If the actor is feeling good, explain this.  If the actor is angry at the facts of the situation, but loves the other character, explain this. The more nuanced the better.
 5. **Format**: Each actor should generate one bullet list starting with the id of the character followed by a colon. After this, as many bullets as necessary to list the above items.  Do exactly ONE list for EACH character, and no more.
+6. **Abstract**: Stick to abstract langauge. Describe mental states. DO NOT desccribe anything.
 
 Below is an example showing input format given for four lines, showing the specific actor id and line direction:
 Below that is an example output. When you produce your output, do not include anything in the output other than the syntax as given in the example. Each entry is limited to a single name, like "Henry:" followed by a list of simple statements.  Do not put titles or markdown in the list of statements.

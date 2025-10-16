@@ -1,0 +1,67 @@
+=== SYSTEM ===
+You write narrative prose from ordered bullets, keeping voice consistent.
+
+=== USER ===
+You are to write narrative prose that realizes the ordered outline below.
+
+Context
+=======
+- Setting and chapter:
+{'factoids': ['Overview', 'Time Period', 'Zenith World', 'Zenith World Lobby and Equipment', 'The Salvation Cohort', 'The 73rd Crèche', 'New Philadelphia'], 'actors': ['Arthur', 'Misty', 'AURA', 'PROF']}
+
+- Story so far:
+It is now Arthur's and Misty's 18th birthday. Well, it is the birthday of _everybody_ in the Creche, which practically feels like a universal holiday! They are now free to leave the Creche, and they are going to move to a semi arcology called New Philadelphia. They plan to move in before the day is out, and they can always come back to the Creche right? They will be logging in to Zenith world before you know it!
+
+
+- Story relative to:
+{
+  "Story-Relative-To": {
+    "Arthur": "Boy is Arthur ready to leave! He has been waiting for this day for so long, and now it has arrived. He isn't even willing to stick around to celebrate everybody's birthday party. He has saved up his descretionary funds in order to celebrate his birthday by logging into Zenith World for the first time. He can't wait to start scoring some of those juicy, juicy Achievements! Maybe he can even play a few harmless pranks while he is at it?\n",
+    "Misty": "She is on the fence about leaving before the party, but she has decided to stick with Arthur for now. Well, to be neighbors at least. As for the party, she certainly isn't going to miss the stilted AI-speak of the other kids as they get emotional, and there aren't any real mysteries in the Creche. On the other hand, she suspects there might be some mysteries in Zenith World. At minimum, it deserves investigation on whether Zenith World is on the up and up. A natural thing to observe is the effect it will have on her longtime childhood friend!\n",
+    "Dan": "He is playing baseball, and will join the big birthday party with everybody else. Dan isn't really bothered that Arthur and Misty won't be there, since he is going to move tomorrow and see them then. Maybe he will notice when they leave, but maybe not. \n",
+    "AURA": "She has known about Arthur and Misty's plans for some time, and has argued that the Creche is a happier place than Zenith World. She wishes they would at least stay for the Birthday party.\n",
+    "PROF": "Also knows Arthur and Misty's plans, and is on balance pleased. This is because the move shows independence and initiative, if perhaps not maximizing caution and empathy. These two human traits, among many other useful ones, he constantly worries may not be fully developed in his charges. This move appears to be proof he did his job at least partially correctly, in the end.\n"
+  }
+}
+
+Touch-Point
+===========
+Text: The Story begins with Arthur and Misty leaving the 73rd Crèche, for the first time in their lives.
+
+State
+=====
+- Scene: {'name': '73rd Crèche, Moving Day', 'description': 'This is also the 18th Birthday of Arthur and Misty. The 73rd Crèche appears almost unreal under the morning sun — a miniature city of glass and greenery, built on a scale that dwarfs its inhabitants. The central yard stretches out like a living map, divided into zones of motion and stillness: half of it an explosion of organized chaos — fields, pools, and archery lanes alive with shouts and splashes — and the other half a quiet parkland of trees, benches, and broad lawns where remaining members of the cohort play pastoral games. From above, the whole 200-acre complex resembles a great neural net — paths and transit lines connecting the tall residential towers that rise around the perimeter, each tower home to thousands of children raised together under the same patient machinery of care. Futuristic golf-carts hum along the walkways, their transparent roofs glinting. They ferry children, boxes, and farewell hugs from dorm to dorm. The air carries the smell of wet grass and the faint metallic tang of distant irrigation drones.\nNear one of the loading bays, Arthur and Misty stand beside a sleek silver Creche Car, their luggage already stacked inside. Around them, the ambient hum of the crèche was oddly emotional: laughter from somewhere in the park, a farewell whistle, the soft voice of AURA murmuring something in the distance. The high-rises cast long, lattice-like shadows across the yard as they cast their gaze toward the pickup point. Above the noise, they can hear the rhythmic chime that meant the midmorning shift — signaling the next rotation of games, classes, and meals for those who stay behind. For Arthur and Misty, it is the sound of the world continuing without them. Above them, across the path which curves through a corridor of trees flys a bright synthetic banners fluttering an aspirational message: “Cohort 73 — Dream, Build, Explore.” A few kids wave from balconies above as the two figures wait the last few minutes, half hero, half ghost — leaving the only home they had ever known for the city that waits beyond.\n', 'props': [{'name': 'Crèche Car', 'significance': 'Symbol of motion and departure; implicit metaphor for change', 'description': 'The Crèche Car is a vehicle used by AIs and children to commute around the vast 73rd Crèche complex, are limited to 20 mph, but are otherwise sleek and shiny.  One unusual aspect of these cars is that they are hovecraft, which prevent damage to grass and sidewalks, and can even cross ponds when necessary.  This was a useful innovation for maintaining the grounds while allowing children direct access to almost any location on the campus.  They do not leave the complex, but can provide a ride to meet with true ground transportation to commute elsewhere.'}, {'name': 'Luggage', 'significance': 'Symbol of learned personality quirks, memories, and motivations; implicit metaphor for the past shaping the future', 'description': "The luggage of Arthur is a seemingly old Trunk, as if picked from middles ages. The luggage of Misty looks like something from a 1950s airplane. Yet, the luggage also carries communication devices which have direct links to AURA and PROF. And yes, it does cross their minds to leave those behind, but they ultimately won't."}]}
+- Actors: Arthur, Misty
+- Foreshadowing: 
+- Prior paragraph (if any): 
+
+Ordered bullets
+===============
+* The 73rd Crèche stands as an architectural marvel, a sprawling complex of glass and greenery that seems to breathe with the rhythm of its young inhabitants.
+* The central yard is a dynamic landscape, half bustling with athletic activities and half serene with quiet games, reflecting the dual nature of childhood exploration and introspection.
+* The futuristic golf-carts, with their transparent roofs, glide silently along the pathways, serving as a reminder of the seamless integration of technology and nature within the Crèche.
+* The ambient sounds of the Crèche—laughter, farewells, and the distant voice of AURA—create a tapestry of emotions that underscore the significance of the day.
+* The rhythmic chime signaling the midmorning shift echoes through the air, a reminder of the structured life continuing for those who remain.
+* Above the path, synthetic banners with the message “Cohort 73 — Dream, Build, Explore” flutter, symbolizing the aspirations instilled in the children of the Crèche.
+* The high-rises cast long shadows across the yard, emphasizing the passage of time and the impending change in Arthur and Misty's lives.
+* Arthur and Misty stand near a sleek silver Creche Car, their luggage already loaded, marking the beginning of their journey away from the only home they've known.
+* Arthur's luggage, resembling an old trunk from the Middle Ages, hints at his fascination with stories of knights and quests.
+* Misty's luggage, styled like something from a 1950s airplane, reflects her affinity for vintage aesthetics and her rejection of AI-speak.
+* The Crèche Car, a symbol of motion and departure, represents the transition from the sheltered life of the Crèche to the unknown world beyond.
+* As Arthur and Misty wait by the loading bay, the world around them continues, indifferent to their departure, yet charged with the weight of their decision.
+* The farewell gestures from balconies above serve as a poignant reminder of the connections formed within the Crèche, even as Arthur and Misty prepare to leave them behind.
+
+Instructions
+============
+- Convert the ordered bullets into a continuous narrative paragraph or two.
+- Keep it vivid, concise, and in the established voice.
+- Do not include bullet markers or headings in your output.
+- Return only the prose.
+- DO NOT say "a symbol of", be sure to transform this into "seemed like" or just "like" or some other simile.
+- Be sure to reformat spaces so that it looks natural.
+
+
+=== RESPONSE ===
+The 73rd Crèche stood as an architectural marvel, a sprawling complex of glass and greenery that seemed to breathe with the rhythm of its young inhabitants. The central yard was a dynamic landscape, half bustling with athletic activities and half serene with quiet games, reflecting the dual nature of childhood exploration and introspection. Futuristic golf-carts with transparent roofs glided silently along the pathways, a reminder of the seamless integration of technology and nature within the Crèche. The ambient sounds of the Crèche—laughter, farewells, and the distant voice of AURA—created a tapestry of emotions that underscored the significance of the day. The rhythmic chime signaling the midmorning shift echoed through the air, a reminder of the structured life continuing for those who remained. Above the path, synthetic banners with the message “Cohort 73 — Dream, Build, Explore” fluttered, symbolizing the aspirations instilled in the children of the Crèche. The high-rises cast long shadows across the yard, emphasizing the passage of time and the impending change in Arthur and Misty's lives.
+
+Arthur and Misty stood near a sleek silver Creche Car, their luggage already loaded, marking the beginning of their journey away from the only home they'd known. Arthur's luggage, resembling an old trunk from the Middle Ages, hinted at his fascination with stories of knights and quests. Misty's luggage, styled like something from a 1950s airplane, reflected her affinity for vintage aesthetics and her rejection of AI-speak. The Creche Car, like a symbol of motion and departure, represented the transition from the sheltered life of the Crèche to the unknown world beyond. As Arthur and Misty waited by the loading bay, the world around them continued, indifferent to their departure, yet charged with the weight of their decision. The farewell gestures from balconies above served as a poignant reminder of the connections formed within the Crèche, even as Arthur and Misty prepared to leave them behind.

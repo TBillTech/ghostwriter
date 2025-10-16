@@ -1,0 +1,11 @@
+{
+  "id": "1",
+  "type": "setting",
+  "touchpoint": "{'factoids': ['Overview', 'Time Period', 'Zenith World', 'Zenith World Lobby and Equipment', 'The Salvation Cohort', 'The 73rd Crèche', 'New Philadelphia'], 'actors': ['Arthur', 'Misty', 'AURA', 'PROF']}",
+  "active_actors": [],
+  "scene": null,
+  "foreshadowing": [],
+  "setting_block": "{'factoids': ['Overview', 'Time Period', 'Zenith World', 'Zenith World Lobby and Equipment', 'The Salvation Cohort', 'The 73rd Crèche', 'New Philadelphia'], 'actors': ['Arthur', 'Misty', 'AURA', 'PROF']}",
+  "characters_block": "",
+  "appended_dialog": {}
+}

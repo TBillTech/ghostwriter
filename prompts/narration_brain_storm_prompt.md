@@ -43,5 +43,6 @@ Please carefully read and understand this Touch-Point; This is the core idea tha
 4. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
 5. **Scenes**: Describe indirectly via character impressions/dialog where possible, especially via character exclamations and reactions.
 6. **Format**: Do NOT print any other information besides bullet points starting the line with '*' character.
+7. **Priority**: Try to alternate Clarity and Flavor points, and put the most important ones first. A downstream tool will truncate the ideas at some fixed number, and we want to keep the best ones.
 
 Now, brainstorm creative ideas to give the readers a picture of the environment and what is objectively happning, with the goal of building upon and making the touch point real. Leave feelings and opions for later.

@@ -32,5 +32,5 @@ Instructions
 - Keep it vivid, concise, and in the established voice.
 - Do not include bullet markers or headings in your output.
 - Return only the prose.
-- Anytime you see a phrase like "a symbol of", be sure to transform this into "seemed like" or just "like" or some other simile.
+- DO NOT say "a symbol of", be sure to transform this into "seemed like" or just "like" or some other simile.
 - Be sure to reformat spaces so that it looks natural.
