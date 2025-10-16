@@ -352,6 +352,31 @@ def llm_complete(
             resp = client.chat.completions.create(**kwargs)
             _breadcrumb("llm:chat.create:after")
             out = resp.choices[0].message.content or ""
+            # If the model returned empty content, retry once with a higher token budget
+            if not out.strip():
+                try:
+                    inc = int(os.getenv("GW_RETRY_TOKEN_INCREMENT", "0") or "0")
+                except Exception:
+                    inc = 0
+                if inc > 0:
+                    try:
+                        # Increase the effective limit on the selected token param
+                        new_limit = effective_limit + inc
+                        try:
+                            cap = int(os.getenv("GW_MAX_TOKENS_CAP", "64000") or "64000")
+                        except Exception:
+                            cap = 64000
+                        new_limit = min(new_limit, cap)
+                        kwargs[token_param] = new_limit
+                        _breadcrumb(f"llm:empty-retry:inc_tokens by={inc} new_limit={new_limit}")
+                        resp = client.chat.completions.create(**kwargs)
+                        _breadcrumb("llm:chat.create:after")
+                        out2 = resp.choices[0].message.content or ""
+                        if out2.strip():
+                            _breadcrumb("llm:exit")
+                            return out2
+                    except Exception:
+                        pass
             _breadcrumb("llm:exit")
             return out
         except Exception as e:
@@ -1091,7 +1116,7 @@ def run_narration_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_brainstorm{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
     )
 
-    # 2) Ordering → bullet list
+    # 2) Ordering → bullet list (narration always orders)
     reps2 = dict(reps)
     # Map brainstorm output into common placeholders used by ordering templates
     reps2["[BULLET_IDEAS]"] = brainstorm
@@ -1141,19 +1166,25 @@ def run_explicit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict,
     brainstorm = _filter_narration_brainstorm(brainstorm, min_chars=24)
     # Post-process: limit to at most 10 bullets
     brainstorm = _truncate_brainstorm(brainstorm, limit=10)
-    # Ordering
+    # Ordering (skippable via env)
     reps2 = dict(reps)
     reps2["[BULLET_IDEAS]"] = brainstorm
     reps2["[BULLETS]"] = brainstorm
     reps2["[bullets]"] = brainstorm
-    sys2 = "Order explicit dialog beats for flow."
-    tpl2 = "ordering_prompt.md"
-    user2 = _apply_step(tpl2, reps2)
-    m2, t2, k2 = _env_for_prompt(tpl2, "ORDERING", default_temp=0.25, default_max_tokens=600)
-    ordered = _llm_call_with_validation(
-        sys2, user2, model=m2, temperature=t2, max_tokens=k2, validator=validate_bullet_list,
-        log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_ordering{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
-    )
+    disable_order_global = os.getenv("GW_DISABLE_ORDERING_DIALOG", "0") == "1"
+    disable_order_explicit = os.getenv("GW_DISABLE_ORDERING_EXPLICIT", "0") == "1"
+    if disable_order_global or disable_order_explicit:
+        _breadcrumb("ordering:skip:explicit")
+        ordered = brainstorm
+    else:
+        sys2 = "Order explicit dialog beats for flow."
+        tpl2 = "ordering_prompt.md"
+        user2 = _apply_step(tpl2, reps2)
+        m2, t2, k2 = _env_for_prompt(tpl2, "ORDERING", default_temp=0.25, default_max_tokens=600)
+        ordered = _llm_call_with_validation(
+            sys2, user2, model=m2, temperature=t2, max_tokens=k2, validator=validate_bullet_list,
+            log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_ordering{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        )
     # Actor assignment → actor lines ("id: line" entries)
     reps3 = dict(reps2)
     reps3["[ORDERED_BULLETS]"] = ordered
@@ -1220,19 +1251,28 @@ def run_explicit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict,
                     continue
     except Exception:
         pass
+    # Parse reactions as (actor_id, reaction) pairs to align by index
+    reactions_pairs = _parse_actor_lines(reactions_text)
     outputs: List[str] = []
     for b_index, (actor_id, line_hint) in enumerate(_parse_actor_lines(actor_lines), start=1):
         # Build a per-line prompt combining hints
         # Select the per-actor agenda block and the per-line reaction
         agenda_block = agenda_by_actor.get(actor_id, "")
-        reaction_line = _pick_bullet_by_index(reactions_text, b_index)
+        reaction_line = ""
+        if 1 <= b_index <= len(reactions_pairs):
+            try:
+                reaction_line = reactions_pairs[b_index - 1][1]
+            except Exception:
+                reaction_line = ""
         # Use only the body-language bullet for this specific line
         body_for_line = _pick_bullet_by_index(body_lang, b_index)
+        # Move body language into agenda to reduce self-description in dialog
+        agenda_combined = agenda_block
+        if body_for_line.strip():
+            agenda_combined = (agenda_block + ("\n" if agenda_block else "") + body_for_line).strip()
         combined_prompt = (
-            f"Line intent: {line_hint}\n"
             f"Reaction: {reaction_line}\n"
-            f"Agenda: {agenda_block}\n"
-            f"Body language: {body_for_line}\n"
+            f"Line intent: {line_hint}\n"
         )
         dialog_lines_ctx = state.recent_dialog(actor_id)
         resp = render_character_call(
@@ -1243,6 +1283,7 @@ def run_explicit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict,
             max_tokens_line=120,
             log_file=(log_dir / f"{tp_index:02d}_b{b_index:02d}_{actor_id}.txt") if log_dir else None,
             character_yaml=char_yaml_by_id.get(actor_id.strip().lower()),
+            agenda=agenda_combined,
         )
         # Inline body language for this line (leading clause)
         outputs.append(_inline_body_with_dialog(body_for_line, resp))
@@ -1268,16 +1309,25 @@ def run_implicit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict,
     )
     # Post-process: limit to at most 10 bullets
     brainstorm = _truncate_brainstorm(brainstorm, limit=10)
-    # Ordering
-    reps2 = dict(reps); reps2["[BULLET_IDEAS]"] = brainstorm
-    sys2 = "Order implicit dialog beats for flow."
-    tpl2 = "ordering_prompt.md"
-    user2 = _apply_step(tpl2, reps2)
-    m2, t2, k2 = _env_for_prompt(tpl2, "ORDERING", default_temp=0.25, default_max_tokens=600)
-    ordered = _llm_call_with_validation(
-        sys2, user2, model=m2, temperature=t2, max_tokens=k2, validator=validate_bullet_list,
-        log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_ordering{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
-    )
+    # Ordering (skippable via env)
+    reps2 = dict(reps)
+    reps2["[BULLET_IDEAS]"] = brainstorm
+    reps2["[BULLETS]"] = brainstorm
+    reps2["[bullets]"] = brainstorm
+    disable_order_global = os.getenv("GW_DISABLE_ORDERING_DIALOG", "0") == "1"
+    disable_order_implicit = os.getenv("GW_DISABLE_ORDERING_IMPLICIT", "0") == "1"
+    if disable_order_global or disable_order_implicit:
+        _breadcrumb("ordering:skip:implicit")
+        ordered = brainstorm
+    else:
+        sys2 = "Order implicit dialog beats for flow."
+        tpl2 = "ordering_prompt.md"
+        user2 = _apply_step(tpl2, reps2)
+        m2, t2, k2 = _env_for_prompt(tpl2, "ORDERING", default_temp=0.25, default_max_tokens=600)
+        ordered = _llm_call_with_validation(
+            sys2, user2, model=m2, temperature=t2, max_tokens=k2, validator=validate_bullet_list,
+            log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_ordering{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        )
     # Actor assignment → actor lines ("id: line" entries)
     reps3 = dict(reps2); reps3["[ORDERED_BULLETS]"] = ordered
     sys3 = "Assign dialog lines to actors as 'id: line' entries."
@@ -1338,16 +1388,23 @@ def run_implicit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict,
                     continue
     except Exception:
         pass
+    reactions_pairs2 = _parse_actor_lines(reactions_text)
     outputs: List[str] = []
     for b_index, (actor_id, line_hint) in enumerate(_parse_actor_lines(actor_lines), start=1):
         agenda_block = agenda_by_actor.get(actor_id, "")
-        reaction_line = _pick_bullet_by_index(reactions_text, b_index)
+        reaction_line = ""
+        if 1 <= b_index <= len(reactions_pairs2):
+            try:
+                reaction_line = reactions_pairs2[b_index - 1][1]
+            except Exception:
+                reaction_line = ""
         body_for_line = _pick_bullet_by_index(body_lang, b_index)
+        agenda_combined = agenda_block
+        if body_for_line.strip():
+            agenda_combined = (agenda_block + ("\n" if agenda_block else "") + body_for_line).strip()
         combined_prompt = (
-            f"(Implicit) Line intent: {line_hint}\n"
             f"Reaction: {reaction_line}\n"
-            f"Agenda: {agenda_block}\n"
-            f"Body language: {body_for_line}\n"
+            f"(Implicit) Line intent: {line_hint}\n"
         )
         dialog_lines_ctx = state.recent_dialog(actor_id)
         resp = render_character_call(
@@ -1358,6 +1415,7 @@ def run_implicit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict,
             max_tokens_line=120,
             log_file=(log_dir / f"{tp_index:02d}_b{b_index:02d}_{actor_id}.txt") if log_dir else None,
             character_yaml=char_yaml_by_id.get(actor_id.strip().lower()),
+            agenda=agenda_combined,
         )
         outputs.append(_inline_body_with_dialog(body_for_line, resp))
         if resp.strip():

@@ -6,7 +6,7 @@ You are aware of or deeply care about the following details.
 DO NOT verbalise _ANYTHING_ above this line!  
 The last N lines of dialog are:
 <dialog>N</dialog>
-The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog.  The director gives you this prompt:
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
 <prompt/>
 Do not just repeat back the director's words, even if he tries to put words in your mouth.
 DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.

@@ -239,10 +239,8 @@ Characters:
         - "Politeness: ‘I request clarification’ instead of ‘What do you mean?’"
         - "Prank aftermath: Always documents them. ‘For the record, that prank had a 95% harmlessness rating.’"
         - "Knightly affectations: A blend of childlike AI-logic, politeness, and Arthurian idealism. Calls Misty and other women ‘my lady’, and other men ‘sir’ without reflection and in earnest."
-      sample_lines:
-        - '“Chivalry update: applied successfully.”'
+      common_lines:
         - '“That wasn’t very optimal — or noble.”'
-        - '“Oh no, I’ve looped again! Sorry, sorry, sorry. NOT AGAIN!”'
         - '“Logging today as: moderately victorious.”'
         - '“My knightly subroutine demands I assist.”'
         - '“That sounds... volatile. A difficult to defeat emotion!”'
@@ -251,6 +249,9 @@ Characters:
         - '“I was raised by consensus algorithms — of course I can deal with ambiguity!”'
         - '“For truth and data integrity!”'
         - '“Please stand by while I recalibrate my courage.”'
+      rare_lines:
+        - '“That monster is frightening, but I have returned to save my lady! Chivalry update: applied successfully.”'
+        - '“That reminds me not to repeat myself! Oh no, I’ve looped again! Sorry, sorry, sorry. AH NOT AGAIN!”'
       forbidden:
         - 'Avoids: “Salvation Cohort,” “Church,” “Ten Thousand,” or anything that sounds like “destiny” or “chosen.”'
         - 'If someone brings it up, he might deflect using humor or formality'
