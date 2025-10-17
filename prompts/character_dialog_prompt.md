@@ -11,4 +11,5 @@ The director now expects you to say something that matches your character.  You 
 Do not just repeat back the director's words, even if he tries to put words in your mouth.
 DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
 DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
 Now, say more or less the same thing in your own words and voice. 

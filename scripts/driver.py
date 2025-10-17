@@ -2297,17 +2297,72 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
         elif tp_type in ("narration", "explicit", "implicit"):
             if tp_type == "narration":
                 if branch_b:
-                    polished_text = run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=prior_draft, prior_suggestions=prior_suggestions, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                    # Use previous version's per-touchpoint artifacts if available
+                    prev_polished_tp = ""
+                    prev_suggestions_tp = ""
+                    try:
+                        prev_dir = iter_dir_for(chapter_id) / f"pipeline_v{version_num-1}"
+                        prev_tp_dir = prev_dir / f"{i:02d}_{tp_type}"
+                        if prev_tp_dir.exists():
+                            try:
+                                prev_polished_tp = read_file(str(prev_tp_dir / "touch_point_draft.txt"))
+                            except Exception:
+                                prev_polished_tp = ""
+                            try:
+                                prev_suggestions_tp = read_file(str(prev_tp_dir / "suggestions.txt"))
+                            except Exception:
+                                prev_suggestions_tp = ""
+                    except Exception:
+                        pass
+                    use_pol = prev_polished_tp or prior_draft
+                    use_sugg = prev_suggestions_tp or prior_suggestions
+                    polished_text = run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=use_pol, prior_suggestions=use_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
                 else:
                     polished_text = run_narration_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
             elif tp_type == "explicit":
                 if branch_b:
-                    polished_text = run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=prior_draft, prior_suggestions=prior_suggestions, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                    prev_polished_tp = ""
+                    prev_suggestions_tp = ""
+                    try:
+                        prev_dir = iter_dir_for(chapter_id) / f"pipeline_v{version_num-1}"
+                        prev_tp_dir = prev_dir / f"{i:02d}_{tp_type}"
+                        if prev_tp_dir.exists():
+                            try:
+                                prev_polished_tp = read_file(str(prev_tp_dir / "touch_point_draft.txt"))
+                            except Exception:
+                                prev_polished_tp = ""
+                            try:
+                                prev_suggestions_tp = read_file(str(prev_tp_dir / "suggestions.txt"))
+                            except Exception:
+                                prev_suggestions_tp = ""
+                    except Exception:
+                        pass
+                    use_pol = prev_polished_tp or prior_draft
+                    use_sugg = prev_suggestions_tp or prior_suggestions
+                    polished_text = run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=use_pol, prior_suggestions=use_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
                 else:
                     polished_text = run_explicit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
             else:  # implicit
                 if branch_b:
-                    polished_text = run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=prior_draft, prior_suggestions=prior_suggestions, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                    prev_polished_tp = ""
+                    prev_suggestions_tp = ""
+                    try:
+                        prev_dir = iter_dir_for(chapter_id) / f"pipeline_v{version_num-1}"
+                        prev_tp_dir = prev_dir / f"{i:02d}_{tp_type}"
+                        if prev_tp_dir.exists():
+                            try:
+                                prev_polished_tp = read_file(str(prev_tp_dir / "touch_point_draft.txt"))
+                            except Exception:
+                                prev_polished_tp = ""
+                            try:
+                                prev_suggestions_tp = read_file(str(prev_tp_dir / "suggestions.txt"))
+                            except Exception:
+                                prev_suggestions_tp = ""
+                    except Exception:
+                        pass
+                    use_pol = prev_polished_tp or prior_draft
+                    use_sugg = prev_suggestions_tp or prior_suggestions
+                    polished_text = run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=use_pol, prior_suggestions=use_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
                 else:
                     polished_text = run_implicit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
         else:
@@ -2319,6 +2374,83 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
 
         # Record (for actors/scene/foreshadowing, polished_text may be empty)
         records.append((tp_id, tp_type, tp_text, polished_text))
+        # After producing a polished draft for contentful types, run per-touch-point check and suggestions
+        if tp_type in ("narration", "explicit", "implicit") and polished_text and tp_log_dir is not None:
+            try:
+                # Build replacements expected by check_* prompts
+                # Setting block
+                setting_block = getattr(state, "setting_block", "") or ""
+                # Characters block: prefer state.characters_block, else select by active actors
+                characters_block = getattr(state, "characters_block", "") or ""
+                if not characters_block and state.active_actors:
+                    try:
+                        sel_chars = []
+                        all_chars = setting.get("Characters") if isinstance(setting, dict) else None
+                        if isinstance(all_chars, list):
+                            wanted = {a.strip().lower() for a in state.active_actors if a.strip()}
+                            for ch in all_chars:
+                                cid = str(ch.get("id", "")).strip().lower()
+                                cname = str(ch.get("name", "")).strip().lower()
+                                if cid in wanted or cname in wanted:
+                                    sel_chars.append(ch)
+                        if sel_chars:
+                            characters_block = _to_text({"Selected-Characters": sel_chars})
+                    except Exception:
+                        characters_block = characters_block or ""
+                # Recent context: last up to 3 polished segments
+                try:
+                    recent_polished = []
+                    for (_tid, _ttype, _touch, _pol) in records[-4:-1]:
+                        if _pol and str(_pol).strip():
+                            recent_polished.append(str(_pol).strip())
+                    context_block = "\n\n---\n\n".join(recent_polished)
+                except Exception:
+                    context_block = ""
+                # Foreshadowing and actors
+                foreshadowing = ", ".join(state.foreshadowing)
+                actors_csv = ", ".join(state.active_actors)
+                # Choose check template per tp type
+                check_tpl = {
+                    "narration": "check_narration_prompt.md",
+                    "explicit": "check_explicit_prompt.md",
+                    "implicit": "check_implicit_prompt.md",
+                }.get(tp_type, "check_narration_prompt.md")
+                # Prepare replacements
+                check_reps = build_common_replacements(setting, chapter, chapter_id, version_num)
+                check_reps.update({
+                    "[SETTING]": setting_block,
+                    "[CHARACTERS]": characters_block,
+                    "[context]": context_block,
+                    "[foreshadowing]": foreshadowing,
+                    "[actors]": actors_csv,
+                    "[TOUCH_POINT]": tp_text,
+                    "[prose]": polished_text,
+                })
+                check_user = _apply_step(check_tpl, check_reps)
+                check_model, check_temp, check_max_tokens = _env_for_prompt(check_tpl, "CHECK", default_temp=0.0, default_max_tokens=1200)
+                check_sys = "You are an evaluator checking touch-point coverage."
+                check_out = llm_complete(check_user, system=check_sys, temperature=check_temp, max_tokens=check_max_tokens, model=check_model)
+                # Compose check.txt with full prompt and response for easier review
+                check_file_text = (
+                    "=== SYSTEM ===\n" + (check_sys or "") +
+                    "\n\n=== USER ===\n" + (check_user or "") +
+                    "\n\n=== RESPONSE ===\n" + (check_out or "") + "\n"
+                )
+                # Suggestions: reuse the same prompt with an appended instruction
+                sugg_tpl = check_tpl
+                sugg_reps = dict(check_reps)
+                suggestions_user = check_user + "\n\n---\nNow produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions."
+                sugg_model, sugg_temp, sugg_max_tokens = _env_for_prompt(sugg_tpl, "SUGGESTIONS", default_temp=0.0, default_max_tokens=800)
+                suggestions_out = llm_complete(suggestions_user, system="You are an evaluator extracting actionable suggestions only.", temperature=sugg_temp, max_tokens=sugg_max_tokens, model=sugg_model)
+                # Write files next to touch_point_draft.txt
+                try:
+                    tp_log_dir.mkdir(parents=True, exist_ok=True)
+                    save_text(tp_log_dir / "check.txt", check_file_text)
+                    save_text(tp_log_dir / "suggestions.txt", suggestions_out)
+                except Exception:
+                    pass
+            except Exception:
+                pass
         # Write checkpoint for resume
         _write_tp_checkpoint(tp_log_dir, tp_id, tp_type, tp_text, polished_text, state)
         # Update prior_paragraph to the latest polished segment (for templates needing previous context)

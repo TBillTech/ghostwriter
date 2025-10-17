@@ -36,11 +36,11 @@ Please carefully read and understand this Touch-Point; This is the core idea tha
 
 # Rules for generation:
 1. **Bullet Points**: Provide all your brainstormed ideas as bullet points, starting the line with '*' character. Use only simple statements, NOT additional markdown.  Do NOT put dashes at the front of the lines.
-2. **Number**: Provide roughly 6 bullet points.
+2. **Number**: Provide roughly 4 to 6 bullet points. Give each actor at least one line, preferably 2.
 3. **Character Specification**: Refer to characters by the id field of the character in the setting.  
 4. **Touch-Point**: Expressing this touch point creatively IS YOUR GOAL.  
 5. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
 6. **Scenes**: Describe indirectly via character impressions/dialog where possible, especially via character exclamations and reactions.
 7. **Priority**: Try to alternate Clarity and Flavor points, and put the most important ones first. A downstream tool will truncate the ideas at some fixed number, and we want to keep the best ones.
 
-Now, brainstorm creative ideas to give the readers clarity and flavor, with the goal of building upon and making the touch point real.
+Now, brainstorm creative lines to give the readers clarity and flavor, with the goal of building upon and making the touch point real.

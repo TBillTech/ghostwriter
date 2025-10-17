@@ -26,11 +26,9 @@ Touch-Points:
             significance: "Symbol of learned personality quirks, memories, and motivations; implicit metaphor for the past shaping the future"
             description: The luggage of Arthur is a seemingly old Trunk, as if picked from middles ages. The luggage of Misty looks like something from a 1950s airplane. Yet, the luggage also carries communication devices which have direct links to AURA and PROF. And yes, it does cross their minds to leave those behind, but they ultimately won't.
     - actors: [Arthur, Misty]
-    - narration: The Story begins with Arthur and Misty leaving the 73rd Crèche, for the first time in their lives.
-    - explicit: Moving Day is also the birthday of all 10000 in the cohort.
-    - implicit: A birthday is not as special when it is shared by 9999 other kids at the same time!
-    - implicit: Arthur and Misty notice that they feel a nostalgic and slighly reluctant to go.
-    - explicit: Arthur has only to think about Zenith World, and he is eager to move! 
+    - narration: The Story begins with Arthur and Misty leaving the 73rd Crèche, for the first time in their lives. They haven't left yet, and this narration point should try hard to pull in the reader's attention. No action has taken place yet.  This moment is the calm before the storm.  In particular, Arthur and Misty are on the cusp of leaving the complex, trying to work themselves up to the biggest step in their lives so far.
+    - explicit: Moving Day is also the birthday of all 10000 in the cohort. A birthday is not as special when it is shared by 9999 other kids at the same time!
+    - explicit: Arthur and Misty notice that they feel nostalgic and slightly reluctant to go. Arthur has only to think about Zenith World, and he is eager to move! 
     - implicit: Is logging into Zenith World really going to go as smoothly as Arthur hopes?
     - explicit: Arthur and Misty are waiting a few more minutes before riding the Creche car to meet with ground transportation to New Philadelphia.
     - actors: [Arthur, Misty, AURA]

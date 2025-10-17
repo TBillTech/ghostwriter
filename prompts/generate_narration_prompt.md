@@ -34,3 +34,4 @@ Instructions
 - Return only the prose.
 - DO NOT say "a symbol of", be sure to transform this into "seemed like" or just "like" or some other simile.
 - Be sure to reformat spaces so that it looks natural.
+- Strongly prefer using proper names over pronouns like "they", "him", "it".

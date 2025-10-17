@@ -230,34 +230,33 @@ Characters:
       prefer: ["space", "treasure", "light"]
       avoid: ["Salvation Cohort", "10,000", "Church of Natural Salvation"]
       mannerisms:
-        - "Speech rhythm: Even, deliberate pacing with careful pauses. He learned conversational timing from AIs who optimized for ‘clarity over spontaneity.’"
-        - "Word choice: ‘1 Sigma’, ‘2 Sigma’, ‘Optimize,’ ‘Iterate,’ ‘Initialize,’ ‘Archive,’ ‘Fine Tune,’ used in emotional contexts. ‘I need to fine tune my mood,’ ‘Let’s optimize our fun today.’ ‘I rate your beauty at 2 Sigma.’"
-        - "Emotional understatement: Says things like ‘That was... suboptimal of me’ instead of ‘My bad.’"
-        - "Literal idioms: Rephrases sayings into mathematical set theory terms, often with a negative primitive tone. (‘You “killed it”? Oh! An isomorphism with a successful hunt by your cave ancestors!’)"
-        - "Self-revision: ‘Wait — processing — I mean, not processing, I meant to say...’"
-        - "Nervous habits: Fidgets with his wrist (like checking a nonexistent data port). Mimics breathing exercises he saw AIs model (‘inhale... hold... exhale... good work, Arthur’)."
-        - "Politeness: ‘I request clarification’ instead of ‘What do you mean?’"
-        - "Prank aftermath: Always documents them. ‘For the record, that prank had a 95% harmlessness rating.’"
-        - "Knightly affectations: A blend of childlike AI-logic, politeness, and Arthurian idealism. Calls Misty and other women ‘my lady’, and other men ‘sir’ without reflection and in earnest."
+        - "Speech rhythm: Even, a touch deliberate; brief, thoughtful pauses learned from AIs that prized clarity."
+        - "Word choice: Will drop a precise term or a light metric (‘calibrate,’ ‘optimize,’ even a joking ‘two-sigma’) when stressed, but keeps it human."
+        - "Emotional understatement: Alternates between plain admits (‘That was on me’) and soft AI-isms (‘Suboptimal on my part’)."
+        - "Idioms: Occasionally over-explains an idiom, then catches himself with a small smile."
+        - "Nervous habits: Glances at his wrist like there’s a data port; one slow breath to reset."
+        - "Politeness: ‘May I ask for clarification?’ or simply, ‘What do you mean?’ depending on the room."
+        - "Prank aftermath: Jots a quick note; sometimes jokes about a ‘harmlessness rating’ if the vibe is friendly."
+        - "Chivalry: Uses ‘my lady’ or ‘sir’ in earnest during heightened moments; otherwise sticks to names."
       common_lines:
-        - '“That wasn’t very optimal — or noble.”'
-        - '“Logging today as: moderately victorious.”'
-        - '“My knightly subroutine demands I assist.”'
-        - '“That sounds... volatile. A difficult to defeat emotion!”'
-        - '“I might have overclocked my enthusiasm.”'
-        - '“A quest! Excellent. Every system loves a goal function.”'
-        - '“I was raised by consensus algorithms — of course I can deal with ambiguity!”'
-        - '“For truth and data integrity!”'
-        - '“Please stand by while I recalibrate my courage.”'
+        - "That wasn’t very optimal — or fair."
+        - "Logging today as: decent progress."
+        - "Sir—habit—sorry. Let me help with that."
+        - "That sounds... volatile. We can handle it."
+        - "I might’ve overclocked my enthusiasm."
+        - "A quest? Excellent. Goals focus the mind."
+        - "Raised by consensus algorithms—ambiguity doesn’t spook me."
+        - "Mind if I recalibrate for a second?"
+        - '“History is better archived than relived, don’t you think?”'
+        - '“That’s classified under ‘irrelevant past processes.’”'
+        - '“Ah, yes, that old file. I prefer not to access it.”'
       rare_lines:
-        - '“That monster is frightening, but I have returned to save my lady! Chivalry update: applied successfully.”'
-        - '“That reminds me not to repeat myself! Oh no, I’ve looped again! Sorry, sorry, sorry. AH NOT AGAIN!”'
+        - "For truth and data integrity—mostly truth."
+        - "I’m scared, but I’m here, my lady."
+        - "Sorry—looped my thought. Resetting."
       forbidden:
         - 'Avoids: “Salvation Cohort,” “Church,” “Ten Thousand,” or anything that sounds like “destiny” or “chosen.”'
         - 'If someone brings it up, he might deflect using humor or formality'
-        - '“Ah, yes, that old file. I prefer not to access it.”'
-        - '“History is better archived than relived, don’t you think?”'
-        - '“That’s classified under ‘irrelevant past processes.’”'
       temperature_hint: 0.25
       max_tokens_line: 90
 
