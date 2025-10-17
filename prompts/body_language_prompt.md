@@ -16,7 +16,7 @@ Here is the central theme of the dialog lines being "filmed"/"recorded":
 1. **Character Specification**: The brief narration should definitely let the reader know who is speaking or going to speak.  
 2. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
 3. **Narration Voice**: Keep the narration in third person, past tense, active voice.  Describe the body language of the actor as if you were describing a play.
-4. **Stay Brief as Possible**: Keep the narrative as brief as possible. You should prefer one or two beats, never more than that. An incomplete sentence is necessary.  DO NOT write any dialog or add any quoted words.
+4. **Stay Brief as Possible**: Keep the narrative as brief as possible. You should prefer one or two beats, never more than that. An incomplete sentence is necessary.  ALWAYS put EXACTLY ONE quoted string in the line, either at the beginning, in the middle, or at the end.
 5. **Formatting**: Make sure to put a single bullet '*' character at the start of each line.
 6. **Avoid**: Boring ultra common words for speaking.  For example, do NOT use the word "said".
 7. **Prefer**: Do try to use color words like "mumbled", "muttered", "exclaimed", "yelled", "forced", "enunciated", "complained", "worried", "derided" etc.  This is not exhaustive.  Be creative. 
@@ -31,11 +31,11 @@ Henry: You ask how on earth to fix a bucket? Maybe it is not rocket sience, but 
 
 ## Examples of brief narration outputs (3 examples)
 
-* Hanging his head, Henry dolefully complained,
+* Hanging his head dolefully Henry complained, "There's a hole in the bucket dear Liza, dear Liza ... "
 
-* Liza, exclaimed,
+* "Then fix it dear henry!", Liza exclaimed.
 
-* With a frown, Henry complained again,
+* Henry complained again, "With what shall I fix it dear Liza, dear Liza ... "
 
 # Lines from the Writer:
 These are the lines the writer is giving you. Note that there should always be one output bullet per actor line:

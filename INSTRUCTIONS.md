@@ -8,15 +8,6 @@ Follow instructions
 
 ## Next steps
 
-We need to fix a list of problems:
-
-* There is too much information being copied from the setting.  I've gone through and changed the [SETTING.yaml] in the templates to just [SETTING], and added a new template parameter [CHARACTERS].  I've also added a setting "touch-point" at the beginning of the chapter.  So, the "setting" command means this:
-  - Read and parse the SETTING.yaml
-  - For each string in the factoid list, include that factoid from SETTING.yaml in the setting state.
-  - For each string in the actor list, include that character description from the SETTINg.yaml in the characters state.
-  - When you see either [SETTING] or [CHARACTERS] in the templates, insert the setting or characters state.
-
-* I am now using [ACTOR_LINES] in the templates for the output of the actor_assignment_prompt .
 
 Relevant `TODO.md` is in the project root
 Relevant `README.md` is in the project root

@@ -147,6 +147,17 @@ def load_env():
     # Prefer .env values to ensure local config wins over shell/session leftovers
     load_dotenv(override=True)
 
+def load_characters_list(ctx: Optional["RunContext"] = None) -> List[dict]:
+    """Return characters for this run. Source of truth is RunContext.characters.
+    No YAML reads here—if ctx is missing or empty, return [].
+    """
+    if ctx is None:
+        return []
+    chars = ctx.characters
+    if isinstance(chars, list):
+        return [c for c in chars if isinstance(c, dict)]
+    return []
+
 # ---- Crash trace helpers ----
 def _crash_trace_file() -> Optional[str]:
     return os.getenv("GW_CRASH_TRACE_FILE")
@@ -203,6 +214,49 @@ def _log_warning(msg: str, log_dir: Optional[Path]) -> None:
 
 _CLIENT = None  # type: ignore
 _CLIENT_INFO = ""  # for diagnostics (base_url or azure endpoint)
+
+class RunContext:
+    """Run-scoped immutable data loaded upfront and passed to pipelines.
+    Holds YAML setting, chapter, character list, and identifiers.
+    """
+    def __init__(self, *, setting: dict, chapter: dict, characters: List[dict], chapter_id: str, version: int):
+        self.setting = setting
+        self.chapter = chapter
+        self.characters = characters
+        self.chapter_id = chapter_id
+        self.version = version
+
+    @classmethod
+    def from_paths(cls, *, chapter_path: str, version: int) -> "RunContext":
+        """Load SETTING.yaml, the given chapter YAML, and CHARACTERS.yaml (with fallback to
+        SETTING['Characters']). Construct and return RunContext. Any parsing error raises.
+        """
+        # Load required SETTING.yaml
+        if not Path("SETTING.yaml").exists():
+            raise MissingFileError("Missing required SETTING.yaml at project root.")
+        setting = load_yaml("SETTING.yaml")
+        # Load required chapter yaml
+        if not Path(chapter_path).exists():
+            raise MissingFileError(f"Missing chapter file: {chapter_path}")
+        chapter = load_yaml(chapter_path)
+        # Load characters (prefer CHARACTERS.yaml)
+        if not Path("CHARACTERS.yaml").exists():
+            raise MissingFileError("Missing required CHARACTERS.yaml at project root.")
+        try:
+            chars_yaml = load_yaml("CHARACTERS.yaml")
+        except Exception as e:
+            raise GWError(f"Unable to read CHARACTERS.yaml: {e}")
+        characters_list: List[dict] = []
+        if isinstance(chars_yaml, list):
+            characters_list = [c for c in chars_yaml if isinstance(c, dict)]
+        elif isinstance(chars_yaml, dict) and isinstance(chars_yaml.get("Characters"), list):
+            characters_list = [c for c in chars_yaml.get("Characters") if isinstance(c, dict)]
+        elif isinstance(setting, dict) and isinstance(setting.get("Characters"), list):
+            # Fallback to legacy SETTING.yaml embedding
+            characters_list = [c for c in setting.get("Characters") if isinstance(c, dict)]
+        # Compute chapter_id
+        cid = chapter_id_from_path(chapter_path)
+        return cls(setting=setting, chapter=chapter, characters=characters_list, chapter_id=cid, version=version)
 
 def get_client():
     """Return OpenAI client if API key is present; otherwise None for mock mode.
@@ -749,6 +803,89 @@ def _truncate_brainstorm(text: str, limit: int = 10) -> str:
         return text
     return _rebuild_bullets(contents[:limit])
 
+def _brainstorm_has_done(text: str) -> bool:
+    """Return True if the last non-empty line is exactly the word DONE (case-insensitive).
+    We intentionally do not consider inline/bulleted DONE—only a trailing line marker.
+    """
+    if text is None:
+        return False
+    try:
+        lines = [ln.strip() for ln in str(text).splitlines() if ln.strip()]
+        if not lines:
+            return False
+        return lines[-1].strip().upper() == "DONE"
+    except Exception:
+        return False
+
+def _strip_trailing_done(text: str) -> str:
+    """Remove a trailing DONE marker line from brainstorm text if present.
+    Returns the remaining text as-is; does not alter bullets.
+    """
+    if text is None:
+        return ""
+    try:
+        lines = text.splitlines()
+        # Remove trailing blank lines
+        while lines and not lines[-1].strip():
+            lines.pop()
+        if lines and lines[-1].strip().upper() == "DONE":
+            lines.pop()
+        return "\n".join(lines).rstrip() + ("\n" if lines else "")
+    except Exception:
+        return str(text)
+
+def _ensure_brainstorm_done_on_resume(tp_type: str, reps: Dict[str, str], *, log_dir: Optional[Path], tp_index: int) -> None:
+    """On resume, if a touch-point is marked completed (draft exists) but brainstorm.txt lacks DONE,
+    submit the brainstorm prompt again seeding with prior bullets, write brainstorm.txt, and exit if still not DONE.
+    This enforces the new collaborative brainstorm gating even across older checkpoints.
+    """
+    if tp_type not in ("narration", "explicit", "implicit"):
+        return
+    if log_dir is None:
+        return
+    bs_path = log_dir / "brainstorm.txt"
+    try:
+        existing_bs = bs_path.read_text(encoding="utf-8") if bs_path.exists() else ""
+    except Exception:
+        existing_bs = ""
+    if existing_bs and _brainstorm_has_done(existing_bs):
+        return
+    # Prepare prompt components per tp_type
+    if tp_type == "narration":
+        sys1 = "You are brainstorming narrative beats as concise bullet points."
+        tpl1 = "narration_brain_storm_prompt.md"
+    elif tp_type == "explicit":
+        sys1 = "Brainstorm explicit dialog beats as bullet points."
+        tpl1 = "explicit_brain_storm_prompt.md"
+    else:
+        sys1 = "Brainstorm implicit dialog beats (indirect, subtext) as bullet points."
+        tpl1 = "implicit_brain_storm_prompt.md"
+    user1_base = _apply_step(tpl1, reps)
+    model, temp, max_toks = _env_for_prompt(tpl1, "BRAIN_STORM", default_temp=0.45 if tp_type != "narration" else 0.4, default_max_tokens=600)
+    seed_bullets = _strip_trailing_done(existing_bs)
+    user1 = (
+        user1_base
+        + "\n\n# Previously brainstormed bullets (carry forward; do not change)\n"
+        + seed_bullets
+        + "\n\n# Continue brainstorming\n- Reproduce the previous bullets unchanged.\n- Append any new bullets to extend/clarify.\n- When the brainstorm is complete, add a final line with exactly: DONE\n- Output only bullet lines starting with '* ' plus the final DONE line when finished.\n"
+    )
+    brainstorm_raw = _llm_call_with_validation(
+        sys1,
+        user1,
+        model=model,
+        temperature=temp,
+        max_tokens=max_toks,
+        validator=validate_bullet_list,
+        log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_brainstorm_resume{'_r'+str(attempt) if attempt>1 else ''}.txt")),
+    )
+    try:
+        bs_path.write_text(brainstorm_raw, encoding="utf-8")
+    except Exception:
+        pass
+    if not _brainstorm_has_done(brainstorm_raw):
+        print("Brainstorming still in progress.")
+        sys.exit(0)
+
 def _inline_body_with_dialog(body_bullet: str, dialog: str) -> str:
     """Inline a body-language bullet as a leading clause before dialog.
     - body_bullet is expected like '* With a frown, Henry ...'
@@ -764,6 +901,55 @@ def _inline_body_with_dialog(body_bullet: str, dialog: str) -> str:
     if not re.search(r"[\.,?!:;—-]\s*$", body):
         body = body + ","
     return f"{body} {dialog.strip()}".strip()
+
+def _apply_body_template(body_bullet: str, dialog: str) -> str:
+    """Compose final line using a body-language bullet as a template.
+    If the body bullet contains EXACTLY ONE quoted string, replace the quoted content
+    with the provided dialog (without adding extra quotes), preserving the quote marks
+    and surrounding punctuation. If no quoted string is found, fall back to the
+    previous behavior of prepending the body clause before the dialog.
+
+    Supports ASCII double/single quotes and common curly quotes.
+    """
+    if not body_bullet:
+        return (dialog or "").strip()
+    body = body_bullet.strip()
+    # Strip leading bullet marker if present
+    if body.startswith(('*', '-')):
+        body = body[1:].lstrip()
+
+    # Clean dialog of symmetrical outer quotes to avoid double-wrapping
+    d = (dialog or "").strip()
+    if len(d) >= 2 and ((d[0] == d[-1]) and d[0] in ('"', "'", '“', '”', '‘', '’')):
+        d = d[1:-1].strip()
+
+    # Find a quoted segment to replace
+    patterns = [
+        r'"([^"\\]*(?:\\.[^"\\]*)*)"',  # ASCII double quotes
+        r"'([^'\\]*(?:\\.[^'\\]*)*)'",    # ASCII single quotes
+        r'“([^”]*)”',                           # curly double
+        r'‘([^’]*)’',                           # curly single
+    ]
+
+    earliest = None
+    for pat in patterns:
+        for m in re.finditer(pat, body):
+            if earliest is None or m.start() < earliest.start():
+                earliest = m
+            break  # only consider first match of each pattern
+
+    if earliest is None:
+        # Fallback: treat body as leading clause
+        return _inline_body_with_dialog(body_bullet, dialog)
+
+    # Reconstruct with replacement inside quotes
+    start, end = earliest.start(0), earliest.end(0)
+    quote_open = body[start]
+    quote_close = body[end-1]
+    before = body[:start]
+    after = body[end:]
+    replaced = f"{before}{quote_open}{d}{quote_close}{after}"
+    return replaced.strip()
 
 def _parse_agenda_by_actor(text: str) -> Dict[str, str]:
     """Parse an agenda text into a mapping of actor_id -> bullet list string.
@@ -875,7 +1061,7 @@ def read_suggestions_records(path: str) -> List[Dict[str, str]]:
 # Pipeline execution (Task 2)
 # ---------------------------
 
-def _build_pipeline_replacements(setting: dict, chapter: dict, chapter_id: str, version: int, tp: TouchPoint, state: ChapterState, *, prior_paragraph: str = "") -> Dict[str, str]:
+def _build_pipeline_replacements(setting: dict, chapter: dict, chapter_id: str, version: int, tp: TouchPoint, state: ChapterState, *, prior_paragraph: str = "", ctx: Optional[RunContext] = None) -> Dict[str, str]:
     reps = build_common_replacements(setting, chapter, chapter_id, version)
     # touch-point variants for templates
     touch_text = tp.get("content", "")
@@ -908,8 +1094,8 @@ def _build_pipeline_replacements(setting: dict, chapter: dict, chapter_id: str, 
     if not chars_block and state.active_actors:
         try:
             sel_chars = []
-            all_chars = setting.get("Characters") if isinstance(setting, dict) else None
-            if isinstance(all_chars, list):
+            all_chars = load_characters_list(ctx)
+            if isinstance(all_chars, list) and all_chars:
                 wanted = {a.strip().lower() for a in state.active_actors if a.strip()}
                 for ch in all_chars:
                     cid = str(ch.get("id", "")).strip().lower()
@@ -938,7 +1124,7 @@ def _build_pipeline_replacements(setting: dict, chapter: dict, chapter_id: str, 
         if isinstance(parsed_chars_block, list):
             candidates = parsed_chars_block
         else:
-            candidates = setting.get("Characters") if isinstance(setting, dict) else None
+            candidates = load_characters_list(ctx)
         if isinstance(candidates, list) and state.active_actors:
             wanted2 = {a.strip().lower() for a in state.active_actors if a.strip()}
             for ch in candidates:
@@ -1102,26 +1288,62 @@ def _parse_actor_lines(actor_list_text: str) -> List[Tuple[str, str]]:
         pairs.append((actor_id.strip(), rest.strip()))
     return pairs
 
-def run_narration_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict, chapter: dict, chapter_id: str, version: int, tp_index: int, prior_paragraph: str = "", log_dir: Optional[Path] = None) -> str:
+def run_narration_pipeline(tp: TouchPoint, state: ChapterState, *, ctx: RunContext, tp_index: int, prior_paragraph: str = "", log_dir: Optional[Path] = None) -> str:
     # Clear last appended dialog; narration adds none
     state.last_appended_dialog = {}
-    reps = _build_pipeline_replacements(setting, chapter, chapter_id, version, tp, state, prior_paragraph=prior_paragraph)
-    # 1) Brainstorm → bullet list
+    reps = _build_pipeline_replacements(ctx.setting, ctx.chapter, ctx.chapter_id, ctx.version, tp, state, prior_paragraph=prior_paragraph, ctx=ctx)
+    # 1) Brainstorm → bullet list (persistent with DONE gating)
     sys1 = "You are brainstorming narrative beats as concise bullet points."
     tpl1 = "narration_brain_storm_prompt.md"
-    user1 = _apply_step(tpl1, reps)
+    user1_base = _apply_step(tpl1, reps)
     model, temp, max_toks = _env_for_prompt(tpl1, "BRAIN_STORM", default_temp=0.4, default_max_tokens=600)
-    brainstorm = _llm_call_with_validation(
-        sys1, user1, model=model, temperature=temp, max_tokens=max_toks, validator=validate_bullet_list,
-        log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_brainstorm{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
-    )
+    # Brainstorm persistence path
+    bs_path = (log_dir / "brainstorm.txt") if log_dir else None
+    existing_bs = ""
+    if bs_path is not None and bs_path.exists():
+        try:
+            existing_bs = bs_path.read_text(encoding="utf-8")
+        except Exception:
+            existing_bs = ""
+
+    brainstorm_for_use = None  # cleaned without DONE for downstream
+    if existing_bs and _brainstorm_has_done(existing_bs):
+        brainstorm_for_use = _strip_trailing_done(existing_bs)
+    else:
+        # Seed with previous bullets if present
+        seed_bullets = _strip_trailing_done(existing_bs) if existing_bs else ""
+        user1 = user1_base
+        if seed_bullets.strip():
+            user1 = (
+                user1
+                + "\n\n# Previously brainstormed bullets (carry forward; do not change)\n"
+                + seed_bullets
+                + "\n\n# Continue brainstorming\n- Reproduce the previous bullets unchanged.\n- Append any new bullets to extend/clarify.\n- When the brainstorm is complete, add a final line with exactly: DONE\n- Output only bullet lines starting with '* ' plus the final DONE line when finished.\n"
+            )
+        # Generate (or extend) brainstorm
+        brainstorm_raw = _llm_call_with_validation(
+            sys1, user1, model=model, temperature=temp, max_tokens=max_toks, validator=validate_bullet_list,
+            log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_brainstorm{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        )
+        # Persist brainstorm text
+        if bs_path is not None:
+            try:
+                bs_path.parent.mkdir(parents=True, exist_ok=True)
+                bs_path.write_text(brainstorm_raw, encoding="utf-8")
+            except Exception:
+                pass
+        # If not DONE yet, stop gracefully to allow human-in-the-loop iteration
+        if not _brainstorm_has_done(brainstorm_raw):
+            print("Brainstorming still in progress.")
+            sys.exit(0)
+        brainstorm_for_use = _strip_trailing_done(brainstorm_raw)
 
     # 2) Ordering → bullet list (narration always orders)
     reps2 = dict(reps)
     # Map brainstorm output into common placeholders used by ordering templates
-    reps2["[BULLET_IDEAS]"] = brainstorm
-    reps2["[BULLETS]"] = brainstorm
-    reps2["[bullets]"] = brainstorm
+    reps2["[BULLET_IDEAS]"] = brainstorm_for_use or ""
+    reps2["[BULLETS]"] = brainstorm_for_use or ""
+    reps2["[bullets]"] = brainstorm_for_use or ""
     sys2 = "You will order and refine brainstormed bullet points for coherent flow."
     tpl2 = "ordering_prompt.md"
     user2 = _apply_step(tpl2, reps2)
@@ -1147,23 +1369,52 @@ def run_narration_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict
     )
 
     # Polish
-    polished = _polish_snippet(narration, setting, chapter, chapter_id, version)
+    polished = _polish_snippet(narration, ctx.setting, ctx.chapter, ctx.chapter_id, ctx.version)
     return polished
 
-def run_explicit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict, chapter: dict, chapter_id: str, version: int, tp_index: int, prior_paragraph: str = "", log_dir: Optional[Path] = None) -> str:
+def run_explicit_pipeline(tp: TouchPoint, state: ChapterState, *, ctx: RunContext, tp_index: int, prior_paragraph: str = "", log_dir: Optional[Path] = None) -> str:
     appended: Dict[str, List[str]] = {}
-    reps = _build_pipeline_replacements(setting, chapter, chapter_id, version, tp, state, prior_paragraph=prior_paragraph)
-    # Brainstorm
+    reps = _build_pipeline_replacements(ctx.setting, ctx.chapter, ctx.chapter_id, ctx.version, tp, state, prior_paragraph=prior_paragraph, ctx=ctx)
+    # Brainstorm (persistent with DONE gating)
     sys1 = "Brainstorm explicit dialog beats as bullet points."
     tpl1 = "explicit_brain_storm_prompt.md"
-    user1 = _apply_step(tpl1, reps)
+    user1_base = _apply_step(tpl1, reps)
     m1, t1, k1 = _env_for_prompt(tpl1, "BRAIN_STORM", default_temp=0.45, default_max_tokens=600)
-    brainstorm = _llm_call_with_validation(
-        sys1, user1, model=m1, temperature=t1, max_tokens=k1, validator=validate_bullet_list,
-        log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_brainstorm{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
-    )
+    bs_path = (log_dir / "brainstorm.txt") if log_dir else None
+    existing_bs = ""
+    if bs_path is not None and bs_path.exists():
+        try:
+            existing_bs = bs_path.read_text(encoding="utf-8")
+        except Exception:
+            existing_bs = ""
+    if existing_bs and _brainstorm_has_done(existing_bs):
+        brainstorm_work = _strip_trailing_done(existing_bs)
+    else:
+        seed_bullets = _strip_trailing_done(existing_bs) if existing_bs else ""
+        user1 = user1_base
+        if seed_bullets.strip():
+            user1 = (
+                user1
+                + "\n\n# Previously brainstormed bullets (carry forward; do not change)\n"
+                + seed_bullets
+                + "\n\n# Continue brainstorming\n- Reproduce the previous bullets unchanged.\n- Append any new bullets to extend/clarify.\n- When the brainstorm is complete, add a final line with exactly: DONE\n- Output only bullet lines starting with '* ' plus the final DONE line when finished.\n"
+            )
+        brainstorm_raw = _llm_call_with_validation(
+            sys1, user1, model=m1, temperature=t1, max_tokens=k1, validator=validate_bullet_list,
+            log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_brainstorm{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        )
+        if bs_path is not None:
+            try:
+                bs_path.parent.mkdir(parents=True, exist_ok=True)
+                bs_path.write_text(brainstorm_raw, encoding="utf-8")
+            except Exception:
+                pass
+        if not _brainstorm_has_done(brainstorm_raw):
+            print("Brainstorming still in progress.")
+            sys.exit(0)
+        brainstorm_work = _strip_trailing_done(brainstorm_raw)
     # Post-process: drop overly short bullets (min 24 chars), keep at least 2
-    brainstorm = _filter_narration_brainstorm(brainstorm, min_chars=24)
+    brainstorm = _filter_narration_brainstorm(brainstorm_work, min_chars=24)
     # Post-process: limit to at most 10 bullets
     brainstorm = _truncate_brainstorm(brainstorm, limit=10)
     # Ordering (skippable via env)
@@ -1237,11 +1488,11 @@ def run_explicit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_reactions{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
     )
     # Join and render character dialog lines
-    # Preload character YAML (JSON text) from in-memory setting to avoid file I/O and YAML parsing
+    # Preload character YAML (JSON text) from CHARACTERS.yaml to avoid YAML parsing during loop
     char_yaml_by_id: Dict[str, str] = {}
     try:
-        all_chars = setting.get("Characters") if isinstance(setting, dict) else None
-        if isinstance(all_chars, list):
+        all_chars = load_characters_list(ctx)
+        if isinstance(all_chars, list) and all_chars:
             for ch in all_chars:
                 try:
                     cid = str(ch.get("id", "")).strip()
@@ -1285,30 +1536,59 @@ def run_explicit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict,
             character_yaml=char_yaml_by_id.get(actor_id.strip().lower()),
             agenda=agenda_combined,
         )
-        # Inline body language for this line (leading clause)
-        outputs.append(_inline_body_with_dialog(body_for_line, resp))
+        # Apply body-language template substitution when available
+        outputs.append(_apply_body_template(body_for_line, resp))
         if resp.strip():
             state.add_dialog_line(actor_id, resp.strip())
             appended.setdefault(actor_id, []).append(resp.strip())
     text = "\n".join(outputs)
-    out = _polish_snippet(text, setting, chapter, chapter_id, version)
+    out = _polish_snippet(text, ctx.setting, ctx.chapter, ctx.chapter_id, ctx.version)
     state.last_appended_dialog = appended
     return out
 
-def run_implicit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict, chapter: dict, chapter_id: str, version: int, tp_index: int, prior_paragraph: str = "", log_dir: Optional[Path] = None) -> str:
+def run_implicit_pipeline(tp: TouchPoint, state: ChapterState, *, ctx: RunContext, tp_index: int, prior_paragraph: str = "", log_dir: Optional[Path] = None) -> str:
     appended: Dict[str, List[str]] = {}
-    reps = _build_pipeline_replacements(setting, chapter, chapter_id, version, tp, state, prior_paragraph=prior_paragraph)
-    # Implicit brainstorm
+    reps = _build_pipeline_replacements(ctx.setting, ctx.chapter, ctx.chapter_id, ctx.version, tp, state, prior_paragraph=prior_paragraph, ctx=ctx)
+    # Implicit brainstorm (persistent with DONE gating)
     sys1 = "Brainstorm implicit dialog beats (indirect, subtext) as bullet points."
     tpl1 = "implicit_brain_storm_prompt.md"
-    user1 = _apply_step(tpl1, reps)
+    user1_base = _apply_step(tpl1, reps)
     m1, t1, k1 = _env_for_prompt(tpl1, "BRAIN_STORM", default_temp=0.5, default_max_tokens=600)
-    brainstorm = _llm_call_with_validation(
-        sys1, user1, model=m1, temperature=t1, max_tokens=k1, validator=validate_bullet_list,
-        log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_brainstorm_implicit{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
-    )
+    bs_path = (log_dir / "brainstorm.txt") if log_dir else None
+    existing_bs = ""
+    if bs_path is not None and bs_path.exists():
+        try:
+            existing_bs = bs_path.read_text(encoding="utf-8")
+        except Exception:
+            existing_bs = ""
+    if existing_bs and _brainstorm_has_done(existing_bs):
+        brainstorm_work = _strip_trailing_done(existing_bs)
+    else:
+        seed_bullets = _strip_trailing_done(existing_bs) if existing_bs else ""
+        user1 = user1_base
+        if seed_bullets.strip():
+            user1 = (
+                user1
+                + "\n\n# Previously brainstormed bullets (carry forward; do not change)\n"
+                + seed_bullets
+                + "\n\n# Continue brainstorming\n- Reproduce the previous bullets unchanged.\n- Append any new bullets to extend/clarify.\n- When the brainstorm is complete, add a final line with exactly: DONE\n- Output only bullet lines starting with '* ' plus the final DONE line when finished.\n"
+            )
+        brainstorm_raw = _llm_call_with_validation(
+            sys1, user1, model=m1, temperature=t1, max_tokens=k1, validator=validate_bullet_list,
+            log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_brainstorm_implicit{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        )
+        if bs_path is not None:
+            try:
+                bs_path.parent.mkdir(parents=True, exist_ok=True)
+                bs_path.write_text(brainstorm_raw, encoding="utf-8")
+            except Exception:
+                pass
+        if not _brainstorm_has_done(brainstorm_raw):
+            print("Brainstorming still in progress.")
+            sys.exit(0)
+        brainstorm_work = _strip_trailing_done(brainstorm_raw)
     # Post-process: limit to at most 10 bullets
-    brainstorm = _truncate_brainstorm(brainstorm, limit=10)
+    brainstorm = _truncate_brainstorm(brainstorm_work, limit=10)
     # Ordering (skippable via env)
     reps2 = dict(reps)
     reps2["[BULLET_IDEAS]"] = brainstorm
@@ -1374,11 +1654,11 @@ def run_implicit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_reactions{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
     )
     # Join and render dialog
-    # Preload character YAML (JSON text) from in-memory setting
+    # Preload character YAML (JSON text) from CHARACTERS.yaml
     char_yaml_by_id: Dict[str, str] = {}
     try:
-        all_chars = setting.get("Characters") if isinstance(setting, dict) else None
-        if isinstance(all_chars, list):
+        all_chars = load_characters_list(ctx)
+        if isinstance(all_chars, list) and all_chars:
             for ch in all_chars:
                 try:
                     cid = str(ch.get("id", "")).strip()
@@ -1417,12 +1697,12 @@ def run_implicit_pipeline(tp: TouchPoint, state: ChapterState, *, setting: dict,
             character_yaml=char_yaml_by_id.get(actor_id.strip().lower()),
             agenda=agenda_combined,
         )
-        outputs.append(_inline_body_with_dialog(body_for_line, resp))
+        outputs.append(_apply_body_template(body_for_line, resp))
         if resp.strip():
             state.add_dialog_line(actor_id, resp.strip())
             appended.setdefault(actor_id, []).append(resp.strip())
     text = "\n".join(outputs)
-    out = _polish_snippet(text, setting, chapter, chapter_id, version)
+    out = _polish_snippet(text, ctx.setting, ctx.chapter, ctx.chapter_id, ctx.version)
     state.last_appended_dialog = appended
     return out
 
@@ -1753,6 +2033,7 @@ def substitute_character_calls(
     log_dir: Optional[Path] = None,
     context_before_chars: int = 800,
     context_after_chars: int = 400,
+    ctx: Optional[RunContext] = None,
 ) -> Tuple[str, Dict[str, int]]:
     """Progressively replace <CHARACTER> call sites using their templates. Returns (text, stats).
     - Processes one call at a time, rescanning after each replacement so subsequent calls
@@ -1771,9 +2052,9 @@ def substitute_character_calls(
     char_yaml_by_id: Dict[str, str] = {}
     char_hints_by_id: Dict[str, Tuple[float, int]] = {}
     try:
-        setting = load_yaml("SETTING.yaml")
-        if isinstance(setting, dict) and isinstance(setting.get("Characters"), list):
-            for ch in setting["Characters"]:
+        chars_list = load_characters_list(ctx)
+        if isinstance(chars_list, list) and chars_list:
+            for ch in chars_list:
                 cid = str(ch.get("id", "")).strip()
                 if not cid:
                     continue
@@ -1788,14 +2069,8 @@ def substitute_character_calls(
         pass
 
     def _char_hints_from_setting(cid: str) -> Tuple[float, int]:
-        """Try to read temperature_hint and max_tokens_line from SETTING.yaml for this character."""
-        try:
-            setting = load_yaml("SETTING.yaml")
-        except Exception:
-            return 0.3, 100
-        chars = []
-        if isinstance(setting, dict) and isinstance(setting.get("Characters"), list):
-            chars = setting["Characters"]
+        """Try to read temperature_hint and max_tokens_line from CHARACTERS.yaml (fallback SETTING)."""
+        chars = load_characters_list(ctx)
         cid_low = str(cid).strip().lower()
         for ch in chars:
             try:
@@ -1875,9 +2150,10 @@ def _extract_numeric_hint(text: str, key: str, default: float) -> float:
 
 def generate_pre_draft(chapter_path: str, version_num: int) -> Tuple[str, Path, str]:
     """Generate a pre_draft_vN using master_initial or master prompt."""
-    setting = load_yaml("SETTING.yaml")
-    chapter = load_yaml(chapter_path)
-    chapter_id = chapter_id_from_path(chapter_path)
+    ctx = RunContext.from_paths(chapter_path=chapter_path, version=version_num)
+    setting = ctx.setting
+    chapter = ctx.chapter
+    chapter_id = ctx.chapter_id
 
     # Decide prompt: initial if first version, else master
     latest = get_latest_version(chapter_id)
@@ -1904,9 +2180,10 @@ def generate_pre_draft(chapter_path: str, version_num: int) -> Tuple[str, Path, 
     return pre_draft, out_path, chapter_id
 
 def polish_prose(text_to_polish: str, chapter_path: str, version_num: int) -> Tuple[str, Path]:
-    setting = load_yaml("SETTING.yaml")
-    chapter = load_yaml(chapter_path)
-    chapter_id = chapter_id_from_path(chapter_path)
+    ctx = RunContext.from_paths(chapter_path=chapter_path, version=version_num)
+    setting = ctx.setting
+    chapter = ctx.chapter
+    chapter_id = ctx.chapter_id
 
     # Polish only; assumes dialog substitution already applied
     polish_prompt = build_polish_prompt(setting, chapter, chapter_id, version_num, text_to_polish)
@@ -1925,9 +2202,10 @@ def polish_prose(text_to_polish: str, chapter_path: str, version_num: int) -> Tu
     return polished, out_path
 
 def verify_predraft(pre_draft_text: str, chapter_path: str, version_num: int) -> Tuple[str, Path]:
-    setting = load_yaml("SETTING.yaml")
-    chapter = load_yaml(chapter_path)
-    chapter_id = chapter_id_from_path(chapter_path)
+    ctx = RunContext.from_paths(chapter_path=chapter_path, version=version_num)
+    setting = ctx.setting
+    chapter = ctx.chapter
+    chapter_id = ctx.chapter_id
 
     check_prompt = build_check_prompt(setting, chapter, chapter_id, version_num, pre_draft_text)
     check_model, check_temp, check_max_tokens = _env_for_prompt("check_prompt.md", "CHECK", default_temp=0.0, default_max_tokens=1200)
@@ -1972,14 +2250,14 @@ def check_iteration_complete(check_text: str) -> bool:
     """Naive check: returns True if no 'missing' is reported (case-insensitive)."""
     return "missing" not in check_text.lower()
 
-def generate_story_so_far_and_relative(pre_draft_text: str, chapter_path: str, version_num: int) -> None:
+def generate_story_so_far_and_relative(ctx: RunContext, pre_draft_text: str) -> None:
     """Optional helpers to evolve story_so_far.txt and story_relative_to.txt for next chapter."""
-    setting = load_yaml("SETTING.yaml")
-    chapter = load_yaml(chapter_path)
-    chapter_id = chapter_id_from_path(chapter_path)
+    setting = ctx.setting
+    chapter = ctx.chapter
+    chapter_id = ctx.chapter_id
 
     # Story so far
-    ssf_prompt = build_story_so_far_prompt(setting, chapter, chapter_id, version_num, pre_draft_text)
+    ssf_prompt = build_story_so_far_prompt(setting, chapter, chapter_id, ctx.version, pre_draft_text)
     ssf_model, ssf_temp, ssf_max_tokens = _env_for_prompt("story_so_far_prompt.md", "STORY_SO_FAR", default_temp=0.2, default_max_tokens=1200)
     ssf = llm_complete(
         ssf_prompt,
@@ -1991,7 +2269,7 @@ def generate_story_so_far_and_relative(pre_draft_text: str, chapter_path: str, v
     save_text(iter_dir_for(chapter_id) / "story_so_far.txt", ssf)
 
     # Story relative to
-    srt_prompt = build_story_relative_to_prompt(setting, chapter, chapter_id, version_num, pre_draft_text)
+    srt_prompt = build_story_relative_to_prompt(setting, chapter, chapter_id, ctx.version, pre_draft_text)
     srt_model, srt_temp, srt_max_tokens = _env_for_prompt("story_relative_to_prompt.md", "STORY_RELATIVE", default_temp=0.2, default_max_tokens=1400)
     srt = llm_complete(
         srt_prompt,
@@ -2099,9 +2377,11 @@ def _resume_apply_state(state: ChapterState, info: Dict[str, Any]) -> None:
 
 def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: bool = False) -> None:
     """Execute deterministic pipelines per touch-point and write artifacts for vN."""
-    setting = load_yaml("SETTING.yaml")
-    chapter = load_yaml(chapter_path)
-    chapter_id = chapter_id_from_path(chapter_path)
+    # Construct RunContext (this loads and validates YAML up front)
+    ctx = RunContext.from_paths(chapter_path=chapter_path, version=version_num)
+    setting = ctx.setting
+    chapter = ctx.chapter
+    chapter_id = ctx.chapter_id
     # Prepare log dir for pre-run warnings if enabled
     warn_log_dir = (iter_dir_for(chapter_id) / f"pipeline_v{version_num}") if log_llm else None
 
@@ -2117,16 +2397,13 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
         _log_warning("SETTING.yaml: Error reading Factoids.", warn_log_dir)
         factoids = []
 
-    # Validate Characters parsing
+    # Validate Characters parsing (prefer CHARACTERS.yaml)
     try:
-        characters = setting.get("Characters") if isinstance(setting, dict) else None
-        if not isinstance(characters, list):
-            _log_warning("SETTING.yaml: Characters not parsed as a list.", warn_log_dir)
-            characters = []
+        characters = load_characters_list(ctx)
         if len(characters) == 0:
-            _log_warning("SETTING.yaml: Characters length is 0.", warn_log_dir)
+            _log_warning("CHARACTERS.yaml: Characters length is 0 or file missing.", warn_log_dir)
     except Exception:
-        _log_warning("SETTING.yaml: Error reading Characters.", warn_log_dir)
+        _log_warning("CHARACTERS.yaml: Error reading Characters.", warn_log_dir)
         characters = []
 
     # (Moved) Scene validation occurs after touch-point parsing
@@ -2181,7 +2458,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 _log_warning("CHAPTER setting: Factoids present but length is 0 or not parsed as list.", warn_log_dir)
             if not actor_names:
                 _log_warning("CHAPTER setting: Actors present but length is 0 or not parsed as list.", warn_log_dir)
-            # Build lookup sets from SETTING.yaml
+            # Build lookup sets from SETTING/CHARACTERS
             fact_set = { _norm_token(f.get("name", "")) for f in factoids if isinstance(f, dict) }
             char_id_set = { _norm_token(c.get("id", "")) for c in characters if isinstance(c, dict) }
             # Compare, ignoring case and leading/trailing quotes
@@ -2190,7 +2467,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                     _log_warning(f"CHAPTER setting: factoid '{x}' does not match any Factoids.name in SETTING.yaml.", warn_log_dir)
             for a in (actor_names or []):
                 if _norm_token(a) and _norm_token(a) not in char_id_set:
-                    _log_warning(f"CHAPTER setting: actor '{a}' does not match any Characters.id in SETTING.yaml.", warn_log_dir)
+                    _log_warning(f"CHAPTER setting: actor '{a}' does not match any Characters.id in CHARACTERS.yaml.", warn_log_dir)
     except Exception:
         # Non-fatal, continue
         pass
@@ -2266,6 +2543,12 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
         # Skip already completed touch-points by checkpoint presence
         if i in completed:
             _log_warning(f"RESUME: Skipping completed touch-point {i} ({tp_type}).", base_log_dir)
+            # Even if draft exists, ensure brainstorm DONE gating is satisfied; if not, re-run brainstorm and exit
+            try:
+                reps_resume = _build_pipeline_replacements(setting, chapter, chapter_id, version_num, tp, state, prior_paragraph=prior_paragraph, ctx=ctx)
+                _ensure_brainstorm_done_on_resume(tp_type, reps_resume, log_dir=tp_log_dir, tp_index=i)
+            except Exception:
+                pass
             continue
 
         polished_text = ""
@@ -2283,8 +2566,8 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 state.setting_block = ""
             try:
                 sel_chars: List[dict] = []
-                all_chars = setting.get("Characters") if isinstance(setting, dict) else None
-                if isinstance(all_chars, list) and state.active_actors:
+                all_chars = load_characters_list(ctx)
+                if isinstance(all_chars, list) and all_chars and state.active_actors:
                     wanted = {a.strip().lower() for a in state.active_actors if a.strip()}
                     for ch in all_chars:
                         cid = str(ch.get("id", "")).strip().lower()
@@ -2295,6 +2578,12 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
             except Exception:
                 state.characters_block = ""
         elif tp_type in ("narration", "explicit", "implicit"):
+            # Before running pipelines, if brainstorm exists but lacks DONE, enforce resume gating
+            try:
+                reps_pre = _build_pipeline_replacements(setting, chapter, chapter_id, version_num, tp, state, prior_paragraph=prior_paragraph, ctx=ctx)
+                _ensure_brainstorm_done_on_resume(tp_type, reps_pre, log_dir=tp_log_dir, tp_index=i)
+            except Exception:
+                pass
             if tp_type == "narration":
                 if branch_b:
                     # Use previous version's per-touchpoint artifacts if available
@@ -2318,7 +2607,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                     use_sugg = prev_suggestions_tp or prior_suggestions
                     polished_text = run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=use_pol, prior_suggestions=use_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
                 else:
-                    polished_text = run_narration_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                    polished_text = run_narration_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
             elif tp_type == "explicit":
                 if branch_b:
                     prev_polished_tp = ""
@@ -2341,7 +2630,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                     use_sugg = prev_suggestions_tp or prior_suggestions
                     polished_text = run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=use_pol, prior_suggestions=use_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
                 else:
-                    polished_text = run_explicit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                    polished_text = run_explicit_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
             else:  # implicit
                 if branch_b:
                     prev_polished_tp = ""
@@ -2364,13 +2653,13 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                     use_sugg = prev_suggestions_tp or prior_suggestions
                     polished_text = run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=use_pol, prior_suggestions=use_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
                 else:
-                    polished_text = run_implicit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                    polished_text = run_implicit_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
         else:
             # Unknown types treated as narration by default
             if branch_b:
                 polished_text = run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, prior_polished=prior_draft, prior_suggestions=prior_suggestions, log_dir=tp_log_dir)
             else:
-                polished_text = run_narration_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, log_dir=tp_log_dir)
+                polished_text = run_narration_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
 
         # Record (for actors/scene/foreshadowing, polished_text may be empty)
         records.append((tp_id, tp_type, tp_text, polished_text))
@@ -2468,7 +2757,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
     # Regenerate summaries using final text
     if os.getenv("GW_SKIP_SUMMARIES", "0") != "1":
         full_text = (final_path.read_text(encoding="utf-8") if Path(final_path).exists() else "")
-        generate_story_so_far_and_relative(full_text, chapter_path, version_num)
+        generate_story_so_far_and_relative(ctx, full_text)
         print("Regenerated story_so_far.txt and story_relative_to.txt")
 
 def main():
@@ -2578,13 +2867,12 @@ def _validate_inputs_and_prepare(chapter_path: str) -> None:
         raise MissingFileError(
             f"Chapter file not found: {chapter_path}. Expected a path like 'chapters/CHAPTER_001.yaml'."
         )
-    # Load to validate YAML
-    _ = load_yaml(str(ch_path))
-
-    # Validate SETTING.yaml
+    # Do not parse YAML here—RunContext is the single source of YAML loading.
+    # Just check required files exist for clearer early errors.
     if not Path("SETTING.yaml").exists():
         raise MissingFileError("Missing required SETTING.yaml at project root.")
-    _ = load_yaml("SETTING.yaml")
+    if not Path("CHARACTERS.yaml").exists():
+        raise MissingFileError("Missing required CHARACTERS.yaml at project root.")
 
     # Validate required prompt templates
     missing = [p for p in _REQUIRED_PROMPTS if not Path(p).exists()]
