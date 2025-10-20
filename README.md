@@ -1,16 +1,32 @@
 # Introduction to GhostWriter
-This project is a system for writing a novel using structured YAML logs and AI ghostwriting assistance.
-It provides a meta-prompting system and an iteration loop to generate, verify, and refine prose chapters.
+GhostWriter is a domain-specific writing engine that uses structured YAML (Setting + Chapter logs) to guide an AI “ghostwriter” to produce publishable prose while honoring story structure.
 
-GhostWriter is a domain-specific writing engine with YAML as the structured source and LLM as the prose generator. The challenge is to:
+It focuses on:
+- Feeding the LLM the right context (Setting + Chapter logs)
+- Separating structure from prose (what’s required vs. what’s creative)
+- Controlling emphasis (Touch-Points = must-hit beats, implicit vs. explicit)
+- Leaving room for creativity (avoid mechanical lists; keep a strong voice)
 
-Feed the LLM the right context (Setting + Chapter logs).
+GhostWriter has been refactored into deterministic per–touch-point pipelines with a modern CLI.
 
-Tell the LLM what’s structural vs. what’s prose.
+## Quickstart (new CLI)
 
-Control emphasis (Touch-Points = must-hit beats, implicit vs. explicit).
+Activate your virtual environment, then run one of the following:
 
-Leave room for creativity (so the LLM doesn’t just mechanically list things).
+- Recommended:
+  - python -m ghostwriter.cli run chapters/CHAPTER_001.yaml v1
+  - python -m ghostwriter.cli run chapters/CHAPTER_001.yaml   # picks next version automatically
+
+- Legacy-compatible (delegates to the CLI under the hood):
+  - python scripts/driver.py chapters/CHAPTER_001.yaml v1
+  - python scripts/driver.py chapters/CHAPTER_001.yaml        # picks next version automatically
+
+Optional flags:
+- --log-llm to save per-step prompts and responses (legacy alias --show-dialog also works)
+
+Notes:
+- The program runs the pipelines exactly once for the selected version; there is no auto-loop. To iterate, edit inputs and run the next version.
+- If OPENAI_API_KEY is not set, the system operates in offline/mock mode and returns deterministic mock outputs (good for dry runs and tests).
 
 ## Emphasis & Importance
 
@@ -24,39 +40,23 @@ Put Setting third (context, but less “must do”).
 
 Put Suggestions last (soft guidance).
 
-## Iteration Loop
+## Iteration model
 
-Thu user will kick off the following iteration loop sequence (for a chapter):
-
-1. Construct prompt for next Draft (using the prompt as described in a later section), and write the next draft.
-
-2. Run a Check Prompt afterward, e.g.:
-
-Check the following prose against the "Touch-Points".  
-For each touch-point, state whether it was satisfied explicitly, implicitly, or missing.  
-Suggest improvements where missing.
-
-3. Feed that back in as suggestions, and if anything is missing, return to step 1.
-
-4. Write the the resulting draft version to the next .yaml chapter version.
-
-5. Report status and overview of changes to the User.
+Each run executes the deterministic pipelines once for a specific version (vN). You iterate manually by making changes (to YAML, prompts, etc.) and running the next version.
 
 ## Meta-Prompting System
 
-Pre-processor merges Setting.yaml + Chapter.yaml → one big input.
-
-Standard prompt template applied.
-
-Post-processor checks touch-point coverage (also using a prompt template).
+- Pre-processor reads Setting.yaml + Chapter.yaml and derives per–touch-point context.
+- Specialized prompt templates are applied per step (brainstorm, ordering, dialog generation, checks, etc.).
+- Output validators enforce expected shapes (bullets, actor lines) with local retry on validation failure.
 
 # Architecture
 
 Instead of writing freeform prose from scratch, this system separates story elements into structured YAML files:
 
-SETTING.yaml – A declarative log of the novel’s background.
+SETTING.yaml – A declarative set of notes of the novel’s background.
 
-## New architecture (deterministic pipelines)
+CHARACTERS.yaml - A declarative set of notes of the novel's characters.
 
 The system is moving to a deterministic, sequential pipeline driven by touch-points with zero automatic looping. Two operating branches exist depending on whether a previous draft is present.
 
@@ -73,69 +73,51 @@ The system is moving to a deterministic, sequential pipeline driven by touch-poi
      - `narration`: run Narration pipeline.
      - `explicit`: run Explicit pipeline.
      - `implicit`: run Implicit pipeline.
-   - Polish each pipeline’s output via `polish_prose_prompt.md`.
    - Write `draft_v1.txt` as a parseable sequence of pairs: original touch-point + polished output.
-   - For each touch-point, run the corresponding check prompt (`check_narration_prompt.md`, `check_explicit_prompt.md`, `check_implicit_prompt.md`) and aggregate into a parseable `suggestions_v1.txt`.
    - Generate `story_relative_to.txt` and `story_so_far.txt`.
    - Write `final.txt` as a clean, publishable text containing only polished prose (no touch-points/markdown).
 
 2) When a prior version exists (largest N where `draft_vN.txt` and `suggestions_vN.txt` are present):
    - Load prior polished texts and suggestions into state so the edit pipeline can reference them by touch-point.
    - For each touch-point that yields prose (`narration`, `explicit`, `implicit`), run the Subtle Edit pipeline instead of generating from scratch.
-   - Polish each result; write a parseable `draft_v(N+1).txt`.
    - Re-run per-touch-point checks and write a parseable `suggestions_v(N+1).txt`.
    - Regenerate and overwrite `story_relative_to.txt`, `story_so_far.txt`, and `final.txt`.
 
 ### Pipelines
-
-- Narration pipeline
-  - `(brain_storm_prompt.md → bullet list)`
+  - `(narration_brain_storm_prompt.md → bullet list)`
   - `(ordering_prompt.md → bullet list)`
   - `(generate_narration_prompt.md → text)`
 
 - Explicit pipeline
-  - `(brain_storm_prompt.md → bullet list)`
   - `(ordering_prompt.md → bullet list)`
   - `(actor_assignment_prompt.md → actor list)`
   - In parallel: `(body_language_prompt.md → bullet list)` and `(agenda_prompt.md → agenda list)`
-  - Join actor lines + body language + agendas. For each actor line, fill `character_dialog_prompt.md`; concatenate into output text.
   - The actor list is stored in state and re-used for downstream templates.
 
 - Implicit pipeline
   - `(implicit_brain_storm_prompt.md → bullet list)`
   - `(ordering_prompt.md → bullet list)`
-  - `(actor_assignment_prompt.md → actor list)`
   - In parallel: `(body_language_prompt.md → bullet list)` and `(agenda_prompt.md → agenda list)`
   - Join as in Explicit pipeline; produce output text via `character_dialog_prompt.md` per actor line.
 
-- Subtle Edit pipeline
   - `(subtle_edit_prompt.md → text)`
 
 ### Output formats and validation
 
 Each pipeline step has an expected output format. The framework validates output; if invalid, it retries up to two more times (total 3 attempts). On third failure, the program stops and reports the error.
 
-- text — freeform text, no parsing required.
-- bullet list — each bullet must be a separate line beginning with `*`; at least 2 bullets required.
-- actor list — dialog lines prefixed by a character id; at least 2 actor attributions (actors may repeat). Non-dialog narrative lines are allowed between dialog lines.
-- agenda list — structured list as described in `prompts/agenda_prompt.md`.
 
 ### State tracking and dialog history
 
 - Track current `actors`, `scene`, and `foreshadowing` (updated by their commands).
 - Track recent dialog per actor (last N lines) so `explicit`/`implicit` pipelines can feed rich context to `character_dialog_prompt.md`.
 
-### Artifacts and logging
-
 Per chapter iteration folder: `iterations/CHAPTER_xxx/`
 
 - `draft_vN.txt` — parseable list of (touch-point, polished output) pairs.
 - `suggestions_vN.txt` — parseable list of (touch-point, per-touch-point checks) results.
-- `story_so_far.txt`, `story_relative_to.txt` — regenerated each run.
 - `final.txt` — stripped, publish-ready prose (polished only).
 - LLM logs — every prompt+response round-trip is saved under a subdirectory with descriptive filenames; logs include fully substituted prompts and raw outputs for traceability.
-
-### Configuration: per-prompt environment variables
 
 Each prompt can be configured with model, temperature, and max tokens (defaults fall back to general settings):
 
@@ -152,12 +134,9 @@ Each prompt can be configured with model, temperature, and max tokens (defaults 
   - Narration: `GW_MODEL_CHECK_NARRATION`, `GW_TEMP_CHECK_NARRATION`, `GW_MAX_TOKENS_CHECK_NARRATION`
   - Explicit: `GW_MODEL_CHECK_EXPLICIT`, `GW_TEMP_CHECK_EXPLICIT`, `GW_MAX_TOKENS_CHECK_EXPLICIT`
   - Implicit: `GW_MODEL_CHECK_IMPLICIT`, `GW_TEMP_CHECK_IMPLICIT`, `GW_MAX_TOKENS_CHECK_IMPLICIT`
-- Summaries (existing):
   - `GW_MODEL_STORY_SO_FAR`, `GW_TEMP_STORY_SO_FAR`, `GW_MAX_TOKENS_STORY_SO_FAR`
   - `GW_MODEL_STORY_RELATIVE`, `GW_TEMP_STORY_RELATIVE`, `GW_MAX_TOKENS_STORY_RELATIVE`
 
-If a per-prompt variable is not set, the stage falls back to defaults (e.g., `OPENAI_MODEL`, a global default temperature, and a global max tokens if configured).
-CHAPTER_xxx.yaml – Sequential logs for each chapter that guide prose generation.
 
 These YAML files serve as inputs to an LLM-powered ghostwriter, which produces continuous prose chapters while ensuring that key narrative elements are included.
 
@@ -172,15 +151,17 @@ File Structure
   |    ├── actor_assignment_prompt.md
   |    ├── agenda_prompt.md
   |    ├── body_language_prompt.md
-  |    ├── brain_storm_prompt.md
+  |    ├── narration_brain_storm_prompt.md
+  |    ├── explicit_brain_storm_prompt.md
+  |    ├── implicit_brain_storm_prompt.md
   |    ├── character_dialog_prompt.md
   |    ├── check_explicit_prompt.md
   |    ├── check_implicit_prompt.md
   |    ├── check_narration_prompt.md
   |    ├── generate_narration_prompt.md
-  |    ├── implicit_brain_storm_prompt.md
   |    ├── ordering_prompt.md
   |    ├── polish_prose_prompt.md
+  |    ├── reaction_prompt.md
   |    ├── story_relative_to_prompt.md
   |    ├── story_so_far_prompt.md
   |    └── subtle_edit_prompt.md
@@ -207,8 +188,6 @@ File Structure
   - `<character_yaml/>` — inlined YAML for the character from `SETTING.yaml`
   - `<agenda/>` — optional per-call agenda text (or blank)
   - `<dialog>N</dialog>` — replaced by the last N lines of surrounding dialog context
-    - You can also write a number instead of `N`, e.g. `<dialog>6</dialog>`
-    - If the call includes `<dialog>k</dialog>`, that overrides the default N for that call
     - Default N is controlled by env var `GW_DIALOG_CONTEXT_LINES` (default: 8)
   - `<prompt/>` — the per-call prompt content
 
@@ -217,7 +196,36 @@ File Structure
   - If `prompts/character_dialog_prompt.md` is missing, the code falls back to a sensible built-in default.
 - The driver is being updated to the deterministic per–touch-point pipelines described above. Some legacy sections are retained in the README for context; the new design takes precedence.
 
-# YAML Format
+## YAML Format
+    ## Planned package layout (refactor)
+
+    We are refactoring to a maintainable, testable package while keeping `RunContext` as the single point of YAML access.
+
+    ```
+    ghostwriter/
+      __init__.py
+      context.py            # RunContext.from_paths, load_yaml (only place that reads YAML)
+      env.py                # Environment helpers, model/temp/max token resolution
+      llm.py                # LLM client, backoff, completions
+      utils.py              # File I/O, text formatting, warnings/logging, breadcrumbs
+      validation.py         # Output validators and retry wrapper
+      templates.py          # Template application and prompt-key helpers
+      artifacts.py          # Draft/suggestions record I/O and parseable formats
+      resume.py             # Checkpointing and resume helpers
+      characters.py         # Character list access (via ctx), rendering and substitution
+      pipelines/
+        __init__.py
+        common.py           # Shared pipeline helpers (replacements, polish, DONE gating)
+        narration.py        # run_narration_pipeline
+        explicit.py         # run_explicit_pipeline
+        implicit.py         # run_implicit_pipeline
+        subtle_edit.py      # run_subtle_edit_pipeline
+      commands.py           # High-level flows (run_pipelines_for_chapter, etc.)
+      cli.py                # Argument parsing and entrypoint
+    ```
+
+    - `scripts/driver.py` will become a thin wrapper that imports `ghostwriter.cli` and calls `main()`.
+    - Only `ghostwriter.context` performs YAML reads. All other modules accept a `RunContext` and avoid file I/O during pipelines.
 ## Setting Log (SETTING.yaml)
 ```yaml
 Factoids:
@@ -285,49 +293,19 @@ Story-So-Far: Summary of past chapters.
 
 Story-Relative-To: Contextualizes each character/scene/prop for this chapter.
 
-# Prompting System
+## Prompting System (modernized)
 
-# Main Prompts
+The current system relies on specialized prompts per pipeline step and per touch-point (narration, explicit, implicit). The legacy master prompts are no longer part of the default flow.
 
-1. Master Initial Prompt
+### Brainstorm (human-in-the-loop)
 
-The Master initial prompt is constructed from the master initial prompt template at ```prompts/master_initial_prompt.md```
+For narration/explicit/implicit touch-points, the pipeline begins with a brainstorm step that produces a bullet list. This brainstorm is intentionally human-gated:
 
-The template has a placeholder for the SETTING.yaml, story_so_far.txt, story_relative_to.txt, the CHAPTER_xx.yaml, but does not have the most recent suggestions_v0.txt, and draft_v0.txt because this prompt is designed to write the initial v1 files to seed the following process. 
-
-This actually will output a pre-prose document with CHARACTER TEMPLATES and CHARACTER "calls" to generate dialog progressviely via an LLM.
-
-2. Master Prompt
-
-The Master prompt is constructed from the master prompt template at ```prompts/master_prompt.md```
-
-The template has a placeholder for the SETTING.yaml, story_so_far.txt, story_relative_to.txt, the CHAPTER_xxx.yaml, and the most recent suggestions_vn.txt, and draft_vn.txt (where n is the integer sequence number of the version being currently generated). 
-
-This actually will output a pre-prose document with CHARACTER TEMPLATES and CHARACTER "calls" to generate dialog progressviely via an LLM.
-
-3. Polish Prose Prompt
-
-The result of the Master prompt will be processed by substituting in CHARACTER "calls" with the response from an LLM prompt.  Thus, the results might be coarse, mal-formatted, or otherwise not polished.
-
-The Polish Prose Prompt is constructed from the polish_prose_prompt template at ```prompts/polish_prose_prompt.md```.
-
-3. Verification Prompt 
-
-The Verification Prompt is constructed from the verification prompt template at ```prompts/check_prompt.md```.
-
-The template has a placeholder for the SETTING.yaml, CHAPTER_xx.yaml, and the predraft_v? text as generated by the master prompt.
-
-4. Story-So-Far prompt
-
-The Story-So-Far Prompt is constructed from the story-so-far template at ```prompts/story_so_far_prompt.md```.
-
-The results of this prompt will be used to create the story_so_far for the next chapter.
-
-5. Story-Relative-To prompt
-
-The Story-Relative-To Prompt is constructed from the story-relative-to template at ```prompts/story_relative_to_prompt.md```.
-
-The results of this prompt will be used to create the story_relative_to for the next chapter.
+- The LLM is never instructed to add DONE. It only produces bullets.
+- The program writes or appends brainstorm bullets to `iterations/CHAPTER_xxx/pipeline_vN/NN_<type>/brainstorm.txt`.
+- To proceed, you must manually open that brainstorm.txt and add a final line containing exactly: `DONE` (all caps) on a line by itself.
+- Re-run the same command. The pipeline will pick up from there using all bullets up to (but not including) the DONE marker.
+- Bullets are cumulative across runs; previous bullets are silently included in the prompt for continuation.
 
 # Iteration Loop
 
@@ -379,20 +357,12 @@ Integration with GitHub Actions for automated iteration loops.
 
 Maintain creative flexibility while enforcing structural discipline.
 
-- Ensure you have the expected inputs: `SETTING.yaml`, a chapter file like `chapters/CHAPTER_001.yaml`, and prompt templates under `prompts/`.
+- Ensure you have the expected inputs: `SETTING.yaml`, `CHARACTERS.yaml`, a chapter file like `chapters/CHAPTER_001.yaml`, and the required prompt templates under `prompts/` (see below).
 
-- Use the project virtual environment when running. Either activate it first:
+- Use the project virtual environment when running. Either activate it first or call the venv’s Python directly:
 
-```bash
-source venv/bin/activate
-python scripts/driver.py chapters/CHAPTER_001.yaml v1
-```
-
-- Or, without activating, call the venv’s Python directly:
-Provide a framework that scales to a full novel-length work.
-```bash
-./venv/bin/python scripts/driver.py chapters/CHAPTER_001.yaml v1
-```
+  - source venv/bin/activate && python -m ghostwriter.cli run chapters/CHAPTER_001.yaml v1
+  - ./venv/bin/python -m ghostwriter.cli run chapters/CHAPTER_001.yaml v1
 - Python 3.10+ (project verified with Python 3.13)
 - Git (optional but recommended)
 
@@ -414,8 +384,8 @@ Provide a framework that scales to a full novel-length work.
 
 3) (Optional) Configure environment variables
 
-- Create a `.env` file (use `.env.example` as a starting point) and set:
-    - `OPENAI_API_KEY=...` (required when LLM integration is implemented in later tasks)
+- Create a `.env` file and set:
+  - `OPENAI_API_KEY=...` (required for live LLM calls; if absent, mock mode is used)
 
 ## Dependencies
 
@@ -428,16 +398,19 @@ Runtime/testing dependencies are pinned in `requirements.txt`. Key libraries:
 
 ## Usage
 
-Basic CLI to generate a draft and run a check for a chapter:
+Basic CLI to run the deterministic pipelines for a chapter:
 
-- Ensure you have the expected inputs: `SETTING.yaml`, a chapter file like `chapters/CHAPTER_001.yaml`, and prompt templates under `prompts/`.
+- Ensure you have the expected inputs: `SETTING.yaml`, `CHARACTERS.yaml`, a chapter file like `chapters/CHAPTER_001.yaml`, and prompt templates under `prompts/`.
 - Activate your venv, then run:
 
 ```
-python scripts/driver.py chapters/CHAPTER_01.yaml v1
+python -m ghostwriter.cli run chapters/CHAPTER_001.yaml v1
 ```
 
-- Outputs will be written under `iterations/CHAPTER_001/` as `draft_v1.txt` and `check_v1.txt`.
+- Outputs will be written under `iterations/CHAPTER_001/`:
+  - `pipeline_v1/` — per–touch-point logs, checks, suggestions, brainstorm files
+  - `draft_v1.txt` — parseable pairs of touch-point and polished result
+  - `final.txt` — clean, publish-ready prose (polished only)
 
 Notes:
 
@@ -448,39 +421,34 @@ Notes:
 
 - The driver now validates required inputs up front and exits with a clear message if something is missing:
   - `SETTING.yaml` at project root
+  - `CHARACTERS.yaml` at project root
   - A chapter file under `chapters/`, e.g. `chapters/CHAPTER_001.yaml`
   - Prompt templates under `prompts/`:
-    - `master_initial_prompt.md`
-    - `master_prompt.md`
+    - `narration_brain_storm_prompt.md`
+    - `explicit_brain_storm_prompt.md`
+    - `implicit_brain_storm_prompt.md`
+    - `ordering_prompt.md`
+    - `generate_narration_prompt.md`
+    - `actor_assignment_prompt.md`
+    - `body_language_prompt.md`
+    - `agenda_prompt.md`
+    - `reaction_prompt.md`
+    - `subtle_edit_prompt.md`
     - `polish_prose_prompt.md`
-    - `check_prompt.md`
     - `story_so_far_prompt.md`
     - `story_relative_to_prompt.md`
   - `prompts/character_dialog_prompt.md` is optional; a built-in default is used if missing.
 
 - On first run for a chapter, the driver auto-creates `iterations/CHAPTER_xxx/` (and dialog log folders when `--show-dialog` is used).
 
-### Iteration mode (auto) and limits
+### Version selection
 
-- Instead of specifying an explicit version like `v1`, you can pass `auto` to let the driver iterate drafts until all touch-points are satisfied (i.e., no "missing" found in the verification step) or until the maximum cycles is reached.
-- Maximum cycles are controlled by the `GW_MAX_ITERATIONS` environment variable (default: `2`).
+- You can specify `vN` explicitly (e.g., `v1`), omit it to pick the next version automatically, or pass `auto` as an alias for “next available version”.
+- There is no auto-looping mode in the new pipelines; run again for subsequent iterations.
 
-Example:
+### Prompt logging (--log-llm)
 
-```
-python scripts/driver.py chapters/CHAPTER_001.yaml auto
-```
-
-Artifacts produced per version include:
-
-- `pre_draft_vN.txt` — pre-prose with CHARACTER TEMPLATES and <CHARACTER> call sites
-- `check_vN.txt` — verification output for touch-points
-- `suggestions_vN.txt` — suggestions derived from the check output
-- `draft_vN.txt` — polished prose after dialog substitution and cleanup
-
-### Dialog prompt logging (--show-dialog)
-
-To debug per-character dialog generation, use the `--show-dialog` flag. When enabled, every <CHARACTER> call made during the polishing phase is captured (system prompt, user prompt, and the LLM response) as plain text files.
+To debug per-step prompts and responses, use the `--log-llm` flag. The legacy alias `--show-dialog` is also accepted.
 
 Where logs go:
 
@@ -494,10 +462,15 @@ Where logs go:
 Example:
 
 ```
-python scripts/driver.py chapters/CHAPTER_001.yaml auto --show-dialog
+python -m ghostwriter.cli run chapters/CHAPTER_001.yaml v1 --log-llm
 ```
 
-This is useful for reviewing exactly how the character template and call prompt were presented to the LLM and what response was returned.
+This is useful for reviewing exactly how prompts were presented to the LLM and what responses were returned.
+
+### Offline/mock mode
+
+- If `OPENAI_API_KEY` is not set (or the OpenAI client cannot be initialized), the program will return deterministic mock outputs. This is helpful for local testing without incurring API calls.
+- You can control behavior via a `.env` file in the project root; environment variables from `.env` override the shell by default.
 
 ## Running Tests
 

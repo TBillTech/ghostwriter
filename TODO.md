@@ -4,82 +4,18 @@ This document outlines the tasks necessary to get the driver.py working correctl
 
 
 
-## New Direction: Deterministic pipelines and two-branch workflow
+## Refactor driver.py logic
 
-The following tasks capture requirements introduced in INSTRUCTIONS.md and extend the plan for the next implementation phase.
+1. Carefully evaluate each function in driver.py.  For each function determine:
+    - Does the function apply to a single touch-point?  If so, insert a short comment right before the function: "#Move to touch_point.py"
+    - Does the function apply to the whole chapter, or is it a loop over touch-points? If so, insert a short comment right before the function "#Move to chapter.py"
+    - Does the function deal with something other than chapter generation, such as the "main()" function?  If so, add a comment: "#Stays in driver.py"
 
-1. Architecture and State Machine
-    - [x] Parse touch-points into commands: `actors`, `scene`, `foreshadowing`, `narration`, `explicit`, `implicit`
-    - [x] Implement chapter processing state:
-         - `active_actors: list[str]`
-         - `current_scene: Optional[str]`
-         - `foreshadowing: set[str]`
-         - `dialog_history: dict[str, deque[str]]` (size N)
-         - `prior_context: dict[touchpoint_id, {polished_text, suggestions}]` when N>0
-    - [ ] Implement two branches:
-         - Branch A (no `draft_v1.txt`): run Narration/Explicit/Implicit pipelines
-         - Branch B (has `draft_vN.txt`): run Subtle Edit pipeline for prose-producing touch-points
-    - [ ] Generate artifacts per branch: `draft_vN.txt`, `suggestions_vN.txt`, `story_so_far.txt`, `story_relative_to.txt`, `final.txt`
+2. Move each function with the annotaiton "#Move to touch_point.py" to a new file at ghostwriter/touch_point.py
+    - Make sure that if the driver.py needs the function (in main()) that it is imported.
 
-2. Pipelines
-    - [x] Narration pipeline: Brainstorm → Ordering → Generate Narration → Polish (functions implemented)
-    - [x] Explicit pipeline: Brainstorm → Ordering → Actor Assignment → (Body Language || Agenda) → Join → Character Dialog per actor line → Polish (functions implemented)
-    - [x] Implicit pipeline: Implicit Brainstorm → Ordering → Actor Assignment → (Body Language || Agenda) → Join → Character Dialog per actor line → Polish (functions implemented)
-    - [x] Subtle Edit pipeline: Subtle Edit → Polish (functions implemented)
-
-3. Output format validators and retries
-    - [x] bullet list: each line starts with `*`, min 2 bullets
-    - [x] actor list: lines begin with `<actor_id>:`; min 2 actor attributions; allow narrative lines
-    - [x] agenda list: conform to `prompts/agenda_prompt.md`
-    - [x] text: accept any string
-    - [x] Retry invalid outputs up to 3 attempts; on third failure, abort with error
-
-4. Per-touch-point checking and suggestions
-    - [ ] Use `check_narration_prompt.md`, `check_explicit_prompt.md`, `check_implicit_prompt.md`
-    - [ ] Build a parseable `suggestions_vN.txt` with one record per touch-point
-
-5. Parseable artifact formats
-    - [x] Define sentinel-based records:
-         - `BEGIN_TOUCHPOINT id=... type=...` / `END_TOUCHPOINT`
-         - `BEGIN_RESULT` / `END_RESULT`
-    - [x] Implement read/write helpers for `draft_vN.txt` and `suggestions_vN.txt`
-    - [ ] Implement `final.txt` generator (polished-only)
-
-6. LLM logging
-    - [ ] Log fully substituted prompts and raw outputs for every call
-    - [ ] For every call, also print brief statistics of input and output, and log this to console.
-    - [ ] When logging to console, also log completion status of current check-point index out of total check-points.
-    - [ ] Organize logs per chapter/version/touch-point/step
-    - [ ] Redact secrets; ensure `.gitignore` covers logs if needed
-
-7. Environment variables per prompt
-    - [ ] Add per-prompt model/temperature/max_tokens for:
-         - Brainstorm, Ordering, Generate Narration, Actor Assignment, Body Language, Agenda, Character Dialog
-         - Subtle Edit, Polish Prose
-         - Checks: Narration/Explicit/Implicit
-         - Summaries: Story-So-Far, Story-Relative-To
-    - [ ] Fallback to global defaults when unset
-
-8. Driver integration and CLI
-    - [x] Update `scripts/driver.py` to implement branch selection and pipelines
-    - [x] Add `--log-llm` (or expand `--show-dialog`) to capture logs for all steps
-    - [x] Keep existing input validation and directory scaffolding
-
-9. Documentation
-    - [ ] README: add deterministic architecture section, pipelines, formats, env vars (done)
-    - [ ] Add `.env.example` entries for new variables
-    - [ ] Document log directory structure and file naming
-
-10. Testing
-    - [ ] Unit: touch-point parser, state transitions, validators, file formats, env var resolution
-    - [ ] Unit: pipelines with Mock LLM — success and retry/failure paths
-    - [ ] Integration: Branch A and B end-to-end with Mock LLM
-    - [ ] Finalization: `final.txt`, `story_so_far.txt`, `story_relative_to.txt`
-
-11. Quality gates
-    - [ ] Lint/typecheck for new modules
-    - [ ] Deterministic test runs with fixed Mock LLM outputs
-
+3. Move each function with the annotation "#Move to chapter.py" to a new file at ghostwriter/chapter.py
+    - Make sure that if the driver.py needs the function (in main()) that it is imported.
 
 ## Testing and Quality Assurance
 

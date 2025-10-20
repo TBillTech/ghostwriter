@@ -1,0 +1,129 @@
+=== SYSTEM ===
+You are an evaluator checking touch-point coverage.
+
+=== USER ===
+You are reviewing the work of an enthusiastic writer who sometimes loses track of key ideas in their haste to complete their work.
+
+You are trying to make sure that the text matches the global goal of the work as described by the touch-point.  I will provide you here with the setting, context, things to watch out for, and the polished draft provided by the writer.  Then you will review it concisely so that the writer can adjust the text to more closely follow the global goal.
+
+Watch out for pronouns that have unclear references, like starting a paragraph with "They".  Using proper names is preferred in our narration.
+
+# Setting in general 
+{'factoids': ['Overview', 'Time Period', 'Zenith World', 'Zenith World Lobby and Equipment', 'The Salvation Cohort', 'The 73rd Crèche', 'New Philadelphia', 'Shackleton City VR Experience'], 'actors': ['Arthur', 'Misty', 'AURA', 'PROF']}
+
+{
+  "Factoids": [
+    {
+      "name": "Overview",
+      "description": ""
+    },
+    {
+      "name": "Time Period",
+      "description": "The story takes place in the year 2222. Many amazing events have happened to humanity in the last 200 years. Humans have set up permanent bases on the Moon, have stepped foot on Mars, and life in space is possible if not entirely comfortable or convenient. In space resource utilization has advanced to where most goods can and are manufactured in space, but few people can afford either to emigrate to space or purchase sufficient life support systems to dwell there long term. Due to advances in medical science, people rarely die of old age. About half the people alive in 2060 are still alive in 2222. The world's population has stabilized at 10 Billion individuals. It is socially expected for people who do die (by accident or design) to designate a substantial portion of their assets (supercentenarians are usually loaded) to a child yet to be born. Thus, most young people have a large account being managed by one of a variety of proxies. It is very rare and scandalous for a \"child\" to have most of their money NOT under strict supervision of an AI system. Of course, \"children\" (anybody under 40 :) ) are allowed unrestricted access to anything they have earned themselves, but this is much more difficult than it appears on paper. For one thing, jobs do not exist as they did in the early 21st century. Businesses are made up of coporate officers and AI employees, with very little room for anybody who did not help found the buisiness. Businesses are taxed highly, but still obscenely profitable. Everybody is given a UBI stipend by the govornment, of course, but these monies are also disbursed by AI proxies for the good of the beneficiaries (as the AI and policy makers see it). For example, \"children\" do not get to blow a monthly UBI payment at Vegas. In 2022 dollars, the AIs usually allow their charges who have no more than UBI to spend about $100 a month as they wish. All other monies are designated for bills, insurance, and other important payments. Naturally, these sorts of restrictions could give rise to unrest, anger, and even violence. To combat these tendencies, the governments of the world have created treaties to provide incentives for international sports, e-sports, and a whole variety of similiar activities and outlets. A huge amount of money is paid in by governments to build facilities, provide equipment, and award large prizes to individuals that win competitions or distinguish themselves in unique ways. In particular, there is a body of prizes and equipment awards given by a central body made up of AIs called the \"Central Body for Happiness through Motivation and Achievement\" or CBHMA. These AIs only purpose is to increase happiness through motivationalized achievements, they have a lot of intelligence and perform numerous objective studies, and they have gotten pretty good at their goals over the last 80 years. The CBHM Achievements, or simply \"Achievements\" as most people call them, are highly top of mind for most people. Saturating the entertainment space with news about \"Achievements\" is one of the goals of the CBHMA, especially when it comes to \"young\" people. Of course, it should come as no surprise that recently a company built a state of the art fantasy virtual reality computer game called \"Zenith\", subtitled \"Your Achievement RPG!\". In truth, Zenith Co. works closely with regulators and the CBHMA to ensure a vast array of curated tasks, quests, and unique in game achievements that are linked to real CBHM Achivements and publicity. This creates an atomosphere similiar to a gold rush. Unbeknownst to most, however, is that a shadowy organization calling itself \"Project Nadir\" controls Zenith Co. and it defines the major global parameters of Zenith World."
+    },
+    {
+      "name": "Zenith World",
+      "description": "Usually just called \"Zenith\" except when discussed in the context and in distinction to Zenith Company. Zenith World is a medium to high fantasy RPG with a heavy emphasis on character classes and their intrinsic skills. In the lobby, which closely resembles Earth IRL, the user can walk or commute to nearby locations which are official entry points to various locations in Zenith World. There are several large territories in Zenith. These are the Chivalrous Kingdom, the Lotus Empire, The Approach, the People's Meritocracy, The Collective, and the Trader's Combine. Around the world in various isolated locations are many City States, usually ruled by an elite family, individual, or even unique monster.\nTaking up most of the South West, and large band around the equator (except for the Approach territory) is called the Badlands, full of anarchy where no formal government is formed. The Badlands are dominated by PC, NPC, and moster warlords with various minor \"holdings\". Many advanced quest lines head out into the badlands, and while tropical or desert climes are common, the West of the globe on the equator climbs to such high elevations that glaciers form. The Badlands are usually the source of world and nation events in Zenith. For example, demon kings will often arise in or near the volcanoes of the Western Elevations. Finally, the Wilds are areas adjacent or even within the major countries that have only been partially \"tamed\", and only differ from the Badlands in that any organized bands are quickly put down by the neighboring countries."
+    },
+    {
+      "name": "Zenith World Lobby and Equipment",
+      "description": "By design, Zenith World has a \"lobby\" which is very close to the real world. Certain anonymous AIs constantly patrol the real world looking for differences such as new architecture, construction, and even sometimes litter, graffiti, and temporary signage. These then update the in game lobby to be eerily close to the real world. Sometimes, people call this \"uncanny\" since the one thing not done faithfully or even attempted is to copy real world people into the lobby. This is explained as a privacy issue to the public. What is unkown to the public is that this spooky copy effort is deeply connected to Project Nadir. In the lobby, users experience several strange (to them) things. Graffiti or signage sometimes goes up in real time, seemingly done by ghosts. When users log in, they wake up in the same room and position they were when logged off, and with their helmet and clothing faithfully simulated.\nIn fact, the weird helmet thing is taken so far, that in game there are permanent helmets and equipment, and temporary helmets and equipment. The only way to get a permanent helmet or equipment in game is to wear the official Zenith Co facsimilies of the equipment IRL when logging in. Temporary equipment can never be better than magic/blue gear, and must be refreshed by the user periodically. While this is a bit of a pain, most casual players accept it and quickly get used to summoning their gear with a thought every 5 minutes. For more serious players, or those who wish to use Epic, Legendary, or Unique quality gear, wearing the facsimily when logging in is the only option.\nMoreover, the game forces players to log in and log out in designated and monitored rooms. Everybody in the same room must either log in simultaneously, or log out simultaneously. Even the login room IRL must have a Zenith Co door monitor that can permit and deny entry, allowing entry simultaneously with the person entering logging in as well. The most minimal form of the helmet for highly casual players, is a simple pair of glasses. As weird as this seems, it isn't terribly inconvenient, since the door monitor has a few glasses which can adjust their prescription and allow the person to log in before entering. While emergency log outs are allowed to violate the lobby log in log out isomorphism with the real world, there is usually an experience, inventory and/or in game currency penalty for doing so. These weird lobby rules are explained publicly as increasing immersion, advertisement to non-players (keeping costs down), and protection from pirates and cheating. However, the real reason comes down to the goals of Project Nadir."
+    },
+    {
+      "name": "The Salvation Cohort",
+      "description": "In the year 2222, the Earth is a tapestry of rejuvenated immortals and mortal holdouts, shaped by life extension technologies that, for over 100 years, have allowed 70-year-olds to revert to the vitality of 30. The widespread adoption of these technologies, coupled with the economic upheaval from nearly 100% job losses due to automation and the stabilizing force of Universal Basic Income (UBI), has largely unified society into a longevity culture. However, lingering tensions from the fractured past persist, embodied by the Church of Natural Salvation, a hardline anti-immortal sect that rejects rejuvenation as a violation of divine will, citing biblical passages like Psalm 90:10. In 2204, this extremist group, desperate to counter the demographic dominance of ageless elites, executed a clandestine plan: a \"core\" pastor of this church named Reverend Virtuous Cycle used illegal cloning and artificial gestation to produce 10,000 children, intended to spark a revolt against the “satanic” immortal order. The Church dubbed these children the Salvation Cohort, envisioning them as a pure, mortal vanguard to restore “natural” humanity. The plot was uncovered by law enforcement before the children could be indoctrinated, and the operation was shut down—but not before all 10,000 were born via artificial wombs. With no human guardians, advanced AIs took over their upbringing, designating them Crèche 73 in bureaucratic records, as this was the 73rd case of illegal “demographic bombing” (attempts to manipulate population dynamics). The sheer scale of the cohort—unprecedented in its audacity—captured global attention, leading the public to call them The Ten Thousand, a name evoking both their number and mythic potential as a disruptive force. They represent a wildcard in 2222’s society: a generation engineered for rebellion but free to forge their own path, caught between the immortal elites in fortified enclaves and the mortal communities clinging to tradition. The Salvation Cohort’s existence fuels narrative tension in this polarized world. The Church of Natural Salvation, now a marginalized sect, sees them as divine redeemers, while the immortal elites view them as a threat, fearing their numbers could destabilize the fragile social order. The AIs, programmed for neutrality, raise the children with education and digital connectivity, exposing them to diverse perspectives that dilute the Church’s anti-immortal rhetoric. Yet, the public’s fascination with The Ten Thousand—amplified by a moderated internet that, since 2045, prioritizes cohesion over echo chambers—casts them as both heroes and outcasts. As they mature, the Cohort grapples with their identity: will they embrace their creators’ revolutionary zeal, integrate into the longevity culture, or redefine spirituality in a world where death is optional? The poor children usually have strong verbal idiosyncracies because the AIs are all too willing to indulge them in order to persuade them behave."
+    },
+    {
+      "name": "The 73rd Crèche",
+      "description": "The 73rd Crèche is also the name of the high tech facility where the 10000 grow up under AI care, isolated from the Church’s extremist ideology but shaped by their unique origin. The campus itself consists of high rise residential buildings around a common yard. During peak hours, the yard is enough to accommodate roughly half the children breaking into teams and playing common sports like soccer, baseball, swimming, or archery. There must be something like 200 teams and 100 sports going at peak times. Moreover, it is large enough to have half the space just be green parklike areas. So it must be something like 200 acres, with futuristic golf-carts carrying people from one location to another. There are access points at both ends of the yard with gaps in the residences where ground transportation to other localities can be arranged."
+    },
+    {
+      "name": "New Philadelphia",
+      "description": "New Philadelphia is a semi-arcology just to the southwest of old Philadelphia. It functions with partial autonomy, importing only luxury items that cannot be easily grown or printed. Otherwise, all common goods which can be easily grown or printed are provided to residents for free by the property management AIs. At the same time, the AIs function as an super strict HOA, ruling on what furniture and outdoor amentities are allowed to be installed by the residents. Arthur moved here because the cost was covered by UBI, because there are few things required of the residents, and because it wasn't too far away from the 73rd Crèche. Of great importance to Arthur is that it also famously has entry points to numerous places in Zenith World, being an affiliate of Zenith Co, and leaning into this to attract residents."
+    },
+    {
+      "name": "Shackleton City VR Experience",
+      "description": "# A Lunar Call to Teens on Earth\nImagine slipping on a sleek VR headset in your cramped Earth apartment, UBI barely covering your basics, the grind of routine weighing heavy. The screen flickers, and suddenly you’re standing on the rim of Shackleton Crater, the Moon’s stark, silvery expanse stretching before you. Earth hangs in the black sky, a blue marble that feels both close and a lifetime away. A pulse of music—low, thrumming, with a futuristic edge—syncs with your heartbeat, pulling you into Shackleton City’s promise: a place where you’re not just surviving, but rewriting what it means to thrive.\n# The Drop-In: Lunar Streets and Gravity’s Spin\nYou’re whisked into the heart of Shackleton City’s rotating habitat, a massive drum spinning to pin you to the floor with Earth-like gravity. The VR’s so crisp you feel the subtle hum of the rotation, the air cool and clean with a faint metallic tang. You’re walking a curved boulevard, the slope rising gently—6 degrees, just enough to remind you this ain’t Earth. Holo-signs pulse with stats: “Solar Array Output: 1.2 GW,” “Poorest Citizen’s Wealth: $10M Earth Equivalent.” Buildings gleam, half glass, half lunar rock, with greenery spilling from rooftop farms. A digital clone of a colonist—maybe Zara, a coder with a sharp grin—pops up beside you, projected by the AI mayor. “Wanna see what’s possible here?” she asks, her voice warm but edged with challenge. You nod, and she’s off, guiding you through a city that feels alive, electric, like it’s daring you to join.\n# The Hook: Be the Hero of Your Story\nThe experience shifts gears—now you’re in a gamified sim, dropped into a day in Shackleton. You’re tasked with a mission: tweak a mining bot to boost helium-3 output. The controls are intuitive, your hands (VR gloves humming) tweaking code on a holo-screen. You nail it, and a leaderboard flashes—your name’s climbing, not for cash but for cred: “Lunar Pioneer, Level 1.” Zara’s clone cheers, “That’s going on the colony’s highlight reel!” Next, you’re in a debate arena, your digital double—built from a quick personality scan—sparring with other clones about habitat upgrades. Your clone’s got your wit but an EI boost, landing points that make you laugh and think, “Damn, I’m good.” The AI mayor chimes in, soft but firm: “Your voice shapes this place. Want more?” It’s not just a game—it’s a taste of mattering.\n# The Pull: Richer Than Earth’s Richest\nNow the VR zooms out, showing Shackleton’s wealth machine. You’re floating above the solar arrays, panels stretching like wings under the unfiltered sun. Below, mines and factories churn, shipping goods to Earth that outvalue every dollar sunk into the colony. Zara’s clone points to a ticker: “Poorest colonist richer than Earth’s top trillionaire.” You see it—shares in the colony, access to tech like bio-hacked med bays, stuff no UBI could touch. The AI mayor’s voice cuts through: “On Earth, you scrape by. Here, you’re rich in ways they can’t dream—freedom, impact, forever.” A bio-hack kicks in—a subtle rush, maybe from the VR’s synced visuals or a soundwave, making you feel alive, like you could own this.\n# The Close: Your Lunar Double Awaits\nThe experience winds down with a personal pitch. You’re in a quiet lunar garden, stars blazing overhead. Your digital clone appears—your face, your vibe, but polished by the AI’s emotional smarts. “I’m you, ready to help run Shackleton,” it says. “Bring your real self, and we’ll build this together.” A menu pops up: tweak your clone’s skills (trivia buff? empathy pro?), sign up for a lunar prep course, or just vibe with the colony’s pulse. The AI mayor seals it: “Earth’s fine, but Shackleton’s home for those who dare. You in?” The VR fades, but the buzz lingers—you’re not just a teen on UBI anymore; you’re a spark for the stars."
+    }
+  ]
+}
+
+# Characters
+
+
+# Prior touch points
+The most recent 3 touch-points for context.
+
+
+# Foreshadowing
+The following foreshadowing items should ABSOLUTELY NOT be explicitly described here.  If they are, that is a problem. These should only be vaguely alluded to:
+
+
+# Actors
+The following actors are allowed to speak in the dialog.  If other actors are speaking, that is a problem.  The actors are:
+Arthur, Misty
+
+# Touch-Point
+This is the most important thing that the writer needs to say one way or another, and fits into the global goal of the work:
+The Story begins with Arthur and Misty leaving the 73rd Crèche, for the first time in their lives. They haven't left yet, and this narration point should try hard to pull in the reader's attention. No action has taken place yet.  This moment is the calm before the storm.  In particular, Arthur and Misty are on the cusp of leaving the complex, trying to work themselves up to the biggest step in their lives so far.
+
+
+# The Draft
+The polished text that needs to be evaluated for Touch-Point satisfaction, and actor and spoiler safety is as follows:
+The 73rd Crèche had always felt strange, even by 2222 standards: a colony of identical-aged bodies and a hundred different artificial voices, children who had been literally birthed by machines and raised by patient circuitry. Arthur and Misty had lived exactly eighteen years—down to the hour—and that precision sat on them like a promise. CBHMA-linked achievements unlocked at eighteen; what better reason, Arthur thought, to step off the only map he had ever known and into something that might hand him a name?
+
+Most of Cohort 73 slept until after ten, but Arthur and Misty were two of the few awake before the sun had climbed high enough to soften the glass towers’ glare. Few other teenagers paced the loading bays; most activity lived in the central yard, where half the acreage thumped with soccer, pools, and archery lanes and the other half lay quiet, trees and benches threaded like thought through muscle. Midmorning light threw the towers’ mirrored glass into long lattice shadows across the two-hundred-acre yard, a pattern that looked, from ground level, like an integrated circuit folded across green. Futuristic hovercraft hummed along the paths at the Crèche’s regulated twenty miles per hour, ferrying children and luggage everywhere the campus could imagine. A bright synthetic banner fluttered above the curved path—Cohort 73 — Dream, Build, Explore—and the chrome facades doubled the words and the moving figures on the lawns, making stillness feel heavier. AURA’s many android voices carried like distant family murmurs; the midmorning chime rolled over games and classes and made Arthur feel, without quite knowing why, like it was time to move.
+
+Arthur and Misty stood beside a sleek silver Crèche Car with its cargo compartment already full. A pickup clock over the bay read "Departures: Arthur, Misty" and ticked down the last minutes. Arthur’s trunk looked like medieval baggage, brass corners catching the sun; Misty’s case matched a mid-twentieth-century airline aesthetic, neat straps and a smooth shell. The vehicle’s display showed a route to the perimeter access point where external ground transport would meet them—the Crèche Car could not cross the gate—and Arthur’s fingers smoothed the small preprogrammed device in his pocket as if sealing the next world shut.
+
+Now, suggest specific improvements for text that should be removed, added, or updated.
+
+
+
+=== RESPONSE ===
+Overall impression
+- The draft hits the right locale and mood: quiet campus, countdown, and the “calm before the storm” feeling are all present.  
+- However, the text could be clearer and stronger about the single most important touch-point: this is the first time Arthur and Misty will leave the Crèche. Right now that idea is implied but not emphatic. Also, give Misty a clearer interior beat so the scene reads as shared, not just Arthur-centric. Finally, tighten a few sentences and fix a couple small pronoun ambiguities.
+
+Concrete suggestions (what to remove, add, or change)
+
+1) Make their first-time leaving explicit
+- Add one short, explicit sentence confirming this is their first time beyond the gate. This anchors the touch-point and heightens the stakes.
+- Suggested insertion (after the first paragraph or right before the car description):
+  - “Neither Arthur nor Misty had ever crossed the Crèche gate; everything beyond that fence was rumor and a sky they’d only seen through the lobby windows.”
+
+2) Strengthen the “calm before the storm” and reader pull
+- Add small physical details and a tense, quiet beat to pull the reader into the moment (palms, breath, the countdown as a tactile thing).
+- Suggested lines to add or replace where appropriate:
+  - “Arthur kept his hand on the device in his pocket until his knuckles went numb. Misty’s breath came slow; her fingers found the strap of her case and didn’t let go.”
+  - Or: “The departure clock didn’t just tick — it pressed against their chests like a pulse.”
+
+3) Give Misty an interior/action beat or a single exchange
+- Right now the scene is Arthur-heavy. Let Misty register the moment (small gesture, look, or one sentence of dialogue) so readers feel both of them leaving.
+- Suggested short exchange (keeps action minimal):
+  - Misty: “You ready?”  
+  - Arthur: “As I’ll ever be.”  
+  - (Or a non-verbal beat: “Misty only nodded, which was as much as either of them could manage.”)
+
+4) Clarify ambiguous pronouns and phrasing
+- Example: “the midmorning chime rolled over games and classes and made Arthur feel, without quite knowing why, like it was time to move.” The “it” is fuzzy. Replace with clearer phrasing:
+  - “the midmorning chime rolled over games and classes; for reasons he couldn’t name, Arthur felt that the moment had come.”
+- “that precision sat on them like a promise” is fine, but if you want to emphasize pressure replace “promise” with “weight” or “mandate” depending on tone.
+
+5) Consider tightening or changing one simile
+- “Arthur’s trunk looked like medieval baggage” feels an odd temporal leap in an otherwise futuristic setting. If you want antique flavor, pick a clearer image:
+  - Alternatives: “an old brass-bound trunk,” “a leather trunk with burnished corners,” or keep the simile but make it purposeful: “like something he’d stolen from a history exhibit.”
+
+6) Small clarity/consistency edits
+- “Most of Cohort 73 slept until after ten” → “Most of Cohort 73 slept past ten.” (minor)
+- Keep AURA references short and clear — you already use it correctly; don’t introduce new AI names here.
+
+7) Keep action minimal — preserve the calm
+- All added beats should remain small and quiet. Do not introduce movement beyond getting ready to depart or any breach of the gate. The point is to heighten the pre-departure tension, not start the journey.
+
+Example of a tightened paragraph incorporating several suggestions
+- (Use only if you want a concrete rewrite; otherwise apply pieces above)
+  - “Neither Arthur nor Misty had ever crossed the Crèche gate; everything beyond that fence was rumor and the blue smear of sky seen through lobby windows. The midmorning chime rolled over games and classes; for reasons he couldn’t name, Arthur felt that the moment had come. He smoothed the small preprogrammed device in his pocket until his knuckles ached. Misty’s fingers tightened on her case strap. The departures clock above the bay read 00:03:18 — Departures: Arthur, Misty — and the numbers seemed to press against their ribs.”
+
+Final note
+- You’re close. Make the first-time fact explicit, give Misty a small internal/action beat or a single line, and tighten a few ambiguous phrases. Those changes will make the opening feel more immediate and ensure the touch-point is unmistakable.

@@ -8,6 +8,7 @@ Follow instructions
 
 ## Next steps
 
+Start working on "Refactor project into maintainable structure" in TODO.md
 
 Relevant `TODO.md` is in the project root
 Relevant `README.md` is in the project root
