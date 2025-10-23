@@ -1,4 +1,6 @@
-"""Explicit dialog pipeline (migrated)."""
+"""Dialog pipeline.
+
+"""
 from __future__ import annotations
 
 from typing import Optional, List, Dict
@@ -23,12 +25,12 @@ from ..characters import load_characters_list, render_character_call
 from ..utils import to_text
 
 
-def run_explicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_paragraph: str = "", log_dir: Optional[Path] = None) -> str:
+def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_paragraph: str = "", log_dir: Optional[Path] = None) -> str:
     appended: Dict[str, List[str]] = {}
     reps = build_pipeline_replacements(ctx.setting, ctx.chapter, ctx.chapter_id, ctx.version, tp, state, prior_paragraph=prior_paragraph, ctx=ctx)
     # Brainstorm
-    sys1 = "Brainstorm explicit dialog beats as bullet points."
-    tpl1 = "explicit_brain_storm_prompt.md"
+    sys1 = "Brainstorm dialog beats as bullet points."
+    tpl1 = "dialog_brain_storm_prompt.md"
     user1_base = apply_template(str(Path("prompts") / tpl1), reps) if (Path("prompts") / tpl1).exists() else ""
     m1, t1, k1 = env_for_prompt(tpl1, "BRAIN_STORM", default_temp=0.45, default_max_tokens=600)
     bs_path = (log_dir / "brainstorm.txt") if log_dir else None
@@ -62,17 +64,16 @@ def run_explicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
     brainstorm = filter_narration_brainstorm(brainstorm_work, min_chars=24)
     brainstorm = truncate_brainstorm(brainstorm, limit=10)
 
-    # Ordering (respect env skip via same keys as driver)
+    # Ordering (respect env skip via dialog key)
     reps2 = dict(reps)
     reps2["[BULLET_IDEAS]"] = brainstorm
     reps2["[BULLETS]"] = brainstorm
     reps2["[bullets]"] = brainstorm
-    disable_order_global = os.getenv("GW_DISABLE_ORDERING_DIALOG", "0") == "1"
-    disable_order_explicit = os.getenv("GW_DISABLE_ORDERING_EXPLICIT", "0") == "1"
-    if disable_order_global or disable_order_explicit:
+    disable_order_dialog = os.getenv("GW_DISABLE_ORDERING_DIALOG", "0") == "1"
+    if disable_order_dialog:
         ordered = brainstorm
     else:
-        sys2 = "Order explicit dialog beats for flow."
+        sys2 = "Order dialog beats for flow."
         tpl2 = "ordering_prompt.md"
         user2 = apply_template(str(Path("prompts") / tpl2), reps2) if (Path("prompts") / tpl2).exists() else f"Order bullets:\n\n{brainstorm}\n"
         m2, t2, k2 = env_for_prompt(tpl2, "ORDERING", default_temp=0.25, default_max_tokens=600)
@@ -229,12 +230,14 @@ def run_explicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
     from ..templates import build_polish_prompt
     polish_prompt = build_polish_prompt(ctx.setting, ctx.chapter, ctx.chapter_id, ctx.version, text)
     modelp, tempp, maxp = env_for_prompt("polish_prose_prompt.md", "POLISH_PROSE", default_temp=0.2, default_max_tokens=2000)
-    polished = llm_complete(
-        polish_prompt,
+    polished = llm_call_with_validation(
         system="You are a ghostwriter polishing and cleaning prose.",
+        user=polish_prompt,
+        model=modelp,
         temperature=tempp,
         max_tokens=maxp,
-        model=modelp,
+        validator=validate_text,
+        log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_polish{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
     )
     state.last_appended_dialog = appended
     return polished

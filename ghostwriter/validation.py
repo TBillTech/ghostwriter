@@ -5,7 +5,16 @@ from typing import Tuple
 
 
 def validate_text(output: str) -> Tuple[bool, str]:
-    return (True, "ok")
+    """Text must be non-empty (after stripping). Used for prose-like prompts.
+
+    We intentionally keep this permissive: any non-empty content is acceptable.
+    Downstream checks enforce shape/quality as needed.
+    """
+    if output is None:
+        return False, "No output returned (None)"
+    if str(output).strip() == "":
+        return False, "Empty output not allowed"
+    return True, "ok"
 
 
 _ACTOR_LINE_RE = re.compile(r"^\s*([A-Za-z0-9_.\-]+)\s*:\s+.+")

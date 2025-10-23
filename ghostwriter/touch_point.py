@@ -137,7 +137,8 @@ def _strip_trailing_done(text: str) -> str:
 
 
 def _ensure_brainstorm_done_on_resume(tp_type: str, reps: Dict[str, str], *, log_dir: Optional[Path], tp_index: int) -> None:
-    if tp_type not in ("narration", "explicit", "implicit"):
+    # Accept only supported types
+    if tp_type not in ("narration", "dialog", "implicit"):
         return
     if log_dir is None:
         return
@@ -151,9 +152,9 @@ def _ensure_brainstorm_done_on_resume(tp_type: str, reps: Dict[str, str], *, log
     if tp_type == "narration":
         sys1 = "You are brainstorming narrative beats as concise bullet points."
         tpl1 = "narration_brain_storm_prompt.md"
-    elif tp_type == "explicit":
-        sys1 = "Brainstorm explicit dialog beats as bullet points."
-        tpl1 = "explicit_brain_storm_prompt.md"
+    elif tp_type == "dialog":
+        sys1 = "Brainstorm dialog beats as bullet points."
+        tpl1 = "dialog_brain_storm_prompt.md"
     else:
         sys1 = "Brainstorm implicit dialog beats (indirect, subtext) as bullet points."
         tpl1 = "implicit_brain_storm_prompt.md"

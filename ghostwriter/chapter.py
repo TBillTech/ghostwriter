@@ -1,16 +1,24 @@
-"""Chapter-level orchestration helpers.
+"""Chapter-level orchestration helpers."""
+try:
+    from .pipelines import (
+        run_narration_pipeline as gw_run_narration_pipeline,
+        run_dialog_pipeline as gw_run_dialog_pipeline,
+        run_implicit_pipeline as gw_run_implicit_pipeline,
+        run_subtle_edit_pipeline as gw_run_subtle_edit_pipeline,
+    )
+except Exception:
+    gw_run_narration_pipeline = None  # type: ignore
+    gw_run_dialog_pipeline = None  # type: ignore
+    gw_run_implicit_pipeline = None  # type: ignore
+    gw_run_subtle_edit_pipeline = None  # type: ignore
 
-Includes parseable artifact helpers, story summary generation, and
-the main per-chapter pipeline runner wrapper (importing pipelines).
-"""
-from __future__ import annotations
-
-from pathlib import Path
-from typing import Dict, List, Tuple, Optional, Iterable, Any
+# Standard library imports
 import os
-import json
 import re
+import json
 import time
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 from .context import RunContext, GWError
 from .templates import (
@@ -35,19 +43,6 @@ from .touch_point import (
     _build_pipeline_replacements,
     _ensure_brainstorm_done_on_resume,
 )
-
-try:
-    from .pipelines import (
-        run_narration_pipeline as gw_run_narration_pipeline,
-        run_explicit_pipeline as gw_run_explicit_pipeline,
-        run_implicit_pipeline as gw_run_implicit_pipeline,
-        run_subtle_edit_pipeline as gw_run_subtle_edit_pipeline,
-    )
-except Exception:
-    gw_run_narration_pipeline = None  # type: ignore
-    gw_run_explicit_pipeline = None  # type: ignore
-    gw_run_implicit_pipeline = None  # type: ignore
-    gw_run_subtle_edit_pipeline = None  # type: ignore
 
 try:
     from .artifacts import (
@@ -158,13 +153,13 @@ def parse_touchpoints_from_chapter(chapter: dict) -> List[TouchPoint]:
     """Parse chapter['Touch-Points'] into a normalized list of touch-points with command and text.
 
     Accepts flexible YAML item shapes like:
-      - explicit: "..."
-      - implicit: "..."
-      - narration: "..."
-      - actors: ["henry", "jim"]   (stored as comma-separated string)
-      - scene: "Battlefield"
-      - foreshadowing: "Storm"
-      - "explicit: Henry meets Jim" (string with 'key: value')
+        - dialog: "..."
+        - implicit: "..."
+        - narration: "..."
+        - actors: ["henry", "jim"]   (stored as comma-separated string)
+        - scene: "Battlefield"
+        - foreshadowing: "Storm"
+        - "dialog: Henry meets Jim" (string with 'key: value')
 
     Returns list of dicts with keys: id (1-based), type, content (string), raw (original-ish).
     """
@@ -172,7 +167,8 @@ def parse_touchpoints_from_chapter(chapter: dict) -> List[TouchPoint]:
     result: List[TouchPoint] = []
     if not isinstance(tps_raw, list):
         return result
-    allowed = {"actors", "scene", "foreshadowing", "narration", "explicit", "implicit", "setting"}
+    # Supported touch-point types
+    allowed = {"actors", "scene", "foreshadowing", "narration", "implicit", "setting", "dialog"}
 
     def _normalize(item) -> List[TouchPoint]:
         # Dict form: {key: value}
@@ -223,7 +219,7 @@ class ChapterState:
         # New: selected context blocks populated by 'setting' touch-point
         self.setting_block: str = ""
         self.characters_block: str = ""
-        # For checkpointing: lines appended by last explicit/implicit pipeline
+    # For checkpointing: lines appended by last dialog/implicit pipeline
         self.last_appended_dialog: Dict[str, List[str]] = {}
 
     def set_actors(self, actors_csv: str) -> None:
@@ -583,13 +579,13 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
     try:
         from .pipelines import (
             run_narration_pipeline as gw_run_narration_pipeline,
-            run_explicit_pipeline as gw_run_explicit_pipeline,
+            run_dialog_pipeline as gw_run_dialog_pipeline,
             run_implicit_pipeline as gw_run_implicit_pipeline,
             run_subtle_edit_pipeline as gw_run_subtle_edit_pipeline,
         )
     except Exception:
         gw_run_narration_pipeline = None  # type: ignore
-        gw_run_explicit_pipeline = None  # type: ignore
+        gw_run_dialog_pipeline = None  # type: ignore
         gw_run_implicit_pipeline = None  # type: ignore
         gw_run_subtle_edit_pipeline = None  # type: ignore
 
@@ -637,7 +633,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 state.characters_block = _gw_to_text({"Selected-Characters": sel_chars}) if sel_chars else ""
             except Exception:
                 state.characters_block = ""
-        elif tp_type in ("narration", "explicit", "implicit"):
+        elif tp_type in ("narration", "dialog", "implicit"):
             # Before running pipelines, if brainstorm exists but lacks DONE, enforce resume gating
             try:
                 reps_pre = _build_pipeline_replacements(setting, chapter, chapter_id, version_num, tp, state, prior_paragraph=prior_paragraph, ctx=ctx)
@@ -673,7 +669,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                     if gw_run_narration_pipeline is None:
                         raise GWError("ghostwriter.pipelines.run_narration_pipeline not available")
                     polished_text = gw_run_narration_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
-            elif tp_type == "explicit":
+            elif tp_type == "dialog":
                 if branch_b:
                     prev_polished_tp = ""
                     prev_suggestions_tp = ""
@@ -697,9 +693,9 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                         raise GWError("ghostwriter.pipelines.run_subtle_edit_pipeline not available")
                     polished_text = gw_run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=use_pol, prior_suggestions=use_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
                 else:
-                    if gw_run_explicit_pipeline is None:
-                        raise GWError("ghostwriter.pipelines.run_explicit_pipeline not available")
-                    polished_text = gw_run_explicit_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                    if gw_run_dialog_pipeline is None:
+                        raise GWError("ghostwriter.pipelines.run_dialog_pipeline not available")
+                    polished_text = gw_run_dialog_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
             else:  # implicit
                 if branch_b:
                     prev_polished_tp = ""
@@ -741,7 +737,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
         # Record (for actors/scene/foreshadowing, polished_text may be empty)
         records.append((tp_id, tp_type, tp_text, polished_text))
         # After producing a polished draft for contentful types, run per-touch-point check and suggestions
-        if tp_type in ("narration", "explicit", "implicit") and polished_text and tp_log_dir is not None:
+        if tp_type in ("narration", "dialog", "implicit") and polished_text and tp_log_dir is not None:
             try:
                 # Build replacements expected by check_* prompts
                 # Setting block
@@ -778,7 +774,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 # Choose check template per tp type
                 check_tpl = {
                     "narration": "check_narration_prompt.md",
-                    "explicit": "check_explicit_prompt.md",
+                    "dialog": "check_dialog_prompt.md",
                     "implicit": "check_implicit_prompt.md",
                 }.get(tp_type, "check_narration_prompt.md")
                 # Prepare replacements

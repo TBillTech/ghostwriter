@@ -16,10 +16,3 @@ RESUME: Skipping completed touch-point 3 (actors).
 RESUME: Skipping completed touch-point 1 (setting).
 RESUME: Skipping completed touch-point 2 (scene).
 RESUME: Skipping completed touch-point 3 (actors).
-RESUME: Skipping completed touch-point 1 (setting).
-RESUME: Skipping completed touch-point 2 (scene).
-RESUME: Skipping completed touch-point 3 (actors).
-RESUME: Skipping completed touch-point 1 (setting).
-RESUME: Skipping completed touch-point 2 (scene).
-RESUME: Skipping completed touch-point 3 (actors).
-RESUME: Skipping completed touch-point 4 (narration).

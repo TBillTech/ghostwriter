@@ -13,7 +13,7 @@ REQUIRED_PROMPTS = [
     "prompts/story_relative_to_prompt.md",
     # Deterministic pipeline steps
     "prompts/narration_brain_storm_prompt.md",
-    "prompts/explicit_brain_storm_prompt.md",
+    "prompts/dialog_brain_storm_prompt.md",
     "prompts/ordering_prompt.md",
     "prompts/implicit_brain_storm_prompt.md",
     "prompts/generate_narration_prompt.md",
@@ -32,7 +32,7 @@ REQUIRED_PROMPTS = [
     "prompts/story_relative_to_prompt.md",
     # Deterministic pipeline steps
     "prompts/narration_brain_storm_prompt.md",
-    "prompts/explicit_brain_storm_prompt.md",
+    "prompts/dialog_brain_storm_prompt.md",
     "prompts/ordering_prompt.md",
     "prompts/implicit_brain_storm_prompt.md",
     "prompts/generate_narration_prompt.md",

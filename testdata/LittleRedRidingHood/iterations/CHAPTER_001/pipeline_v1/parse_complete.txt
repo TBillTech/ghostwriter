@@ -1,14 +1,14 @@
-[v1] Parsing complete: SETTING.yaml + chapters/CHAPTER_000.yaml loaded; 36 touch-points.
-chapter_id=CHAPTER_000
-timestamp=2025-10-20 11:58:43
+[v1] Parsing complete: SETTING.yaml + CHAPTER_001.yaml loaded; 7 touch-points.
+chapter_id=CHAPTER_001
+timestamp=2025-10-22 14:00:52
 cwd=/home/tom/code/ghostwriter
 
 [ENVIRONMENT]
 {
   "env": {
+    "GW_BOOK_BASE_DIR": "testdata/LittleRedRidingHood",
     "GW_CHARS_PER_TOKEN": "***",
     "GW_CRASH_TRACE": "1",
-    "GW_CRASH_TRACE_FILE": "iterations/CHAPTER_000/pipeline_v1/crash_trace.log",
     "GW_DIALOG_CONTEXT_LINES": "8",
     "GW_DISABLE_ORDERING_DIALOG": "1",
     "GW_INCLUDE_PROMPT_TOKENS": "***",
@@ -70,7 +70,7 @@ cwd=/home/tom/code/ghostwriter
     "tokens_param_selected": "max_completion_tokens",
     "include_prompt_tokens": true,
     "chars_per_token": 4.0,
-    "crash_trace_file": "iterations/CHAPTER_000/pipeline_v1/crash_trace.log",
+    "crash_trace_file": "",
     "dotenv_override_enabled": true
   }
 }

@@ -8,7 +8,7 @@ Follow instructions
 
 ## Next steps
 
-Start working on "Refactor project into maintainable structure" in TODO.md
+Start working on Task 1, chapter brainstorming pipeline.
 
 Relevant `TODO.md` is in the project root
 Relevant `README.md` is in the project root
@@ -56,5 +56,5 @@ Relevant `README.md` is in the project root
 - Update the session conversation summary at the end of TODO.md.
 - Update the README.md with any findings that appeared during the session which are worth remarking on.  Be sure to preserve any solutions to command line issues, so we don't have to repeat broken command lines in the future.
 - Update these `INSTRUCTIONS.md` by setting "Focus" to the next actionable tasks in `TODO.md` (e.g., move from Environment Setup to Core Functionality Implementation).
-	- Current: Task 8 done; focus moved to Task 9.
+	- Current: Task 11 implemented (configurable paths + testbed). Focus moved to Task 12 (Create Unit Tests).
 - Finally, commit all file changes.

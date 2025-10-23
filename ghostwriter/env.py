@@ -9,6 +9,7 @@ from __future__ import annotations
 import os
 import re
 from typing import Optional, Dict, Any, List, Tuple
+from pathlib import Path
 
 from dotenv import load_dotenv
 
@@ -83,6 +84,102 @@ def resolve_max_tokens(step_key: str, default_max_tokens: int) -> int:
 
 
 # ---------------------------
+# Path resolution for configurable book directories (Task 11)
+# ---------------------------
+
+def _as_path(val: Optional[str]) -> Optional[Path]:
+    if val is None or str(val).strip() == "":
+        return None
+    p = Path(val)
+    return p
+
+
+def get_book_base_dir() -> Path:
+    """Resolve the base working directory for a given book.
+
+    Env: GW_BOOK_BASE_DIR
+    Default: current working directory
+    """
+    base = env_str("GW_BOOK_BASE_DIR")
+    if base:
+        p = Path(base)
+        return p if p.is_absolute() else (Path.cwd() / p)
+    # Default to relative path to preserve existing tests that compare Path("iterations")
+    return Path(".")
+
+
+def get_setting_path() -> Path:
+    """Resolve SETTING.yaml path.
+
+    Env: GW_SETTING_PATH (relative to base if not absolute)
+    Default: <base>/SETTING.yaml
+    """
+    base = get_book_base_dir()
+    p = _as_path(env_str("GW_SETTING_PATH"))
+    if p is None:
+        return base / "SETTING.yaml"
+    return p if p.is_absolute() else (base / p)
+
+
+def get_characters_path() -> Path:
+    """Resolve CHARACTERS.yaml path.
+
+    Env: GW_CHARACTERS_PATH (relative to base if not absolute)
+    Default: <base>/CHARACTERS.yaml
+    """
+    base = get_book_base_dir()
+    p = _as_path(env_str("GW_CHARACTERS_PATH"))
+    if p is None:
+        return base / "CHARACTERS.yaml"
+    return p if p.is_absolute() else (base / p)
+
+
+def get_chapters_dir() -> Path:
+    """Resolve chapters directory.
+
+    Env: GW_CHAPTERS_DIR (relative to base if not absolute)
+    Default: <base>/chapters
+    """
+    base = get_book_base_dir()
+    p = _as_path(env_str("GW_CHAPTERS_DIR"))
+    if p is None:
+        return base / "chapters"
+    return p if p.is_absolute() else (base / p)
+
+
+def get_iterations_dir() -> Path:
+    """Resolve iterations directory.
+
+    Env: GW_ITERATIONS_DIR (relative to base if not absolute)
+    Default: <base>/iterations
+    """
+    base = get_book_base_dir()
+    p = _as_path(env_str("GW_ITERATIONS_DIR"))
+    if p is None:
+        return base / "iterations"
+    return p if p.is_absolute() else (base / p)
+
+
+def resolve_chapter_path(chapter_path: str) -> Path:
+    """Resolve a chapter path, allowing bare filenames or relative names.
+
+    Precedence:
+    - If chapter_path exists as given (absolute or relative to cwd), use it
+    - Else try <chapters_dir>/<chapter_path>
+    - Else try <chapters_dir>/<basename(chapter_path)>
+    """
+    p = Path(chapter_path)
+    if p.exists():
+        return p
+    ch_dir = get_chapters_dir()
+    cand = ch_dir / p
+    if cand.exists():
+        return cand
+    cand2 = ch_dir / p.name
+    return cand2
+
+
+# ---------------------------
 # Composite resolvers for steps and prompt templates
 # ---------------------------
 
@@ -99,19 +196,8 @@ def env_for(step_key: str, *, default_temp: float = 0.2, default_max_tokens: int
     temp = resolve_temp(step_key, default_temp)
     max_tokens = resolve_max_tokens(step_key, default_max_tokens)
     if step_key == "CHARACTER_DIALOG":
-        if model is None:
-            model = env_str("GW_MODEL_DIALOG")
-        if os.getenv("GW_TEMP_CHARACTER_DIALOG") is None and os.getenv("GW_TEMP_DIALOG") is not None:
-            try:
-                temp = float(os.getenv("GW_TEMP_DIALOG", str(temp)))
-            except Exception:
-                pass
-        if os.getenv("GW_MAX_TOKENS_CHARACTER_DIALOG") is None and os.getenv("GW_MAX_TOKENS_DIALOG") is not None:
-            try:
-                v = int(os.getenv("GW_MAX_TOKENS_DIALOG", str(max_tokens)))
-                max_tokens = v if v > 0 else max_tokens
-            except Exception:
-                pass
+        # No additional aliases; use the CHARACTER_DIALOG keys only
+        pass
     return model, float(temp), int(max_tokens)
 
 

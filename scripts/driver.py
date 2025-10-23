@@ -109,6 +109,9 @@ from ghostwriter.env import (
     mask_env_value as _mask_env_value,
     normalize_base_url_from_env as _normalize_base_url_from_env,
     collect_program_env_snapshot as _collect_program_env_snapshot,
+    get_setting_path as _get_setting_path,
+    get_characters_path as _get_characters_path,
+    resolve_chapter_path as _resolve_chapter_path,
 )
 
 from ghostwriter.touch_point import ValidationError
@@ -129,13 +132,13 @@ from typing import Callable
 try:
     from ghostwriter.pipelines import (
         run_narration_pipeline as gw_run_narration_pipeline,
-        run_explicit_pipeline as gw_run_explicit_pipeline,
+        run_dialog_pipeline as gw_run_dialog_pipeline,
         run_implicit_pipeline as gw_run_implicit_pipeline,
         run_subtle_edit_pipeline as gw_run_subtle_edit_pipeline,
     )
 except Exception:
     gw_run_narration_pipeline = None  # type: ignore
-    gw_run_explicit_pipeline = None  # type: ignore
+    gw_run_dialog_pipeline = None  # type: ignore
     gw_run_implicit_pipeline = None  # type: ignore
     gw_run_subtle_edit_pipeline = None  # type: ignore
 
@@ -253,17 +256,18 @@ def _validate_inputs_and_prepare(chapter_path: str) -> None:
     - Creates iterations/<CHAPTER_ID>/ directory
     """
     # Validate chapter file early for clearer errors before any work
-    ch_path = Path(chapter_path)
+    # Resolve chapter path using environment-aware resolver
+    ch_path = _resolve_chapter_path(chapter_path)
     if not ch_path.exists():
         raise MissingFileError(
-            f"Chapter file not found: {chapter_path}. Expected a path like 'chapters/CHAPTER_001.yaml'."
+            f"Chapter file not found: {chapter_path}. Resolved to '{ch_path}'."
         )
     # Do not parse YAML here—RunContext is the single source of YAML loading.
     # Just check required files exist for clearer early errors.
-    if not Path("SETTING.yaml").exists():
-        raise MissingFileError("Missing required SETTING.yaml at project root.")
-    if not Path("CHARACTERS.yaml").exists():
-        raise MissingFileError("Missing required CHARACTERS.yaml at project root.")
+    if not _get_setting_path().exists():
+        raise MissingFileError(f"Missing required SETTING.yaml: {_get_setting_path()}")
+    if not _get_characters_path().exists():
+        raise MissingFileError(f"Missing required CHARACTERS.yaml: {_get_characters_path()}")
 
     # Validate required prompt templates
     missing = [p for p in _REQUIRED_PROMPTS if not Path(p).exists()]
@@ -277,7 +281,7 @@ def _validate_inputs_and_prepare(chapter_path: str) -> None:
     # Character dialog prompt is optional (we fallback to a built-in template)
 
     # Ensure iterations directory exists for this chapter
-    chapter_id = chapter_id_from_path(chapter_path)
+    chapter_id = chapter_id_from_path(str(ch_path))
     out_dir = iter_dir_for(chapter_id)
     try:
         out_dir.mkdir(parents=True, exist_ok=True)

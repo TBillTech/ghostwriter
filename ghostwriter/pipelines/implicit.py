@@ -213,12 +213,14 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
     from ..templates import build_polish_prompt
     polish_prompt = build_polish_prompt(ctx.setting, ctx.chapter, ctx.chapter_id, ctx.version, text)
     modelp, tempp, maxp = env_for_prompt("polish_prose_prompt.md", "POLISH_PROSE", default_temp=0.2, default_max_tokens=2000)
-    polished = llm_complete(
-        polish_prompt,
+    polished = llm_call_with_validation(
         system="You are a ghostwriter polishing and cleaning prose.",
+        user=polish_prompt,
+        model=modelp,
         temperature=tempp,
         max_tokens=maxp,
-        model=modelp,
+        validator=validate_text,
+        log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_polish{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
     )
     state.last_appended_dialog = appended
     return polished

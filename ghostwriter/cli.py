@@ -27,6 +27,7 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     p_run.add_argument("chapter_path", help="Path to chapter yaml, e.g., chapters/CHAPTER_001.yaml")
     p_run.add_argument("version", nargs="?", help="vN or 'auto' (default: auto)")
     p_run.add_argument("--log-llm", action="store_true", dest="log_llm", help="Log LLM prompts/responses")
+    p_run.add_argument("--book-base", dest="book_base", help="Override GW_BOOK_BASE_DIR for this run")
 
     return parser.parse_args(argv)
 
@@ -45,6 +46,15 @@ def main(argv: list[str] | None = None) -> int:
         for a in list(argv_list):
             if a == "--log-llm" or a == "--show-dialog":
                 log_llm = True
+        # Legacy parse for --book-base
+        book_base = None
+        if "--book-base" in argv_list:
+            try:
+                idx = argv_list.index("--book-base")
+                if idx + 1 < len(argv_list):
+                    book_base = argv_list[idx + 1]
+            except Exception:
+                book_base = None
         # chapter path is first non-flag
         toks = [t for t in argv_list if not t.startswith("--")]
         if toks:
@@ -52,13 +62,17 @@ def main(argv: list[str] | None = None) -> int:
             if len(toks) > 1:
                 version_token = toks[1]
         if chapter_path:
-            ns = argparse.Namespace(cmd="run", chapter_path=chapter_path, version=version_token, log_llm=log_llm)
+            ns = argparse.Namespace(cmd="run", chapter_path=chapter_path, version=version_token, log_llm=log_llm, book_base=book_base)
         else:
             # Fall back to showing help
-            print("Usage: ghostwriter run <chapters/CHAPTER_xx.yaml> [vN|auto] [--log-llm]")
+            print("Usage: ghostwriter run <chapters/CHAPTER_xx.yaml> [vN|auto] [--log-llm] [--book-base <dir>]")
             return 1
 
     if ns.cmd == "run":
+        # Apply --book-base override if provided
+        if getattr(ns, "book_base", None):
+            import os
+            os.environ["GW_BOOK_BASE_DIR"] = str(ns.book_base)
         chapter_path = ns.chapter_path
         def _chapter_id_from_path(chapter_path: str) -> str:
             return Path(chapter_path).stem

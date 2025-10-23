@@ -12,9 +12,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Any
 
-import json
 import yaml
 from yaml.loader import SafeLoader as _PySafeLoader
+from .env import get_setting_path, get_characters_path, resolve_chapter_path
 
 class GWError(Exception):
     pass
@@ -60,15 +60,19 @@ class RunContext:
 
     @classmethod
     def from_paths(cls, *, chapter_path: str, version: int) -> "RunContext":
-        if not Path("SETTING.yaml").exists():
-            raise MissingFileError("Missing required SETTING.yaml at project root.")
-        setting = load_yaml("SETTING.yaml")
-        if not Path(chapter_path).exists():
-            raise MissingFileError(f"Missing chapter file: {chapter_path}")
-        chapter = load_yaml(chapter_path)
-        if not Path("CHARACTERS.yaml").exists():
-            raise MissingFileError("Missing required CHARACTERS.yaml at project root.")
-        chars_yaml = load_yaml("CHARACTERS.yaml")
+        # Resolve configurable paths (ENV can change locations)
+        setting_path = get_setting_path()
+        characters_path = get_characters_path()
+        resolved_chapter = resolve_chapter_path(chapter_path)
+        if not setting_path.exists():
+            raise MissingFileError(f"Missing required SETTING.yaml: {setting_path}")
+        setting = load_yaml(str(setting_path))
+        if not resolved_chapter.exists():
+            raise MissingFileError(f"Missing chapter file: {chapter_path} (resolved: {resolved_chapter})")
+        chapter = load_yaml(str(resolved_chapter))
+        if not characters_path.exists():
+            raise MissingFileError(f"Missing required CHARACTERS.yaml: {characters_path}")
+        chars_yaml = load_yaml(str(characters_path))
         characters_list: List[dict] = []
         if isinstance(chars_yaml, list):
             characters_list = [c for c in chars_yaml if isinstance(c, dict)]
@@ -76,5 +80,5 @@ class RunContext:
             characters_list = [c for c in chars_yaml.get("Characters") if isinstance(c, dict)]
         elif isinstance(setting, dict) and isinstance(setting.get("Characters"), list):
             characters_list = [c for c in setting.get("Characters") if isinstance(c, dict)]
-        cid = chapter_id_from_path(chapter_path)
+        cid = chapter_id_from_path(str(resolved_chapter))
         return cls(setting=setting, chapter=chapter, characters=characters_list, chapter_id=cid, version=version)

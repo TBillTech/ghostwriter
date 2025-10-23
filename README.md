@@ -4,7 +4,7 @@ GhostWriter is a domain-specific writing engine that uses structured YAML (Setti
 It focuses on:
 - Feeding the LLM the right context (Setting + Chapter logs)
 - Separating structure from prose (what’s required vs. what’s creative)
-- Controlling emphasis (Touch-Points = must-hit beats, implicit vs. explicit)
+- Controlling emphasis (Touch-Points = must-hit beats, narration vs. dialog vs. implicit)
 - Leaving room for creativity (avoid mechanical lists; keep a strong voice)
 
 GhostWriter has been refactored into deterministic per–touch-point pipelines with a modern CLI.
@@ -17,6 +17,10 @@ Activate your virtual environment, then run one of the following:
   - python -m ghostwriter.cli run chapters/CHAPTER_001.yaml v1
   - python -m ghostwriter.cli run chapters/CHAPTER_001.yaml   # picks next version automatically
 
+- With a custom book base directory (Task 11):
+  - python -m ghostwriter.cli run chapters/CHAPTER_001.yaml v1 --book-base BecomingDjinn
+  - python -m ghostwriter.cli run CHAPTER_001.yaml --book-base BecomingDjinn  # chapter resolved under base/chapters
+
 - Legacy-compatible (delegates to the CLI under the hood):
   - python scripts/driver.py chapters/CHAPTER_001.yaml v1
   - python scripts/driver.py chapters/CHAPTER_001.yaml        # picks next version automatically
@@ -27,6 +31,28 @@ Optional flags:
 Notes:
 - The program runs the pipelines exactly once for the selected version; there is no auto-loop. To iterate, edit inputs and run the next version.
 - If OPENAI_API_KEY is not set, the system operates in offline/mock mode and returns deterministic mock outputs (good for dry runs and tests).
+
+## Configurable file locations (Task 11)
+
+You can control where the book’s working files live via environment variables. Set these in your shell or in a `.env` file (see `.env.example`).
+
+- GW_BOOK_BASE_DIR — Base directory containing your book assets (defaults to current working directory). When set, other paths default relative to it.
+- GW_SETTING_PATH — Path to SETTING.yaml; defaults to `<base>/SETTING.yaml`.
+- GW_CHARACTERS_PATH — Path to CHARACTERS.yaml; defaults to `<base>/CHARACTERS.yaml`.
+- GW_CHAPTERS_DIR — Directory containing chapter YAML files; defaults to `<base>/chapters`.
+- GW_ITERATIONS_DIR — Output directory for per-chapter artifacts; defaults to `<base>/iterations`.
+
+CLI override:
+- Pass `--book-base <dir>` to temporarily override `GW_BOOK_BASE_DIR` for a single run.
+
+Examples:
+
+```
+# Use the included Little Red Riding Hood testbed
+cp .env.example .env
+# (optional) edit .env if needed
+python -m ghostwriter.cli run CHAPTER_001.yaml --book-base testdata/LittleRedRidingHood
+```
 
 ## Emphasis & Importance
 
@@ -66,20 +92,20 @@ The system is moving to a deterministic, sequential pipeline driven by touch-poi
 ### Two branches
 
 1) When no prior draft exists (no `draft_v1.txt`):
-   - Read and parse chapter touch-points as commands: `actors`, `scene`, `foreshadowing`, `narration`, `explicit`, `implicit`.
+  - Read and parse chapter touch-points as commands: `actors`, `scene`, `foreshadowing`, `narration`, `dialog`, `implicit`.
    - Maintain state across touch-points: active actors, current scene, foreshadowing flags, and dialog history per actor (latest few lines).
    - For each touch-point:
      - `actors`/`scene`/`foreshadowing`: update state only.
      - `narration`: run Narration pipeline.
-     - `explicit`: run Explicit pipeline.
+  - `dialog`: run Dialog pipeline.
      - `implicit`: run Implicit pipeline.
    - Write `draft_v1.txt` as a parseable sequence of pairs: original touch-point + polished output.
    - Generate `story_relative_to.txt` and `story_so_far.txt`.
    - Write `final.txt` as a clean, publishable text containing only polished prose (no touch-points/markdown).
 
 2) When a prior version exists (largest N where `draft_vN.txt` and `suggestions_vN.txt` are present):
-   - Load prior polished texts and suggestions into state so the edit pipeline can reference them by touch-point.
-   - For each touch-point that yields prose (`narration`, `explicit`, `implicit`), run the Subtle Edit pipeline instead of generating from scratch.
+  - Load prior polished texts and suggestions into state so the edit pipeline can reference them by touch-point.
+  - For each touch-point that yields prose (`narration`, `dialog`, `implicit`), run the Subtle Edit pipeline instead of generating from scratch.
    - Re-run per-touch-point checks and write a parseable `suggestions_v(N+1).txt`.
    - Regenerate and overwrite `story_relative_to.txt`, `story_so_far.txt`, and `final.txt`.
 
@@ -88,7 +114,7 @@ The system is moving to a deterministic, sequential pipeline driven by touch-poi
   - `(ordering_prompt.md → bullet list)`
   - `(generate_narration_prompt.md → text)`
 
-- Explicit pipeline
+- Dialog pipeline
   - `(ordering_prompt.md → bullet list)`
   - `(actor_assignment_prompt.md → actor list)`
   - In parallel: `(body_language_prompt.md → bullet list)` and `(agenda_prompt.md → agenda list)`
@@ -98,7 +124,7 @@ The system is moving to a deterministic, sequential pipeline driven by touch-poi
   - `(implicit_brain_storm_prompt.md → bullet list)`
   - `(ordering_prompt.md → bullet list)`
   - In parallel: `(body_language_prompt.md → bullet list)` and `(agenda_prompt.md → agenda list)`
-  - Join as in Explicit pipeline; produce output text via `character_dialog_prompt.md` per actor line.
+  - Join as in Dialog pipeline; produce output text via `character_dialog_prompt.md` per actor line.
 
   - `(subtle_edit_prompt.md → text)`
 
@@ -110,7 +136,7 @@ Each pipeline step has an expected output format. The framework validates output
 ### State tracking and dialog history
 
 - Track current `actors`, `scene`, and `foreshadowing` (updated by their commands).
-- Track recent dialog per actor (last N lines) so `explicit`/`implicit` pipelines can feed rich context to `character_dialog_prompt.md`.
+- Track recent dialog per actor (last N lines) so `dialog`/`implicit` pipelines can feed rich context to `character_dialog_prompt.md`.
 
 Per chapter iteration folder: `iterations/CHAPTER_xxx/`
 
@@ -132,7 +158,7 @@ Each prompt can be configured with model, temperature, and max tokens (defaults 
 - Polish prose: `GW_MODEL_POLISH_PROSE`, `GW_TEMP_POLISH_PROSE`, `GW_MAX_TOKENS_POLISH_PROSE`
 - Checks (per kind):
   - Narration: `GW_MODEL_CHECK_NARRATION`, `GW_TEMP_CHECK_NARRATION`, `GW_MAX_TOKENS_CHECK_NARRATION`
-  - Explicit: `GW_MODEL_CHECK_EXPLICIT`, `GW_TEMP_CHECK_EXPLICIT`, `GW_MAX_TOKENS_CHECK_EXPLICIT`
+  - Dialog: `GW_MODEL_CHECK_DIALOG`, `GW_TEMP_CHECK_DIALOG`, `GW_MAX_TOKENS_CHECK_DIALOG`
   - Implicit: `GW_MODEL_CHECK_IMPLICIT`, `GW_TEMP_CHECK_IMPLICIT`, `GW_MAX_TOKENS_CHECK_IMPLICIT`
   - `GW_MODEL_STORY_SO_FAR`, `GW_TEMP_STORY_SO_FAR`, `GW_MAX_TOKENS_STORY_SO_FAR`
   - `GW_MODEL_STORY_RELATIVE`, `GW_TEMP_STORY_RELATIVE`, `GW_MAX_TOKENS_STORY_RELATIVE`
@@ -152,10 +178,10 @@ File Structure
   |    ├── agenda_prompt.md
   |    ├── body_language_prompt.md
   |    ├── narration_brain_storm_prompt.md
-  |    ├── explicit_brain_storm_prompt.md
+  |    ├── dialog_brain_storm_prompt.md
   |    ├── implicit_brain_storm_prompt.md
   |    ├── character_dialog_prompt.md
-  |    ├── check_explicit_prompt.md
+  |    ├── check_dialog_prompt.md
   |    ├── check_implicit_prompt.md
   |    ├── check_narration_prompt.md
   |    ├── generate_narration_prompt.md
@@ -217,7 +243,7 @@ File Structure
         __init__.py
         common.py           # Shared pipeline helpers (replacements, polish, DONE gating)
         narration.py        # run_narration_pipeline
-        explicit.py         # run_explicit_pipeline
+        dialog.py           # run_dialog_pipeline
         implicit.py         # run_implicit_pipeline
         subtle_edit.py      # run_subtle_edit_pipeline
       commands.py           # High-level flows (run_pipelines_for_chapter, etc.)
@@ -274,9 +300,9 @@ Props: Active (interactable) or inactive (background/foreshadowing).
 ## Chapter Log (CHAPTER_xxx.yaml)
 ```yaml
 Touch-Points:
-    - explicit: "Henry sees the wounded soldier with the bloody shirt"
-    - implicit: "The battlefield described only through Henry’s impressions"
-    - explicit: "The ridiculousness of shelling an entire continent"
+  - dialog: "Henry sees the wounded soldier with the bloody shirt"
+  - implicit: "The battlefield described only through Henry’s impressions"
+  - dialog: "The ridiculousness of shelling an entire continent"
 
 Story-So-Far: |
     Henry has fled battle once, ashamed of his cowardice.
@@ -295,11 +321,11 @@ Story-Relative-To: Contextualizes each character/scene/prop for this chapter.
 
 ## Prompting System (modernized)
 
-The current system relies on specialized prompts per pipeline step and per touch-point (narration, explicit, implicit). The legacy master prompts are no longer part of the default flow.
+The current system relies on specialized prompts per pipeline step and per touch-point (narration, dialog, implicit). The legacy master prompts are no longer part of the default flow.
 
 ### Brainstorm (human-in-the-loop)
 
-For narration/explicit/implicit touch-points, the pipeline begins with a brainstorm step that produces a bullet list. This brainstorm is intentionally human-gated:
+For narration/dialog/implicit touch-points, the pipeline begins with a brainstorm step that produces a bullet list. This brainstorm is intentionally human-gated:
 
 - The LLM is never instructed to add DONE. It only produces bullets.
 - The program writes or appends brainstorm bullets to `iterations/CHAPTER_xxx/pipeline_vN/NN_<type>/brainstorm.txt`.
@@ -420,12 +446,12 @@ Notes:
 ### File validation and auto-directories
 
 - The driver now validates required inputs up front and exits with a clear message if something is missing:
-  - `SETTING.yaml` at project root
-  - `CHARACTERS.yaml` at project root
-  - A chapter file under `chapters/`, e.g. `chapters/CHAPTER_001.yaml`
+  - `SETTING.yaml` (resolved via GW_SETTING_PATH or `<base>/SETTING.yaml`)
+  - `CHARACTERS.yaml` (resolved via GW_CHARACTERS_PATH or `<base>/CHARACTERS.yaml`)
+  - A chapter file under your chapters dir (GW_CHAPTERS_DIR), e.g. `CHAPTER_001.yaml` or `chapters/CHAPTER_001.yaml`
   - Prompt templates under `prompts/`:
     - `narration_brain_storm_prompt.md`
-    - `explicit_brain_storm_prompt.md`
+  - `dialog_brain_storm_prompt.md`
     - `implicit_brain_storm_prompt.md`
     - `ordering_prompt.md`
     - `generate_narration_prompt.md`
@@ -439,7 +465,7 @@ Notes:
     - `story_relative_to_prompt.md`
   - `prompts/character_dialog_prompt.md` is optional; a built-in default is used if missing.
 
-- On first run for a chapter, the driver auto-creates `iterations/CHAPTER_xxx/` (and dialog log folders when `--show-dialog` is used).
+- On first run for a chapter, the driver auto-creates `<iterations>/CHAPTER_xxx/` (and dialog log folders when `--log-llm` is used).
 
 ### Version selection
 

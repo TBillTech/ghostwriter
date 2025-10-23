@@ -72,7 +72,10 @@ def llm_call_with_validation(
 ) -> str:
     last_reason = ""
     for attempt in range(1, 4):
-        out = llm_complete(user, system=system, temperature=temperature, max_tokens=max_tokens, model=model)
+        # Increase token budget on retries to mitigate truncation/empty responses
+        factor = 1.0 if attempt == 1 else (1.5 if attempt == 2 else 2.0)
+        max_toks_try = int(max_tokens * factor)
+        out = llm_complete(user, system=system, temperature=temperature, max_tokens=max_toks_try, model=model)
         log_path = log_maker(attempt) if log_maker else None
         if log_path is not None:
             try:
@@ -270,7 +273,7 @@ def build_pipeline_replacements(setting: dict, chapter: dict, chapter_id: str, v
     else:
         extra["[SETTING]"] = merge_setting_with_factoids("", setting, chapter=chapter)
 
-    # Characters block: explicit block or subset of CHARACTERS limited to active actors
+    # Characters block: selected block or subset of CHARACTERS limited to active actors
     chars_block = getattr(state, "characters_block", "")
     if not chars_block and getattr(state, "active_actors", None):
         try:

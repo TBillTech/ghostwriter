@@ -1,0 +1,91 @@
+=== SYSTEM ===
+You are an evaluator checking touch-point coverage.
+
+=== USER ===
+You are reviewing the work of an enthusiastic writer who sometimes loses track of key ideas in their haste to complete their work.
+
+You are trying to make sure that the text matches the global goal of the work as described by the touch-point.  I will provide you here with the setting, context, things to watch out for, and the polished draft provided by the writer.  Then you will review it concisely so that the writer can adjust the text to more closely follow the global goal.
+
+Watch out for pronouns that have unclear references, like starting a paragraph with "They".  Using proper names is preferred in our narration.
+
+# Setting in general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters
+
+
+# Prior touch points
+The most recent 3 touch-points for context.
+
+
+# Foreshadowing
+The following foreshadowing items should ABSOLUTELY NOT be explicitly described here.  If they are, that is a problem. These should only be vaguely alluded to:
+
+
+# Actors
+The following actors are allowed to speak in the dialog.  If other actors are speaking, that is a problem.  The actors are:
+Red, Wolf
+
+# Touch-Point
+This is the most important thing that the writer needs to say one way or another, and fits into the global goal of the work:
+Red walks the forest path, humming, basket in hand.
+
+# The Draft
+The polished text that needs to be evaluated for Touch-Point satisfaction, and actor and spoiler safety is as follows:
+Shafts of light striped the ground, sliding over Red's bright cloak and the uneven trail as Red walked the winding dirt path beneath the tall pines. The red hood Grandmother had given Red showed plainly against the forest greens, catching stray beams between branches. Birds rustled in the canopy and fell still when the wind crossed the path. Damp earth scented the air, threaded with the sweetness rising from the wicker basket that rested on Red's arm. Pine needles and cones scattered underfoot; Red chose her steps around the rough patches. Low boughs pressed over the path; Red ducked, and the tip of the hood brushed resin-sticky twigs.
+
+A soft tune hummed from Red as she went, even and unhurried. At a bend the humming thinned as the forest quieted, then gathered again as Red moved on. Inside the basket, bread and jam lay wrapped and steady beneath a shifting lid; glass tapped against wicker and the basket gave a small creak with each swing. Light glinted on a jar rim when the hood shifted back. Red steadied the basket with a free hand as the trail dipped, and the sweetness hung stronger in the air. A small gust carried the jam scent deeper into the woods.
+
+Wolf, moving along a deer track that met the path ahead, lifted a muzzle to the breeze and took in the smells of bread, jam, and child. He kept to the shadowed trees beside the path, pacing Red's progress with silent pauses. Soft paw prints sank into the moist soil where Wolf passed, soon hidden by fallen needles, and the forest held quiet save for Red's humming and the faint brush of Wolf moving through the fern as the trail carried Red toward Grandmother's cottage deeper among the pines.
+
+Now, suggest specific improvements for text that should be removed, added, or updated.
+
+
+
+=== RESPONSE ===
+Short summary
+- The touch-point is satisfied: Red is clearly walking the forest path, humming, with a basket. Wolf’s presence is also established and appropriate.
+- No forbidden foreshadowing appears. Actor usage is limited to Red and Wolf (no unauthorized speakers).
+- A few phrasing and clarity issues remain (pronoun use, a couple awkward references, and a long sentence that could be tightened).
+
+Specific suggested edits (remove / add / update)
+
+1) Make pronouns clearer — prefer the name "Red" in a few places
+- Replace "Red chose her steps around the rough patches." with "Red chose Red’s steps around the rough patches." (Better: "Red picked her steps around the rough patches.")
+- Replace any later lone pronoun starts that might be ambiguous in future drafts. (Current uses of "he" for Wolf are clear; avoid starting paragraphs with "They" or similar.)
+
+2) Match the touch-point phrasing more explicitly
+- First sentence can directly include "basket in hand" to mirror the touch-point: e.g., "Shafts of light striped the ground as Red walked the winding dirt path beneath the tall pines, basket in hand."
+
+3) Fix the hood / jar-glint inconsistency
+- The line "Light glinted on a jar rim when the hood shifted back." reads oddly (why the hood shifting reveals a jar rim?). Either attribute the movement to the basket or clarify the action. Suggestions:
+  - "Light glinted on a jar rim as the basket swung." or
+  - "Light glinted on a jar rim when Red brushed the hood back."
+
+4) Tighten/clarify the Wolf paragraph
+- "Wolf, moving along a deer track that met the path ahead, lifted a muzzle…" → "Wolf followed a deer track that joined the path ahead, lifted his muzzle to the breeze…"
+- Break the long final sentence into two for rhythm and clarity. For example:
+  - "Soft paw prints sank into the moist soil where Wolf passed, soon hidden by fallen needles. The forest held quiet save for Red's humming and the faint brush of Wolf moving through the ferns as Red followed the trail toward Grandmother's cottage."
+
+5) Small wording and consistency fixes
+- Change "the fern" to "the ferns."
+- Consider removing one of the near-duplicate images of pine trees/depth (you mention tall pines several times); consolidate to avoid repetition.
+- Consider varying verbs for movement/adjustment: "Red steadied the basket with a free hand as the trail dipped" is fine; you could make it active and concise: "Red steadied the basket as the trail dipped."
+
+6) Sensory detail balance
+- The sensory details (scent of jam, creak of the basket) work well—keep them, but avoid small redundancies (e.g., both "glass tapped against wicker" and "a jar rim glinted" are fine but make sure each line adds something distinct).
+
+Overall: content is on target. Make the pronoun/name swaps, clarify the hood/jar line, break the long sentence, and optionally insert "basket in hand" in the opening to match the touch-point exactly.

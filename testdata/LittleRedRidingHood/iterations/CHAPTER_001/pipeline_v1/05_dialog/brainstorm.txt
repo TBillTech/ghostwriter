@@ -1,0 +1,16 @@
+* wolf steps from the shade, voice smooth, paws quiet on the dirt
+* wolf: Good day, little one.
+* red: Good day, sir.
+* wolf: Where might you be going, little one?
+* red lifts the basket a little: I'm bringing goodies to Grandmother.
+* wolf: Ah, bread and jam. Your basket smells very sweet.
+* red: It's bread and jam. She is ill, so I must hurry.
+* wolf: What a fine red hood. It brightens this dark wood.
+* red touches the hood: Grandmother made it for me.
+* wolf: She must love you dearly. Does she live far?
+* red: Deeper in the pines, past the bend by the big stump.
+* wolf: Do you go all alone, so brave and bright?
+* red: Mama said to stay on the path and not be afraid.
+* wolf: A wise mother. Which way do you take when the trail forks?
+* red: The right-hand way, where the pine roots twist like a rope.
+DONE

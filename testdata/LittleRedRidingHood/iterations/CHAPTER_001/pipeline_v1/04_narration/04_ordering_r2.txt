@@ -1,0 +1,134 @@
+=== SYSTEM ===
+You will order and refine brainstormed bullet points for coherent flow.
+
+=== USER ===
+You are a director examining the output of a creative brainstorming session, also working from structured YAML notes.  
+Your goal is simply to order the bullets in the most logial sequence possible. You are not allowed to take bullets away.
+You are however, allowed to add new intermediate bullets to help the sequence make more sense.
+
+# Setting in general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "red",
+      "name": "Little Red Riding Hood",
+      "traits": [
+        "curious",
+        "kind",
+        "naive"
+      ],
+      "cadence": "light, earnest",
+      "lexicon": "simple words, fairy-tale tone",
+      "sample_lines": [
+        "I'm bringing goodies to Grandmother."
+      ],
+      "max_tokens_line": 80
+    },
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive"
+      ],
+      "cadence": "smooth, persuasive",
+      "lexicon": "sly flattery",
+      "sample_lines": [
+        "Where might you be going, little one?"
+      ],
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red promised to bring goodies to her ailing grandmother.
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+{
+  "Story-Relative-To": {
+    "Red": "Eager to help, trusts strangers.",
+    "Wolf": "Hungry, looking for an opportunity.",
+    "Forest Path": "Quiet, but shadows watch."
+  }
+}
+
+# Prior paragraph
+This is only for context. Do NOT repeat this:
+
+
+# Scene
+Here is the scene they actors are placed in:
+{'name': 'Forest Path', 'description': 'A winding dirt trail beneath tall, shadowed pines. Shafts of light\nthread through the branches; birds rustle, then fall silent when the\nwind shifts. The air smells of damp earth and sweet jam.\n', 'props': [{'name': 'Basket', 'significance': 'Gift and responsibility; symbol of trust', 'description': "A small wicker basket filled with bread and jam, carried on Red's arm."}, {'name': 'Red Hood', 'significance': 'Identity and innocence; visible target in the woods', 'description': 'A bright red cloak and hood, a gift from Grandmother that draws the eye.'}]}
+
+# Actors
+Here are the actors in the scene:
+Red, Wolf
+
+# Rules for generation:
+1. **Bullet Points**: Provide your results as bullet points, starting the line with '*' character.
+2. **Clean Lines**: If there are intent words at the beginning of the given bullets, for example "Clarity - ", or "Flavor: " leave those out and just recover the point without a title.
+3. **Just Bullets Output**: Strip off, ignore, and do not output any markdown or other formatting, other than just only '*' character at line start.
+
+Now, Here are the Bullets to be ordered in as logical a way as possible:
+* red walks the winding dirt trail beneath tall pines, her bright red hood catching stray light between branches.
+* The wicker basket rests on red's arm; inside are bread and jam, wrapped and steady beneath a shifting lid.
+* A soft tune hums from red as she goes, even and unhurried along the path.
+* Damp earth scents the air, threaded with the sweetness coming from the basket.
+* Birds rustle in the canopy and fall still when the wind crosses the path.
+* Shafts of light stripe the ground, sliding over red's cloak and the uneven trail.
+* Pine needles and cones scatter underfoot; red chooses her steps around the rough patches.
+* Glass taps within the basket, and the wicker gives a small creak with each swing.
+* The red hood, given by Grandmother, shows plainly against the forest greens.
+* The trail carries red toward Grandmother’s cottage deeper among the pines.
+* At a bend, red’s humming thins as the forest quiets, then gathers again as she moves on.
+* wolf keeps to the shadowed trees beside the path, pacing red’s progress with silent pauses.
+* wolf lifts his muzzle to the breeze and takes in the smells of bread, jam, and child.
+* Soft paw prints sink into moist soil where wolf passes, soon hidden by fallen needles.
+* Low boughs press over the path; red ducks, and the tip of her hood brushes resin-sticky twigs.
+* A small gust carries the sweet jam scent deeper into the woods; wolf turns along a deer track that meets the path ahead.
+* red steadies the basket with a free hand as the trail dips, and the sweetness hangs stronger in the air.
+* Light glints on a jar rim inside the basket when the hood shifts back.
+* The forest holds quiet save for red’s humming and the faint brush of wolf moving through fern.
+
+
+=== RESPONSE ===
+* Shafts of light stripe the ground, sliding over red's cloak and the uneven trail.
+* red walks the winding dirt trail beneath tall pines, her bright red hood catching stray light between branches.
+* The red hood, given by Grandmother, shows plainly against the forest greens.
+* Birds rustle in the canopy and fall still when the wind crosses the path.
+* Damp earth scents the air, threaded with the sweetness coming from the basket.
+* Pine needles and cones scatter underfoot; red chooses her steps around the rough patches.
+* Low boughs press over the path; red ducks, and the tip of her hood brushes resin-sticky twigs.
+* A soft tune hums from red as she goes, even and unhurried along the path.
+* At a bend, red’s humming thins as the forest quiets, then gathers again as she moves on.
+* The wicker basket rests on red's arm; inside are bread and jam, wrapped and steady beneath a shifting lid.
+* Glass taps within the basket, and the wicker gives a small creak with each swing.
+* Light glints on a jar rim inside the basket when the hood shifts back.
+* red steadies the basket with a free hand as the trail dips, and the sweetness hangs stronger in the air.
+* A small gust carries the sweet jam scent deeper into the woods; wolf turns along a deer track that meets the path ahead.
+* wolf lifts his muzzle to the breeze and takes in the smells of bread, jam, and child.
+* wolf keeps to the shadowed trees beside the path, pacing red’s progress with silent pauses.
+* Soft paw prints sink into moist soil where wolf passes, soon hidden by fallen needles.
+* The forest holds quiet save for red’s humming and the faint brush of wolf moving through fern.
+* The trail carries red toward Grandmother’s cottage deeper among the pines.

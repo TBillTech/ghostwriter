@@ -9,6 +9,7 @@ import re
 from .context import RunContext
 from .utils import to_text, read_text, _extract_numeric_hint
 from .llm import complete
+from .validation import validate_text
 from .env import env_for as _env_for
 
 
@@ -216,27 +217,46 @@ def render_character_call(
     )
     dialog_model, dialog_temp_env, dialog_max_tokens = _env_for("CHARACTER_DIALOG", default_temp=temperature if temperature is not None else 0.3, default_max_tokens=max_tokens_line)
     effective_temp = temperature if temperature is not None else dialog_temp_env
-    response = complete(
-        user,
-        system=system,
-        temperature=effective_temp,
-        max_tokens=dialog_max_tokens,
-        model=dialog_model,
-    )
-    if log_file is not None:
-        log_file.parent.mkdir(parents=True, exist_ok=True)
-        try:
-            with log_file.open("w", encoding="utf-8") as f:
-                f.write("=== SYSTEM ===\n")
-                f.write(system)
-                f.write("\n\n=== USER ===\n")
-                f.write(user)
-                f.write("\n\n=== RESPONSE ===\n")
-                f.write(response)
-                f.write("\n")
-        except Exception:
-            pass
-    return response
+
+    last_reason = ""
+    for attempt in range(1, 4):
+        factor = 1.0 if attempt == 1 else (1.5 if attempt == 2 else 2.0)
+        try_max = int(dialog_max_tokens * factor)
+        response = complete(
+            user,
+            system=system,
+            temperature=effective_temp,
+            max_tokens=try_max,
+            model=dialog_model,
+        )
+        # Attempt-specific logging
+        if log_file is not None:
+            try:
+                log_file.parent.mkdir(parents=True, exist_ok=True)
+                lf = log_file
+                if attempt > 1:
+                    # Insert _rN before suffix
+                    try:
+                        suffix = log_file.suffix
+                        stem = log_file.stem
+                        lf = log_file.with_name(f"{stem}_r{attempt}{suffix}")
+                    except Exception:
+                        lf = log_file
+                with lf.open("w", encoding="utf-8") as f:
+                    f.write("=== SYSTEM ===\n")
+                    f.write(system)
+                    f.write("\n\n=== USER ===\n")
+                    f.write(user)
+                    f.write("\n\n=== RESPONSE ===\n")
+                    f.write(response or "")
+                    f.write("\n")
+            except Exception:
+                pass
+        ok, reason = validate_text(response)
+        if ok:
+            return response
+        last_reason = reason
+    raise ValueError(f"Character dialog generation failed after 3 attempts: {last_reason}")
 
 
 def substitute_character_calls(

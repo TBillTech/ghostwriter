@@ -1,0 +1,34 @@
+Touch-Points:
+  - setting:
+      factoids:
+        - "Basket of Goodies"
+        - "Red Hood"
+      actors:
+        - "Red"
+        - "Wolf"
+  - scene:
+      name: "Forest Path"
+      description: |
+        A winding dirt trail beneath tall, shadowed pines. Shafts of light
+        thread through the branches; birds rustle, then fall silent when the
+        wind shifts. The air smells of damp earth and sweet jam.
+      props:
+        - name: "Basket"
+          significance: "Gift and responsibility; symbol of trust"
+          description: "A small wicker basket filled with bread and jam, carried on Red's arm."
+        - name: "Red Hood"
+          significance: "Identity and innocence; visible target in the woods"
+          description: "A bright red cloak and hood, a gift from Grandmother that draws the eye."
+  - actors: [Red, Wolf]
+  - narration: "Red walks the forest path, humming, basket in hand."
+  - dialog: "The Wolf greets Red and asks where she's going."
+  - implicit: "Danger hinted at in the dark trees and Wolf's smile."
+  - dialog: "The Wolf suggests a shortcut to Grandmother's."
+
+Story-So-Far: |
+  Red promised to bring goodies to her ailing grandmother.
+
+Story-Relative-To:
+  Red: "Eager to help, trusts strangers."
+  Wolf: "Hungry, looking for an opportunity."
+  Forest Path: "Quiet, but shadows watch."

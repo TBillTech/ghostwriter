@@ -1,0 +1,85 @@
+=== SYSTEM ===
+You write narrative prose from ordered bullets, keeping voice consistent.
+
+=== USER ===
+You are to write narrative prose that realizes the ordered outline below.
+
+Context
+=======
+- Setting and chapter:
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+- Story so far:
+Red promised to bring goodies to her ailing grandmother.
+
+
+- Story relative to:
+{
+  "Story-Relative-To": {
+    "Red": "Eager to help, trusts strangers.",
+    "Wolf": "Hungry, looking for an opportunity.",
+    "Forest Path": "Quiet, but shadows watch."
+  }
+}
+
+Touch-Point
+===========
+Text: Red walks the forest path, humming, basket in hand.
+
+State
+=====
+- Scene: {'name': 'Forest Path', 'description': 'A winding dirt trail beneath tall, shadowed pines. Shafts of light\nthread through the branches; birds rustle, then fall silent when the\nwind shifts. The air smells of damp earth and sweet jam.\n', 'props': [{'name': 'Basket', 'significance': 'Gift and responsibility; symbol of trust', 'description': "A small wicker basket filled with bread and jam, carried on Red's arm."}, {'name': 'Red Hood', 'significance': 'Identity and innocence; visible target in the woods', 'description': 'A bright red cloak and hood, a gift from Grandmother that draws the eye.'}]}
+- Actors: Red, Wolf
+- Foreshadowing: 
+- Prior paragraph (if any): 
+
+Ordered bullets
+===============
+* Shafts of light stripe the ground, sliding over red's cloak and the uneven trail.
+* red walks the winding dirt trail beneath tall pines, her bright red hood catching stray light between branches.
+* The red hood, given by Grandmother, shows plainly against the forest greens.
+* Birds rustle in the canopy and fall still when the wind crosses the path.
+* Damp earth scents the air, threaded with the sweetness coming from the basket.
+* Pine needles and cones scatter underfoot; red chooses her steps around the rough patches.
+* Low boughs press over the path; red ducks, and the tip of her hood brushes resin-sticky twigs.
+* A soft tune hums from red as she goes, even and unhurried along the path.
+* At a bend, red’s humming thins as the forest quiets, then gathers again as she moves on.
+* The wicker basket rests on red's arm; inside are bread and jam, wrapped and steady beneath a shifting lid.
+* Glass taps within the basket, and the wicker gives a small creak with each swing.
+* Light glints on a jar rim inside the basket when the hood shifts back.
+* red steadies the basket with a free hand as the trail dips, and the sweetness hangs stronger in the air.
+* A small gust carries the sweet jam scent deeper into the woods; wolf turns along a deer track that meets the path ahead.
+* wolf lifts his muzzle to the breeze and takes in the smells of bread, jam, and child.
+* wolf keeps to the shadowed trees beside the path, pacing red’s progress with silent pauses.
+* Soft paw prints sink into moist soil where wolf passes, soon hidden by fallen needles.
+* The forest holds quiet save for red’s humming and the faint brush of wolf moving through fern.
+* The trail carries red toward Grandmother’s cottage deeper among the pines.
+
+Instructions
+============
+- Convert the ordered bullets into a continuous narrative paragraph or two.
+- Keep it vivid, concise, and in the established voice.
+- Do not include bullet markers or headings in your output.
+- Return only the prose.
+- DO NOT say "a symbol of", be sure to transform this into "seemed like" or just "like" or some other simile.
+- Be sure to reformat spaces so that it looks natural.
+- Strongly prefer using proper names over pronouns like "they", "him", "it".
+
+
+=== RESPONSE ===
+Shafts of light striped the ground, sliding over Red's bright cloak and the uneven trail as Red walked the winding dirt path beneath the tall pines. The red hood Grandmother had given Red showed plainly against the forest greens, catching stray beams between branches. Birds rustled in the canopy and fell still when the wind crossed the path. Damp earth scented the air, threaded with the sweetness coming from the wicker basket that rested on Red's arm. Pine needles and cones scattered underfoot; Red chose steps around the rough patches. Low boughs pressed over the path; Red ducked, and the tip of the hood brushed resin-sticky twigs.
+
+A soft tune hummed from Red as Red went, even and unhurried. At a bend the humming thinned as the forest quieted, then gathered again as Red moved on. Inside the basket bread and jam lay wrapped and steady beneath a shifting lid; glass tapped against wicker and the basket gave a small creak with each swing. Light glinted on a jar rim when the hood shifted back. Red steadied the basket with a free hand as the trail dipped and the sweetness hung stronger in the air. A small gust carried jam scent deeper into the woods; Wolf, moving along a deer track that met the path ahead, lifted a muzzle to the breeze and took in the smells of bread, jam, and child. Wolf kept to the shadowed trees beside the path, pacing Red's progress with silent pauses. Soft paw prints sank into the moist soil where Wolf passed, soon hidden by fallen needles, and the forest held quiet save for Red's humming and the faint brush of Wolf moving through the fern as the trail carried Red toward Grandmother's cottage deeper among the pines.

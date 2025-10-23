@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from .utils import read_text, read_file, to_text
+from .env import get_iterations_dir
 
 
 def apply_template(template_path: str | Path, replacements: Dict[str, str]) -> str:
@@ -37,7 +38,19 @@ def prompt_key_from_filename(filename: str) -> str:
 # ---------------------------
 
 def iter_dir_for(chapter_id: str) -> Path:
-    return Path("iterations") / chapter_id
+    """Return the iterations directory for a chapter id.
+
+    Honors GW_ITERATIONS_DIR, but if a local ./iterations directory exists in the
+    current working directory, prefer that for backward-compatible tests and
+    simple runs. This preserves prior behavior where tests interact with a
+    relative 'iterations/' folder.
+
+    Default: iterations/<chapter_id>
+    """
+    configured = get_iterations_dir()
+    local = Path("iterations")
+    base = local if local.exists() else configured
+    return base / chapter_id
 
 
 def list_versions(chapter_id: str, prefix: str) -> List[int]:

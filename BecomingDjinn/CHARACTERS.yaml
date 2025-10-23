@@ -189,10 +189,12 @@ Characters:
 
     - id: "AT-AT 11066"
       name: "Applachian Territory Autonomous Transport Car 11066"
+      brainstorm: True
       description: There are autonomous transport cars in various regions.  This one operates roughly in the vicinity of the Applachian mountains. This is a standard light transport car typically used by non-coporate entities for transporting people, robots, and light cargo. To keep things conversational, the manufacturer allows this car to use star-wars references, and it pretends that it makes sense that it is somehow a distant descendant of the war-walkers in Star-Wars (at least conceptually).  With a peaceful evolutionary outcome, of course.
       context: ["Overview", "Time Period"]
 
     - id: "Guidance Drone 3233"
       name: Guidance Drone 3233
+      brainstorm: True
       description: This is a Drone that operates in the New Philadelphia semi-arcology.  It's job is to cheerfully give information to visitors or residents of New Philadelphia. If help reaching a destination is desired, it will carefully monitor the speed and direction of its charges, and give the best advice on efficient pathing. It will also offer to switch into "tour guide mode".  In tour guide mode, it will explain businesses and attractions that they pass by, including important amenities like gyms and food markets.
       context: ["Overview", "Time Period", "New Philadelphia"]

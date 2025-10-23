@@ -2,24 +2,53 @@
 
 This document outlines the tasks necessary to get the driver.py working correctly and establish a complete development environment for the GhostWriter novel generation system.
 
+## New Features
 
+1. **CHAPTER_xxx brainstorming pipeline***
+    - [ ] If the ghostwriter.cli is run with CHAPTER_XYZ.yaml, but the CHAPTER_XYZ.yaml file is missing (where XYZ is the chapter number), then trigger this new pipeline
+    - [ ] If the ghostwriter.cli is run with CHAPTER_XYZ.yaml, and if there is a touch-point called : "- brainstorming: True", then trigger this new pipeline
+    - [ ] The new CHAPTER_xxx brainstorming pipeline should use a new prompt template called brainstorm_chapter_outline.md
+    - [ ] The new CHAPTER_xxx brainstorming pipeline prompt template should provide the following information to the LLM:
+        - The dereferenced factoids and characters if the CHAPTER_XYZ.yaml is present and has a setting block
+        - If the setting block is absent, or CHAPTER_XYZ.yaml is not present, then instead provide the entire list of character names, and the entire list of factoid names (But not the full character data or the full factoid data). This is so that the brainstorming session can pick up likely factoids and characters to put into a new brainstormed setting block.
+        - The story_so_far
+        - If the CHAPTER_XYZ.yaml is not present, then careful instructions on the format desired for the CHAPTER_XYZ.yaml. This should not include the "Story-So-Far" or "Story-Relative-To" parts
+        - CONTENT_TABLE.yaml
+        - The current version of CHAPTER_XYZ.yaml if present. Do NOT include the "Story-So-Far" or "Story-Relative-To" parts with the CHAPTER_XYZ.yaml provided in the prompt
+        - Explicit instructions to look at the synopsis in for version XYZ in the CONTENT_TABLE.yaml, and brainstorm an exciting and engaging chapter for the book, at the high level direction level.
+    - [ ] The old version of the CHAPTER_XYZ.yaml should be copied to a prior version like CHAPTER_XYZ.9.yaml, if this was the ninth brainstorm cycle.
+    - [ ] Save the prompt + result in CHAPTER_XYZ.txt
+    - [ ] Save result from the LLM plus the story so far and story relative to from the prior completed chapter in iterations/CHAPTER_(XYZ-1)/pipeline_v2/ 
+    - [ ] After the pipeline is done, the program should stop. This will result in exactly one chapter outline being updated.
 
-## Refactor driver.py logic
-
-1. Carefully evaluate each function in driver.py.  For each function determine:
-    - Does the function apply to a single touch-point?  If so, insert a short comment right before the function: "#Move to touch_point.py"
-    - Does the function apply to the whole chapter, or is it a loop over touch-points? If so, insert a short comment right before the function "#Move to chapter.py"
-    - Does the function deal with something other than chapter generation, such as the "main()" function?  If so, add a comment: "#Stays in driver.py"
-
-2. Move each function with the annotaiton "#Move to touch_point.py" to a new file at ghostwriter/touch_point.py
-    - Make sure that if the driver.py needs the function (in main()) that it is imported.
-
-3. Move each function with the annotation "#Move to chapter.py" to a new file at ghostwriter/chapter.py
-    - Make sure that if the driver.py needs the function (in main()) that it is imported.
+2. **CHARACTER brainstorming pipeline**
+    - [ ] When ghostwriter.cli is run with CHAPTER_XYZ.yaml, test the contents of the actors in the setting block.
+    - [ ] If an actor name is present in the setting block that is NOT in in the CHARACTERS context, then kick off this new brainstorming pipeline focussed on that character. In addition, prompt the user for a text description of the character they should type in the terminal and save this text to a user_description variable.
+    - [ ] Alternatively, if in the CHARACTERS context, there is a character with the field "brainstorming: True", then kick off this new brainstorming pipeline focussed on that character. Use the data already provided from the CHARACTERS context to initialize the user_description variable without prompting the user in the terminal. 
+    - [ ] The new CHARACTER brainstorming pipeline should use a new prompt template called brainstorm_character_outline.md
+    - [ ] The new CHARACTER brainstorming pipeline prompt template should provide the following information to the LLM:
+        - The dereferenced factoids and characters from the CHAPTER_XYZ.yaml setting block (except of course for other characters that are missing.)
+        - The CHAPTER_XYZ.yaml
+        - Clear instructions on the output format of the CHARACTER which should match that in LRRH book CHARACTERS.yaml. You can use Red's character as an example.
+        - The user_description from either the terminal or the existing CHARACTER context, followed by "Now, for the character <NAME>,  brainstorm an interesting character outline from the prior description".  Note that <NAME> sould be replaced with the character actor name being brainstormed.
+    - [ ] Save the LLM prompt + LLM result in character_brainstorm.txt in the book base operating directory (overwrite if necessary)
+    - [ ] Simply append the LLM result to the CHARACTERS.yaml, and make sure it is properly tabbed to be correct yaml.
+    - [ ] After the pipeline is done, the program should stop. This will result in exactly one character outline being updated.
 
 ## Testing and Quality Assurance
 
-12. **Create Unit Tests for driver.py**
+11. **Fully configurable file locations**
+    - [x] Add a new ENV for the book base operating directory (GW_BOOK_BASE_DIR)
+    - [x] Add a new optional argument to override this (`--book-base` in CLI)
+    - [x] Define ENV vars for SETTING.yaml path, CHARACTERS.yaml path, chapters path, and iterations path
+    - [x] Make these ENV vars default to expected locations in the base operating directory 
+    - [x] Support moving these four paths into `BecomingDjinn/` (or any base) via GW_BOOK_BASE_DIR
+    - [x] Create new testbed directory for later unit testing and integration testing steps
+    - [x] Create a set of test files in this directory (Little Red Riding Hood book)
+    - [x] Modify unit test scaffolding to allow copying LRRH into a sandbox (pytest fixtures in `tests/conftest.py`)
+    - [x] Update README.md to document the new path variables, and add `.env.example` pointing to LittleRedRidingHood
+
+12. **Create Unit Tests**
     - Test YAML loading and validation functions
     - Test prompt template building with mock data
     - Test file I/O operations with temporary directories
@@ -36,6 +65,8 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - Test the two-phase pre-draft → substitution → polish pipeline end-to-end with a Mock LLM
 
 14. **Add Mock LLM for Testing**
+    - Rely on the fact that for testing, we will use the Little Red Riding Hood book
+    - Use the LRRH text as the return values for the MockLLM.  This way, the outputs can be tested in detail.
     - Create MockLLM class that returns predictable responses
     - Implement different response scenarios (successful, missing touch-points, API errors)
     - Add per-character response fixtures to simulate distinct voices/cadences
@@ -46,83 +77,14 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - Create expected output files for verification
     - Set up pytest fixtures for consistent test data
 
-## Documentation and Developer Experience
-
-16. **Add Comprehensive Error Handling**
-    - Implement specific exception classes for different error types
-    - Add user-friendly error messages with suggested solutions
-    - Create error recovery strategies where possible
-
-17. **Add Logging and Debugging**
-    - Implement structured logging throughout the application
-    - Add debug mode for verbose output
-    - Log API calls, file operations, and iteration progress
-
-18. **Create Developer Documentation**
-    - Document the complete system architecture
-    - Add code comments explaining complex logic
-    - Create troubleshooting guide for common issues
-    - Document the prompt engineering approach
-    - Document Character Template schema and CHARACTER call syntax with examples
-    - Add a README section for the two-phase generation and how to add new characters
-
-19. **Security and Safety Considerations**
-    - Ensure `.env` is ignored (already in .gitignore) and provide `.env.example`
-    - Avoid leaking API keys in logs; redact sensitive fields in debug mode
-    - Validate CHARACTER blocks to prevent prompt injection via templates or call sites
-    - Add rate limit/backoff strategies for per-character calls; batch when possible
-
-## Future Enhancements (Optional)
-
-19. **Add Command-Line Interface Improvements**
-    - Add `--dry-run` flag to preview operations without executing
-    - Add `--continue` flag to resume interrupted iterations
-    - Add `--chapter-range` to process multiple chapters
-    - Add progress bars for long-running operations
-
-20. **Add Validation and Quality Checks**
-    - Validate YAML structure against expected schema
-    - Check for required fields in SETTING.yaml and CHAPTER files
-    - Warn about potential issues (empty touch-points, missing characters)
-    - Add prose quality metrics (word count, readability scores)
-    - Add style/voice conformance checks per-character (e.g., lexicon hits/misses)
 
 ## Completion Criteria
 
 - [ ] All core functions implemented and working
 - [ ] Complete test suite with >90% code coverage
-- [ ] Documentation updated and comprehensive
-- [ ] Example files created and tested
+- [x] Documentation updated and comprehensive (paths + example)
+- [x] Example files created and tested (Little Red Riding Hood)
 - [ ] Virtual environment and dependencies properly configured
 - [ ] Error handling robust and user-friendly
 - [ ] Iteration loop fully functional with real LLM integration
 
----
-
-**Priority Order**: Complete tasks 1-8 first for basic functionality, then 9-15 for robustness, and finally 16-20 for polish and developer experience.
-
----
-
-Session summary (env setup):
-- Created and validated a Python virtual environment under `venv/`.
-- Installed and pinned dependencies to `requirements.txt` (PyYAML, openai, python-dotenv, pytest, pytest-mock, and transitive deps).
-- Updated `README.md` with environment setup, usage, and troubleshooting.
-- Verified `.gitignore` already ignores `venv/` and related files.
-
----
-
-Session status (2025-10-09):
-- SETTING.yaml parsing errors resolved (converted long scalars to block scalars; normalized quotes/indentation).
-- Driver end-to-end smoke test passes with mock LLM; artifacts generated:
-    - pre_draft_v1.txt, check_v1.txt, draft_v1.txt, story_so_far.txt, story_relative_to.txt, suggestions_v1.txt
-- Character substitution wired with template/call parsing; mock run shows missing templates when calls exist without preceding templates in the pre_draft.
-- Iteration loop (initial → verify → polish) operational; touch-point check uses 'missing' heuristic.
-
----
-
-Session status (2025-10-13):
-- Implemented Task 8 validations and directory management in `scripts/driver.py`:
-    - Early validation for `SETTING.yaml`, chapter YAML, and required prompt templates.
-    - Automatic creation of `iterations/CHAPTER_xxx/` directory.
-    - Clear, user-friendly error messages with custom exceptions.
-    - Guarded file reads to avoid confusing stack traces for common issues.

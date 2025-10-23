@@ -1,5 +1,5 @@
 === SYSTEM ===
-Brainstorm explicit dialog beats as bullet points.
+Brainstorm dialog beats as bullet points.
 
 === USER ===
 You are a creative writer working from structured YAML notes.  

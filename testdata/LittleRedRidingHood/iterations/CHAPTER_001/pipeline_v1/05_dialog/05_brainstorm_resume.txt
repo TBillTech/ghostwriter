@@ -1,0 +1,130 @@
+=== SYSTEM ===
+Brainstorm dialog beats as bullet points.
+
+=== USER ===
+You are a creative writer working from structured YAML notes.  
+Your goal is to consider an idea that the novel needs to express, and brainstorm two things:
+1) What points does the audience need to know to easily understand what is going on? This adds clarity.
+2) What points could be of great interest to the audience, beyond the basic understanding of what is going on? This adds flavor.
+
+# Setting in general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "red",
+      "name": "Little Red Riding Hood",
+      "traits": [
+        "curious",
+        "kind",
+        "naive"
+      ],
+      "cadence": "light, earnest",
+      "lexicon": "simple words, fairy-tale tone",
+      "sample_lines": [
+        "I'm bringing goodies to Grandmother."
+      ],
+      "max_tokens_line": 80
+    },
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive"
+      ],
+      "cadence": "smooth, persuasive",
+      "lexicon": "sly flattery",
+      "sample_lines": [
+        "Where might you be going, little one?"
+      ],
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red promised to bring goodies to her ailing grandmother.
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+{
+  "Story-Relative-To": {
+    "Red": "Eager to help, trusts strangers.",
+    "Wolf": "Hungry, looking for an opportunity.",
+    "Forest Path": "Quiet, but shadows watch."
+  }
+}
+
+# Prior paragraph
+This is only for context. Do NOT repeat this:
+Wolf, moving along a deer track that met the path ahead, lifted a muzzle to the breeze and took in the smells of bread, jam, and child. He kept to the shadowed trees beside the path, pacing Red's progress with silent pauses. Soft paw prints sank into the moist soil where Wolf passed, soon hidden by fallen needles, and the forest held quiet save for Red's humming and the faint brush of Wolf moving through the fern as the trail carried Red toward Grandmother's cottage deeper among the pines.
+
+# Scene
+Here is the scene they actors are placed in:
+{'name': 'Forest Path', 'description': 'A winding dirt trail beneath tall, shadowed pines. Shafts of light\nthread through the branches; birds rustle, then fall silent when the\nwind shifts. The air smells of damp earth and sweet jam.\n', 'props': [{'name': 'Basket', 'significance': 'Gift and responsibility; symbol of trust', 'description': "A small wicker basket filled with bread and jam, carried on Red's arm."}, {'name': 'Red Hood', 'significance': 'Identity and innocence; visible target in the woods', 'description': 'A bright red cloak and hood, a gift from Grandmother that draws the eye.'}]}
+
+# Actors
+Here are the actors in the scene:
+Red, Wolf
+
+# The Touch-Point
+Please carefully read and understand this Touch-Point; This is the core idea that needs to be expounded upon:
+The Wolf greets Red and asks where she's going.
+
+
+# Rules for generation:
+1. **Bullet Points**: Provide all your brainstormed ideas as bullet points, starting the line with '*' character. Use only simple statements, NOT additional markdown.  Do NOT put dashes at the front of the lines.
+2. **Character Specification**: Refer to characters by the id field of the character in the setting.  
+3. **Touch-Point**: Expressing this touch point creatively IS YOUR GOAL.  
+4. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
+5. **Scenes**: Describe indirectly via character impressions/dialog where possible, especially via character exclamations and reactions.
+
+Now, brainstorm creative lines to give the readers clarity and flavor, with the goal of building upon and making the touch point real.
+
+=== RESPONSE ===
+* wolf steps from the shade, voice smooth, paws quiet on the dirt
+* wolf: Good day, little one.
+* red: Good day, sir.
+* wolf: Where might you be going, little one?
+* red lifts the basket a little: I'm bringing goodies to Grandmother.
+* wolf: Ah, bread and jam. Your basket smells very sweet.
+* red: It's bread and jam. She is ill, so I must hurry.
+* wolf: What a fine red hood. It brightens this dark wood.
+* red touches the hood: Grandmother made it for me.
+* wolf: She must love you dearly. Does she live far?
+* red: Deeper in the pines, past the bend by the big stump.
+* wolf: Do you go all alone, so brave and bright?
+* red: Mama said to stay on the path and not be afraid.
+* wolf: A wise mother. Which way do you take when the trail forks?
+* red: The right-hand way, where the pine roots twist like a rope.
+* wolf sniffles politely, smile small, teeth hidden
+* wolf: Does Grandmother keep anyone with her?
+* red: No, she lives alone, but I come often.
+* wolf: She will be glad to hear your step and taste your jam.
+* red: I hope she smiles when she sees the bread too.
+* wolf: And what do folk call you, little one?
+* red: Everyone calls me red.
+* wolf: A bright name for a bright hood.
+* red's humming fades as the birds go quiet, then she smiles again
+* wolf steps aside as if to make room: Do not let me delay you.
+* red: Thank you. I must not dawdle.
+* wolf: Then may your path be smooth, and your basket light.
