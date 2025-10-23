@@ -5,35 +5,35 @@ This document outlines the tasks necessary to get the driver.py working correctl
 ## New Features
 
 1. **CHAPTER_xxx brainstorming pipeline***
-    - [ ] If the ghostwriter.cli is run with CHAPTER_XYZ.yaml, but the CHAPTER_XYZ.yaml file is missing (where XYZ is the chapter number), then trigger this new pipeline
-    - [ ] If the ghostwriter.cli is run with CHAPTER_XYZ.yaml, and if there is a touch-point called : "- brainstorming: True", then trigger this new pipeline
-    - [ ] The new CHAPTER_xxx brainstorming pipeline should use a new prompt template called brainstorm_chapter_outline.md
-    - [ ] The new CHAPTER_xxx brainstorming pipeline prompt template should provide the following information to the LLM:
+    - [x] If the ghostwriter.cli is run with CHAPTER_XYZ.yaml, but the CHAPTER_XYZ.yaml file is missing (where XYZ is the chapter number), then trigger this new pipeline
+    - [x] If the ghostwriter.cli is run with CHAPTER_XYZ.yaml, and if there is a touch-point called : "- brainstorming: True", then trigger this new pipeline
+    - [x] The new CHAPTER_xxx brainstorming pipeline should use a new prompt template called brainstorm_chapter_outline.md
+    - [x] The new CHAPTER_xxx brainstorming pipeline prompt template should provide the following information to the LLM:
         - The dereferenced factoids and characters if the CHAPTER_XYZ.yaml is present and has a setting block
         - If the setting block is absent, or CHAPTER_XYZ.yaml is not present, then instead provide the entire list of character names, and the entire list of factoid names (But not the full character data or the full factoid data). This is so that the brainstorming session can pick up likely factoids and characters to put into a new brainstormed setting block.
         - The story_so_far
-        - If the CHAPTER_XYZ.yaml is not present, then careful instructions on the format desired for the CHAPTER_XYZ.yaml. This should not include the "Story-So-Far" or "Story-Relative-To" parts
+        - [x] If the CHAPTER_XYZ.yaml is not present, then careful instructions on the format desired for the CHAPTER_XYZ.yaml. This should not include the "Story-So-Far" or "Story-Relative-To" parts
         - CONTENT_TABLE.yaml
-        - The current version of CHAPTER_XYZ.yaml if present. Do NOT include the "Story-So-Far" or "Story-Relative-To" parts with the CHAPTER_XYZ.yaml provided in the prompt
-        - Explicit instructions to look at the synopsis in for version XYZ in the CONTENT_TABLE.yaml, and brainstorm an exciting and engaging chapter for the book, at the high level direction level.
-    - [ ] The old version of the CHAPTER_XYZ.yaml should be copied to a prior version like CHAPTER_XYZ.9.yaml, if this was the ninth brainstorm cycle.
-    - [ ] Save the prompt + result in CHAPTER_XYZ.txt
-    - [ ] Save result from the LLM plus the story so far and story relative to from the prior completed chapter in iterations/CHAPTER_(XYZ-1)/pipeline_v2/ 
-    - [ ] After the pipeline is done, the program should stop. This will result in exactly one chapter outline being updated.
+        - [x] The current version of CHAPTER_XYZ.yaml if present. Do NOT include the "Story-So-Far" or "Story-Relative-To" parts with the CHAPTER_XYZ.yaml provided in the prompt
+        - [x] Explicit instructions to look at the synopsis in for version XYZ in the CONTENT_TABLE.yaml, and brainstorm an exciting and engaging chapter for the book, at the high level direction level.
+    - [x] The old version of the CHAPTER_XYZ.yaml should be copied to a prior version like CHAPTER_XYZ.9.yaml, if this was the ninth brainstorm cycle.
+    - [x] Save the prompt + result in CHAPTER_XYZ.txt
+    - [x] Save result from the LLM plus the story so far and story relative to from the prior completed chapter in iterations/CHAPTER_(XYZ-1)/pipeline_v2/ 
+    - [x] After the pipeline is done, the program should stop. This will result in exactly one chapter outline being updated.
 
 2. **CHARACTER brainstorming pipeline**
-    - [ ] When ghostwriter.cli is run with CHAPTER_XYZ.yaml, test the contents of the actors in the setting block.
-    - [ ] If an actor name is present in the setting block that is NOT in in the CHARACTERS context, then kick off this new brainstorming pipeline focussed on that character. In addition, prompt the user for a text description of the character they should type in the terminal and save this text to a user_description variable.
-    - [ ] Alternatively, if in the CHARACTERS context, there is a character with the field "brainstorming: True", then kick off this new brainstorming pipeline focussed on that character. Use the data already provided from the CHARACTERS context to initialize the user_description variable without prompting the user in the terminal. 
-    - [ ] The new CHARACTER brainstorming pipeline should use a new prompt template called brainstorm_character_outline.md
-    - [ ] The new CHARACTER brainstorming pipeline prompt template should provide the following information to the LLM:
+    - [x] When ghostwriter.cli is run with CHAPTER_XYZ.yaml, test the contents of the actors in the setting block.
+    - [x] If an actor name is present in the setting block that is NOT in in the CHARACTERS context, then kick off this new brainstorming pipeline focussed on that character. In addition, prompt the user for a text description of the character they should type in the terminal and save this text to a user_description variable.
+    - [x] Alternatively, if in the CHARACTERS context, there is a character with the field "brainstorming: True", then kick off this new brainstorming pipeline focussed on that character. Use the data already provided from the CHARACTERS context to initialize the user_description variable without prompting the user in the terminal. 
+    - [x] The new CHARACTER brainstorming pipeline should use a new prompt template called brainstorm_character_outline.md
+    - [x] The new CHARACTER brainstorming pipeline prompt template should provide the following information to the LLM:
         - The dereferenced factoids and characters from the CHAPTER_XYZ.yaml setting block (except of course for other characters that are missing.)
         - The CHAPTER_XYZ.yaml
         - Clear instructions on the output format of the CHARACTER which should match that in LRRH book CHARACTERS.yaml. You can use Red's character as an example.
         - The user_description from either the terminal or the existing CHARACTER context, followed by "Now, for the character <NAME>,  brainstorm an interesting character outline from the prior description".  Note that <NAME> sould be replaced with the character actor name being brainstormed.
-    - [ ] Save the LLM prompt + LLM result in character_brainstorm.txt in the book base operating directory (overwrite if necessary)
-    - [ ] Simply append the LLM result to the CHARACTERS.yaml, and make sure it is properly tabbed to be correct yaml.
-    - [ ] After the pipeline is done, the program should stop. This will result in exactly one character outline being updated.
+    - [x] Save the LLM prompt + LLM result in character_brainstorm.txt in the book base operating directory (overwrite if necessary)
+    - [x] Simply append the LLM result to the CHARACTERS.yaml, and make sure it is properly tabbed to be correct yaml.
+    - [x] After the pipeline is done, the program should stop. This will result in exactly one character outline being updated.
 
 ## Testing and Quality Assurance
 

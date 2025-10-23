@@ -500,15 +500,28 @@ This is useful for reviewing exactly how prompts were presented to the LLM and w
 
 ## Running Tests
 
-When tests are added (tasks 12–15), run them with:
+Always run tests using the project's virtual environment so the correct dependencies are used.
 
 ```bash
-# If activated
-pytest -q
+# Option A: Activate the venv first (recommended)
+source venv/bin/activate
+python -m pytest -q
 
-# Or without activating
+# Option B: Without activating, call the venv's Python explicitly
 ./venv/bin/python -m pytest -q
 ```
+
+Notes:
+- Ensure you've installed dependencies inside the venv: `pip install -r requirements.txt` (see Installation above).
+- Using the venv avoids "pytest: command not found" and version mismatches.
+
+### Test environment (.env.test)
+
+Pytest automatically loads a test-specific environment file `.env.test` (wired in `tests/conftest.py`). This keeps tests deterministic and independent of your personal `.env` settings.
+
+- Default test book base: `.env.test` sets `GW_BOOK_BASE_DIR=sandbox/LittleRedRidingHood`.
+- Your personal `.env` can continue to point to your active book (e.g., `BecomingDjinn`); tests will still use `.env.test`.
+- VS Code Testing tab will also respect this because `.env.test` is loaded by pytest itself.
 
 ## Troubleshooting
 

@@ -4,6 +4,17 @@ from pathlib import Path
 
 import pytest
 
+# Load a test-specific environment file so pytest runs are consistent locally and in VS Code
+try:
+    from dotenv import load_dotenv
+    _root = Path(__file__).resolve().parents[1]
+    _env_test = _root / ".env.test"
+    if _env_test.exists():
+        load_dotenv(dotenv_path=_env_test, override=True)
+except Exception:
+    # Non-fatal if dotenv is unavailable; tests also work without it
+    pass
+
 
 @pytest.fixture(scope="session")
 def lr_source_dir() -> Path:

@@ -56,5 +56,5 @@ Relevant `README.md` is in the project root
 - Update the session conversation summary at the end of TODO.md.
 - Update the README.md with any findings that appeared during the session which are worth remarking on.  Be sure to preserve any solutions to command line issues, so we don't have to repeat broken command lines in the future.
 - Update these `INSTRUCTIONS.md` by setting "Focus" to the next actionable tasks in `TODO.md` (e.g., move from Environment Setup to Core Functionality Implementation).
-	- Current: Task 11 implemented (configurable paths + testbed). Focus moved to Task 12 (Create Unit Tests).
+	- Current: Task 1 and 2 implemented (Chapter + Character brainstorming pipelines). Focus moved to Task 12 (Create Unit Tests) and integration work.
 - Finally, commit all file changes.

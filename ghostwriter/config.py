@@ -22,6 +22,12 @@ REQUIRED_PROMPTS = [
     "prompts/agenda_prompt.md",
     "prompts/reaction_prompt.md",
     "prompts/subtle_edit_prompt.md",
+    # Chapter brainstorming
+    "prompts/brainstorm_chapter_outline.md",
+    # Character brainstorming
+    "prompts/brainstorm_character_outline.md",
+    # Content table brainstorming
+    "prompts/brainstorm_content_table_next.md",
 ]
 """Configuration constants and paths for GhostWriter."""
 
@@ -41,4 +47,10 @@ REQUIRED_PROMPTS = [
     "prompts/agenda_prompt.md",
     "prompts/reaction_prompt.md",
     "prompts/subtle_edit_prompt.md",
+    # Chapter brainstorming
+    "prompts/brainstorm_chapter_outline.md",
+    # Character brainstorming
+    "prompts/brainstorm_character_outline.md",
+    # Content table brainstorming
+    "prompts/brainstorm_content_table_next.md",
 ]

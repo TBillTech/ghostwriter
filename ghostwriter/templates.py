@@ -40,16 +40,10 @@ def prompt_key_from_filename(filename: str) -> str:
 def iter_dir_for(chapter_id: str) -> Path:
     """Return the iterations directory for a chapter id.
 
-    Honors GW_ITERATIONS_DIR, but if a local ./iterations directory exists in the
-    current working directory, prefer that for backward-compatible tests and
-    simple runs. This preserves prior behavior where tests interact with a
-    relative 'iterations/' folder.
-
-    Default: iterations/<chapter_id>
+    Always uses the configured location resolved by get_iterations_dir(),
+    typically <GW_BOOK_BASE_DIR or .>/iterations/<chapter_id>.
     """
-    configured = get_iterations_dir()
-    local = Path("iterations")
-    base = local if local.exists() else configured
+    base = get_iterations_dir()
     return base / chapter_id
 
 

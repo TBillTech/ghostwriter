@@ -20,6 +20,7 @@ from ghostwriter.templates import (
     apply_template,
     _yaml_section_fallback,
 )
+from ghostwriter.env import get_iterations_dir
 
 
 def test_prompt_key_from_filename():
@@ -39,9 +40,9 @@ def test_yaml_section_fallback_basic():
 
 
 def test_iter_dir_and_versions_and_read_latest(tmp_path: Path):
-    # These helpers use a fixed base 'iterations/'. We'll create and clean it.
     chapter_id = "UNIT_TEST_CH"
-    base = Path("iterations") / chapter_id
+    # Use configured iterations dir so tests are environment-agnostic
+    base = get_iterations_dir() / chapter_id
     try:
         # Ensure clean slate
         if base.exists():
@@ -65,7 +66,7 @@ def test_iter_dir_and_versions_and_read_latest(tmp_path: Path):
 
 def test_build_common_replacements_fallback_and_files():
     chapter_id = "UNIT_TEST_CH2"
-    base = Path("iterations") / chapter_id
+    base = get_iterations_dir() / chapter_id
     try:
         if base.exists():
             shutil.rmtree(base)
