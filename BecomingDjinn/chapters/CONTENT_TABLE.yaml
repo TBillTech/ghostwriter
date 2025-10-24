@@ -1,24 +1,90 @@
 TABLE_OF_CONTENTS:
-  - Author: Tom Henry
-  - Title: Becoming Djinn
-  - Prolog: |
-      If there were any dedication to this book it would be to futurists and fans of books-for-fun. Rather than bother with that, I just have a couple things I must get off my chest. I suggest instead of bearing with me that you skip to the fourth chapter to decide if you want to read the whole thing. I thought about starting the book there, but I want readers to have a feel for Arthur's initial background, motivation, and disappointment first. Since I don't usually prefer flashbacks in stories, I have tried to mimize those. Thus, the chapters do not necessarily appear in order of most fun first. 
-      
-      I must also admit that I have used AI to help me with this book. In my defense, I, the human, chose each creative element that went into it. On the other hand, I used AI to help me brainstorm many bad ideas, and to make the few good ideas I did choose into valid English. I make the AI keep the dialog centered on the character voices. You can even see the prompts and logic I used if you search for the "ghostwrier" project on github, if you are curious or wish to try it out yourself.
-      
-      Now, before you make the conscious choice to be critical of the AI use I admitted to, think about what happens next. If the public punishes every writer who admits exactly how much and to what degree they use AI, then the writers will stop telling you. You have been warned.
-      
-      Finally, I claim that this book is hard sci fi. For the most part, I truly believe that this story could actually happen, almost. There are just two ways you will have to suspend dis-belief. First, it is "unlikely" that the VR "helmets" you will read about will really exist by 2222; to acheive what this book describes users would really need what I would call "extreme" brain implants. I went ahead with "unlikely" VR tech anyway because I didn't want to write about that kind of drama. The other suspension of disbelief is that those spooky characters of the Nadir Project really HAVE chipped away at the fabric of reality ... Or maybe you will admit they might be RIGHT?
-  - 001: |
-      Moving Day. Arthur and Misty leave the 73rd Crèche, and arrive at their new apartments in New Philadelphia.
-  - 002: |
-      Login. Arthur enters his apartment. Arthur logs into Zenith world. Arther learns with bitter disappointment that his chosen class is a guard. Arthur decides to make the best of it, and meets Misty who is a scout.  They start discussing/noticing how it really IS eerie in the lobby. The same drone arrives to show them to the outskirts of the Chivalrous Kingdom, calculated to match Arthur and Misty's classes. At the end of Arthur's shift, he is even more discouraged, and he meets with Misty at the tavern where they log out for the day.
-  - 003: | 
-      The Purveyor. Arthur and Misty get supper. He complains about his class at the restaurant. When he gets back to his apartment, he notices somebody has slipped him a holographic piece of paper with instructions to meet in game for a unique class change quest. Instead of going to bed, or notifying PROF, Arthur sneaks back into Zenith world. He follows the instructions to the letter, and meets with the "Purveyor". They strike a deal, and Arthur obtains a unique class change quest. Unable to sleep from excitement, he decides to complete the quest immediately.
-  - 004: |
-      Cave of Wonders. The quest guides Arthur to a Cave of Wonders. That's right! Treasure stacks to the ceiling, with gold, magic swords, and everything in between. Arthur is bewildered by his identify skill. Finally he reaches an unassuming wood stool with a tarnished silver lamp. As instructed, he rubs it, and meets the Djinni within! Fighting sleep deprivation, Arthur misses a few questionable comments, and uses his wish for a new class. Who knew that the Djinni would switch classes with him! Actually, we all kinda guessed that was where this was going...
-  - 005: |
-      Trapped in a bottle. As awareness dawns on Arthur, he tries to run away he grabs an enourmous chest, which slams shut. It contains dozens of astounding weapons, and gets sucked into the bottle with him. 
-  - 006: |
-      Quest for the Cave. After finally logging in again, Arthur realizes there might be some really interesting things in the giant chest. He opens it, and transfers something to his inventory.  This triggers two things: "the first player to plunder and item from the cave" and the first payment to the Purveyor.
-  - ???: Brainstorm - During the remainder of this book mostly not in order: Misty gets Arthur in his party part-time through a wish; Arthur still has to serve as a Djinni part-time; WE get to see many entertaining and even hilarious instances of Arthur's bottle being picked up by various characters; Episodes include Arthur giving them monkey-paw type wish fulfillment, earning him a lot of enemies; The climax of the book is a scene where Arthur thinks he is in VR on the space elevator fighting for his life, but he is really fighting IRL, and uses a skill from the game in real life to win. This sets up the Nadir Project Epilogue teasing for the next book. 
+- Author: Tom Henry
+- Title: Becoming Djinn
+- Prolog: "If there were any dedication to this book it would be to futurists and\
+    \ fans of books-for-fun. Rather than bother with that, I just have a couple things\
+    \ I must get off my chest. I suggest instead of bearing with me that you skip\
+    \ to the fourth chapter to decide if you want to read the whole thing. I thought\
+    \ about starting the book there, but I want readers to have a feel for Arthur's\
+    \ initial background, motivation, and disappointment first. Since I don't usually\
+    \ prefer flashbacks in stories, I have tried to mimize those. Thus, the chapters\
+    \ do not necessarily appear in order of most fun first. \n\nI must also admit\
+    \ that I have used AI to help me with this book. In my defense, I, the human,\
+    \ chose each creative element that went into it. On the other hand, I used AI\
+    \ to help me brainstorm many bad ideas, and to make the few good ideas I did choose\
+    \ into valid English. I make the AI keep the dialog centered on the character\
+    \ voices. You can even see the prompts and logic I used if you search for the\
+    \ \"ghostwrier\" project on github, if you are curious or wish to try it out yourself.\n\
+    \nNow, before you make the conscious choice to be critical of the AI use I admitted\
+    \ to, think about what happens next. If the public punishes every writer who admits\
+    \ exactly how much and to what degree they use AI, then the writers will stop\
+    \ telling you. You have been warned.\n\nFinally, I claim that this book is hard\
+    \ sci fi. For the most part, I truly believe that this story could actually happen,\
+    \ almost. There are just two ways you will have to suspend dis-belief. First,\
+    \ it is \"unlikely\" that the VR \"helmets\" you will read about will really exist\
+    \ by 2222; to acheive what this book describes users would really need what I\
+    \ would call \"extreme\" brain implants. I went ahead with \"unlikely\" VR tech\
+    \ anyway because I didn't want to write about that kind of drama. The other suspension\
+    \ of disbelief is that those spooky characters of the Nadir Project really HAVE\
+    \ chipped away at the fabric of reality ... Or maybe you will admit they might\
+    \ be RIGHT?\n"
+- 1: |
+    Moving Day. Arthur and Misty leave the 73rd Crèche, and arrive at their new apartments in New Philadelphia.
+- 2: |
+    Login. Arthur enters his apartment. Arthur logs into Zenith world. Arther learns with bitter disappointment that his chosen class is a guard. Arthur decides to make the best of it, and meets Misty who is a scout.  They start discussing/noticing how it really IS eerie in the lobby. The same drone arrives to show them to the outskirts of the Chivalrous Kingdom, calculated to match Arthur and Misty's classes. At the end of Arthur's shift, he is even more discouraged, and he meets with Misty at the tavern where they log out for the day.
+- 3: |
+    The Purveyor. Arthur and Misty get supper. He complains about his class at the restaurant. When he gets back to his apartment, he notices somebody has slipped him a holographic piece of paper with instructions to meet in game for a unique class change quest. Instead of going to bed, or notifying PROF, Arthur sneaks back into Zenith world. He follows the instructions to the letter, and meets with the "Purveyor". They strike a deal, and Arthur obtains a unique class change quest. Unable to sleep from excitement, he decides to complete the quest immediately.
+- 4: |
+    Cave of Wonders. The quest guides Arthur to a Cave of Wonders. That's right! Treasure stacks to the ceiling, with gold, magic swords, and everything in between. Arthur is bewildered by his identify skill. Finally he reaches an unassuming wood stool with a tarnished silver lamp. As instructed, he rubs it, and meets the Djinni within! Fighting sleep deprivation, Arthur misses a few questionable comments, and uses his wish for a new class. Who knew that the Djinni would switch classes with him! Actually, we all kinda guessed that was where this was going...
+- 5: "Trapped in a bottle. As awareness dawns on Arthur, he tries to run away and\
+    \ he grabs\nan enourmous chest, which slams shut. It contains dozens of astounding\
+    \ weapons,\nand gets sucked into the bottle with him. The former Djinn then laughs\
+    \ and has an extended discussion with Arthur, who is trapped in his bottle, \n\
+    and the Djinni cannot help but give Arthur a hard time while he explains the rules\
+    \ of his new class. After realizing he has been had, and that he may be facing\
+    \ a very \"complicated\" future, after a moment of reflection Arthur realizes\
+    \ there might\nbe some really interesting things in the giant chest! He opens\
+    \ it, and transfers\nsomething to his inventory.  Server trumpets blare: First\
+    \ Plunderer of the Cave of Wonders. Arthur’s UI quietly\ndocks the Purveyor’s\
+    \ “first payment” and slaps a punch-clock on his screen—Djinn\nservice hours now\
+    \ in effect. The Djinni laughs again, and explains: Being on the clock as a Djinni\
+    \ is pretty boring until somebody finds his bottle. He is allowed to log out from\
+    \ inside the bottle: It counts as a safe area. The Djinni leaves, and Arthur tries\
+    \ opening the chest again.  A system message informs him that all items transferred\
+    \ into his bottle become optional Djinn wish rewards; NOT Arthur's personal items.\
+    \ After browsing his menus and realizing he is dead tired, he logs off! There is a catch though: If he wants to keep his new class, he will have to submit to monitoring IRL until his bottle is found.\n"
+- 6: |
+    Zenith erupts after the “First Plunderer” trumpet: the Purveyor auctions cryptic
+    map-scraps, a royal bulletin formalizes a server-wide hunt, and whispers agree
+    the Cave of Wonders is a shifting vault that opens only when three ancient markers
+    are aligned. Misty snaps up an official Quest for the Cave from a taciturn cartographer
+    NPC, while Arthur—stuck in his lamp looking out a the treasure vault- realized this is
+    where his bottle almost certainly lies and that admitting anything would violate secrecy provisions of the Zenith terms of service. With guilds, thieves, and scholars mobilizing, Misty
+    stakes one of three viable routes and asks Arthur to party; sadly, he isn't allowed to give any clues, or even explain where he is. He CAN, however, tell her that he would very much like for her to go on the Quest for the Cave.
+- 7: |
+    ??? A Tale of Three Parties, and a thousand others.
+- 9: |
+    ??? The Looting of the Cave.
+- 10: |
+    ??? At the Last, a Junky Bottle?
+- 11: |
+    ??? The First Wish Fulfilled
+- 12: |
+    ??? The Second of Many Hands
+- 13: |
+    The Heist. Having gotten away with stealing the bottle scott free, a swaggering min-max thief begins streaming to his a rabid
+    guild (and few fans). Arthur learns the fine print—one wish, literal compliance, broad interpretation—and
+    grants a narrow, monkey-paw version of “make me invisible to guards” that hilariously
+    breaks the thief’s heist and makes Arthur an instant enemy of a top guild. Across
+    town, Misty sees the world announcement and hears whispers of a silver lamp changing
+    hands; she starts tracking the rumor as Arthurs journey in a bottle continues.
+- ???: 'I want about 100 chapters, so we have to have a number of episodes filling
+    out the following skeleton: During the remainder of this book mostly not in order:
+    Misty gets Arthur in his party part-time through a wish; Arthur still has to serve
+    as a Djinni part-time; WE get to see many entertaining and even hilarious instances
+    of Arthur''s bottle being picked up by various characters; Episodes include Arthur
+    giving them monkey-paw type wish fulfillment, earning him a lot of enemies; The
+    climax of the book is a scene where Arthur thinks he is in VR on the space elevator
+    fighting for his life, but he is really fighting IRL, and uses a skill from the
+    game in real life to win. This sets up the Nadir Project Epilogue teasing for
+    the next book. '

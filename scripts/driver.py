@@ -36,6 +36,7 @@ from ghostwriter.context import (
     InvalidYAMLError,
     RunContext,
     chapter_id_from_path,
+    UserActionRequired,
 )
 from ghostwriter.utils import to_text as _gw_to_text, save_text, read_file, load_env, _norm_token, _extract_numeric_hint
 from ghostwriter.templates import (
@@ -238,7 +239,13 @@ def main():
             pass
 
     # Execute the deterministic pipeline once for vN
-    run_pipelines_for_chapter(chapter_path, version_num, log_llm=log_llm)
+    try:
+        run_pipelines_for_chapter(chapter_path, version_num, log_llm=log_llm)
+    except UserActionRequired as uar:
+        # Graceful stop for human-in-the-loop checkpoints
+        msg = str(uar).strip() or "Waiting for user suggestions on first draft."
+        print(msg)
+        return
 
 # ---------------------------
 # Validation & Setup (Task 8)

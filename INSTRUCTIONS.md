@@ -8,7 +8,7 @@ Follow instructions
 
 ## Next steps
 
-Start working on Task 1, chapter brainstorming pipeline.
+Start working on Task 3, pre_touch_point_draft user-in-the-loop feature.
 
 Relevant `TODO.md` is in the project root
 Relevant `README.md` is in the project root

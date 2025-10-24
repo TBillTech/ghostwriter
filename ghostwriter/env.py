@@ -240,6 +240,41 @@ def env_for_prompt(template_filename: str, fallback_step_key: str, *, default_te
     return model, float(temp), int(max_tokens)
 
 
+def _normalize_reasoning(val: Optional[str]) -> Optional[str]:
+    if val is None:
+        return None
+    v = str(val).strip().lower()
+    return v if v in ("low", "medium", "high") else None
+
+
+def reasoning_for(step_key: str) -> Optional[str]:
+    """Resolve reasoning effort with precedence:
+    GW_REASONING_EFFORT_{STEP} -> GW_REASONING_EFFORT_DEFAULT -> GW_REASONING_EFFORT
+    Returns one of 'low'|'medium'|'high' or None if unset/invalid.
+    """
+    v = os.getenv(f"GW_REASONING_EFFORT_{step_key}")
+    r = _normalize_reasoning(v)
+    if r:
+        return r
+    r = _normalize_reasoning(os.getenv("GW_REASONING_EFFORT_DEFAULT"))
+    if r:
+        return r
+    return _normalize_reasoning(os.getenv("GW_REASONING_EFFORT"))
+
+
+def reasoning_for_prompt(template_filename: str, fallback_step_key: str) -> Optional[str]:
+    """Resolve per-prompt reasoning effort with precedence:
+    GW_REASONING_EFFORT_PROMPT_{KEY} -> reasoning_for(fallback_step_key)
+    """
+    from .templates import prompt_key_from_filename  # lazy import
+    key = prompt_key_from_filename(template_filename)
+    if key:
+        r = _normalize_reasoning(os.getenv(f"GW_REASONING_EFFORT_PROMPT_{key}"))
+        if r:
+            return r
+    return reasoning_for(fallback_step_key)
+
+
 def mask_env_value(k: str, v: Optional[str]) -> str:
     """Mask secrets in environment values while retaining minimal suffix for debugging.
     Masks keys containing key/secret/token/password regardless of prefix.

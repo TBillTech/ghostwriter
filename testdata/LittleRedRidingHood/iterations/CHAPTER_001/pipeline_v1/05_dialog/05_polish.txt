@@ -1,0 +1,65 @@
+=== SYSTEM ===
+You are a ghostwriter polishing and cleaning prose.
+
+=== USER ===
+You are a ghostwriter working from a more rough version of a novel chapter.  
+Your job is to write polished clean prose for a novel chapter.  
+
+# Setting in general 
+[SETTING]
+
+# Characters
+[CHARACTERS]
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red promised to bring goodies to her ailing grandmother.
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+{
+  "Story-Relative-To": {
+    "Red": "Eager to help, trusts strangers.",
+    "Wolf": "Hungry, looking for an opportunity.",
+    "Forest Path": "Quiet, but shadows watch."
+  }
+}
+
+# Rules for generation:
+1. Produce **continuous prose only** (no lists or notes or markup or obnoxious formatting unless central to the text like litRPG stats).  
+2. Make sure to fix the commas, spacing, and capitalization when prose includes quoted dialog.
+
+# Previous rough version
+Please clean up the following text:
+The Wolf slipped forward, "From the shade I speak, child—your courage shines as bright as the moon. Which road toward grandmother’s house do you mean to take, and I’ll walk with you a stretch, if you share a tiny secret with me.."
+The Wolf tilted courteously, "Well met, brave little traveler. Which way are you bound toward Grandmother’s house, and I’ll walk with you for a stretch if you share a tiny secret with me.."
+The Wolf purred, "Such courage shines in you, little one—your steps are guided by a moonlit thread. Which road toward Grandmother’s house are you bound for, and would you let a patient listener walk with you a stretch if you share a tiny secret with me??"
+Red lifted the basket, "These goodies are for Grandmother. I’m going to her now, and thinking of how kind she is keeps me steady.."
+The Wolf murmured, "Bread and jam drift to me on the night air, sweet enough to loosen a wary heart. Which road toward Grandmother's house will you take, and may I walk with you a stretch if you share a tiny secret with me?."
+Red replied simply, "Thank you for noticing my care. It’s bread and jam for Grandmother, and she is ill, so I must hurry.."
+The Wolf complimented slowly, "That red hood brightens this dark wood, little traveler—such a soft glow that even shadows lean closer. Walk with me a stretch, and you may share a tiny secret; I’ll listen with patience and keep your pace steady.."
+Red touched her hood, "Grandmother made it for me. These goodies are for Grandmother, and I must hurry to her. Thank you for noticing my care; I’ll go straight to Grandmother now.."
+The Wolf smiled mildly, "That warmth deserves a straight, unhurried path. Is Grandmother's house nearby, or must we walk a while to reach it??"
+Further into the pines, beyond the bend by the big stump, is the path I must take. I’ll hurry straight to Grandmother now, and I’ll stay on the safe path. Thank you for your kindness; I must not waste any more time.
+
+Now, draft the chapter prose, sticking as close to possible to the words and sentences in the rough_draft, only adding words and filler where absolutely necessary.
+
+=== RESPONSE ===
+The Wolf slipped forward from the shade. "Child, your courage shines as bright as the moon. Which road toward Grandmother's house do you mean to take? I'll walk with you a stretch if you share a tiny secret with me."
+
+Red lifted the basket. "These goodies are for Grandmother. I'm going to her now, and thinking of how kind she is keeps me steady."
+
+The Wolf tilted his head courteously. "Well met, brave little traveler. Which way are you bound toward Grandmother's house? I'll walk with you for a stretch if you share a tiny secret."
+
+Red replied simply, "Thank you for noticing my care. It's bread and jam for Grandmother, and she is ill, so I must hurry."
+
+The Wolf purred, "Such courage shines in you, little one—your steps are guided by a moonlit thread. Which road are you bound for, and would you let a patient listener walk with you if you share a tiny secret?"
+
+Red touched her hood. "Grandmother made it for me. These goodies are for her, and I must hurry to her. Thank you for noticing my care; I'll go straight to Grandmother now."
+
+The Wolf murmured, "Bread and jam drift to me on the night air, sweet enough to loosen a wary heart. That red hood brightens this dark wood—such a soft glow that even shadows lean closer. Walk with me a stretch, and you may share a tiny secret; I'll listen with patience and keep your pace steady."
+
+"That warmth deserves a straight, unhurried path," the Wolf added mildly. "Is Grandmother's house nearby, or must we walk a while to reach it?"
+
+"Further into the pines, beyond the bend by the big stump, is the path I must take," Red said, steadying the basket. "I'll hurry straight to Grandmother now, and I'll stay on the safe path. Thank you for your kindness; I must not waste any more time."

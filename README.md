@@ -128,6 +128,23 @@ The system is moving to a deterministic, sequential pipeline driven by touch-poi
 
   - `(subtle_edit_prompt.md → text)`
 
+### Pre-draft user-in-the-loop (Task 3)
+
+For narration, dialog, and implicit touch-points, each run now pauses for a human edit pass before the final draft is recorded:
+
+- Phase 1 (first draft):
+  - The pipeline generates prose and writes `touch_point_first_draft.txt` and `first_suggestions.txt` under `iterations/CHAPTER_xxx/pipeline_vN/NN_<type>/`.
+  - The program stops gracefully with: “Waiting for user suggestions on first draft.”
+  - Edit `touch_point_first_draft.txt` directly as needed.
+
+- Phase 2 (resume):
+  - Re-run the same command. The system reads your edited `touch_point_first_draft.txt` plus `first_suggestions.txt` and applies `subtle_edit_prompt.md`.
+  - Outputs are saved as `touch_point_draft.txt` and a fresh `suggestions.txt`.
+
+Notes:
+- The old `check.txt` per–touch-point file is no longer produced.
+- `touch_point_state.json` is still written to allow resuming and to preserve state.
+
 ### Output formats and validation
 
 Each pipeline step has an expected output format. The framework validates output; if invalid, it retries up to two more times (total 3 attempts). On third failure, the program stops and reports the error.
@@ -145,23 +162,9 @@ Per chapter iteration folder: `iterations/CHAPTER_xxx/`
 - `final.txt` — stripped, publish-ready prose (polished only).
 - LLM logs — every prompt+response round-trip is saved under a subdirectory with descriptive filenames; logs include fully substituted prompts and raw outputs for traceability.
 
-Each prompt can be configured with model, temperature, and max tokens (defaults fall back to general settings):
+Environment configuration
 
-- Brainstorm: `GW_MODEL_BRAIN_STORM`, `GW_TEMP_BRAIN_STORM`, `GW_MAX_TOKENS_BRAIN_STORM`
-- Ordering: `GW_MODEL_ORDERING`, `GW_TEMP_ORDERING`, `GW_MAX_TOKENS_ORDERING`
-- Generate narration: `GW_MODEL_GENERATE_NARRATION`, `GW_TEMP_GENERATE_NARRATION`, `GW_MAX_TOKENS_GENERATE_NARRATION`
-- Actor assignment: `GW_MODEL_ACTOR_ASSIGNMENT`, `GW_TEMP_ACTOR_ASSIGNMENT`, `GW_MAX_TOKENS_ACTOR_ASSIGNMENT`
-- Body language: `GW_MODEL_BODY_LANGUAGE`, `GW_TEMP_BODY_LANGUAGE`, `GW_MAX_TOKENS_BODY_LANGUAGE`
-- Agenda: `GW_MODEL_AGENDA`, `GW_TEMP_AGENDA`, `GW_MAX_TOKENS_AGENDA`
-- Character dialog: `GW_MODEL_CHARACTER_DIALOG`, `GW_TEMP_CHARACTER_DIALOG`, `GW_MAX_TOKENS_CHARACTER_DIALOG`
-- Subtle edit: `GW_MODEL_SUBTLE_EDIT`, `GW_TEMP_SUBTLE_EDIT`, `GW_MAX_TOKENS_SUBTLE_EDIT`
-- Polish prose: `GW_MODEL_POLISH_PROSE`, `GW_TEMP_POLISH_PROSE`, `GW_MAX_TOKENS_POLISH_PROSE`
-- Checks (per kind):
-  - Narration: `GW_MODEL_CHECK_NARRATION`, `GW_TEMP_CHECK_NARRATION`, `GW_MAX_TOKENS_CHECK_NARRATION`
-  - Dialog: `GW_MODEL_CHECK_DIALOG`, `GW_TEMP_CHECK_DIALOG`, `GW_MAX_TOKENS_CHECK_DIALOG`
-  - Implicit: `GW_MODEL_CHECK_IMPLICIT`, `GW_TEMP_CHECK_IMPLICIT`, `GW_MAX_TOKENS_CHECK_IMPLICIT`
-  - `GW_MODEL_STORY_SO_FAR`, `GW_TEMP_STORY_SO_FAR`, `GW_MAX_TOKENS_STORY_SO_FAR`
-  - `GW_MODEL_STORY_RELATIVE`, `GW_TEMP_STORY_RELATIVE`, `GW_MAX_TOKENS_STORY_RELATIVE`
+For detailed environment variable settings (global defaults, per-step overrides, and per-prompt overrides for model/temperature/token budgeting, plus reasoning-effort controls), see `.env.example`.
 
 
 These YAML files serve as inputs to an LLM-powered ghostwriter, which produces continuous prose chapters while ensuring that key narrative elements are included.
@@ -257,11 +260,10 @@ File Structure
 Factoids:
     - name: "Time Period"
       description: "The Civil war was a time of industrialization and strained social fabrics"
+```
 
-Scenes:
-    - name: "Battlefield"
-      description: "Rolling fields, littered with smoke and the echoes of artillery."
-
+## Characters (CHARACTERS.yaml)
+```yaml
 Characters:
     - id: "henry"
       name: "Henry"
@@ -282,25 +284,30 @@ Characters:
         - "use military jargon beyond what's established"
       temperature_hint: 0.25
       max_tokens_line: 90
-
-Props:
-    - name: "Bloody Shirt"
-      active: true
-      significance: "Symbol of sacrifice; implicit metaphor for courage"
 ```
 
 Factoids: General statements or explanations that do not fit into the remaining categories.
 
-Scenes: Backgrounds for story action. Should usually be described indirectly (e.g. through character impressions), but some narrator expositions are allowable if it doesn't easily fit into dialog.
-
 Characters: Dialog generators with traits and personality anchors.  This system works with a higher level more intelligent Director agent, which spawns off calls to individual sub-agent calls for the dialog.  The sub agents therefore need a full description of the voice, lexicon, traits, etc. for the best personality prompting. 
-
-Props: Active (interactable) or inactive (background/foreshadowing).
 
 ## Chapter Log (CHAPTER_xxx.yaml)
 ```yaml
 Touch-Points:
+  - setting:
+      factoids:
+        - "Time Period"
+      actors:
+        - "Henry"
+        - "Seargent"
+  - scene:
+      name: "Battlefield"
+      description: "A terrifying field of death and artillery explosions"
+      props:
+        - name: "Red Cloth"
+          significance: "A symbol of courage, sacrifice, or tragedy"
+          description: "A scrap of what was once a white soldier's shirt"
   - dialog: "Henry sees the wounded soldier with the bloody shirt"
+  - narration: The horror of a falling artillery shell landing 100 meters away.
   - implicit: "The battlefield described only through Henry’s impressions"
   - dialog: "The ridiculousness of shelling an entire continent"
 
@@ -333,41 +340,86 @@ For narration/dialog/implicit touch-points, the pipeline begins with a brainstor
 - Re-run the same command. The pipeline will pick up from there using all bullets up to (but not including) the DONE marker.
 - Bullets are cumulative across runs; previous bullets are silently included in the prompt for continuation.
 
-# Iteration Loop
+# Iteration workflow and brainstorming rules
 
-The system supports an iteration workflow. For a given Chapter_xx:
+This project uses deterministic, single-pass pipelines with explicit human gates. Each run performs exactly one update and then exits. You re-run to proceed. There are four kinds of brainstorming the system can initiate, each with clear trigger and stop rules.
 
-EITHER: 
-1.1. Version 1 Draft Generation will use Master Initial Prompt Template ```prompts/master_initial_prompt.md```.
+## 1) CONTENT_TABLE brainstorming (table of contents)
 
-1.2. Feed files into prompt template.
+When it runs
+- Automatically runs first if a brainstorm placeholder exists in `CONTENT_TABLE.yaml` regardless of the chapter you asked to run.
+  - Placeholders detected in the table list include:
+    - A map item with key `???` or value `???`
+    - A string list item containing `???`
+    - A numeric chapter entry whose value starts with `???` (e.g., `6: "??? …"`) or with `Brainstorm…` (case-insensitive)
 
-1.3. Send to LLM and save output as pre_draft_v1.txt.
+What it targets
+- If any numeric placeholder exists, it selects the smallest such chapter number and fills that slot.
+- Otherwise it selects “next” = max existing numeric chapter + 1.
 
-OR: 
-1.1. If Version N Draft Generation has already been completed, use Master Prompt Template ```prompts/master_prompt.md```.
+What the LLM sees and writes
+- Prompt includes the entire `CONTENT_TABLE.yaml` text and a chapter-settings index derived from parsed chapters.
+- The synopsis is written back to `CONTENT_TABLE.yaml` as a numeric key (e.g., `6:`), using YAML literal block style (`|`) for multi-line text.
+- A copy of system+prompt+response is saved to `chapters/CONTENT_TABLE_brainstorm.txt`.
 
-1.2. Feed files into prompt template
+How it stops
+- It always performs exactly one synopsis insertion (fill placeholder or append next) and then exits.
 
-1.3. Send to LLM and save output as pre_draft_vn.txt, where N is the current version.
+## 2) CHAPTER brainstorming (outline file)
 
-Template Substitution
+When it runs
+- If the chapter file you requested is missing, or
+- If the chapter YAML contains any Touch-Point dictionary with `brainstorming: true`.
 
-2.1. The program will load pre_draft_vn.txt, where N is the current version, and load in each <CHARACTER TEMPLATE> structure (see master_prompt.md for detailed structure).  Then, for each <CHARACTER> template "call", the framework will send a LLM prompt for that character to get a narrowed and accurate voice and dialog response.  The reponse will be substituted in.
+What the LLM sees and writes
+- Prompt includes: CONTENT_TABLE, story-so-far/relative-to from the previous completed chapter, and Setting/Characters excerpts.
+- It writes or overwrites `chapters/CHAPTER_XXX.yaml` with a structured outline (Touch-Points, optional setting with factoids/actors/scene). Story sections are omitted on purpose.
+- The prior chapter YAML (if any) is backed up as `CHAPTER_XXX.N.yaml` before overwrite.
+- A prompt+response trace is saved next to the chapter as `chapters/CHAPTER_XXX.txt`.
 
-2.2. The program will insert the fully substituted <CHARACTER> template response text into the polish_prose_prompt template, and write the response of this prompt to the file draft_vn.txt, where N is the current version.
+How it stops
+- It performs one outline update and then exits.
 
-Verification
+## 3) CHARACTER brainstorming (single character entry)
 
-2.1. Verification will use ```prompts/check_prompt.md``` Prompt Template.
+When it runs
+- If any `CHARACTERS.yaml` entry has `brainstorming: true`, or
+- If the current chapter setting references an actor not present in `CHARACTERS.yaml` (missing character).
 
-2.2. Feed files into prompt template.
+What the LLM sees and writes
+- It uses the current chapter YAML, setting dereferences, and optionally an example character when none are referenced.
+- If the character exists and has `brainstorming: true`, that YAML is used as the seed text; otherwise you’re prompted in the terminal for a brief description.
+- The generated YAML entry starting with `- id:` is appended to `CHARACTERS.yaml`.
+- A prompt+response trace is written to `<base>/character_brainstorm.txt`.
 
-2.3. Send to LLM, and save results as check_vN.txt, where N is the current version.
+How it stops
+- It appends exactly one character outline and then exits.
 
-Verification Check
+## 4) Touch-point pipelines: narration, dialog, implicit (human-gated brainstorm)
 
-3.1. If Verification resulted in a "missing" case, go to step 1.1 where the check_vN will be added into a re-draft. Repeat until all touch-points are satisfied.
+When they run
+- For each touch-point that produces prose, the pipeline begins with a “brainstorm bullets” step. The rest of the pipeline (ordering → generation/assignment → polish) only proceeds after you mark the brainstorm as done.
+
+Where the brainstorm lives
+- For each chapter version `vN`, brainstorm bullets are persisted under:
+  - `iterations/CHAPTER_xxx/pipeline_vN/04_narration/brainstorm.txt` (narration example)
+  - `iterations/CHAPTER_xxx/pipeline_vN/05_dialog/brainstorm.txt` (dialog example)
+  - `iterations/CHAPTER_xxx/pipeline_vN/implicit/.../brainstorm.txt` (implicit example)
+  - Exact folder numbers can vary with pipeline layout; look for a `brainstorm.txt` in the step folder.
+
+Human gate: how to control “done”
+- The LLM never writes `DONE`. It only produces more bullets.
+- The program appends newly generated bullets to `brainstorm.txt` and then stops with: “Brainstorming still in progress.”
+- To proceed to ordering/generation:
+  1) Open the `brainstorm.txt` for that step.
+  2) Add a final line with exactly: `DONE` (all caps) on its own line.
+  3) Re-run the same command. The pipeline will consume all bullets up to (but not including) the `DONE` line and continue.
+- Bullets are cumulative across runs; you can add, edit, or reorder them before placing `DONE`.
+
+Other controls
+- Dialog/implicit ordering can be disabled with env vars (see `.env.example`):
+  - `GW_DISABLE_ORDERING_DIALOG=1`
+  - `GW_DISABLE_ORDERING_IMPLICIT=1`
 
 # Future Extensions
 

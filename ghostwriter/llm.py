@@ -10,6 +10,8 @@ import re
 import random
 import time
 from typing import Optional, List
+from .logging import breadcrumb as _breadcrumb, log_run as _log_run
+from .tokenizer import count_chat_tokens as _count_chat_tokens
 
 try:
     from openai import OpenAI
@@ -81,6 +83,7 @@ def complete(
     temperature: float = 0.2,
     max_tokens: int = 800,
     model: Optional[str] = None,
+    reasoning_effort: Optional[str] = None,
 ) -> str:
     """Chat-completion with graceful mock fallback if no API key/client.
     """
@@ -101,8 +104,30 @@ def complete(
             "messages": messages,
             "temperature": temperature,
         }
+        if reasoning_effort and str(reasoning_effort).strip().lower() in ("low", "medium", "high"):
+            kwargs["reasoning_effort"] = str(reasoning_effort).strip().lower()
+            _breadcrumb(f"llm2:reasoning_effort={kwargs['reasoning_effort']}")
         token_param = os.getenv("GW_TOKENS_PARAM", "max_tokens").strip() or "max_tokens"
         kwargs[token_param] = int(max_tokens)
+        # Preflight prompt token accounting and request summary
+        try:
+            ptoks = int(_count_chat_tokens(messages, model_name))
+        except Exception:
+            ptoks = 0
+        try:
+            chars = sum(len(str(m.get("content", "")) or "") for m in messages)
+        except Exception:
+            chars = 0
+        cpt = os.getenv("GW_CHARS_PER_TOKEN", "4") or "4"
+        try:
+            _breadcrumb(f"llm2:prompt_tokens tiktoken={ptoks} chars={chars} cpt={float(cpt) if cpt else 4.0}")
+            _log_run(
+                f"LLM request | model={model_name} temp={temperature} param={token_param} "
+                f"prompt_tokens={ptoks} chars={chars} cpt={cpt} limit={kwargs[token_param]} "
+                f"reasoning_effort={kwargs.get('reasoning_effort','n/a')}"
+            )
+        except Exception:
+            pass
         try:
             resp = client.chat.completions.create(**kwargs)
             return resp.choices[0].message.content or ""
@@ -112,7 +137,17 @@ def complete(
                 kwargs.pop("max_tokens", None)
                 kwargs["max_completion_tokens"] = int(max_tokens)
                 resp = client.chat.completions.create(**kwargs)
-                return resp.choices[0].message.content or ""
+                out = resp.choices[0].message.content or ""
+                try:
+                    usage = getattr(resp, "usage", None)
+                    if usage:
+                        pt = getattr(usage, "prompt_tokens", None)
+                        ct = getattr(usage, "completion_tokens", None)
+                        rt = getattr(usage, "reasoning_tokens", None)
+                        tt = getattr(usage, "total_tokens", None)
+                        _log_run(f"LLM response | usage prompt={pt} completion={ct} reasoning={rt} total={tt}")
+                except Exception:
+                    pass
+                return out
             raise
-
     return _with_backoff(_do_call)

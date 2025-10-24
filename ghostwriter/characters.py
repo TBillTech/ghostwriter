@@ -7,10 +7,12 @@ import os
 import re
 
 from .context import RunContext
+from .logging import log_warning as _log_warning_base
 from .utils import to_text, read_text, _extract_numeric_hint
 from .llm import complete
 from .validation import validate_text
 from .env import env_for as _env_for
+from .env import reasoning_for_prompt as _reasoning_for_prompt
 
 
 def load_characters_list(ctx: Optional[RunContext]) -> List[dict]:
@@ -113,12 +115,9 @@ def parse_character_blocks(pre_draft_text: str) -> Tuple[Dict[str, str], List[Di
 
 
 def _log_warning(msg: str, log_dir: Optional[Path]) -> None:
+    # Delegate to centralized logger which writes to base run.log
     try:
-        print(f"WARNING: {msg}")
-        if log_dir is not None:
-            log_dir.mkdir(parents=True, exist_ok=True)
-            with (log_dir / "warnings.txt").open("a", encoding="utf-8") as f:
-                f.write(msg + "\n")
+        _log_warning_base(msg, log_dir)
     except Exception:
         pass
 
@@ -159,7 +158,8 @@ def render_character_call(
     # Warn if missing YAML
     try:
         warn_dir = log_file.parent if log_file is not None else None
-        if not (character_yaml or "").strip():
+        # Do not warn for special 'Narrator' id, which is not a character
+        if character_id.strip().lower() != "narrator" and not (character_yaml or "").strip():
             _log_warning(f"CHARACTER: Missing character_yaml for id '{character_id}'.", warn_dir)
     except Exception:
         pass
@@ -216,7 +216,15 @@ def render_character_call(
         f"Return only the character's dialog or inner monologue; no notes or brackets."
     )
     dialog_model, dialog_temp_env, dialog_max_tokens = _env_for("CHARACTER_DIALOG", default_temp=temperature if temperature is not None else 0.3, default_max_tokens=max_tokens_line)
-    effective_temp = temperature if temperature is not None else dialog_temp_env
+    # Allow an env override to take precedence over character/template hints.
+    # If GW_FORCE_TEMP_CHARACTER_DIALOG=1, always use GW_TEMP_CHARACTER_DIALOG (via dialog_temp_env).
+    force_env_temp = os.getenv("GW_FORCE_TEMP_CHARACTER_DIALOG", "0") == "1"
+    if force_env_temp:
+        effective_temp = dialog_temp_env
+    else:
+        effective_temp = temperature if temperature is not None else dialog_temp_env
+    # Resolve reasoning_effort for character dialog: per-prompt override wins
+    reasoning = _reasoning_for_prompt("character_dialog_prompt.md", "CHARACTER_DIALOG")
 
     last_reason = ""
     for attempt in range(1, 4):
@@ -228,6 +236,7 @@ def render_character_call(
             temperature=effective_temp,
             max_tokens=try_max,
             model=dialog_model,
+            reasoning_effort=reasoning,
         )
         # Attempt-specific logging
         if log_file is not None:

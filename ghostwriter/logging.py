@@ -7,6 +7,8 @@ Public API:
 - rss_kb() -> Optional[int]
 - breadcrumb(label: str) -> None
 - log_warning(msg: str, log_dir: Optional[Path]) -> None
+ - log_error_base(msg: str) -> None
+ - log_run(msg: str) -> None
 """
 from __future__ import annotations
 from pathlib import Path
@@ -38,16 +40,21 @@ def rss_kb() -> Optional[int]:
 
 def breadcrumb(label: str) -> None:
     path = crash_trace_file()
-    if not path:
-        return
     try:
         ts = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         tid = threading.get_ident()
         mem = rss_kb()
         line = f"{ts} pid={os.getpid()} tid={tid} rss_kb={mem or 'na'} | {label}\n"
-        with open(path, "a", encoding="utf-8") as f:
-            f.write(line)
-            f.flush()
+        # Write to crash trace file if enabled
+        if path:
+            with open(path, "a", encoding="utf-8") as f:
+                f.write(line)
+                f.flush()
+        # Also append all breadcrumbs to base run.log
+        try:
+            log_run(f"BREADCRUMB | {label}")
+        except Exception:
+            pass
         try:
             sys.stderr.write(f"[crumb] {label}\n")
             sys.stderr.flush()
@@ -58,11 +65,51 @@ def breadcrumb(label: str) -> None:
 
 
 def log_warning(msg: str, log_dir: Optional[Path]) -> None:
+    """Log a warning message to stdout and base run.log (ignores log_dir)."""
     try:
-        print(f"WARNING: {msg}")
-        if log_dir is not None:
-            log_dir.mkdir(parents=True, exist_ok=True)
-            with (log_dir / "warnings.txt").open("a", encoding="utf-8") as f:
-                f.write(msg + "\n")
+        text = f"WARNING: {msg}"
+        print(text)
+        log_run(text)
+    except Exception:
+        pass
+
+
+def log_error_base(msg: str) -> None:
+    """Append an error message to the base book directory (run_error.log)."""
+    try:
+        from .env import get_book_base_dir  # lazy import to avoid cycles
+        base = get_book_base_dir()
+        base.mkdir(parents=True, exist_ok=True)
+        path = base / "run_error.log"
+        ts = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        with path.open("a", encoding="utf-8") as f:
+            f.write(f"[{ts}] {msg}\n")
+        # Also append to unified run.log
+        try:
+            log_run(f"ERROR: {msg}")
+        except Exception:
+            pass
+        try:
+            print(f"ERROR: {msg}")
+        except Exception:
+            pass
+    except Exception:
+        # Last resort: print only
+        try:
+            print(f"ERROR: {msg}")
+        except Exception:
+            pass
+
+
+def log_run(msg: str) -> None:
+    """Append a message to the unified base run.log file."""
+    try:
+        from .env import get_book_base_dir  # lazy import
+        base = get_book_base_dir()
+        base.mkdir(parents=True, exist_ok=True)
+        path = base / "run.log"
+        ts = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        with path.open("a", encoding="utf-8") as f:
+            f.write(f"[{ts}] {msg}\n")
     except Exception:
         pass

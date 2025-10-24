@@ -20,7 +20,7 @@ import time
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
-from .context import RunContext, GWError
+from .context import RunContext, GWError, UserActionRequired
 from .templates import (
     iter_dir_for,
     read_latest,
@@ -30,7 +30,7 @@ from .templates import (
     build_story_relative_to_prompt,
 )
 from .utils import to_text as _gw_to_text, save_text, read_file, _norm_token
-from .logging import breadcrumb as _breadcrumb, log_warning as _log_warning, crash_trace_file as _crash_trace_file
+from .logging import breadcrumb as _breadcrumb, log_warning as _log_warning, crash_trace_file as _crash_trace_file, log_error_base as _log_error_base, log_run as _log_run
 from .openai import llm_complete, get_model
 from .characters import load_characters_list
 from .env import collect_program_env_snapshot as _collect_program_env_snapshot
@@ -557,15 +557,16 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
         msg = f"[v{version_num}] Parsing complete: SETTING.yaml + {chapter_path} loaded; {total} touch-points."
         print(msg)
         _breadcrumb("parse:complete")
-        if base_log_dir is not None:
-            base_log_dir.mkdir(parents=True, exist_ok=True)
-            with (base_log_dir / "parse_complete.txt").open("w", encoding="utf-8") as f:
+        # Write parse and environment snapshot under base dir
+        from .env import get_book_base_dir as _get_book_base_dir
+        try:
+            base = _get_book_base_dir()
+            base.mkdir(parents=True, exist_ok=True)
+            with (base / "parse_and_env.log").open("w", encoding="utf-8") as f:
                 f.write(msg + "\n")
-                # Also record a small snapshot for debugging boundaries
                 f.write(f"chapter_id={chapter_id}\n")
                 f.write(f"timestamp={time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}\n")
                 f.write(f"cwd={os.getcwd()}\n")
-                # Record full program environment snapshot for this run
                 try:
                     snapshot = _collect_program_env_snapshot(get_model_cb=get_model, crash_trace_cb=_crash_trace_file)
                     f.write("\n[ENVIRONMENT]\n")
@@ -573,6 +574,8 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                     f.write("\n")
                 except Exception:
                     pass
+        except Exception:
+            pass
     except Exception:
         pass
 
@@ -640,89 +643,121 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 _ensure_brainstorm_done_on_resume(tp_type, reps_pre, log_dir=tp_log_dir, tp_index=i)
             except Exception:
                 pass
-            if tp_type == "narration":
-                if branch_b:
-                    # Use previous version's per-touchpoint artifacts if available
-                    prev_polished_tp = ""
-                    prev_suggestions_tp = ""
+            # If a first-draft gate exists, skip generation and proceed directly to subtle-edit phase
+            first_draft_path = (tp_log_dir / "touch_point_first_draft.txt") if tp_log_dir else None
+            final_draft_path = (tp_log_dir / "touch_point_draft.txt") if tp_log_dir else None
+            first_suggestions_path = (tp_log_dir / "first_suggestions.txt") if tp_log_dir else None
+            subtle_edit_post_gate = False
+            if tp_log_dir is not None and first_draft_path and first_draft_path.exists() and not (final_draft_path and final_draft_path.exists()):
+                # Resume after user-in-the-loop: run subtle edit using the latest on-disk first draft and suggestions
+                try:
+                    prior_pol = read_file(str(first_draft_path))
+                except Exception:
+                    prior_pol = ""
+                try:
+                    prior_sugg = read_file(str(first_suggestions_path)) if (first_suggestions_path and first_suggestions_path.exists()) else ""
+                except Exception:
+                    prior_sugg = ""
+                if gw_run_subtle_edit_pipeline is None:
+                    raise GWError("ghostwriter.pipelines.run_subtle_edit_pipeline not available")
+                polished_text = gw_run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=prior_pol, prior_suggestions=prior_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                subtle_edit_post_gate = True
+            else:
+                # Execute the contentful pipeline with graceful error handling
+                try:
+                    if tp_type == "narration":
+                        if branch_b:
+                            # Use previous version's per-touchpoint artifacts if available
+                            prev_polished_tp = ""
+                            prev_suggestions_tp = ""
+                            try:
+                                prev_dir = iter_dir_for(chapter_id) / f"pipeline_v{version_num-1}"
+                                prev_tp_dir = prev_dir / f"{i:02d}_{tp_type}"
+                                if prev_tp_dir.exists():
+                                    try:
+                                        prev_polished_tp = read_file(str(prev_tp_dir / "touch_point_draft.txt"))
+                                    except Exception:
+                                        prev_polished_tp = ""
+                                    try:
+                                        prev_suggestions_tp = read_file(str(prev_tp_dir / "suggestions.txt"))
+                                    except Exception:
+                                        prev_suggestions_tp = ""
+                            except Exception:
+                                pass
+                            use_pol = prev_polished_tp or prior_draft
+                            use_sugg = prev_suggestions_tp or prior_suggestions
+                            # Use package subtle edit pipeline exclusively
+                            if gw_run_subtle_edit_pipeline is None:
+                                raise GWError("ghostwriter.pipelines.run_subtle_edit_pipeline not available")
+                            polished_text = gw_run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=use_pol, prior_suggestions=use_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                        else:
+                            if gw_run_narration_pipeline is None:
+                                raise GWError("ghostwriter.pipelines.run_narration_pipeline not available")
+                            polished_text = gw_run_narration_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                    elif tp_type == "dialog":
+                        if branch_b:
+                            prev_polished_tp = ""
+                            prev_suggestions_tp = ""
+                            try:
+                                prev_dir = iter_dir_for(chapter_id) / f"pipeline_v{version_num-1}"
+                                prev_tp_dir = prev_dir / f"{i:02d}_{tp_type}"
+                                if prev_tp_dir.exists():
+                                    try:
+                                        prev_polished_tp = read_file(str(prev_tp_dir / "touch_point_draft.txt"))
+                                    except Exception:
+                                        prev_polished_tp = ""
+                                    try:
+                                        prev_suggestions_tp = read_file(str(prev_tp_dir / "suggestions.txt"))
+                                    except Exception:
+                                        prev_suggestions_tp = ""
+                            except Exception:
+                                pass
+                            use_pol = prev_polished_tp or prior_draft
+                            use_sugg = prev_suggestions_tp or prior_suggestions
+                            if gw_run_subtle_edit_pipeline is None:
+                                raise GWError("ghostwriter.pipelines.run_subtle_edit_pipeline not available")
+                            polished_text = gw_run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=use_pol, prior_suggestions=use_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                        else:
+                            if gw_run_dialog_pipeline is None:
+                                raise GWError("ghostwriter.pipelines.run_dialog_pipeline not available")
+                            polished_text = gw_run_dialog_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                    else:  # implicit
+                        if branch_b:
+                            prev_polished_tp = ""
+                            prev_suggestions_tp = ""
+                            try:
+                                prev_dir = iter_dir_for(chapter_id) / f"pipeline_v{version_num-1}"
+                                prev_tp_dir = prev_dir / f"{i:02d}_{tp_type}"
+                                if prev_tp_dir.exists():
+                                    try:
+                                        prev_polished_tp = read_file(str(prev_tp_dir / "touch_point_draft.txt"))
+                                    except Exception:
+                                        prev_polished_tp = ""
+                                    try:
+                                        prev_suggestions_tp = read_file(str(prev_tp_dir / "suggestions.txt"))
+                                    except Exception:
+                                        prev_suggestions_tp = ""
+                            except Exception:
+                                pass
+                            use_pol = prev_polished_tp or prior_draft
+                            use_sugg = prev_suggestions_tp or prior_suggestions
+                            if gw_run_subtle_edit_pipeline is None:
+                                raise GWError("ghostwriter.pipelines.run_subtle_edit_pipeline not available")
+                            polished_text = gw_run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=use_pol, prior_suggestions=use_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                        else:
+                            if gw_run_implicit_pipeline is None:
+                                raise GWError("ghostwriter.pipelines.run_implicit_pipeline not available")
+                            polished_text = gw_run_implicit_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                except Exception as e:
+                    # Gracefully log and stop the run on validation/LLM errors
+                    msg = f"Touch-point {i} ({tp_type}) failed: {e}"
+                    _log_error_base(msg)
                     try:
-                        prev_dir = iter_dir_for(chapter_id) / f"pipeline_v{version_num-1}"
-                        prev_tp_dir = prev_dir / f"{i:02d}_{tp_type}"
-                        if prev_tp_dir.exists():
-                            try:
-                                prev_polished_tp = read_file(str(prev_tp_dir / "touch_point_draft.txt"))
-                            except Exception:
-                                prev_polished_tp = ""
-                            try:
-                                prev_suggestions_tp = read_file(str(prev_tp_dir / "suggestions.txt"))
-                            except Exception:
-                                prev_suggestions_tp = ""
+                        _log_run(msg)
                     except Exception:
                         pass
-                    use_pol = prev_polished_tp or prior_draft
-                    use_sugg = prev_suggestions_tp or prior_suggestions
-                    # Use package subtle edit pipeline exclusively
-                    if gw_run_subtle_edit_pipeline is None:
-                        raise GWError("ghostwriter.pipelines.run_subtle_edit_pipeline not available")
-                    polished_text = gw_run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=use_pol, prior_suggestions=use_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
-                else:
-                    if gw_run_narration_pipeline is None:
-                        raise GWError("ghostwriter.pipelines.run_narration_pipeline not available")
-                    polished_text = gw_run_narration_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
-            elif tp_type == "dialog":
-                if branch_b:
-                    prev_polished_tp = ""
-                    prev_suggestions_tp = ""
-                    try:
-                        prev_dir = iter_dir_for(chapter_id) / f"pipeline_v{version_num-1}"
-                        prev_tp_dir = prev_dir / f"{i:02d}_{tp_type}"
-                        if prev_tp_dir.exists():
-                            try:
-                                prev_polished_tp = read_file(str(prev_tp_dir / "touch_point_draft.txt"))
-                            except Exception:
-                                prev_polished_tp = ""
-                            try:
-                                prev_suggestions_tp = read_file(str(prev_tp_dir / "suggestions.txt"))
-                            except Exception:
-                                prev_suggestions_tp = ""
-                    except Exception:
-                        pass
-                    use_pol = prev_polished_tp or prior_draft
-                    use_sugg = prev_suggestions_tp or prior_suggestions
-                    if gw_run_subtle_edit_pipeline is None:
-                        raise GWError("ghostwriter.pipelines.run_subtle_edit_pipeline not available")
-                    polished_text = gw_run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=use_pol, prior_suggestions=use_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
-                else:
-                    if gw_run_dialog_pipeline is None:
-                        raise GWError("ghostwriter.pipelines.run_dialog_pipeline not available")
-                    polished_text = gw_run_dialog_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
-            else:  # implicit
-                if branch_b:
-                    prev_polished_tp = ""
-                    prev_suggestions_tp = ""
-                    try:
-                        prev_dir = iter_dir_for(chapter_id) / f"pipeline_v{version_num-1}"
-                        prev_tp_dir = prev_dir / f"{i:02d}_{tp_type}"
-                        if prev_tp_dir.exists():
-                            try:
-                                prev_polished_tp = read_file(str(prev_tp_dir / "touch_point_draft.txt"))
-                            except Exception:
-                                prev_polished_tp = ""
-                            try:
-                                prev_suggestions_tp = read_file(str(prev_tp_dir / "suggestions.txt"))
-                            except Exception:
-                                prev_suggestions_tp = ""
-                    except Exception:
-                        pass
-                    use_pol = prev_polished_tp or prior_draft
-                    use_sugg = prev_suggestions_tp or prior_suggestions
-                    if gw_run_subtle_edit_pipeline is None:
-                        raise GWError("ghostwriter.pipelines.run_subtle_edit_pipeline not available")
-                    polished_text = gw_run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=use_pol, prior_suggestions=use_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
-                else:
-                    if gw_run_implicit_pipeline is None:
-                        raise GWError("ghostwriter.pipelines.run_implicit_pipeline not available")
-                    polished_text = gw_run_implicit_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                    print("Stopping run due to error. See run_error.log in base directory.")
+                    return
         else:
             # Unknown types treated as narration by default
             if branch_b:
@@ -736,13 +771,11 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
 
         # Record (for actors/scene/foreshadowing, polished_text may be empty)
         records.append((tp_id, tp_type, tp_text, polished_text))
-        # After producing a polished draft for contentful types, run per-touch-point check and suggestions
+        # After producing content for narration/dialog/implicit, enforce the new first-draft user-in-the-loop gate
         if tp_type in ("narration", "dialog", "implicit") and polished_text and tp_log_dir is not None:
             try:
-                # Build replacements expected by check_* prompts
-                # Setting block
+                # Build replacements shared by suggestions prompt
                 setting_block = getattr(state, "setting_block", "") or ""
-                # Characters block: prefer state.characters_block, else select by active actors
                 characters_block = getattr(state, "characters_block", "") or ""
                 if not characters_block and state.active_actors:
                     try:
@@ -759,7 +792,6 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                             characters_block = _gw_to_text({"Selected-Characters": sel_chars})
                     except Exception:
                         characters_block = characters_block or ""
-                # Recent context: last up to 3 polished segments
                 try:
                     recent_polished = []
                     for (_tid, _ttype, _touch, _pol) in records[-4:-1]:
@@ -768,16 +800,13 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                     context_block = "\n\n---\n\n".join(recent_polished)
                 except Exception:
                     context_block = ""
-                # Foreshadowing and actors
                 foreshadowing = ", ".join(state.foreshadowing)
                 actors_csv = ", ".join(state.active_actors)
-                # Choose check template per tp type
                 check_tpl = {
                     "narration": "check_narration_prompt.md",
                     "dialog": "check_dialog_prompt.md",
                     "implicit": "check_implicit_prompt.md",
                 }.get(tp_type, "check_narration_prompt.md")
-                # Prepare replacements
                 from .templates import build_common_replacements
                 check_reps = build_common_replacements(setting, chapter, chapter_id, version_num)
                 check_reps.update({
@@ -790,31 +819,34 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                     "[prose]": polished_text,
                 })
                 check_user = _apply_step(check_tpl, check_reps)
-                check_model, check_temp, check_max_tokens = _env_for_prompt(check_tpl, "CHECK", default_temp=0.0, default_max_tokens=1200)
-                check_sys = "You are an evaluator checking touch-point coverage."
-                check_out = llm_complete(check_user, system=check_sys, temperature=check_temp, max_tokens=check_max_tokens, model=check_model)
-                # Compose check.txt with full prompt and response for easier review
-                check_file_text = (
-                    "=== SYSTEM ===\n" + (check_sys or "") +
-                    "\n\n=== USER ===\n" + (check_user or "") +
-                    "\n\n=== RESPONSE ===\n" + (check_out or "") + "\n"
-                )
-                # Suggestions: reuse the same prompt with an appended instruction
-                sugg_tpl = check_tpl
-                sugg_reps = dict(check_reps)
                 suggestions_user = check_user + "\n\n---\nNow produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions."
-                sugg_model, sugg_temp, sugg_max_tokens = _env_for_prompt(sugg_tpl, "SUGGESTIONS", default_temp=0.0, default_max_tokens=800)
+                sugg_model, sugg_temp, sugg_max_tokens = _env_for_prompt(check_tpl, "SUGGESTIONS", default_temp=0.0, default_max_tokens=800)
                 suggestions_out = llm_complete(suggestions_user, system="You are an evaluator extracting actionable suggestions only.", temperature=sugg_temp, max_tokens=sugg_max_tokens, model=sugg_model)
-                # Write files next to touch_point_draft.txt
                 try:
                     tp_log_dir.mkdir(parents=True, exist_ok=True)
-                    save_text(tp_log_dir / "check.txt", check_file_text)
-                    save_text(tp_log_dir / "suggestions.txt", suggestions_out)
+                    if subtle_edit_post_gate:
+                        save_text(tp_log_dir / "suggestions.txt", suggestions_out)
+                    else:
+                        save_text(tp_log_dir / "touch_point_first_draft.txt", polished_text)
+                        save_text(tp_log_dir / "first_suggestions.txt", suggestions_out)
+                        cp = {
+                            "id": tp_id,
+                            "type": tp_type,
+                            "touchpoint": tp_text,
+                            "active_actors": state.active_actors,
+                            "scene": state.current_scene,
+                            "foreshadowing": state.foreshadowing,
+                            "setting_block": state.setting_block,
+                            "characters_block": state.characters_block,
+                            "appended_dialog": state.last_appended_dialog,
+                        }
+                        save_text(tp_log_dir / "touch_point_state.json", _gw_to_text(cp))
+                        raise UserActionRequired("Waiting for user suggestions on first draft.")
                 except Exception:
                     pass
             except Exception:
                 pass
-        # Write checkpoint for resume
+        # Write checkpoint for resume (only after final draft is produced)
         _write_tp_checkpoint(tp_log_dir, tp_id, tp_type, tp_text, polished_text, state)
         # Update prior_paragraph to the latest polished segment (for templates needing previous context)
         if polished_text:

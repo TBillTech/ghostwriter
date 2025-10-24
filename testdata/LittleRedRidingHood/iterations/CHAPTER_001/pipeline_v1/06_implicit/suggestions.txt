@@ -1,0 +1,19 @@
+- Delete all phrases like "share a tiny secret"
+
+- Remove duplicate Red lines so she only states her intent once. Keep one concise line: e.g. Red clutching the basket, "Thank you. I must hurry to Grandmother and stay on the safe path."
+
+- Cut repeated Wolf invitations. Keep a single, clear Wolf line instead of several variations.
+
+- Tone down the Wolf's explicit menace. Delete "my hunger ticking softly in the shade as we go." Replace with a subtler undercurrent, e.g. "I'll walk a stretch—I've a fondness for good company in these woods."
+
+- Simplify the Wolf's florid praise. Replace "Bright hood you wear, child—the forest itself seems to lean closer" with something less grand and less literal, e.g. "That red hood stands out in these pines."
+
+- Remove redundant gratitude/forgiveness exchanges from Red. One brief, polite refusal is enough (don't repeat "Please forgive me" and "Thank you for your kindness" multiple times).
+
+- Avoid characters narrating actions about themselves. Change lines like "Red thanked him softly." to an integrated action tag: Red said softly, "…" or Red drew the hood tighter and said, "…"
+
+- Shorten or tighten the natural imagery that interrupts dialogue. Keep one brief moment of hush (bird or falling needle) but remove both the bird stanza and the pine-needle clock image to prevent overwriting the scene and unintentionally amplifying foreshadowing.
+
+- Remove any line that feels like it's explaining a symbol or emotion (e.g., "that warmth deserves a straight, unhurried path"). Replace with concrete, actionable phrasing grounded in the scene (e.g., "I'll go straight to Grandmother").
+
+- Ensure only Red and Wolf speak. Any remaining narrative beats should be brief stage/atmosphere descriptions, not additional "voices."

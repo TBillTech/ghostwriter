@@ -19,13 +19,12 @@ from typing import Optional, Dict, Any, List, Tuple
 
 from ..env import (
     get_chapters_dir,
-    get_setting_path,
-    get_characters_path,
     env_for_prompt,
+    reasoning_for_prompt
 )
 from ..templates import apply_template, iter_dir_for
 from ..utils import to_text as _to_text, read_text as _read_text, save_text as _save_text
-from ..context import load_yaml
+from ..context import RunContext
 from ..validation import validate_text
 from ..llm import complete as llm_complete
 from ..characters import load_characters_list
@@ -133,47 +132,38 @@ def _backup_existing_chapter(path: Path) -> Optional[Path]:
         return None
 
 
-def run_chapter_brainstorm(chapter_path: str, version_num: int, *, log_llm: bool = False) -> None:
-    chapter_id = _chapter_id_from_path(chapter_path)
-    chapters_dir = get_chapters_dir()
+def run_chapter_brainstorm(*, ctx: RunContext, log_llm: bool = False) -> None:
+    chapter_id = ctx.chapter_id
+    version_num = ctx.version
+    chapters_dir = ctx.chapters_dir or get_chapters_dir()
     chapter_file = chapters_dir / f"{chapter_id}.yaml"
 
-    # Load SETTING + CHARACTERS
-    setting = load_yaml(str(get_setting_path()))
-    # Characters are loaded via helper to respect alt formats
-    characters = load_characters_list(None)
+    # Use SETTING + CHARACTERS from context
+    setting = ctx.setting
+    characters = ctx.characters
 
-    # Load CONTENT_TABLE.yaml
-    content_tbl_text = ""
-    try:
-        content_tbl = chapters_dir / "CONTENT_TABLE.yaml"
-        if content_tbl.exists():
-            content_tbl_text = content_tbl.read_text(encoding="utf-8")
-    except Exception:
-        content_tbl_text = ""
+    # CONTENT_TABLE.yaml text from context (may be empty)
+    content_tbl_text = ctx.content_table_text or ""
 
-    # Derive current chapter YAML if present (without Story sections)
+    # Derive current chapter YAML from context if present (without Story sections)
     current_chapter_no_story = ""
     chapter_has_setting = False
     sel_factoids_block = ""
     sel_characters_block = ""
     names_only_block = ""
-    if chapter_file.exists():
-        try:
-            ch_yaml = load_yaml(str(chapter_file))
+    try:
+        ch_yaml = ctx.chapter
+        if isinstance(ch_yaml, dict) and ch_yaml:
             current_chapter_no_story = _strip_story_sections(ch_yaml)
-            # If chapter includes a 'setting' with lists of factoids/actors, dereference
-            if isinstance(ch_yaml, dict) and isinstance(ch_yaml.get("setting"), dict):
+            if isinstance(ch_yaml.get("setting"), dict):
                 chs = ch_yaml.get("setting")
                 chapter_has_setting = True
                 fact_list = chs.get("factoids") if isinstance(chs.get("factoids"), list) else []
                 actor_list = chs.get("actors") if isinstance(chs.get("actors"), list) else []
-                # Factoids: expand matching ones with descriptions
                 sel_factoids_block = factoids_block_from_setting(setting, selected_names=fact_list)
-                # Characters: include full selected characters
                 sel_characters_block = _selected_characters_block(characters, actor_list)
-        except Exception:
-            current_chapter_no_story = ""
+    except Exception:
+        current_chapter_no_story = ""
     # If no structured chapter setting found, provide names-only list
     if not chapter_has_setting:
         names_only_block = _names_only_block(setting, characters)
@@ -199,9 +189,10 @@ def run_chapter_brainstorm(chapter_path: str, version_num: int, *, log_llm: bool
     # Apply template and call LLM
     tpl_name = "brainstorm_chapter_outline.md"
     user_prompt = apply_template(Path("prompts") / tpl_name, reps)
-    model, temp, max_tokens = env_for_prompt(tpl_name, "BRAIN_STORM", default_temp=0.45, default_max_tokens=1200)
+    model, temp, max_tokens = env_for_prompt(tpl_name, "BRAIN_STORM", default_temp=0.5, default_max_tokens=800)
+    reason = reasoning_for_prompt(tpl_name, "BRAIN_STORM")
     system = "You brainstorm and draft a chapter outline as YAML."
-    out = llm_complete(user_prompt, system=system, temperature=temp, max_tokens=max_tokens, model=model)
+    out = llm_complete(user_prompt, system=system, temperature=temp, max_tokens=max_tokens, model=model, reasoning_effort=reason)
 
     # Log prompt + result alongside the chapter file as CHAPTER_XXX.txt
     try:

@@ -13,7 +13,7 @@ from pathlib import Path
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
 from ..templates import apply_template, prompt_key_from_filename
-from ..env import env_for as _env_for, env_for_prompt as _env_for_prompt
+from ..env import env_for as _env_for, env_for_prompt as _env_for_prompt, reasoning_for_prompt as _reasoning_for_prompt
 from ..validation import validate_text, validate_bullet_list, validate_actor_list
 from ..llm import complete as llm_complete
 from ..utils import to_text
@@ -29,6 +29,7 @@ __all__ = [
     # Helpers
     "env_for",  # provided as thin wrappers below
     "env_for_prompt",
+    "reasoning_for_prompt",
     "llm_call_with_validation",
     "extract_bullet_contents",
     "rebuild_bullets",
@@ -56,6 +57,10 @@ def env_for_prompt(template_filename: str, fallback_step_key: str, *, default_te
     return _env_for_prompt(template_filename, fallback_step_key, default_temp=default_temp, default_max_tokens=default_max_tokens)
 
 
+def reasoning_for_prompt(template_filename: str, fallback_step_key: str) -> Optional[str]:
+    return _reasoning_for_prompt(template_filename, fallback_step_key)
+
+
 # ---------------------------
 # LLM call with validation and logging
 # ---------------------------
@@ -68,6 +73,7 @@ def llm_call_with_validation(
     temperature: float,
     max_tokens: int,
     validator,
+    reasoning_effort: Optional[str] = None,
     log_maker: Optional[Callable[[int], Optional[Path]]] = None,
 ) -> str:
     last_reason = ""
@@ -75,7 +81,7 @@ def llm_call_with_validation(
         # Increase token budget on retries to mitigate truncation/empty responses
         factor = 1.0 if attempt == 1 else (1.5 if attempt == 2 else 2.0)
         max_toks_try = int(max_tokens * factor)
-        out = llm_complete(user, system=system, temperature=temperature, max_tokens=max_toks_try, model=model)
+        out = llm_complete(user, system=system, temperature=temperature, max_tokens=max_toks_try, model=model, reasoning_effort=reasoning_effort)
         log_path = log_maker(attempt) if log_maker else None
         if log_path is not None:
             try:

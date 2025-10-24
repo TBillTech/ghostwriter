@@ -15,6 +15,7 @@ from ..llm import complete as llm_complete
 from ..validation import validate_text, validate_bullet_list
 from .common import (
     env_for_prompt,
+    reasoning_for_prompt,
     llm_call_with_validation,
     build_pipeline_replacements,
     strip_trailing_done,
@@ -35,6 +36,7 @@ def run_narration_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_p
         f"State: actors={reps.get('[ACTIVE_ACTORS]', '')}, scene={reps.get('[SCENE]', '')}\n"
     )
     model, temp, max_toks = env_for_prompt(tpl1, "BRAIN_STORM", default_temp=0.4, default_max_tokens=600)
+    reason1 = reasoning_for_prompt(tpl1, "BRAIN_STORM")
     # Brainstorm persistence path
     bs_path = (log_dir / "brainstorm.txt") if log_dir else None
     existing_bs = ""
@@ -55,7 +57,7 @@ def run_narration_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_p
             user1 = user1 + "\n\n" + seed_bullets.strip() + "\n"
         # Generate additional bullets
             brainstorm_new = llm_call_with_validation(
-            sys1, user1, model=model, temperature=temp, max_tokens=max_toks, validator=validate_bullet_list,
+            sys1, user1, model=model, temperature=temp, max_tokens=max_toks, validator=validate_bullet_list, reasoning_effort=reason1,
             log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_brainstorm{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
         )
         # Persist brainstorm as previous bullets followed by new bullets (cumulative). No DONE written by LLM.
@@ -82,8 +84,9 @@ def run_narration_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_p
     else:
         user2 = f"Order the following bullets for coherent flow:\n\n{reps2['[bullets]']}\n"
     model2, temp2, max2 = env_for_prompt(tpl2, "ORDERING", default_temp=0.2, default_max_tokens=600)
+    reason2 = reasoning_for_prompt(tpl2, "ORDERING")
     ordered = llm_call_with_validation(
-        sys2, user2, model=model2, temperature=temp2, max_tokens=max2, validator=validate_bullet_list,
+        sys2, user2, model=model2, temperature=temp2, max_tokens=max2, validator=validate_bullet_list, reasoning_effort=reason2,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_ordering{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
     )
 
@@ -99,8 +102,9 @@ def run_narration_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_p
     else:
         user3 = f"Write prose from these bullets:\n\n{ordered}\n"
     model3, temp3, max3 = env_for_prompt(tpl3, "GENERATE_NARRATION", default_temp=0.35, default_max_tokens=1000)
+    reason3 = reasoning_for_prompt(tpl3, "GENERATE_NARRATION")
     narration = llm_call_with_validation(
-        sys3, user3, model=model3, temperature=temp3, max_tokens=max3, validator=validate_text,
+        sys3, user3, model=model3, temperature=temp3, max_tokens=max3, validator=validate_text, reasoning_effort=reason3,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_generate_narration{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
     )
 
@@ -108,12 +112,14 @@ def run_narration_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_p
     from ..templates import build_polish_prompt
     polish_prompt = build_polish_prompt(ctx.setting, ctx.chapter, ctx.chapter_id, ctx.version, narration)
     modelp, tempp, maxp = env_for_prompt("polish_prose_prompt.md", "POLISH_PROSE", default_temp=0.2, default_max_tokens=2000)
+    reasonp = reasoning_for_prompt("polish_prose_prompt.md", "POLISH_PROSE")
     polished = llm_call_with_validation(
         system="You are a ghostwriter polishing and cleaning prose.",
         user=polish_prompt,
         model=modelp,
         temperature=tempp,
         max_tokens=maxp,
+        reasoning_effort=reasonp,
         validator=validate_text,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_polish{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
     )

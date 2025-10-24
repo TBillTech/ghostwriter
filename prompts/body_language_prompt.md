@@ -16,10 +16,11 @@ Here is the central theme of the dialog lines being "filmed"/"recorded":
 1. **Character Specification**: The brief narration should definitely let the reader know who is speaking or going to speak.  
 2. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
 3. **Narration Voice**: Keep the narration in third person, past tense, active voice.  Describe the body language of the actor as if you were describing a play.
-4. **Stay Brief as Possible**: Keep the narrative as brief as possible. You should prefer one or two beats, never more than that. An incomplete sentence is necessary.  ALWAYS put EXACTLY ONE quoted string in the line, either at the beginning, in the middle, or at the end.
-5. **Formatting**: Make sure to put a single bullet '*' character at the start of each line.
-6. **Avoid**: Boring ultra common words for speaking.  For example, do NOT use the word "said".
-7. **Prefer**: Do try to use color words like "mumbled", "muttered", "exclaimed", "yelled", "forced", "enunciated", "complained", "worried", "derided" etc.  This is not exhaustive.  Be creative. 
+4. **Narrator**: If the line begins with "Narrator:", just copy the whole line over into the output.
+5. **Stay Brief as Possible**: Keep the narrative as brief as possible. You should prefer one or two beats, never more than that. An incomplete sentence is necessary.  ALWAYS put EXACTLY ONE quoted string in the line, either at the beginning, in the middle, or at the end.
+6. **Formatting**: Make sure to put a single bullet '*' character at the start of each line.
+7. **Avoid**: Boring ultra common words for speaking.  For example, do NOT use the word "said".
+8. **Prefer**: Do try to use color words like "mumbled", "muttered", "exclaimed", "yelled", "forced", "enunciated", "complained", "worried", "derided" etc.  This is not exhaustive.  Be creative. 
 
 ## Examples of actor prompt lines (3 examples)
 
@@ -27,13 +28,17 @@ Henry: You say there is a hole in the bucket.  You use Liza's name several times
 
 Liza: You shortly tell Henry to just fix the dang thing!  Already!  Politely of course.
 
+Narrator: Liza points directly at the hole.
+
 Henry: You ask how on earth to fix a bucket? Maybe it is not rocket sience, but you don't think you have a way to do it.
 
 ## Examples of brief narration outputs (3 examples)
 
-* Hanging his head dolefully Henry complained, "There's a hole in the bucket dear Liza, dear Liza ... "
+* Henry complained, "There's a hole in the bucket dear Liza, dear Liza ... "
 
 * "Then fix it dear henry!", Liza exclaimed.
+
+* Narrator: Liza points directly at the hold.
 
 * Henry complained again, "With what shall I fix it dear Liza, dear Liza ... "
 
@@ -42,4 +47,4 @@ These are the lines the writer is giving you. Note that there should always be o
 [ACTOR_LINES]
 
 ## Job to do
-Now, convert each line the actors say to brief third person identity narratives.
+Now, convert each line the actors say to brief third person identity narratives. Use 2 to 4 words aside from the quoted phrase, just a single simple phrase to identify the speaker. DO NOT make multiple parenthetical phrases. Feel free to add words to the quoted string if you feel like it.

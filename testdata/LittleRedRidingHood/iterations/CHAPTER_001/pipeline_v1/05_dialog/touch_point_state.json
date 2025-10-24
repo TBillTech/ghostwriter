@@ -1,0 +1,29 @@
+{
+  "id": "5",
+  "type": "dialog",
+  "touchpoint": "The Wolf greets Red and asks where she's going.",
+  "active_actors": [
+    "Red",
+    "Wolf"
+  ],
+  "scene": "{'name': 'Forest Path', 'description': 'A winding dirt trail beneath tall, shadowed pines. Shafts of light\\nthread through the branches; birds rustle, then fall silent when the\\nwind shifts. The air smells of damp earth and sweet jam.\\n', 'props': [{'name': 'Basket', 'significance': 'Gift and responsibility; symbol of trust', 'description': \"A small wicker basket filled with bread and jam, carried on Red's arm.\"}, {'name': 'Red Hood', 'significance': 'Identity and innocence; visible target in the woods', 'description': 'A bright red cloak and hood, a gift from Grandmother that draws the eye.'}]}",
+  "foreshadowing": [],
+  "setting_block": "{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}",
+  "characters_block": "",
+  "appended_dialog": {
+    "wolf": [
+      "From the shade I speak, child—your courage shines as bright as the moon. Which road toward grandmother’s house do you mean to take, and I’ll walk with you a stretch, if you share a tiny secret with me.",
+      "Well met, brave little traveler. Which way are you bound toward Grandmother’s house, and I’ll walk with you for a stretch if you share a tiny secret with me.",
+      "Such courage shines in you, little one—your steps are guided by a moonlit thread. Which road toward Grandmother’s house are you bound for, and would you let a patient listener walk with you a stretch if you share a tiny secret with me?",
+      "Bread and jam drift to me on the night air, sweet enough to loosen a wary heart. Which road toward Grandmother's house will you take, and may I walk with you a stretch if you share a tiny secret with me?",
+      "That red hood brightens this dark wood, little traveler—such a soft glow that even shadows lean closer. Walk with me a stretch, and you may share a tiny secret; I’ll listen with patience and keep your pace steady.",
+      "That warmth deserves a straight, unhurried path. Is Grandmother's house nearby, or must we walk a while to reach it?"
+    ],
+    "red": [
+      "These goodies are for Grandmother. I’m going to her now, and thinking of how kind she is keeps me steady.",
+      "Thank you for noticing my care. It’s bread and jam for Grandmother, and she is ill, so I must hurry.",
+      "Grandmother made it for me. These goodies are for Grandmother, and I must hurry to her. Thank you for noticing my care; I’ll go straight to Grandmother now.",
+      "Further into the pines, beyond the bend by the big stump, is the path I must take. I’ll hurry straight to Grandmother now, and I’ll stay on the safe path. Thank you for your kindness; I must not waste any more time."
+    ]
+  }
+}

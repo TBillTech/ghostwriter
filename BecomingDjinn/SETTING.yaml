@@ -213,3 +213,59 @@ Factoids:
     - name: Integrated Textile System for Lunar Fashion
       description: |
         The lunar colony’s clothing system combines cotton (0.5-1 kg/colonist/year), PHA (0.5 kg), and chitosan (from 20-30 kg/m² crab and 5-10 kg/m² shrimp chitin) to create sustainable, functional textiles for 1,500-10,000 colonists. Cotton provides breathable fabrics, PHA adds waterproof linings, and chitosan offers antimicrobial properties, ideal for hospital gowns and centenarian clothing (e.g., hypoallergenic suits for 150-year-olds). Robots (0.05-0.1/colonist for cotton, 0.01-0.05 for PHA/chitosan) automate spinning, weaving, and coating in 0.5g, reducing labor and energy costs by 10-20% compared to Earth.This integrated system uses lunar regolith (Si, Al for looms; Ca, P for cotton nutrients) and asteroid imports (C, H, N for PHA, chitosan), with waste recycled via composting (10-30 m², 10-20 kg humus/m²). The textiles support colonist morale and hospital hygiene, aligning with food production (730 kg/colonist, including crab/shrimp bisques) and medical needs (supplements, micro-g therapies), ensuring a cohesive, sustainable colony.
+
+    - name: Djinn hours 
+      description: |
+        Arthur's hours as a Djinn are not terrible. There are two kinds of hours of service as a Djinn: Compulsory, and Discretionary. Compulsory hours are tied to the blood moon (when the spirits are strongest), which is an astronomical effect that takes place exactly once every 48 hours. Happily, this corresponds to 2 PM Arthur's time, every other day. During Compulsory hours, Arthur is obligated to talk with those who possess his bottle, and who have not yet gotten a wish. If Arthur takes over 95% damage, he gets automatically sucked back into the indestructible bottle, and no longer has to fulfill compulsory demands. Discretionary hours occur the rest of the time, but are restricted to moonlight conditions. If Arthur is not logged in during Compulsory hours, he will get docked experience points, and an AI will fulfill user wishes. This is the identify text that shows for users explaining this:
+
+    - name: Zenith World Time 
+      description: |
+        Zenith World Time of day goes 48 times faster than IRL. A Zenith World Day takes 30 minutes, A Zenith world season take 96 in game days, or 48 hours IRL. A Zenith world year of 384 Zenith days takes 196 hours (8 days) IRL. There are various astronomical moments create special in-game effects, such as the blood moon every 96 in game days. Others include the solar eclipse (lasts for 1 in game day and occurs once every 2 in game years) and supports themes of extra hard quests fighting concepts like demons eating the light. Quest failures could include extended darkness. Then there are the solstices which bring out the concepts of ice, wood, fire, and wind. We expect to discover more as time goes on. Zenith world has small moons, one large moon, and several planets in it's solar system, alignments of these can have various minor or major effects.
+
+    - name: Arthur's Djinn Bottle
+      description: |
+        Arthurs bottle, at level 1 to 20, which is where most of the story happens, looks like a green bottle which was once lost to the sea. Players who examine it can discern a tiny rickety wood cottage within, a little fishing pond, and a treasure chest amonst a pile of coins and jewels. If Arthur is logged in, he can choose to allow himself to be visible to players as a tiny human like character with blurry legs. Arthur's bottle can be destroyed as easily as any other glass bottle.  However, it will respawn no sooner than 1 in game day, and when the moon shines brightest (if the moon is new, it will take longer). Upon identify, users see the following screen:
+
+        Identify: Arthur’s Djinn Bottle
+
+        (Artifact — Mythic — Wishing Tool)
+
+        Description:
+        Once lost to the sea, this green glass bottle bears faint etchings of moons, stars, and forgotten names. Within its depths glimmers a tiny cottage adrift upon golden coins — the home and prison of Arthur the Djinn, an entity both whimsical and weary. When the moonlight strikes the glass just so, a blurred figure can sometimes be seen within, pacing by his fishing pond. This bottle has a label along one side with an calligraphic text.
+
+        Properties:
+
+        Durability: 2/2
+
+        Origin: Recovered from the Cave of Wonders — first unearthed by [PLAYER NAME] (Glows blue on your identify screen).
+
+        Label text:
+
+        A green glass gleams where the moonlight drips,
+        From tide to tide the bottle slips,
+        And in its heart a sailor sighs,
+        Who bartered dreams of starry skies.
+
+        Rub the glass and call his name,
+        One wish he grants — it’s all the same.
+        But word thy wish with wary art,
+        For Djinn twist truth as sailors chart.
+
+        Yet mark the Blood Moon’s crimson glare,
+        When spirits wake and bindings tear.
+        That hour alone his will you own,
+        Compel the wish — the vow is sown.
+
+        Break the glass? It matters not,
+        For moon shall mend what man has wrought.
+        When silver tides return once more,
+        He dreams again upon the shore.
+
+        So treasure deep or folly’s boon,
+        The choice lies under blood-red moon.
+        A wish, a wave, a whispered plea,
+        And Arthur sighs beneath the sea.
+
+    - name: Arthur's Wish fulfillment 
+      description: | 
+        As a Djinni, Arthur is obligated to fulfill one wish of each unique player who rubs his bottle and summons him. He surprisingly has a high amount of lattitude when fulfilling wishes, and this is what makes this book so interesting. It is true that many players try to box him in with wishes that can't be misconstrued. On the other hand, as a level 5 Djinni, there are a LOT of wishes that are beyond him. One thing he can do to get more "leverage" from his wishes is to grant a wish by offering a unique quest, offloading reward generation to the system, as it were. At level 2, Arthur learns how to hide level requirements and various other important information in the unique quests.

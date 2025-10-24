@@ -1,0 +1,95 @@
+=== SYSTEM ===
+You are an evaluator checking touch-point coverage.
+
+=== USER ===
+You are reviewing lines of enthusiastic actors who sometimes lose track of key ideas in their haste to complete their lines.
+
+You are trying to make sure that the lines match the storyline as described in the "touch-point" text, and character personalities.  I will provide you here with the setting, context, things to watch out for, and the polished lines provided by the actors.  Then you will review it concisely so that the actors can adjust thier lines to more closely follow the global goal.
+
+One thing to watch out for is that these actors have tendency to repeat themselves.  If you notice this, point out where some text is redundant and should be removed. The audience won't like hearing the same thing over and over.
+
+Things to look for also include weird constructions, and overly literal similies.  For example:
+* It is weird for a character to describe their own actions.  For example, if a character says "I nod, and I agree with you" that is weird. Better would be: Henry nodded, "I agree with you".
+* It is weird to slap the reader in the when something is a symbol.  For example, "The ball, symbolizing fun, was thrown".  Better would be "The ball, like an atom of entertainment, was thrown".
+* It is weird for a character to simply describe what they see.  For example, if a character says "I see the ball bouncing on the court." better would be "Oh! Did somebody drop the ball?"
+
+
+# Setting in general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters
+
+
+# Prior touch points
+The most recent 3 touch-points for context.
+Shafts of light striped the ground, sliding over Red's bright cloak and the uneven trail as Red walked the winding dirt path beneath the tall pines. The red hood Grandmother had given Red showed plainly against the forest greens, catching stray beams between branches. Birds rustled in the canopy and fell still when the wind crossed the path. Damp earth scented the air, threaded with the sweetness rising from the wicker basket that rested on Red's arm. Pine needles and cones scattered underfoot; Red chose her steps around the rough patches. Low boughs pressed over the path; Red ducked, and the tip of the hood brushed resin-sticky twigs.
+
+A soft tune hummed from Red as she went, even and unhurried. At a bend the humming thinned as the forest quieted, then gathered again as Red moved on. Inside the basket, bread and jam lay wrapped and steady beneath a shifting lid; glass tapped against wicker and the basket gave a small creak with each swing. Light glinted on a jar rim when the hood shifted back. Red steadied the basket with a free hand as the trail dipped, and the sweetness hung stronger in the air. A small gust carried the jam scent deeper into the woods.
+
+Wolf, moving along a deer track that met the path ahead, lifted a muzzle to the breeze and took in the smells of bread, jam, and child. He kept to the shadowed trees beside the path, pacing Red's progress with silent pauses. Soft paw prints sank into the moist soil where Wolf passed, soon hidden by fallen needles, and the forest held quiet save for Red's humming and the faint brush of Wolf moving through the fern as the trail carried Red toward Grandmother's cottage deeper among the pines.
+
+---
+
+The Wolf slipped forward from the shade. "Child, your courage shines as bright as the moon. Which road toward Grandmother's house do you mean to take? I'll walk with you a stretch if you share a tiny secret with me."
+
+Red lifted the basket. "These goodies are for Grandmother. I'm going to her now, and thinking of how kind she is keeps me steady."
+
+The Wolf tilted his head courteously. "Well met, brave little traveler. Which way are you bound toward Grandmother's house? I'll walk with you for a stretch if you share a tiny secret."
+
+Red replied simply, "Thank you for noticing my care. It's bread and jam for Grandmother, and she is ill, so I must hurry."
+
+The Wolf purred, "Such courage shines in you, little one—your steps are guided by a moonlit thread. Which road are you bound for, and would you let a patient listener walk with you if you share a tiny secret?"
+
+Red touched her hood. "Grandmother made it for me. These goodies are for her, and I must hurry to her. Thank you for noticing my care; I'll go straight to Grandmother now."
+
+The Wolf murmured, "Bread and jam drift to me on the night air, sweet enough to loosen a wary heart. That red hood brightens this dark wood—such a soft glow that even shadows lean closer. Walk with me a stretch, and you may share a tiny secret; I'll listen with patience and keep your pace steady."
+
+"That warmth deserves a straight, unhurried path," the Wolf added mildly. "Is Grandmother's house nearby, or must we walk a while to reach it?"
+
+"Further into the pines, beyond the bend by the big stump, is the path I must take," Red said, steadying the basket. "I'll hurry straight to Grandmother now, and I'll stay on the safe path. Thank you for your kindness; I must not waste any more time."
+
+# Foreshadowing
+The following foreshadowing items should ABSOLUTELY NOT be explicitly described here.  If they are, that is a problem. These should only be vaguely alluded to:
+
+
+# Actors
+The following actors are allowed to speak in the dialog.  If other actors are speaking, that is a problem.  The actors are:
+Red, Wolf
+
+# Touch-Point
+Please note that the actors should NOT directly say this.  They are supposed to allow the clever reader to infer it:
+Danger hinted at in the dark trees and Wolf's smile.
+
+# The Draft
+The polished lines that need to be evaluated for Touch-Point satisfaction, and actor and spoiler safety is as follows:
+Red clutched the basket. "Thank you for your kindness. I’ll hurry to Grandmother now and keep to the safe path. I’ll do my best to be brave."
+
+The wolf purred, "Bright hood you wear, child—the forest itself seems to lean closer. I’ll walk with you a stretch if you share that tiny secret; such small truths have a way of smoothing the road. Trust a patient listener, and the way to Grandmother’s door may open a little wider."
+
+A bird lifted its song on the thin air, then halted as a sudden turn of the head cut the thread; the forest held its breath and listened alongside them. The moment settled into a hush, as if the trees themselves waited for the next small truth to unfold on the path ahead.
+
+Red thanked him softly. "Thank you for your kindness. Please forgive me, but I must hurry to Grandmother now and stay on the safe path," she added, clutching her basket a little tighter.
+
+The wolf stepped forward. "Your courage lights the path, little traveler. Which road toward Grandmother’s house do you mean to take? I’ll walk with you a stretch if you share a tiny secret with me—my hunger ticking softly in the shade as we go."
+
+A pine needle dropped between them, its quiet arc measuring the hush as surely as a clock hand; the wolf’s gaze pierced the space, weighing truth against tread. The moment landed, and Red moved with the safe path in mind, the basket sweet with bread and jam, a quiet beacon of intent.
+
+She curtsied. "Please forgive me; I must hurry to Grandmother now and stay on the safe path. Thank you for your kindness; I’ll go straight to Grandmother and do my best to be brave."
+
+Now, suggest specific improvements for lines that should be removed, added, or updated.
+
+=== RESPONSE ===
+

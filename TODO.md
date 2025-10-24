@@ -35,6 +35,26 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - [x] Simply append the LLM result to the CHARACTERS.yaml, and make sure it is properly tabbed to be correct yaml.
     - [x] After the pipeline is done, the program should stop. This will result in exactly one character outline being updated.
 
+3. **New feature: Pre-draft user-in-the-loop**
+    I like how this is working overall, but I noticed something that I think could be fixed. The way the algorithm currently works, is that it runs the check and the suggestions prompts right after touch_point_draft.txt. I still want this, BUT, here is the thing: the dialog from the previous touch-point is used in the prompt of the next touch-point. For the initial draft, the dialog is pretty rough, and sometimes has unwanted artifacts that the next touch-point picks up and even repeats. Let's set this up to normally expect the user to apply one edit pass before the touch_point_draft is done. SO, make the following changes:
+
+    - [x] Skip the prompt that creates check.txt and don't output this file anymore, since check.txt, while interesting, is not used later
+    - [x] Create a new user-in-the-loop step allowing the user to view and edit a first suggestion and pass by:
+          - Save the current output of the touch-point to touch_point_first_draft.txt, and save the first output of suggestions to first_suggestions.txt. Then terminate the program (gracefully) with message "Waiting for user suggestions on first draft."
+          - If and only if the touch_point_first_draft.txt file exists, then continue after the user-in-the-loop by running the subtle_edit_prompt template using the touch_point_first_draft.txt and the first_suggestions.txt.
+          - Save the output of the subtle_edit_prompt to touch_point_draft.txt
+          - Run the suggestions prompt again, on the touch_point_draft.txt, and save this to suggestions.txt
+    - [x] This new user-in-the-loop feature should be applied to all three of narration, dialog, and implicit
+    - [x] Be sure that if the user modifies the touch_point_first_draft.txt directly these changes will be fed into the subtle_edit prompt, and not a prior chached version of touch_point_first_draft.txt or prior cached prior_suggestions.txt
+    - [x] Make sure that the touch_point_state.json is compatible with this new feature.
+    - [x] DO NOT create a new environment variable to preserve the current no-human-in-the-loop single step to touch_point_draft.txt. We do not want to continue supporting the old workflow (although files already appear to be forward compatible without any extra work).
+
+4. **Scrub program "termination" for gracefulness**
+    Since we are going to want to run the cli and test user-in-the-loop workflows from the unit testing framework, we need to verify that this will work.  Please verify the following:
+    - [ ] User-in-the-loop workflows should return from calls gracefully all the way back to the caller.
+    - [ ] User-in-the-loop workflows should NOT use system.exit or exceptions
+    - [ ] However, if the above point is difficult or hard to achive, you may create a derived exception class that could be caught gracefully without terminating the program.s
+
 ## Testing and Quality Assurance
 
 11. **Fully configurable file locations**
@@ -87,4 +107,14 @@ This document outlines the tasks necessary to get the driver.py working correctl
 - [ ] Virtual environment and dependencies properly configured
 - [ ] Error handling robust and user-friendly
 - [ ] Iteration loop fully functional with real LLM integration
+
+## Session Summary (Oct 24, 2025)
+
+- Implemented Task 3: pre-draft user-in-the-loop across narration, dialog, and implicit.
+    - Writes `touch_point_first_draft.txt` and `first_suggestions.txt`, then stops gracefully.
+    - On resume, reads edited first draft + suggestions and applies `subtle_edit_prompt.md` → `touch_point_draft.txt`; regenerates `suggestions.txt`.
+    - Removed per–touch-point `check.txt` generation.
+    - Ensured `touch_point_state.json` remains compatible and is written at both phases.
+- Added `UserActionRequired` exception to signal human-gated stops and caught it in the driver for graceful exit.
+- Updated README with the new flow.
 

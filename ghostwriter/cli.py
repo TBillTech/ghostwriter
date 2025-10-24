@@ -18,11 +18,11 @@ from .commands import (
 )
 from .env import load_env
 from .env import resolve_chapter_path
-from .context import load_yaml
 from .pipelines import run_chapter_brainstorm, run_character_brainstorm, run_content_table_brainstorm
 from .context import RunContext
 from .utils import _norm_token
 from .env import get_chapters_dir
+from .logging import breadcrumb as _breadcrumb
 from .templates import iter_dir_for, get_latest_version
 
 
@@ -97,41 +97,99 @@ def main(argv: list[str] | None = None) -> int:
         else:
             version_num = get_latest_version(chapter_id) + 1
 
-        # Run CONTENT_TABLE.yaml brainstorming FIRST if '???' placeholder exists, regardless of chapter arg
+        # Enable crash tracing early, so breadcrumbs below are captured to base/crash_trace.log
         try:
-            ct_path = get_chapters_dir() / "CONTENT_TABLE.yaml"
-            if ct_path.exists():
-                ct_yaml = load_yaml(str(ct_path))
-                toc = ct_yaml.get("TABLE_OF_CONTENTS") if isinstance(ct_yaml, dict) else None
-                if isinstance(toc, list):
-                    has_placeholder = any(isinstance(item, dict) and ("???" in item) for item in toc)
-                    if has_placeholder:
-                        run_content_table_brainstorm()
-                        return 0
+            import os as _os
+            if _os.getenv("GW_CRASH_TRACE", "0") == "1":
+                import faulthandler as _faulthandler
+                import signal as _signal
+                from .env import get_book_base_dir
+                crash_log_file = get_book_base_dir() / "crash_trace.log"
+                crash_log_file.parent.mkdir(parents=True, exist_ok=True)
+                _os.environ["GW_CRASH_TRACE_FILE"] = str(crash_log_file)
+                fh = open(crash_log_file, "a", encoding="utf-8")
+                _faulthandler.enable(file=fh, all_threads=True)
+                for sig in (getattr(_signal, "SIGSEGV", None), getattr(_signal, "SIGABRT", None)):
+                    try:
+                        if sig is not None:
+                            _faulthandler.register(sig, file=fh, all_threads=True, chain=True)
+                    except Exception:
+                        pass
+                _breadcrumb("crash:enabled")
+        except Exception:
+            pass
+
+        # Build context up-front (allow missing chapter if needed)
+        # We need chapter id for versioning; create context even if file is missing
+        try:
+            ctx = RunContext.from_paths(chapter_path=chapter_path, version=0, allow_missing_chapter=True)
+        except Exception:
+            ctx = None
+
+        # Run CONTENT_TABLE.yaml brainstorming FIRST if a brainstorm placeholder exists, regardless of chapter arg
+        try:
+            def _toc_has_brainstorm_placeholder(toc_obj) -> bool:
+                try:
+                    if not isinstance(toc_obj, list):
+                        return False
+                    for it in toc_obj:
+                        # Map form: check key '???' or value '???' or value starting with 'Brainstorm'
+                        if isinstance(it, dict):
+                            for k, v in it.items():
+                                ks = str(k).strip()
+                                vs = str(v).strip() if v is not None else ""
+                                if ks == "???" or vs == "???" or vs.lower().startswith("brainstorm"):
+                                    return True
+                        # String form: contains ???
+                        elif isinstance(it, str) and "???" in it:
+                            return True
+                    return False
+                except Exception:
+                    return False
+
+            if ctx and isinstance(ctx.content_table, dict):
+                _breadcrumb("content_table:check:start")
+                toc = ctx.content_table.get("TABLE_OF_CONTENTS") if isinstance(ctx.content_table, dict) else None
+                try:
+                    _breadcrumb(f"content_table:toc_type={type(toc).__name__} size={len(toc) if isinstance(toc, list) else 'na'}")
+                except Exception:
+                    pass
+                if _toc_has_brainstorm_placeholder(toc):
+                    _breadcrumb("content_table:brainstorm:detected")
+                    run_content_table_brainstorm(ctx=ctx)
+                    return 0
+                else:
+                    _breadcrumb("content_table:brainstorm:not_detected")
         except Exception:
             pass
 
         # Branch: CONTENT_TABLE.yaml brainstorming
         if Path(chapter_path).name.upper() == "CONTENT_TABLE.YAML":
-            run_content_table_brainstorm()
+            if ctx is None:
+                ctx = RunContext.from_paths(chapter_path=chapter_path, version=0, allow_missing_chapter=True)
+            run_content_table_brainstorm(ctx=ctx)
             return 0
 
         # Branch: Chapter brainstorming conditions
         # 1) If chapter file is missing, trigger brainstorming pipeline
         resolved = resolve_chapter_path(chapter_path)
         if not resolved.exists():
-            run_chapter_brainstorm(chapter_path, version_num, log_llm=bool(ns.log_llm))
+            if ctx is None:
+                ctx = RunContext.from_paths(chapter_path=chapter_path, version=version_num, allow_missing_chapter=True)
+            run_chapter_brainstorm(ctx=ctx, log_llm=bool(ns.log_llm))
             return 0
 
         # 2) If chapter contains a touch-point with `brainstorming: True`, trigger brainstorming
         try:
-            ch_yaml = load_yaml(str(resolved))
+            if ctx is None:
+                ctx = RunContext.from_paths(chapter_path=str(resolved), version=version_num)
+            ch_yaml = ctx.chapter
             if isinstance(ch_yaml, dict):
                 tps = ch_yaml.get("Touch-Points") or ch_yaml.get("TouchPoints") or []
                 if isinstance(tps, list):
                     for it in tps:
                         if isinstance(it, dict) and it.get("brainstorming") is True:
-                            run_chapter_brainstorm(chapter_path, version_num, log_llm=bool(ns.log_llm))
+                            run_chapter_brainstorm(ctx=ctx, log_llm=bool(ns.log_llm))
                             return 0
         except Exception:
             pass
@@ -140,7 +198,8 @@ def main(argv: list[str] | None = None) -> int:
         try:
             resolved2 = resolve_chapter_path(chapter_path)
             if resolved2.exists():
-                ctx = RunContext.from_paths(chapter_path=str(resolved2), version=version_num)
+                if ctx is None:
+                    ctx = RunContext.from_paths(chapter_path=str(resolved2), version=version_num)
                 # 1) existing character with brainstorming: True
                 target_name: str | None = None
                 for ch in (ctx.characters or []):
@@ -185,26 +244,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"Error: {e}")
             return 2
 
-        # Enable crash tracing if requested (match legacy driver behavior)
-        try:
-            import os as _os
-            if _os.getenv("GW_CRASH_TRACE", "0") == "1":
-                import faulthandler as _faulthandler
-                import signal as _signal
-                base_log_dir = iter_dir_for(chapter_id) / f"pipeline_v{version_num}"
-                base_log_dir.mkdir(parents=True, exist_ok=True)
-                crash_log_file = base_log_dir / "crash_trace.log"
-                _os.environ["GW_CRASH_TRACE_FILE"] = str(crash_log_file)
-                fh = open(crash_log_file, "a", encoding="utf-8")
-                _faulthandler.enable(file=fh, all_threads=True)
-                for sig in (getattr(_signal, "SIGSEGV", None), getattr(_signal, "SIGABRT", None)):
-                    try:
-                        if sig is not None:
-                            _faulthandler.register(sig, file=fh, all_threads=True, chain=True)
-                    except Exception:
-                        pass
-        except Exception:
-            pass
+        # Crash tracing already enabled above if requested
 
         run_pipelines_for_chapter(chapter_path, version_num, log_llm=bool(ns.log_llm))
         return 0

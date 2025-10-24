@@ -18,6 +18,7 @@ from ..env import (
     get_book_base_dir,
     get_characters_path,
     env_for_prompt,
+    reasoning_for_prompt,
 )
 from ..templates import apply_template
 from ..utils import to_text as _to_text, read_text as _read_text, save_text as _save_text, _norm_token
@@ -143,9 +144,10 @@ def run_character_brainstorm(*, ctx: RunContext, target_name: str, version_num: 
     # Compose prompt and call LLM
     tpl_name = "brainstorm_character_outline.md"
     user_prompt = apply_template(Path("prompts") / tpl_name, reps)
-    model, temp, max_tokens = env_for_prompt(tpl_name, "BRAIN_STORM", default_temp=0.45, default_max_tokens=900)
+    model, temp, max_tokens = env_for_prompt(tpl_name, "BRAIN_STORM", default_temp=0.4, default_max_tokens=800)
+    reason = reasoning_for_prompt(tpl_name, "BRAIN_STORM")
     system = "You brainstorm and draft a single character YAML entry starting with '- id:'."
-    out = llm_complete(user_prompt, system=system, temperature=temp, max_tokens=max_tokens, model=model)
+    out = llm_complete(user_prompt, system=system, temperature=temp, max_tokens=max_tokens, model=model, reasoning_effort=reason)
 
     # Save prompt + result to base/character_brainstorm.txt
     try:
