@@ -842,6 +842,9 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                         }
                         save_text(tp_log_dir / "touch_point_state.json", _gw_to_text(cp))
                         raise UserActionRequired("Waiting for user suggestions on first draft.")
+                except UserActionRequired:
+                    # Re-raise to propagate graceful stop to CLI/driver
+                    raise
                 except Exception:
                     pass
             except Exception:

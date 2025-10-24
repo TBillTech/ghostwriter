@@ -11,7 +11,7 @@ import os
 import re
 import json
 
-from .context import GWError
+from .context import GWError, UserActionRequired
 from .utils import to_text as _gw_to_text, read_file, save_text
 from .templates import apply_template, build_common_replacements, prompt_key_from_filename
 from .env import env_for as _env_for_env, env_for_prompt as _env_for_prompt_env
@@ -180,8 +180,7 @@ def _ensure_brainstorm_done_on_resume(tp_type: str, reps: Dict[str, str], *, log
         pass
     if not _brainstorm_has_done(brainstorm_raw):
         print("Brainstorming still in progress.")
-        import sys as _sys
-        _sys.exit(0)
+        raise UserActionRequired("Brainstorming still in progress.")
 
 
 def _inline_body_with_dialog(body_bullet: str, dialog: str) -> str:

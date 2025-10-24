@@ -9,7 +9,7 @@ from __future__ import annotations
 from typing import Optional, Dict, List
 from pathlib import Path
 
-from ..context import RunContext
+from ..context import RunContext, UserActionRequired
 from ..templates import apply_template
 from ..llm import complete as llm_complete
 from ..validation import validate_text, validate_bullet_list
@@ -69,8 +69,8 @@ def run_narration_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_p
             except Exception:
                 pass
         # Require human to add DONE manually to proceed
-        print("Brainstorming still in progress.")
-        raise SystemExit(0)
+    print("Brainstorming still in progress.")
+    raise UserActionRequired("Brainstorming still in progress.")
 
     # 2) Ordering → bullet list
     reps2 = dict(reps)

@@ -7,7 +7,7 @@ from typing import Optional, List, Dict
 import os
 from pathlib import Path
 
-from ..context import RunContext
+from ..context import RunContext, UserActionRequired
 from ..templates import apply_template
 from ..validation import validate_bullet_list, validate_actor_list, validate_text
 from ..llm import complete as llm_complete
@@ -60,8 +60,8 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
                 bs_path.write_text(combined, encoding="utf-8")
             except Exception:
                 pass
-        print("Brainstorming still in progress.")
-        raise SystemExit(0)
+    print("Brainstorming still in progress.")
+    raise UserActionRequired("Brainstorming still in progress.")
 
     brainstorm = filter_narration_brainstorm(brainstorm_work, min_chars=24)
     brainstorm = truncate_brainstorm(brainstorm, limit=10)

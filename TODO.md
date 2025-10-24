@@ -51,9 +51,10 @@ This document outlines the tasks necessary to get the driver.py working correctl
 
 4. **Scrub program "termination" for gracefulness**
     Since we are going to want to run the cli and test user-in-the-loop workflows from the unit testing framework, we need to verify that this will work.  Please verify the following:
-    - [ ] User-in-the-loop workflows should return from calls gracefully all the way back to the caller.
-    - [ ] User-in-the-loop workflows should NOT use system.exit or exceptions
-    - [ ] However, if the above point is difficult or hard to achive, you may create a derived exception class that could be caught gracefully without terminating the program.s
+        - [x] User-in-the-loop workflows should return from calls gracefully all the way back to the caller.
+        - [ ] User-in-the-loop workflows should NOT use system.exit or exceptions
+        - [x] However, if the above point is difficult or hard to achive, you may create a derived exception class that could be caught gracefully without terminating the program.s
+            - Note: We now use a derived exception `UserActionRequired` and catch it in both CLI and driver; no sys.exit remains in pipelines or touch-point gates.
 
 ## Testing and Quality Assurance
 

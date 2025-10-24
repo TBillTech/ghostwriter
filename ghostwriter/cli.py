@@ -246,12 +246,21 @@ def main(argv: list[str] | None = None) -> int:
 
         # Crash tracing already enabled above if requested
 
-        run_pipelines_for_chapter(chapter_path, version_num, log_llm=bool(ns.log_llm))
-        return 0
+        try:
+            run_pipelines_for_chapter(chapter_path, version_num, log_llm=bool(ns.log_llm))
+            return 0
+        except Exception as e:
+            from .context import UserActionRequired as _UAR
+            if isinstance(e, _UAR):
+                msg = str(e).strip() or "Waiting for user suggestions on first draft."
+                print(msg)
+                return 0
+            raise
 
     print("No command executed.")
     return 1
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    code = main()
+    raise SystemExit(code)

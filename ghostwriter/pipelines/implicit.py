@@ -4,7 +4,7 @@ from __future__ import annotations
 from typing import Optional, List, Dict, Tuple
 from pathlib import Path
 
-from ..context import RunContext
+from ..context import RunContext, UserActionRequired
 from ..templates import apply_template
 from ..validation import validate_bullet_list, validate_actor_list, validate_text
 from ..llm import complete as llm_complete
@@ -56,8 +56,8 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
                 bs_path.write_text(combined, encoding="utf-8")
             except Exception:
                 pass
-        print("Brainstorming still in progress.")
-        raise SystemExit(0)
+    print("Brainstorming still in progress.")
+    raise UserActionRequired("Brainstorming still in progress.")
 
     # Limit to at most 10 bullets
     brainstorm = truncate_brainstorm(brainstorm_work, limit=10)
