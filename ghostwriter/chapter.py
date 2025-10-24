@@ -30,7 +30,7 @@ from .templates import (
     build_story_relative_to_prompt,
 )
 from .utils import to_text as _gw_to_text, save_text, read_file, _norm_token
-from .logging import breadcrumb as _breadcrumb, log_warning as _log_warning, crash_trace_file as _crash_trace_file, log_error_base as _log_error_base, log_run as _log_run
+from .logging import breadcrumb as _breadcrumb, log_warning as _log_warning, log_info as _log_info, crash_trace_file as _crash_trace_file, log_error_base as _log_error_base, log_run as _log_run
 from .openai import llm_complete, get_model
 from .characters import load_characters_list
 from .env import collect_program_env_snapshot as _collect_program_env_snapshot
@@ -601,7 +601,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
 
         # Skip already completed touch-points by checkpoint presence
         if i in completed:
-            _log_warning(f"RESUME: Skipping completed touch-point {i} ({tp_type}).", base_log_dir)
+            _log_info(f"RESUME: Skipping completed touch-point {i} ({tp_type}).", base_log_dir)
             # Even if draft exists, ensure brainstorm DONE gating is satisfied; if not, re-run brainstorm and exit
             try:
                 reps_resume = _build_pipeline_replacements(setting, chapter, chapter_id, version_num, tp, state, prior_paragraph=prior_paragraph, ctx=ctx)
@@ -749,7 +749,13 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                                 raise GWError("ghostwriter.pipelines.run_implicit_pipeline not available")
                             polished_text = gw_run_implicit_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
                 except Exception as e:
-                    # Gracefully log and stop the run on validation/LLM errors
+                    # If this is a human-in-the-loop pause, log as INFO and stop gracefully
+                    if isinstance(e, UserActionRequired):
+                        pause_msg = str(e).strip() or "Human input required."
+                        info = f"Touch-point {i} ({tp_type}) paused: {pause_msg}"
+                        _log_info(info, base_log_dir)
+                        return
+                    # Otherwise, log as error and stop
                     msg = f"Touch-point {i} ({tp_type}) failed: {e}"
                     _log_error_base(msg)
                     try:

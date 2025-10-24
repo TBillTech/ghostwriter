@@ -51,7 +51,7 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
             user1 = user1 + "\n\n" + seed_bullets.strip() + "\n"
         brainstorm_new = llm_call_with_validation(
             sys1, user1, model=m1, temperature=t1, max_tokens=k1, validator=validate_bullet_list, reasoning_effort=r1,
-            log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_brainstorm{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+            log_maker=None,
         )
         if bs_path is not None:
             try:

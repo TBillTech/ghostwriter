@@ -74,6 +74,16 @@ def log_warning(msg: str, log_dir: Optional[Path]) -> None:
         pass
 
 
+def log_info(msg: str, log_dir: Optional[Path] = None) -> None:
+    """Log an informational message to stdout and base run.log (ignores log_dir)."""
+    try:
+        text = f"INFO: {msg}"
+        print(text)
+        log_run(text)
+    except Exception:
+        pass
+
+
 def log_error_base(msg: str) -> None:
     """Append an error message to the base book directory (run_error.log)."""
     try:

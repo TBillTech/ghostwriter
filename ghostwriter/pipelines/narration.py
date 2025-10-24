@@ -55,10 +55,10 @@ def run_narration_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_p
         user1 = user1_base
         if seed_bullets.strip():
             user1 = user1 + "\n\n" + seed_bullets.strip() + "\n"
-        # Generate additional bullets
-            brainstorm_new = llm_call_with_validation(
+        # Generate additional bullets (no per-call numbered brainstorm logs; only persist brainstorm.txt)
+        brainstorm_new = llm_call_with_validation(
             sys1, user1, model=model, temperature=temp, max_tokens=max_toks, validator=validate_bullet_list, reasoning_effort=reason1,
-            log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_brainstorm{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+            log_maker=None,
         )
         # Persist brainstorm as previous bullets followed by new bullets (cumulative). No DONE written by LLM.
         if bs_path is not None:
