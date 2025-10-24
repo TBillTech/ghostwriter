@@ -146,7 +146,10 @@ def brainstorm_has_done(text: str) -> bool:
         lines = [ln.strip() for ln in str(text).splitlines() if ln.strip()]
         if not lines:
             return False
-        return lines[-1].strip().upper() == "DONE"
+        last = lines[-1].strip().upper()
+        # Accept DONE optionally followed by punctuation/spaces
+        import re as _re
+        return bool(_re.match(r"^DONE(?:\s*[\.!\-—…]*)?$", last))
     except Exception:
         return False
 
@@ -158,8 +161,11 @@ def strip_trailing_done(text: str) -> str:
         lines = text.splitlines()
         while lines and not lines[-1].strip():
             lines.pop()
-        if lines and lines[-1].strip().upper() == "DONE":
-            lines.pop()
+        if lines:
+            last = lines[-1].strip()
+            import re as _re
+            if _re.match(r"^(?i:done)(?:\s*[\.!\-—…]*)?$", last):
+                lines.pop()
         return "\n".join(lines).rstrip() + ("\n" if lines else "")
     except Exception:
         return str(text)
