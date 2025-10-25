@@ -1,0 +1,15 @@
+- Replace ambiguous pronouns with names where needed (e.g., change sentence-initial "He paused..." / "He smoothed..." / "He pinched..." to "Wolf paused...", "Wolf smoothed...", "Wolf pinched...").
+
+- Remove or replace the "plumping strawberries into a hill" image (inconsistent with Factoids). Either remove the strawberry image or replace it with items from the Basket of Goodies (bread and jam) to match setting.
+
+- Clarify what the "powder tin" contains and why Wolf uses it (a single short phrase, e.g., "powder tin of face dust" or "powder tin to dull his muzzle's sheen") so the disguise action reads clearly.
+
+- Tighten or simplify overwrought metaphors that obscure action (examples to shorten: "scenting the warmth and counting heartbeats in the hush," "swift as a lantern snuffed," "breath warm, intent neatly folded") — keep one or two evocative lines, remove redundant flourishes to preserve pacing.
+
+- Adjust the quilt/fruit/belly phrasing for clarity and consistency (e.g., "Wolf's belly rounded beneath the quilt" or "he tucked the basket and drew the quilt over his distended belly") — avoid mixed images that suggest both fruit hill and stuffed belly.
+
+- Make the disguise details succinct and chronological: powder tin → nightcap → ribbon → spectacles → fasten shutter. Remove any ambiguous or anatomically contradictory phrases (e.g., "brow too broad for human comfort" can be shortened to "brow too broad").
+
+- Ensure no other characters speak or are introduced; replace any lines that might imply Grandmother speaks after being swallowed (none present now, but watch for future drafts).
+
+- Optionally, add one short line confirming Wolf's indifference to the weight to align explicitly with the touch-point ("Wolf didn't mind the weight in his belly.") if you want the touch-point emphasis to be unmistakable.

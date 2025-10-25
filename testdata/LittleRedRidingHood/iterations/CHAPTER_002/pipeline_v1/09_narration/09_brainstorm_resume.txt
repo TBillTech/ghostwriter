@@ -1,0 +1,160 @@
+=== SYSTEM ===
+You are brainstorming narrative beats as concise bullet points.
+
+=== USER ===
+You are a creative writer working from structured YAML notes.  
+Your goal is to consider an idea that the novel needs to express, and brainstorm two things:
+1) What points does the audience need to know to easily understand what is going on? This adds clarity.
+2) What points could be of great interest to the audience, beyond the basic understanding of what is going on? This adds flavor.
+
+ALWAYS keep to the facts. Anything that sounds like dialog we will leave for the dialog parts of the story.  
+We need to generate pure narrative pseudo-historical prose.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['The Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters in this chapter
+{
+  "Selected-Characters": [
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "No gore; avoids explicit violent imagery in first person.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+
+
+# Prior paragraph
+This is only for context. Do NOT repeat this:
+The latch clicked; the kettle sighed. The Wolf purred, "Grandmother, it's me. Mama sent bread and jam." Grandmother murmured, "Come in, child. Sit by the stove — tea's hot. The hazel stick's by the door." The Wolf purred, "Take your time; I'll wait where the door is smallest."
+
+# Scene
+Here is the scene the actors are placed in:
+{'name': 'Inside, the Disguise', 'description': 'The aftermath of swallowing Grandma: The chair is knocked over, and the teapot is still warm.\n', 'props': [{'name': 'Grandmother’s Nightcap and Spectacles', 'significance': 'Tools of disguise; innocence repurposed', 'description': 'A soft cap with a blue ribbon, and spectacles smudged with use.\nThey pinch the Wolf’s ears and blur his eyes, but lend him a silhouette.\n'}, {'name': 'Feather Quilt and Bed Curtains', 'significance': 'Stage for the masquerade', 'description': 'A puffed quilt stitched with strawberries, curtains that turn a bed into a small theater.\nThey muffle size and shape, smooth the outline of teeth.\n'}, {'name': 'Shutter Hook', 'significance': 'Conspiracy with the dark', 'description': 'A simple hook-and-eye that tames daylight.\nOnce fastened, the room agrees to keep secrets.\n'}, {'name': 'Powder Tin', 'significance': 'A trick to soften a snout', 'description': 'A little tin of rice powder; a dab on the muzzle keeps the fur from gleaming.\n'}]}
+
+# Actors
+Here are the actors in the scene:
+The, Wolf
+
+# The Touch-Point
+Please carefully read and understand this Touch-Point; this is the core idea that needs to be expounded upon:
+Wolf enters, then swallows Grandma up in one bite. His belly is distended, but Wolf doesn't mind.
+
+
+# Rules for generation:
+1. **Bullet Points**: Provide all your brainstormed ideas as bullet points, starting each line with an '*' character. Use only simple statements, NOT additional markdown. Do NOT use nested bullets or dashes.
+2. **Character Specification**: Refer to characters by their `id` field from the setting.
+3. **Touch-Point**: Express this moment clearly and concretely; the key action should be visible to the reader (“on camera”), not merely implied.
+4. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To" so that events and logic align with prior context.
+5. **Scenes**: You should depict action directly when appropriate. Use sound, motion, rhythm, and consequence to convey the event.
+6. **Tone**: Write in the manner of a classic fairytale, cinematic myth, or entertaining space opera — swift, sometimes symbolic, and dwell on implications instead of graphic detail. Focus on transformation, and atmosphere.
+7. **Style**: Keep sentences concise and vivid. Each bullet should contribute one clear beat of story progression or imagery.
+8. **Format**: Output only bullet points beginning with '*', with no headings or commentary.
+
+Now, brainstorm creative ideas to give the readers a picture of the environment and what is objectively happening, with the goal of building upon and making the Touch-Point real. Leave feelings and opinions for later. Consider the probabilities of items up to 2 or 3 sigma in the sampled distribution.
+
+
+=== RESPONSE ===
+* The door eased inward, and wolf slipped through the gap like a shadow finding its shape.
+* Steam ribboned from the kettle; the room held the hush of someone expecting a child.
+* Grandmother rose from her chair, one hand on the hazel stick, the other reaching toward the stove.
+* The floorboards creaked once; the chair tipped and skated, knocking the tea-cup askew.
+* Wolf crossed the hearth stones in two silent bounds, breath warm, intent neatly folded.
+* A single gulp took Grandmother whole, swift as a lantern snuffed; the room answered with a thud of chair leg and a soft settling sigh.
+* The teapot kept its whisper; the spoon in the cup rattled and went still.
+* Wolf’s belly rounded, heavy beneath his ribs, and he adjusted his stance until the weight found its place.
+* He fastened the shutter hook, letting the room trade daylight for secrecy and lamplight gloss.
+* He pinched the powder tin between claws, dabbed rice dust along his muzzle to dim the telltale gleam.
+* The nightcap slid over pricked ears; the blue ribbon bowed above a brow too broad for human comfort.
+* Spectacles perched on a bridge made for scent, lenses fogging, smudges turning the world to blur.
+* He smoothed the feather quilt, plumping strawberries into a hill that disguised his breadth.
+* Bed curtains sighed closed, turning the frame into a small theater with a wolf-sized understudy.
+* He tested the creak of mattress boards, found a stillness that made his outline ordinary in the dim.
+* The knocked chair lay on its side like a dropped sentence; he left it that way to match the hurry he intended to claim.
+* The warm hearth breathed, masking other breaths under the perfume of steeping tea and toasted crust.
+* Wolf settled, belly distended under quilted fruit, untroubled by the burden as the cottage kept his secret.

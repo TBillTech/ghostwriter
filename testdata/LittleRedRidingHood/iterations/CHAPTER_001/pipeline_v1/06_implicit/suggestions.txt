@@ -1,0 +1,15 @@
+- Remove the first "The Wolf purred" + later "The Wolf chuckled" redundancy — combine into one single Wolf speech that offers a guide once, so he doesn't repeat the same offer.
+
+- Replace combined Wolf line with something more concise and subtly unsettling (no explicit danger). Suggested replacement: Wolf: "Good day, little one. Where are you headed? That basket promises a noble errand—if you'd trust a patient guide, I can show a quicker way through the pines." (Drop "purred" and "chuckled"; use a single carry-through description like a "too-smooth smile" if you want a stage direction.)
+
+- Remove Red's repeated "I must hurry and stay on the path" phrasing. Make her reply shorter and resolute to avoid redundancy. Suggested replacement: Red: "To my grandmother's cottage—bread and jam. I'll stay on the path." (Or: "I'll be careful and stay on the path." — pick one.)
+
+- Change "There are shrewd shortcuts..." phrasing (awkward "shrewd") to a simpler line in Wolf's offer: use "quicker" or "shorter" so it sounds natural: e.g., "There are quicker paths through the pines for those who like to hurry."
+
+- Remove the second explicit refusal repetition. After a single Wolf offer and Red's single refusal, end the exchange; do not repeat the offer/refusal.
+
+- If you want to hint danger without stating it, add a brief, subtle stage direction tied to Wolf (not explicit): e.g., after his line: "Wolf's smile was too smooth." or "Wolf's smile flickered in the gloom." (Keep it suggestive, not literal danger.)
+
+- Check for awkward word choices: change "The woods can be kinder with a guide" (awkward) to "the woods are kinder with a guide" or incorporate into the combined Wolf line above.
+
+Implementing these will remove repetition, tighten pacing, and preserve the hinted menace without stating it.

@@ -59,6 +59,7 @@ def run_narration_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_p
         brainstorm_new = llm_call_with_validation(
             sys1, user1, model=model, temperature=temp, max_tokens=max_toks, validator=validate_bullet_list, reasoning_effort=reason1,
             log_maker=None,
+            context_tag=f"tp={tp_index:02d} type=narration template={tpl1} step=BRAIN_STORM",
         )
         # Persist brainstorm as previous bullets followed by new bullets (cumulative). No DONE written by LLM.
         if bs_path is not None:
@@ -69,8 +70,8 @@ def run_narration_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_p
             except Exception:
                 pass
         # Require human to add DONE manually to proceed
-    print("Brainstorming still in progress.")
-    raise UserActionRequired("Brainstorming still in progress.")
+        print("Brainstorming still in progress.")
+        raise UserActionRequired("Brainstorming still in progress.")
 
     # 2) Ordering → bullet list
     reps2 = dict(reps)
@@ -88,6 +89,7 @@ def run_narration_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_p
     ordered = llm_call_with_validation(
         sys2, user2, model=model2, temperature=temp2, max_tokens=max2, validator=validate_bullet_list, reasoning_effort=reason2,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_ordering{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        context_tag=f"tp={tp_index:02d} type=narration template={tpl2} step=ORDERING",
     )
 
     # 3) Generate narration → text
@@ -106,6 +108,7 @@ def run_narration_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_p
     narration = llm_call_with_validation(
         sys3, user3, model=model3, temperature=temp3, max_tokens=max3, validator=validate_text, reasoning_effort=reason3,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_generate_narration{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        context_tag=f"tp={tp_index:02d} type=narration template={tpl3} step=GENERATE_NARRATION",
     )
 
     # 4) Polish
@@ -122,5 +125,6 @@ def run_narration_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_p
         reasoning_effort=reasonp,
         validator=validate_text,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_polish{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        context_tag=f"tp={tp_index:02d} type=narration template=polish_prose_prompt.md step=POLISH_PROSE",
     )
     return polished

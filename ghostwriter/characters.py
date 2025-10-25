@@ -125,19 +125,19 @@ def _log_warning(msg: str, log_dir: Optional[Path]) -> None:
 # numeric hint extractor moved to utils._extract_numeric_hint
 
 
-def render_character_call(
+def build_character_call_prompt(
     character_id: str,
     call_prompt: str,
     dialog_lines: List[str],
     *,
-    temperature: float = 0.3,
-    max_tokens_line: int = 100,
-    log_file: Optional[Path] = None,
     agenda: str = "",
     character_yaml: Optional[str] = None,
     dialog_n_override: Optional[int] = None,
-) -> str:
-    # Load external character dialog template if available
+) -> tuple[str, str]:
+    """Build the SYSTEM and USER messages for a single character dialog call.
+
+    Returns (system, user) without executing the model.
+    """
     template_path = Path("prompts") / "character_dialog_prompt.md"
     default_template = (
         "<id/>\n"
@@ -154,15 +154,6 @@ def render_character_call(
         user = read_text(template_path) if template_path.exists() else default_template
     except Exception:
         user = default_template
-
-    # Warn if missing YAML
-    try:
-        warn_dir = log_file.parent if log_file is not None else None
-        # Do not warn for special 'Narrator' id, which is not a character
-        if character_id.strip().lower() != "narrator" and not (character_yaml or "").strip():
-            _log_warning(f"CHARACTER: Missing character_yaml for id '{character_id}'.", warn_dir)
-    except Exception:
-        pass
 
     # Substitute <character_yaml/>, <id/>, <agenda/>
     if "<character_yaml/>" in user:
@@ -214,6 +205,37 @@ def render_character_call(
     system = (
         f"You are the character with id '{character_id}'. "
         f"Return only the character's dialog or inner monologue; no notes or brackets."
+    )
+    return system, user
+
+
+def render_character_call(
+    character_id: str,
+    call_prompt: str,
+    dialog_lines: List[str],
+    *,
+    temperature: float = 0.3,
+    max_tokens_line: int = 100,
+    log_file: Optional[Path] = None,
+    agenda: str = "",
+    character_yaml: Optional[str] = None,
+    dialog_n_override: Optional[int] = None,
+) -> str:
+    # Warn if missing YAML
+    try:
+        warn_dir = log_file.parent if log_file is not None else None
+        # Do not warn for special 'Narrator' id, which is not a character
+        if character_id.strip().lower() != "narrator" and not (character_yaml or "").strip():
+            _log_warning(f"CHARACTER: Missing character_yaml for id '{character_id}'.", warn_dir)
+    except Exception:
+        pass
+    system, user = build_character_call_prompt(
+        character_id,
+        call_prompt,
+        dialog_lines,
+        agenda=agenda,
+        character_yaml=character_yaml,
+        dialog_n_override=dialog_n_override,
     )
     dialog_model, dialog_temp_env, dialog_max_tokens = _env_for("CHARACTER_DIALOG", default_temp=temperature if temperature is not None else 0.3, default_max_tokens=max_tokens_line)
     # Allow an env override to take precedence over character/template hints.

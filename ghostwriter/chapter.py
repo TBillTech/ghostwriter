@@ -543,14 +543,16 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
             except Exception:
                 pass
             # Load polished text for prior_paragraph and draft record
+            tp_type_i = info.get("type", "")
             try:
                 polished = read_file(info.get("draft_path"))
             except Exception:
                 polished = ""
             # Recreate basic record (tp_id unknown here; assign i)
-            records.append((str(i), info.get("type", ""), "", polished))
-            if polished.strip():
-                prior_paragraph = polished.strip().splitlines()[-1]
+            records.append((str(i), tp_type_i, "", polished))
+            # Only contentful types (narration/dialog/implicit) should influence prior_paragraph
+            if tp_type_i in ("narration", "dialog", "implicit") and polished.strip():
+                prior_paragraph = polished.strip()
 
     # Parsing complete marker: YAML files loaded and touch-points parsed
     try:
@@ -604,8 +606,12 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
             _log_info(f"RESUME: Skipping completed touch-point {i} ({tp_type}).", base_log_dir)
             # Even if draft exists, ensure brainstorm DONE gating is satisfied; if not, re-run brainstorm and exit
             try:
-                reps_resume = _build_pipeline_replacements(setting, chapter, chapter_id, version_num, tp, state, prior_paragraph=prior_paragraph, ctx=ctx)
-                _ensure_brainstorm_done_on_resume(tp_type, reps_resume, log_dir=tp_log_dir, tp_index=i)
+                if not branch_b:  # Only enforce brainstorm gating on initial authoring runs
+                    reps_resume = _build_pipeline_replacements(setting, chapter, chapter_id, version_num, tp, state, prior_paragraph=prior_paragraph, ctx=ctx)
+                    _ensure_brainstorm_done_on_resume(tp_type, reps_resume, log_dir=tp_log_dir, tp_index=i)
+            except UserActionRequired:
+                # Propagate HIL pause
+                raise
             except Exception:
                 pass
             continue
@@ -639,8 +645,12 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
         elif tp_type in ("narration", "dialog", "implicit"):
             # Before running pipelines, if brainstorm exists but lacks DONE, enforce resume gating
             try:
-                reps_pre = _build_pipeline_replacements(setting, chapter, chapter_id, version_num, tp, state, prior_paragraph=prior_paragraph, ctx=ctx)
-                _ensure_brainstorm_done_on_resume(tp_type, reps_pre, log_dir=tp_log_dir, tp_index=i)
+                if not branch_b:  # Skip brainstorm enforcement for edit branches (v2+)
+                    reps_pre = _build_pipeline_replacements(setting, chapter, chapter_id, version_num, tp, state, prior_paragraph=prior_paragraph, ctx=ctx)
+                    _ensure_brainstorm_done_on_resume(tp_type, reps_pre, log_dir=tp_log_dir, tp_index=i)
+            except UserActionRequired:
+                # Propagate HIL pause from resume gating
+                raise
             except Exception:
                 pass
             # If a first-draft gate exists, skip generation and proceed directly to subtle-edit phase
@@ -827,39 +837,51 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 check_user = _apply_step(check_tpl, check_reps)
                 suggestions_user = check_user + "\n\n---\nNow produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions."
                 sugg_model, sugg_temp, sugg_max_tokens = _env_for_prompt(check_tpl, "SUGGESTIONS", default_temp=0.0, default_max_tokens=800)
+                # Log LLM context to run.log before the request for traceability
+                try:
+                    from .logging import log_run as _log_run
+                    _log_run(f"LLM ctx | tp={i:02d} type={tp_type} template={check_tpl} step=SUGGESTIONS")
+                except Exception:
+                    pass
                 suggestions_out = llm_complete(suggestions_user, system="You are an evaluator extracting actionable suggestions only.", temperature=sugg_temp, max_tokens=sugg_max_tokens, model=sugg_model)
                 try:
                     tp_log_dir.mkdir(parents=True, exist_ok=True)
-                    if subtle_edit_post_gate:
-                        save_text(tp_log_dir / "suggestions.txt", suggestions_out)
-                    else:
-                        save_text(tp_log_dir / "touch_point_first_draft.txt", polished_text)
-                        save_text(tp_log_dir / "first_suggestions.txt", suggestions_out)
-                        cp = {
-                            "id": tp_id,
-                            "type": tp_type,
-                            "touchpoint": tp_text,
-                            "active_actors": state.active_actors,
-                            "scene": state.current_scene,
-                            "foreshadowing": state.foreshadowing,
-                            "setting_block": state.setting_block,
-                            "characters_block": state.characters_block,
-                            "appended_dialog": state.last_appended_dialog,
-                        }
-                        save_text(tp_log_dir / "touch_point_state.json", _gw_to_text(cp))
-                        raise UserActionRequired("Waiting for user suggestions on first draft.")
+                    if not branch_b:
+                        if subtle_edit_post_gate:
+                            # Post-gate resume run: update final suggestions only
+                            save_text(tp_log_dir / "suggestions.txt", suggestions_out)
+                        else:
+                            # Initial authoring run: create first-draft gate and pause
+                            save_text(tp_log_dir / "touch_point_first_draft.txt", polished_text)
+                            save_text(tp_log_dir / "first_suggestions.txt", suggestions_out)
+                            cp = {
+                                "id": tp_id,
+                                "type": tp_type,
+                                "touchpoint": tp_text,
+                                "active_actors": state.active_actors,
+                                "scene": state.current_scene,
+                                "foreshadowing": state.foreshadowing,
+                                "setting_block": state.setting_block,
+                                "characters_block": state.characters_block,
+                                "appended_dialog": state.last_appended_dialog,
+                            }
+                            save_text(tp_log_dir / "touch_point_state.json", _gw_to_text(cp))
+                            raise UserActionRequired("Waiting for user suggestions on first draft.")
                 except UserActionRequired:
                     # Re-raise to propagate graceful stop to CLI/driver
                     raise
                 except Exception:
                     pass
+            except UserActionRequired:
+                # Ensure the first-draft gate pause is not swallowed by broad exception handlers
+                raise
             except Exception:
                 pass
         # Write checkpoint for resume (only after final draft is produced)
         _write_tp_checkpoint(tp_log_dir, tp_id, tp_type, tp_text, polished_text, state)
-        # Update prior_paragraph to the latest polished segment (for templates needing previous context)
+        # Update prior_paragraph to the entire previous touch-point draft (not just the last line)
         if polished_text:
-            prior_paragraph = polished_text.strip().splitlines()[-1] if polished_text.strip() else ""
+            prior_paragraph = polished_text.strip()
 
     # Write draft_vN.txt (parseable)
     out_path = write_draft_records(chapter_id, version_num, records)

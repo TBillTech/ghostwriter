@@ -1,0 +1,48 @@
+Touch-Points:
+  - setting:
+      factoids:
+        - "Basket of Goodies"
+        - "Red Hood"
+      actors:
+        - "Red"
+        - "Wolf"
+
+  - scene:
+      name: "Forest Path"
+      description: |
+        A winding dirt trail threads through a forest of tall, whispering pines. 
+        Shafts of sunlight pierce the canopy, striping the ground in gold and shadow. 
+        The scent of damp earth mingles with the sweetness of berry jam wafting from Red’s basket. 
+        Each step stirs a quiet rhythm of leaves and birdsong — until the woods fall suddenly, unnervingly still.
+      props:
+        - name: "Basket"
+          significance: "Gift and responsibility; symbol of trust"
+          description: |
+            A small wicker basket filled with bread and jars of strawberry jam, carefully wrapped in linen.
+            Its weight is modest, but to Red it carries both duty and pride — a token of her mother’s faith in her.
+        - name: "Red Hood"
+          significance: "Identity and innocence; visible target in the woods"
+          description: |
+            A bright red cloak and hood, lovingly stitched by her grandmother.
+            It marks her as special, and yet in the shadowed woods it burns like a signal fire.
+
+  - actors: [Red, Wolf]
+
+  - narration: |
+      Red walks the forest path with a light step and a tune on her lips, the basket swinging from her arm.
+      She hums to keep herself company, unaware that the forest has grown too quiet, as though holding its breath.
+
+  - dialog: |
+      The Wolf steps out from behind a tree, his voice smooth and almost courteous.
+      “Good morning, little traveler,” he says, eyes glinting beneath the canopy. “And where might you be headed with such a fine basket?”
+
+  - implicit: |
+      The silence of the forest feels heavier now; even the wind seems to listen.
+      The Wolf’s smile is friendly, but his gaze lingers too long on Red’s hands, the basket, the vulnerable path ahead.
+      Somewhere unseen, a crow caws once — harsh and short — before taking flight.
+
+  - dialog: |
+      The Wolf tilts his head, feigning thoughtfulness. “You know,” he murmurs, “there’s a quicker way to your grandmother’s house.
+      Through the meadow, just past the stream — far prettier than this gloomy path.”
+      Red hesitates, glancing at the shadows between the trees. “Really?” she asks. “I suppose... that might be nice.”
+      And with that small decision, the forest seems to close behind her like a secret.

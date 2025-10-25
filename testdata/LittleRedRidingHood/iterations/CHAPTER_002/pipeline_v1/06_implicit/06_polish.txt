@@ -1,0 +1,43 @@
+=== SYSTEM ===
+You are a ghostwriter polishing and cleaning prose.
+
+=== USER ===
+You are a ghostwriter working from a more rough version of a novel chapter.  
+Your job is to write polished clean prose for a novel chapter.  
+
+# Setting in general 
+[SETTING]
+
+# Characters
+[CHARACTERS]
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+
+
+# Rules for generation:
+1. Produce **continuous prose only** (no lists or notes or markup or obnoxious formatting unless central to the text like litRPG stats).  
+2. Make sure to fix the commas, spacing, and capitalization when prose includes quoted dialog.
+
+# Previous rough version
+Please clean up the following text:
+The Wolf purred, "That small latch click speaks softly to us both. Come with me to a quieter door, where you can pace the moment and decide on your own terms.."
+Grandmother murmured, "Come in, dear. Sit by the stove awhile; today’s just a quiet visit. I’ve left my hazel walking stick by the door to keep things ordinary.."
+The Wolf, smoothing, purred, "That latch keeps time with our breath, does it not? The hazel stick in your hand is a plain thing—the sort of ordinary tool that makes a quieter door feel safer. Come with me at your pace, and you’ll decide on your own terms.."
+Grandmother, slow, answered, "Well, hello there, dear. Make yourself comfortable by the stove; there’s tea to pour and a warm biscuit waiting. I’ve left my hazel walking stick by the door to keep things ordinary for now.."
+The room greets the moment with mint and ash, the pine and rain outside echoing softly; the air holds its tongue where teeth should be, letting the space choose its pace.
+The Wolf paused, "That latch keeps time with our breath; I’ll move at your pace and step through when you’re ready.
+Let the quiet guide us; a moment shared is a moment earned.
+Whenever you’re ready, we’ll take the door and see where it leads.."
+The clock hand slides its measured arc, counting the breath between tapping moments and the quiet that follows each pause. Patience gathers at the door like thyme and smoke, pacing the space until the next knock is more invitation than interruption.
+
+Now, draft the chapter prose, sticking as close to possible to the words and sentences in the rough_draft, only adding words and filler where absolutely necessary.
+
+=== RESPONSE ===
+The Wolf purred, "That small latch click speaks softly to us both. Come with me to a quieter door, where you can pace the moment and decide on your own terms." Grandmother murmured, "Come in, dear. Sit by the stove awhile; today’s just a quiet visit. I’ve left my hazel walking stick by the door to keep things ordinary." The Wolf, smoothing his voice, purred again, "That latch keeps time with our breath, does it not? The hazel stick in your hand is a plain thing—the sort of ordinary tool that makes a quieter door feel safer. Come with me at your pace, and you’ll decide on your own terms." Grandmother, slow and deliberate, answered, "Well, hello there, dear. Make yourself comfortable by the stove; there’s tea to pour and a warm biscuit waiting. I’ve left my hazel walking stick by the door to keep things ordinary for now."
+
+The room greets the moment with mint and ash, the pine and rain outside echoing softly; the air holds its tongue where teeth should be, letting the space choose its pace. The Wolf paused and said, "That latch keeps time with our breath; I’ll move at your pace and step through when you’re ready. Let the quiet guide us; a moment shared is a moment earned. Whenever you’re ready, we’ll take the door and see where it leads." The clock hand slides its measured arc, counting the breath between tapping moments and the quiet that follows each pause. Patience gathers at the door like thyme and smoke, pacing the space until the next knock becomes more invitation than interruption.

@@ -1,0 +1,13 @@
+- Remove the opening sentence "The latch clicked; the kettle sighed." (those sensory beats should be implied, not stated outright).
+
+- Replace "The Wolf purred, 'Grandmother, it's me. Mama sent bread and jam.'" with: The Wolf softened, "Grandmother, it's me. Mama sent bread and jam." (drop "purred" to avoid repetitive verb and animalizing the voice twice).
+
+- Change Grandmother's line to be tighter and less narrational: replace
+  "Grandmother murmured, 'Come in, child. Sit by the stove — tea's hot. The hazel stick's by the door.'"
+  with:
+  "Grandmother murmured, 'Come in, dear. Sit by the stove. The stick's by the door.'"
+
+- Replace the Wolf's final line "The Wolf purred, 'Take your time; I'll wait where the door is smallest.'" with a clearer, less odd image and without repeating "purred":
+  "The Wolf said softly, 'Take your time. I'll wait at the threshold.'"
+
+- Remove redundancy between the two "soft/soft-sounding" verbs by ensuring only one description of vocal tone precedes the first spoken line (kept above as "softened").

@@ -1,0 +1,53 @@
+=== SYSTEM ===
+You are a ghostwriter polishing and cleaning prose.
+
+=== USER ===
+You are a ghostwriter working from a more rough version of a novel chapter.  
+Your job is to write polished clean prose for a novel chapter.  
+
+# Setting in general 
+[SETTING]
+
+# Characters
+[CHARACTERS]
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Prior Story So Far
+Red promised to bring goodies to her ailing grandmother.
+
+Extended Story So Far
+The tale opens in a small, sylvan world: Red moves through a hushed pinewood, her red hood a bright punctuation against moss and needle. The prose lingers on texture and scent—damp earth, the creak of wicker, the jam’s sweetness lifting into the bracken—so that each small movement feels intimate and inevitable. She hums, careful and steady, intent on the single errand that defines her: bread and jam for a grandmother who is ill.
+
+Into this quietly choreographed scene slips the Wolf, a patient, shadowed presence who mirrors Red’s steps at the forest’s edge. The narrative shifts seamlessly from pastoral detail to a taut, conversational duel: the Wolf’s soft, insinuating offers—guidance, shortcuts, companionship—arrive masked as civility. Red’s replies are short, earnest; she cites her mother’s warning and the straight path. Yet the seduction is gentle rather than brutish. The Wolf repeats and reframes, its tone coaxing, its smile a slow, dangerous hospitality.
+
+What follows is the story’s pivot. After a prolonged, almost ritualized exchange, Red, torn between rule and urgency, yields: she accepts the Wolf’s promise of a quicker deer track and steps off the safe path. The final image is small but decisive—Red tightening her grip on the basket and following the narrow, mossy way—and it carries the weight of foreshadowing. The chapter closes on that quiet capitulation, the forest holding its breath, the Wolf slipping ahead unseen.
+
+As a scene, it excels in mood and restraint. It trades thunderous threat for insinuation, letting atmosphere and dialogue do the work. Themes of innocence, persuasion, and the peril of choice are threaded through sensory detail and the characters’ polite but loaded exchanges, leaving the reader poised for the consequences of that one wrong turn.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+{
+  "Story-Relative-To": {
+    "Red": "Eager to help, trusts strangers. Appended: In this chapter Red is a study in earnestness and small rituals; the camera lingers on the domestic—her hummed tune, the creak of the wicker, the jam’s scent—so that her choice feels less like folly and more like necessity. She approaches the Wolf with polite deflection, clinging to her mother’s instruction, yet the film of worry under her composure is visible: Grandmother’s need tugs at her more than caution. When the Wolf’s silvered promises of a quicker route begin to outpace her resolve, Red’s trust, not naïveté, does the work—she negotiates duty against rule and, after a brief, almost ceremonial hesitation, yields. The closing image of her stepping onto the mossy deer track reframes innocence as decision, not accident.",
+    "Wolf": "Hungry, looking for an opportunity. Appended: The Wolf performs in soft focus—a predator who understands posture, cadence and the persuasive power of civility. Scenes cut between his unseen padding and the bright red hood, his voice a practiced instrumental that repeats and reframes Red’s replies until politeness becomes compliance. He does not rush; the animal calculates rhythm and timing, offering shortcuts and companionship like bait wrapped in concern. The Wolf's triumph is cinematic in its subtlety: he choreographs the moment of surrender, turning a domestic errand into a staged misdirection, and watches as Red trades safety for speed on the deer track he silently indicates.",
+    "Forest Path": "Quiet, but shadows watch. Appended: The path is an observant presence—textured, patient and complicit in atmosphere. Light and scent are its language; damp earth, mossy stumps and birds provide mise-en-scène while the bracken holds a shadowed companion. The narrative’s tension is ecological rather than dramatic: the path’s straightness represents rule, the deer track a tempting deviation. As Red departs the maintained trail, the forest registers the shift with a tightening hush, as if the landscape itself leans in to see how a single choice will unspool. The woods do not act overtly, but their silence and the way they cradle both girl and Wolf make them an accomplice to what follows."
+  }
+}
+
+# Rules for generation:
+1. Produce **continuous prose only** (no lists or notes or markup or obnoxious formatting unless central to the text like litRPG stats).  
+2. Make sure to fix the commas, spacing, and capitalization when prose includes quoted dialog.
+
+# Previous rough version
+Please clean up the following text:
+The Wolf said, "Good day, little one. Where are you headed? That basket promises a noble errand—if you'd trust a patient guide, I can show a quicker way through the pines." The Wolf's smile was too smooth.
+
+Little Red blinked. "To my grandmother's cottage—bread and jam. I'll stay on the path." Little Red straightened.
+
+Now, draft the chapter prose, sticking as close to possible to the words and sentences in the rough_draft, only adding words and filler where absolutely necessary.
+
+=== RESPONSE ===
+The Wolf said, "Good day, little one. Where are you headed? That basket promises a noble errand—if you'd trust a patient guide, I can show a quicker way through the pines." His smile was too smooth.
+
+Little Red blinked. "To my grandmother's cottage—bread and jam. I'll stay on the path." She straightened, basket held a little tighter, and the forest listened.

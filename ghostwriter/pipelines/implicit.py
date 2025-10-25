@@ -1,6 +1,8 @@
 """Implicit dialog pipeline (migrated)."""
 from __future__ import annotations
 
+import os
+
 from typing import Optional, List, Dict, Tuple
 from pathlib import Path
 
@@ -15,7 +17,6 @@ from .common import (
     build_pipeline_replacements,
     strip_trailing_done,
     brainstorm_has_done,
-    truncate_brainstorm,
     apply_body_template,
 )
 from ..characters import load_characters_list, render_character_call
@@ -48,6 +49,7 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
         brainstorm_new = llm_call_with_validation(
             sys1, user1, model=m1, temperature=t1, max_tokens=k1, validator=validate_bullet_list, reasoning_effort=r1,
             log_maker=None,
+            context_tag=f"tp={tp_index:02d} type=implicit template={tpl1} step=BRAIN_STORM",
         )
         if bs_path is not None:
             try:
@@ -56,18 +58,17 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
                 bs_path.write_text(combined, encoding="utf-8")
             except Exception:
                 pass
-    print("Brainstorming still in progress.")
-    raise UserActionRequired("Brainstorming still in progress.")
+        print("Brainstorming still in progress.")
+        raise UserActionRequired("Brainstorming still in progress.")
 
-    # Limit to at most 10 bullets
-    brainstorm = truncate_brainstorm(brainstorm_work, limit=10)
+    # Use full brainstorm list without truncation
+    brainstorm = brainstorm_work
 
     # Ordering
     reps2 = dict(reps)
     reps2["[BULLET_IDEAS]"] = brainstorm
     reps2["[BULLETS]"] = brainstorm
     reps2["[bullets]"] = brainstorm
-    import os
     disable_order_global = os.getenv("GW_DISABLE_ORDERING_DIALOG", "0") == "1"
     disable_order_implicit = os.getenv("GW_DISABLE_ORDERING_IMPLICIT", "0") == "1"
     if disable_order_global or disable_order_implicit:
@@ -81,6 +82,7 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
         ordered = llm_call_with_validation(
             sys2, user2, model=m2, temperature=t2, max_tokens=k2, validator=validate_bullet_list, reasoning_effort=r2,
             log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_ordering{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+            context_tag=f"tp={tp_index:02d} type=implicit template={tpl2} step=ORDERING",
         )
 
     # Actor assignment
@@ -93,6 +95,7 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
     actor_lines = llm_call_with_validation(
         sys3, user3, model=m3, temperature=t3, max_tokens=k3, validator=validate_actor_list, reasoning_effort=r3,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_actor_assignment{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        context_tag=f"tp={tp_index:02d} type=implicit template={tpl3} step=ACTOR_ASSIGNMENT",
     )
 
     # Parse actor lines
@@ -119,6 +122,7 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
     body_lang = llm_call_with_validation(
         sys4a, user4a, model=m4a, temperature=t4a, max_tokens=k4a, validator=validate_bullet_list, reasoning_effort=r4a,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_body_language{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        context_tag=f"tp={tp_index:02d} type=implicit template={tpl4a} step=BODY_LANGUAGE",
     )
     # Agenda
     sys4b = "Produce an agenda list grouped by actor id."
@@ -129,6 +133,7 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
     agenda_text = llm_call_with_validation(
         sys4b, user4b, model=m4b, temperature=t4b, max_tokens=k4b, validator=validate_text, reasoning_effort=r4b,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_agenda{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        context_tag=f"tp={tp_index:02d} type=implicit template={tpl4b} step=AGENDA",
     )
     # Parse agenda by actor
     def _parse_agenda_by_actor(text: str) -> Dict[str, str]:
@@ -161,6 +166,7 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
     reactions_text = llm_call_with_validation(
         sys4c, user4c, model=m4c, temperature=t4c, max_tokens=k4c, validator=validate_actor_list, reasoning_effort=r4c,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_reactions{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        context_tag=f"tp={tp_index:02d} type=implicit template={tpl4c} step=REACTIONS",
     )
 
     # Preload character YAML for ids
@@ -182,72 +188,137 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
         if m:
             reactions_pairs.append((m.group(1), m.group(2)))
 
-    # Render dialog lines (with Narrator support)
+    # Render dialog lines (with Narrator support) or batch-generate
     outputs: List[str] = []
-    for b_index, (actor_id, line_hint) in enumerate(actor_pairs, start=1):
-        agenda_block = agenda_by_actor.get(actor_id, "")
-        reaction_line = reactions_pairs[b_index - 1][1] if 1 <= b_index <= len(reactions_pairs) else ""
-        # nth bullet from body_lang
+    batch_mode = os.getenv("GW_DIALOG_BATCH_MODE", "0") == "1"
+    if batch_mode:
+        # Build a single prompt asking for N lines in order, formatted as 'id: line'
+        spec_lines: List[str] = []
         def _pick(text: str, n: int) -> str:
             cnt = [ln.lstrip()[1:].lstrip() for ln in text.splitlines() if ln.lstrip().startswith(('*', '-'))]
             if 1 <= n <= len(cnt):
                 return f"* {cnt[n-1]}"
             return ""
-
-        # Narrator routing: generate narration prose without quotes and without body-language injection
-        if actor_id.strip().lower() == "narrator":
-            tpln = "narration_in_dialog_prompt.md"
-            repsN = dict(reps4)
-            repsN["[REACTION]"] = reaction_line
-            repsN["[LINE_INTENT]"] = line_hint
-            repsN["[AGENDA]"] = agenda_block or ""
-            try:
-                dialog_map = {a: state.recent_dialog(a) for a in (getattr(state, "active_actors", []) or [])}
-                from ..utils import to_text as _to_text
-                repsN["[DIALOG_HISTORY]"] = _to_text(dialog_map)
-            except Exception:
-                repsN["[DIALOG_HISTORY]"] = ""
-            userN = apply_template(str(Path("prompts") / tpln), repsN) if (Path("prompts") / tpln).exists() else (
-                f"Write a short third-person narrative beat (no quotes).\n\n"
-                f"Line intent: {line_hint}\nReaction to previous line: {reaction_line}\nAgenda notes: {agenda_block}\n"
+        for b_index, (actor_id, line_hint) in enumerate(actor_pairs, start=1):
+            reaction_line = reactions_pairs[b_index - 1][1] if 1 <= b_index <= len(reactions_pairs) else ""
+            agenda_block = agenda_by_actor.get(actor_id, "")
+            spec_lines.append(
+                f"- id: {actor_id}\n  intent: {line_hint}\n  reaction: {reaction_line}\n  agenda: {agenda_block}"
             )
-            mN, tN, kN = env_for_prompt(tpln, "CHARACTER_DIALOG", default_temp=0.3, default_max_tokens=120)
-            rN = reasoning_for_prompt(tpln, "CHARACTER_DIALOG")
-            respN = llm_call_with_validation(
-                system="You write third-person narrative prose without quotation marks.",
-                user=userN,
-                model=mN,
-                temperature=tN,
-                max_tokens=kN,
-                validator=validate_text,
-                reasoning_effort=rN,
-                log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_b{b_index:02d}_Narrator{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
-            )
-            outputs.append((respN or "").strip())
-            # Skip dialog history update for narrator
-            continue
+        dialog_history_map = {}
+        try:
+            dialog_history_map = {a: state.recent_dialog(a) for a in (getattr(state, "active_actors", []) or [])}
+        except Exception:
+            dialog_history_map = {}
+        from ..utils import to_text as _to_text
+        batch_user = (
+            "You will produce the entire dialog exchange in one go (implicit subtext).\n"
+            "- Return exactly the same number of lines as the specification, in order.\n"
+            "- Format each line strictly as 'id: line'.\n"
+            "- Keep each line concise; avoid exposition; imply more than you say.\n"
+            "- Do NOT include stage directions or body-language cues; only the spoken line (or Narrator prose).\n"
+            "- For Narrator entries, return narrative prose without quotation marks.\n\n"
+            f"Dialog history (per actor):\n{_to_text(dialog_history_map)}\n\n"
+            "Specification:\n\n"
+            + "\n".join(spec_lines)
+            + "\n"
+        )
+        mB, tB, kB = env_for_prompt("character_dialog_prompt.md", "CHARACTER_DIALOG", default_temp=0.3, default_max_tokens=120 * max(4, len(actor_pairs)))
+        rB = reasoning_for_prompt("character_dialog_prompt.md", "CHARACTER_DIALOG")
+        batch_resp = llm_call_with_validation(
+            system="You write a short, implied dialog exchange with subtext.",
+            user=batch_user,
+            model=mB,
+            temperature=tB,
+            max_tokens=kB,
+            validator=validate_actor_list,
+            reasoning_effort=rB,
+            log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_dialog_batch{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+            context_tag=f"tp={tp_index:02d} type=implicit template=character_dialog_batch step=CHARACTER_DIALOG_BATCH",
+        )
+        # Parse and post-process
+        import re as _reB
+        _A2 = _reB.compile(r"^\s*([A-Za-z0-9_.\-]+)\s*:\s+(.+)")
+        resp_pairs: List[Tuple[str, str]] = []
+        for ln in batch_resp.splitlines():
+            m = _A2.match(ln)
+            if m:
+                resp_pairs.append((m.group(1), m.group(2)))
+        for b_index, (actor_id, line_text) in enumerate(resp_pairs, start=1):
+            if actor_id.strip().lower() == "narrator":
+                outputs.append((line_text or "").strip())
+                continue
+            body_for_line = _pick(body_lang, b_index)
+            merged = apply_body_template(body_for_line, line_text or "")
+            outputs.append(merged)
+            if (line_text or "").strip():
+                state.add_dialog_line(actor_id, (line_text or "").strip())
+                appended.setdefault(actor_id, []).append((line_text or "").strip())
+    else:
+        for b_index, (actor_id, line_hint) in enumerate(actor_pairs, start=1):
+            agenda_block = agenda_by_actor.get(actor_id, "")
+            reaction_line = reactions_pairs[b_index - 1][1] if 1 <= b_index <= len(reactions_pairs) else ""
+            # nth bullet from body_lang
+            def _pick(text: str, n: int) -> str:
+                cnt = [ln.lstrip()[1:].lstrip() for ln in text.splitlines() if ln.lstrip().startswith(('*', '-'))]
+                if 1 <= n <= len(cnt):
+                    return f"* {cnt[n-1]}"
+                return ""
 
-        body_for_line = _pick(body_lang, b_index)
-        agenda_combined = (agenda_block + ("\n" if agenda_block else "") + body_for_line).strip() if body_for_line.strip() else agenda_block
-        combined_prompt = (
-            f"Reaction: {reaction_line}\n"
-            f"(Implicit) Line intent: {line_hint}\n"
-        )
-        dialog_lines_ctx = state.recent_dialog(actor_id)
-        resp = render_character_call(
-            actor_id,
-            combined_prompt,
-            dialog_lines_ctx,
-            temperature=0.35,
-            max_tokens_line=120,
-            log_file=(log_dir / f"{tp_index:02d}_b{b_index:02d}_{actor_id}.txt") if log_dir else None,
-            character_yaml=char_yaml_by_id.get(actor_id.strip().lower()),
-            agenda=agenda_combined,
-        )
-        outputs.append(apply_body_template(body_for_line, resp))
-        if resp.strip():
-            state.add_dialog_line(actor_id, resp.strip())
-            appended.setdefault(actor_id, []).append(resp.strip())
+            # Narrator routing: generate narration prose without quotes and without body-language injection
+            if actor_id.strip().lower() == "narrator":
+                tpln = "narration_in_dialog_prompt.md"
+                repsN = dict(reps4)
+                repsN["[REACTION]"] = reaction_line
+                repsN["[LINE_INTENT]"] = line_hint
+                repsN["[AGENDA]"] = agenda_block or ""
+                try:
+                    dialog_map = {a: state.recent_dialog(a) for a in (getattr(state, "active_actors", []) or [])}
+                    from ..utils import to_text as _to_text
+                    repsN["[DIALOG_HISTORY]"] = _to_text(dialog_map)
+                except Exception:
+                    repsN["[DIALOG_HISTORY]"] = ""
+                userN = apply_template(str(Path("prompts") / tpln), repsN) if (Path("prompts") / tpln).exists() else (
+                    f"Write a short third-person narrative beat (no quotes).\n\n"
+                    f"Line intent: {line_hint}\nReaction to previous line: {reaction_line}\nAgenda notes: {agenda_block}\n"
+                )
+                mN, tN, kN = env_for_prompt(tpln, "CHARACTER_DIALOG", default_temp=0.3, default_max_tokens=120)
+                rN = reasoning_for_prompt(tpln, "CHARACTER_DIALOG")
+                respN = llm_call_with_validation(
+                    system="You write third-person narrative prose without quotation marks.",
+                    user=userN,
+                    model=mN,
+                    temperature=tN,
+                    max_tokens=kN,
+                    validator=validate_text,
+                    reasoning_effort=rN,
+                    log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_b{b_index:02d}_Narrator{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+                )
+                outputs.append((respN or "").strip())
+                # Skip dialog history update for narrator
+                continue
+
+            body_for_line = _pick(body_lang, b_index)
+            agenda_combined = (agenda_block + ("\n" if agenda_block else "") + body_for_line).strip() if body_for_line.strip() else agenda_block
+            combined_prompt = (
+                f"Reaction: {reaction_line}\n"
+                f"(Implicit) Line intent: {line_hint}\n"
+            )
+            dialog_lines_ctx = state.recent_dialog(actor_id)
+            resp = render_character_call(
+                actor_id,
+                combined_prompt,
+                dialog_lines_ctx,
+                temperature=0.35,
+                max_tokens_line=120,
+                log_file=(log_dir / f"{tp_index:02d}_b{b_index:02d}_{actor_id}.txt") if log_dir else None,
+                character_yaml=char_yaml_by_id.get(actor_id.strip().lower()),
+                agenda=agenda_combined,
+            )
+            outputs.append(apply_body_template(body_for_line, resp))
+            if resp.strip():
+                state.add_dialog_line(actor_id, resp.strip())
+                appended.setdefault(actor_id, []).append(resp.strip())
     text = "\n".join(outputs)
     # Polish
     from ..templates import build_polish_prompt
@@ -263,6 +334,7 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
         reasoning_effort=rp,
         validator=validate_text,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_polish{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        context_tag=f"tp={tp_index:02d} type=implicit template=polish_prose_prompt.md step=POLISH_PROSE",
     )
     state.last_appended_dialog = appended
     return polished

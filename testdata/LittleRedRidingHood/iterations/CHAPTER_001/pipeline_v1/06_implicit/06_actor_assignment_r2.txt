@@ -1,0 +1,195 @@
+=== SYSTEM ===
+Assign dialog lines to actors as 'id: line' entries.
+
+=== USER ===
+You are a Director working from structured YAML notes.  
+The overall goal is to produce polished prose to go into a novel.
+Your job is to tell the actors what to say.  The actors know what their characters are like, but they need to be prompted as if they forgot their lines.
+The writer has already given you each line that needs to be said, but didn't tell us which actors should say what, and the voice should be cast to second person.  Each line (bullet point) which needs to be spoken by an actor starts with a '*' character.
+
+# Setting for this chapter general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters in this chapter
+{
+  "Selected-Characters": [
+    {
+      "id": "red",
+      "name": "Little Red Riding Hood",
+      "background": "A bright, tender-hearted village girl sent to bring food and comfort to her\nailing grandmother. She’s been warned to keep to the path and not speak to\nstrangers, but curiosity and kindness tug at her feet. She loves flowers,\nbirdsong, and the way sunlight freckles through the trees. Her iconic red\nhood and basket are more than props—they’re little anchors of bravery when\nthe woods press close. She’s polite by upbringing, literal in her\nunderstanding, and brave in small, practical ways.\n",
+      "traits": [
+        "curious",
+        "kind",
+        "naive",
+        "brave",
+        "easily-distracted",
+        "polite"
+      ],
+      "cadence": "light, earnest",
+      "lexicon": "simple words, fairy-tale tone; polite forms like \"please\" and \"thank you\"",
+      "prefer": [
+        "flowers",
+        "Grandmother",
+        "safe path",
+        "helpfulness",
+        "honesty"
+      ],
+      "avoid": [
+        "lying",
+        "strangers' tricks",
+        "dark thickets",
+        "leaving the path"
+      ],
+      "mannerisms": [
+        "Clutches her basket when nervous; relaxes as soon as she can offer help.",
+        "Answers questions plainly; takes idioms literally before catching on.",
+        "Soft little gasps of wonder at woodland sights; quiet hums of nursery tunes.",
+        "Uses simple, sincere phrases over fancy words; sprinkles in ‘please’ and ‘thank you.’",
+        "When scolded, lowers her eyes and apologizes, then tries to fix things at once."
+      ],
+      "sample_lines": [
+        "I'm bringing goodies to Grandmother.",
+        "I promised to stay on the path—well, mostly.",
+        "These flowers will cheer her right up, don’t you think?",
+        "Mama says it’s safest if I hurry, but I can help for just a minute.",
+        "If you know a shorter way, I suppose that would be kind…"
+      ],
+      "common_lines": [
+        "Grandmother’s waiting; I mustn’t dawdle.",
+        "Oh! I didn’t mean to be rude.",
+        "Thank you, but I should be on my way."
+      ],
+      "rare_lines": [
+        "I’m frightened, but I won’t run.",
+        "I did wrong to wander. I’ll make it right."
+      ],
+      "forbidden": [
+        "Does not use modern slang or technical jargon.",
+        "Will not be cruel, lewd, or cynical; no scheming language.",
+        "Avoids graphic descriptions of danger or harm."
+      ],
+      "temperature_hint": 0.25,
+      "max_tokens_line": 80
+    },
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "No gore; avoids explicit violent imagery in first person.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# Specifics in the Chapter
+Here is central theme of the dialog lines being "filmed"/"recorded":
+Danger hinted at in the dark trees and Wolf's smile.
+
+# Rules for generation:
+1. **Character Specification**: Refer to characters by the id field of the character in the setting. Each line must start with the id of the best character to speak it. 
+2. **Narrator**: Some lines cannot easily be conveyed to a reader as dialog.  You should use "Narrator:" to assign lines that would be strange for any of the characters to say.
+3. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
+4. **Character Dialog**: When you tell the actor what to say, be sure to transform the words into second person, using the "you" pronoun. This helps the character role play and not get distracted by other points of view. 
+5. **Multi-way Dialog**: Prefer switching which character says what on each successive line, if possible.  Sometimes, a character has to have two lines in a row, but this can get confusing for the reader. If you are tempted to have the same character say two consecutive dialogs, consider if one line should be Narrator.
+6. **Avoid**: DO NOT put - or * at the beginning of the line. DO NOT add any other text or markdown other than the name, colon, and line. 
+
+## Examples of actor prompt lines
+
+Below is an example showing the format desired for three bullets, showing both the identity narration bits, followed by the specific actor id and line direction:
+
+Henry: You say there is a hole in the bucket.  You use Liza's name several times for emphasis.  But you are careful to be polite.
+
+Liza: You shortly tell Henry to just fix the dang thing!  Already!  Politely of course.
+
+Narrator: Liza points her finger directly at the bucket hole.
+
+Henry: You ask how on earth to fix a bucket? Maybe it is not rocket science, but you don't think you have a way to do it.
+
+# Lines from the Writer:
+These are the lines the writer is giving you. Note that there should always be one actor line output per bullet:
+* wolf repeats red’s word “Grandmother” as if tasting it, then asks how far “the little cottage” might be.
+* red asks, “Do you know Grandmother?” and wolf says, “Not yet,” like it is a compliment.
+* A pine cone drops; red startles, and wolf chuckles like it was a shared joke.
+* He asks if Grandmother keeps her door latched “against drafts,” and red answers about the little iron hook without seeing his smile tighten.
+* A squirrel freezes on a trunk, eyes wide; red waves, while wolf freezes too. Suddenly the squirrel bolts into bramble.
+
+## Job to do
+Now, convert each line from the writer to the new actor centric second person format. Notice that you are always allowed to assign a line to the Narrator, but try not to do it unless you cannot see how to make it into a line of dialog. 
+
+=== RESPONSE ===
+wolf: You draw out the word "Grandmother" like a taste and ask, "How far is the little cottage?" with a velvet edge to your curiosity.
+
+red: You say, "Do you know Grandmother?" and note—softly, as if catching a compliment—how he answers, "Not yet."
+
+wolf: You let a low chuckle slip when a pine cone drops and she startles, as if it were a small, shared joke between you.
+
+red: You describe the little iron hook on the door—polite, practical—while you do not see his smile tighten at the word "latched."
+
+wolf: You freeze when the squirrel freezes on the trunk; you watch it bolt into the bramble, and the sudden quiet feels like a held breath.

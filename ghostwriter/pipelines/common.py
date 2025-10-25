@@ -16,6 +16,7 @@ from ..templates import apply_template, prompt_key_from_filename
 from ..env import env_for as _env_for, env_for_prompt as _env_for_prompt, reasoning_for_prompt as _reasoning_for_prompt
 from ..validation import validate_text, validate_bullet_list, validate_actor_list
 from ..llm import complete as llm_complete
+from ..logging import log_run as _log_run
 from ..utils import to_text
 from ..characters import load_characters_list
 
@@ -75,12 +76,18 @@ def llm_call_with_validation(
     validator,
     reasoning_effort: Optional[str] = None,
     log_maker: Optional[Callable[[int], Optional[Path]]] = None,
+    context_tag: Optional[str] = None,
 ) -> str:
     last_reason = ""
     for attempt in range(1, 4):
         # Increase token budget on retries to mitigate truncation/empty responses
         factor = 1.0 if attempt == 1 else (1.5 if attempt == 2 else 2.0)
         max_toks_try = int(max_tokens * factor)
+        try:
+            if context_tag:
+                _log_run(f"LLM ctx | {context_tag}")
+        except Exception:
+            pass
         out = llm_complete(user, system=system, temperature=temperature, max_tokens=max_toks_try, model=model, reasoning_effort=reasoning_effort)
         log_path = log_maker(attempt) if log_maker else None
         if log_path is not None:

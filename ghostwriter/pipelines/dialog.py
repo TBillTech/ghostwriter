@@ -19,7 +19,6 @@ from .common import (
     strip_trailing_done,
     brainstorm_has_done,
     filter_narration_brainstorm,
-    truncate_brainstorm,
     apply_body_template,
 )
 from ..characters import load_characters_list, render_character_call
@@ -52,6 +51,7 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
         brainstorm_new = llm_call_with_validation(
             sys1, user1, model=m1, temperature=t1, max_tokens=k1, validator=validate_bullet_list, reasoning_effort=r1,
             log_maker=None,
+            context_tag=f"tp={tp_index:02d} type=dialog template={tpl1} step=BRAIN_STORM",
         )
         if bs_path is not None:
             try:
@@ -60,11 +60,10 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
                 bs_path.write_text(combined, encoding="utf-8")
             except Exception:
                 pass
-    print("Brainstorming still in progress.")
-    raise UserActionRequired("Brainstorming still in progress.")
+        print("Brainstorming still in progress.")
+        raise UserActionRequired("Brainstorming still in progress.")
 
     brainstorm = filter_narration_brainstorm(brainstorm_work, min_chars=24)
-    brainstorm = truncate_brainstorm(brainstorm, limit=10)
 
     # Ordering (respect env skip via dialog key)
     reps2 = dict(reps)
@@ -83,6 +82,7 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
         ordered = llm_call_with_validation(
             sys2, user2, model=m2, temperature=t2, max_tokens=k2, validator=validate_bullet_list, reasoning_effort=r2,
             log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_ordering{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+            context_tag=f"tp={tp_index:02d} type=dialog template={tpl2} step=ORDERING",
         )
 
     # Actor assignment
@@ -98,6 +98,7 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
     actor_lines = llm_call_with_validation(
         sys3, user3, model=m3, temperature=t3, max_tokens=k3, validator=validate_actor_list, reasoning_effort=r3,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_actor_assignment{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        context_tag=f"tp={tp_index:02d} type=dialog template={tpl3} step=ACTOR_ASSIGNMENT",
     )
 
     # Build ACTOR_LIST (ids only)
@@ -124,6 +125,7 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
     body_lang = llm_call_with_validation(
         sys4a, user4a, model=m4a, temperature=t4a, max_tokens=k4a, validator=validate_bullet_list, reasoning_effort=r4a,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_body_language{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        context_tag=f"tp={tp_index:02d} type=dialog template={tpl4a} step=BODY_LANGUAGE",
     )
     # Agenda (grouped by actor)
     sys4b = "Produce an agenda list grouped by actor id."
@@ -134,6 +136,7 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
     agenda_text = llm_call_with_validation(
         sys4b, user4b, model=m4b, temperature=t4b, max_tokens=k4b, validator=validate_text, reasoning_effort=r4b,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_agenda{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        context_tag=f"tp={tp_index:02d} type=dialog template={tpl4b} step=AGENDA",
     )
     # Parse agenda into per-actor bullets
     def _parse_agenda_by_actor(text: str) -> Dict[str, str]:
@@ -166,6 +169,7 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
     reactions_text = llm_call_with_validation(
         sys4c, user4c, model=m4c, temperature=t4c, max_tokens=k4c, validator=validate_actor_list, reasoning_effort=r4c,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_reactions{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        context_tag=f"tp={tp_index:02d} type=dialog template={tpl4c} step=REACTIONS",
     )
 
     # Preload character YAML for ids
@@ -191,34 +195,34 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
             reactions_pairs.append(m.group(1))
             reactions_vals.append(m.group(2))
 
-    # Iterate assigned actor lines
+    # Iterate assigned actor lines and generate in a single batch using existing character dialog prompts
     outputs: List[str] = []
-    # reuse parser for actor_lines
     lines_pairs: List[tuple[str, str]] = []
     for ln in actor_lines.splitlines():
         m = _A_RE.match(ln)
         if m:
             lines_pairs.append((m.group(1), m.group(2)))
+    # Build per-line prompts using existing templates and combine into a single batch call
+    # Helper to pick nth body-language bullet
+    def _pick(text: str, n: int) -> str:
+        cnt = [ln.lstrip()[1:].lstrip() for ln in text.splitlines() if ln.lstrip().startswith(('*', '-'))]
+        if 1 <= n <= len(cnt):
+            return f"* {cnt[n-1]}"
+        return ""
+
+    from ..characters import build_character_call_prompt
+
+    items_sections: List[str] = []
     for b_index, (actor_id, line_hint) in enumerate(lines_pairs, start=1):
         agenda_block = agenda_by_actor.get(actor_id, "")
         reaction_line = reactions_vals[b_index - 1] if 1 <= b_index <= len(reactions_vals) else ""
-        # Pick body-language bullet for this line
-        # simple nth bullet picker
-        def _pick(text: str, n: int) -> str:
-            cnt = [ln.lstrip()[1:].lstrip() for ln in text.splitlines() if ln.lstrip().startswith(('*', '-'))]
-            if 1 <= n <= len(cnt):
-                return f"* {cnt[n-1]}"
-            return ""
 
-        # Route Narrator lines to a prose generator (no quotes, no body-language injection)
         if actor_id.strip().lower() == "narrator":
-            # Build a dedicated narration-in-dialog prompt using available context
             tpln = "narration_in_dialog_prompt.md"
             repsN = dict(reps4)
             repsN["[REACTION]"] = reaction_line
             repsN["[LINE_INTENT]"] = line_hint
             repsN["[AGENDA]"] = agenda_block or ""
-            # Include recent dialog (all actors) as JSON text
             try:
                 dialog_map = {a: state.recent_dialog(a) for a in (getattr(state, "active_actors", []) or [])}
                 from ..utils import to_text as _to_text
@@ -229,46 +233,79 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
                 f"Write a short narrative beat (no quotes) that fits this scene.\n\n"
                 f"Line intent: {line_hint}\nReaction to prior line: {reaction_line}\nAgenda notes: {agenda_block}\n"
             )
-            # Use the same step settings as CHARACTER_DIALOG
-            mN, tN, kN = env_for_prompt(tpln, "CHARACTER_DIALOG", default_temp=0.3, default_max_tokens=120)
-            rN = reasoning_for_prompt(tpln, "CHARACTER_DIALOG")
-            respN = llm_call_with_validation(
-                system="You write third-person narrative prose without quotation marks.",
-                user=userN,
-                model=mN,
-                temperature=tN,
-                max_tokens=kN,
-                validator=validate_text,
-                reasoning_effort=rN,
-                log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_b{b_index:02d}_Narrator{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+            systemN = "You write third-person narrative prose without quotation marks."
+            item = (
+                f"ITEM {b_index}: id={actor_id}\n=== SYSTEM ===\n{systemN}\n=== USER ===\n{userN}\n"
             )
-            # For narrator, append output exactly (no body-language merging, no quote substitution)
-            outputs.append(respN.strip())
-            # Do not add 'Narrator' to dialog history (not a character)
+            items_sections.append(item)
             continue
 
-        body_for_line = _pick(body_lang, b_index)
+        # Character lines
+        body_for_line = _pick(body_lang, b_index)  # still applied after batch response
         agenda_combined = (agenda_block + ("\n" if agenda_block else "") + body_for_line).strip() if body_for_line.strip() else agenda_block
-
         combined_prompt = (
             f"Reaction: {reaction_line}\n"
             f"Line intent: {line_hint}\n"
         )
         dialog_lines_ctx = state.recent_dialog(actor_id)
-        resp = render_character_call(
+        system_i, user_i = build_character_call_prompt(
             actor_id,
             combined_prompt,
             dialog_lines_ctx,
-            temperature=0.35,
-            max_tokens_line=120,
-            log_file=(log_dir / f"{tp_index:02d}_b{b_index:02d}_{actor_id}.txt") if log_dir else None,
-            character_yaml=char_yaml_by_id.get(actor_id.strip().lower()),
             agenda=agenda_combined,
+            character_yaml=char_yaml_by_id.get(actor_id.strip().lower()),
         )
-        outputs.append(apply_body_template(body_for_line, resp))
-        if resp.strip():
-            state.add_dialog_line(actor_id, resp.strip())
-            appended.setdefault(actor_id, []).append(resp.strip())
+        item = (
+            f"ITEM {b_index}: id={actor_id}\n=== SYSTEM ===\n{system_i}\n=== USER ===\n{user_i}\n"
+        )
+        items_sections.append(item)
+
+    # Compose batch system and user
+    batch_system = (
+        "You will simulate multiple independent character dialog calls. "
+        "For each ITEM below, read its SYSTEM and USER sections and produce exactly one response as that model would. "
+        "Return exactly one line per item, in order, strictly formatted as 'id: line'. "
+        "Do not include any extra commentary or headers."
+    )
+    batch_user = (
+        "Follow these rules:\n"
+        "- Output N lines: one per ITEM, same order.\n"
+        "- Each line formatted 'id: line'.\n"
+        "- Keep each line concise; no stage directions; narrator uses prose without quotes.\n\n"
+        + "\n".join(items_sections)
+    )
+
+    # Use the same env as CHARACTER_DIALOG (same as per-line calls)
+    mB, tB, kB = env_for_prompt("character_dialog_prompt.md", "CHARACTER_DIALOG", default_temp=0.3, default_max_tokens=120 * max(4, len(lines_pairs)))
+    rB = reasoning_for_prompt("character_dialog_prompt.md", "CHARACTER_DIALOG")
+    batch_resp = llm_call_with_validation(
+        system=batch_system,
+        user=batch_user,
+        model=mB,
+        temperature=tB,
+        max_tokens=kB,
+        validator=validate_actor_list,
+        reasoning_effort=rB,
+        log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_dialog_batch{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        context_tag=f"tp={tp_index:02d} type=dialog template=character_dialog_prompt.md step=CHARACTER_DIALOG_BATCH",
+    )
+
+    # Parse and post-process
+    resp_pairs: List[tuple[str, str]] = []
+    for ln in batch_resp.splitlines():
+        m = _A_RE.match(ln)
+        if m:
+            resp_pairs.append((m.group(1), m.group(2)))
+    for b_index, (actor_id, line_text) in enumerate(resp_pairs, start=1):
+        if actor_id.strip().lower() == "narrator":
+            outputs.append((line_text or "").strip())
+            continue
+        body_for_line = _pick(body_lang, b_index)
+        merged = apply_body_template(body_for_line, line_text or "")
+        outputs.append(merged)
+        if (line_text or "").strip():
+            state.add_dialog_line(actor_id, (line_text or "").strip())
+            appended.setdefault(actor_id, []).append((line_text or "").strip())
     text = "\n".join(outputs)
     # Polish
     from ..templates import build_polish_prompt
@@ -284,6 +321,7 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
         reasoning_effort=rp,
         validator=validate_text,
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_polish{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
+        context_tag="tp={:02d} type=dialog template=polish_prose_prompt.md step=POLISH_PROSE".format(tp_index),
     )
     state.last_appended_dialog = appended
     return polished

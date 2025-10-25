@@ -1,0 +1,25 @@
+- Rewrite Wolf's opening line ("Grandmother, how far is the little cottage? I like to measure a path by whispers...") — it's confusing and oddly addresses Grandmother. Replace with a simple, sly question: e.g., "How far Grandmother's cottage?"
+
+- Remove Wolf's explicit mention of "Grandmother" as addressee and all direct references to measuring by "whispers" that read as a weird simile. If you want a mysterious tone, use: "I know these woods well" or "I know a quicker way through the woods."
+
+- Cut or compress Red's redundant line: "Yes, I know Grandmother. She is my grandmother, and I bring her these goodies..." → Keep as one clear sentence: e.g., "Yes—she's my grandmother. I'm bringing her bread and jam; I must hurry and stay on the path."
+
+- Remove Wolf's line: "Only a suggestion, of course—your mother needn't know." It introduces an inconsistent parent and needlessly encourages secrecy. Replace with a subtler temptation: e.g., "Just a friendly offer—if you'd like company."
+
+- Tone down or remove Wolf's overtly ominous metaphors about doors, latches, tolls ("I know doors that yield...pay the toll"). That explicitly telegraphs danger. Replace with a suggestive, nonliteral lure: e.g., "There are ways through the trees that shave hours from the road—shortcuts, if you trust them." Or: "Some paths open easily to those who know the step; others keep their secrets."
+
+- Avoid lines that state danger or threat directly. Ensure Wolf's lines remain charming and slightly unsettling without explicit menace: use calm enticement and ambiguous phrasing ("I worry for your steps" is okay but keep it subtle).
+
+- Remove any meta-action descriptions (e.g., "The Wolf purred," "The Wolf froze") used as dialog tags inside quotes. Use normal dialogue attributions or brief stage directions outside spoken lines. If kept as speech, rephrase so it reads as spoken: e.g., start with "The Wolf purred" as a beat then a shorter spoken line.
+
+- Keep the focus on Red's resolve: her insistence on staying on the path and hurrying should be concise and firm, not repetitive. Suggested line: "No—I'm going straight to my grandmother's cottage. I must hurry and stay on the path."
+
+- Ensure only Red and Wolf speak; remove any stray references to other speakers or relatives beyond "grandmother" to avoid confusion.
+
+- Final suggested compact dialogue sequence (for clarity, adapt into script format):
+  - Wolf (calm, sly): "Good day, little one. Where are you headed? The woods can be kinder with a guide."
+  - Red (firm): "To my grandmother's cottage. I'm bringing bread and jam. I'll stay on the path and hurry."
+  - Wolf (smooth, suggestive): "A noble errand. There are shrewd shortcuts through the pines—faster ways, for those who care to try."
+  - Red (resolute): "No, thank you. I'll stay on the path."
+
+Use those rewrites as direct replacements to remove redundancy and avoid explicit foreshadowing.

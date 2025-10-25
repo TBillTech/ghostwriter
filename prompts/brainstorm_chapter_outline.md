@@ -27,10 +27,16 @@ Instructions:
 - Do NOT include Story-So-Far or Story-Relative-To sections.
 - The YAML SHOULD include:
   - Touch-Points: a list of items (narration/dialog/implicit/actors/scene/foreshadowing/setting) in the order they should be executed.
-  - Optional 'setting' block with:
+  - The first touch-point should be a 'setting' block with:
     - factoids: [list of factoid names]
     - actors: [list of character ids or names]
-    - scene: string
+  - The second touch-point should be a 'scene' block with:
+    - name: the name of the scene
+    - description: The 1 or two paragraph description of the scene
+    - props: a list of 'prop' blocks
+  - The third touch-point should be an 'actors: [list of character ids or names]'  
+  - You may include another 'scene' block touch-point if the scene changes significantly during the chapter.
+  - You may change the on-scene actors by using another actors touch-point.
 - Keep Touch-Points specific enough to guide pipelines, but concise (single sentences or short phrases).
 - Prefer clarity and coherence over exhaustiveness.
 

@@ -56,6 +56,42 @@ This document outlines the tasks necessary to get the driver.py working correctl
         - [x] However, if the above point is difficult or hard to achive, you may create a derived exception class that could be caught gracefully without terminating the program.s
             - Note: We now use a derived exception `UserActionRequired` and catch it in both CLI and driver; no sys.exit remains in pipelines or touch-point gates.
 
+5. **Scaffolding for MockLLM**
+    The plan is to use the LRRH book as a database for the MockLLM, and to make it deterministic. In addition, since the LRRH book under testdata has been built originally using a real LLM response, it should help with good code coverage. Now, in order for this to work, we need some scaffolding and helper functions so that the MockLLM can operate effectively and be coded somewhat generically. 
+    By far the thorniest issue to come up in this design is that the prompts may be updated in the future, while the previously generated LRRH book would then mismatch the prompt templates.  To fix this we will have to create an update process for the LRRH book to update the prompting (however, the reponses from the LLM, and pure artifacts like brainstorm.txt and touch_point_draft.txt can remain the same).  Pure artifacts are outputs and files that do not have the prompt prior to the RESPONSE in them.
+    
+    We have the following engineering requirements:
+    - [ ] Functions which can track prompt changes using a hash
+        - [ ] Compute a hash of the prompts any time the program runs
+        - [ ] Write the prompt hash to the prompts directory in a prompt_hash file
+        - [ ] Test if the prompt_hash from the prompts directory matches the prompt_hash in the LRRH directory
+    - [ ] A function which can update the LRRH book for the new prompt templates:
+        - [ ] Run this function if and only if the prompt_hash from the prompts directory mismatches with the prompt_hash in the LRRH directory
+        - [ ] A function that will iterate through each touch-point and pipeline step and update any files with LLM prompts for the new prompt templates, using the following functions:
+        - [ ] A function which can take an LLM prompt + reponse file, and pull out just the LLM prompt part
+        - [ ] A function which can regenerate the prompt for the same touch-point pipeline step
+        - [ ] Then take the regenerated prompt + original response, and overwrite the original file.
+        - [ ] After all touch-point pipeline steps have been updated, write the new prompt_hash in the LRRH directory.
+        - [ ] Obviously, give a summary log for each touch-point pipeline step which is either updated or left the same.
+    - [ ] A function which can copy a partial version of the LRRH book as if it had been generated up to a given touch-point and pipeline step specifier. This will be used to set up a test of a pipeline step. This has sub requirements:
+        - [ ] Honor destination path to copy, and clear any prior version at that path.
+        - [ ] It must not include any files that come from later in the pipeline.
+        - [ ] It must include all files that came before
+        - [ ] Depending on the test to be done, it may need to strip the DONE off of a LRRH file.
+    - [ ] A function which can modify a partial version of the LRRH book so that a user-in-the-loop step can be tested.
+        - [ ] For touch-point brainstorm.txt, it must be able to remove the "DONE"
+        - [ ] for first_suggestions.txt and touch_point_first_draft.txt, it must not copy the touch_point_draft.txt or suggestions.txt.
+    - [ ] A function which can be given a path to a partial copy of LRRH, and return the response for the current touch-point pipeline step. Expect this to be "independent" of the prompt, since the LRRH is taken to be the golden output.
+    - [ ] A function which can be given a path to a partial copy of LRRH, and return the prompt for the current touch-point pipeline step. Expect this to be "equal" to the prompt, since the LRRH is taken to be the golden output.
+
+6. **Add Mock LLM for Testing**
+    - Rely on the fact that for testing, we will use the Little Red Riding Hood book
+    - Use the LRRH text as the return values for the MockLLM.  This way, the outputs can be tested in detail.
+    - Create MockLLM class that returns predictable responses
+    - Implement different response scenarios (successful, missing touch-points, API errors)
+    - Have the MockLLM not only provide the response from the correct touch-point pipeline step, but also check the prompt for that step against the LRRH prompt up to whitespace. This should be possible because of applying the update functio to the LRRH book when prompts change.
+    - Use for unit testing without requiring actual API calls
+
 ## Testing and Quality Assurance
 
 11. **Fully configurable file locations**
@@ -84,14 +120,6 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - Test story-so-far and story-relative-to generation
     - Test multi-chapter workflow
     - Test the two-phase pre-draft → substitution → polish pipeline end-to-end with a Mock LLM
-
-14. **Add Mock LLM for Testing**
-    - Rely on the fact that for testing, we will use the Little Red Riding Hood book
-    - Use the LRRH text as the return values for the MockLLM.  This way, the outputs can be tested in detail.
-    - Create MockLLM class that returns predictable responses
-    - Implement different response scenarios (successful, missing touch-points, API errors)
-    - Add per-character response fixtures to simulate distinct voices/cadences
-    - Use for unit testing without requiring actual API calls
 
 15. **Create Test Data**
     - Create test SETTING.yaml and CHAPTER files in tests/ directory

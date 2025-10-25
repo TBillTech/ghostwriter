@@ -1,0 +1,37 @@
+=== SYSTEM ===
+You are a ghostwriter polishing and cleaning prose.
+
+=== USER ===
+You are a ghostwriter working from a more rough version of a novel chapter.  
+Your job is to write polished clean prose for a novel chapter.  
+
+# Setting in general 
+[SETTING]
+
+# Characters
+[CHARACTERS]
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+
+
+# Rules for generation:
+1. Produce **continuous prose only** (no lists or notes or markup or obnoxious formatting unless central to the text like litRPG stats).  
+2. Make sure to fix the commas, spacing, and capitalization when prose includes quoted dialog.
+
+# Previous rough version
+Please clean up the following text:
+Wolf set the tipped chair upright with a careful paw; the scrape across the creaking boards was brief, like a thing remembered and forgiven. He squared the rug at the bed’s foot, brushed the heel scuffs near the door with the side of a paw as if erasing footprints from a page, then folded the scattered shawl once and drew it about his shoulders so the outline softened. The fallen teacup was righted on its saucer; with the cuff of the shawl’s edge he wiped a faint ring of tea from the table until the wood looked tended. Each motion tidied the impression of struggle to nothing. He settled the kettle back on the hook above the coals and set the kettle to murmur, nudging the embers until a low sound began beneath the lid. The hearth answered his coaxing with a steady, tended glow, turning the room into a kept secret. He snapped the powder tin shut and hid it beneath the washstand. Wolf pushed the spectacles higher on his snout until the smudge hid the shine of his eyes, and he left the shutter hook fast so the lamp made corners kinder, blurrier.
+
+Wolf shook the feather quilt once to loosen the crease of struggle, smoothed it flat across the bed, and drew the curtains to a half-closed drape that framed a small, resting silhouette. In the mirror’s dim, Wolf’s mouth learned a smaller smile. Wolf tried on a cough the way one tries on a glove: dry, modest, tested once, then again until the third sat ordinary and harmless. At last Wolf settled into the pillows, sinking until the quilt erased his breadth and left only the gentle rise where a head ought to be.
+
+Now, draft the chapter prose, sticking as close to possible to the words and sentences in the rough_draft, only adding words and filler where absolutely necessary.
+
+=== RESPONSE ===
+Wolf set the tipped chair upright with a careful paw; the scrape across the creaking boards was brief, like a thing remembered and forgiven. He squared the rug at the bed’s foot, brushed the heel scuffs near the door with the side of a paw as if erasing footprints from a page, then folded the scattered shawl once and drew it about his shoulders so the outline softened. The fallen teacup was righted on its saucer; with the cuff of the shawl’s edge he wiped a faint ring of tea from the table until the wood looked tended. Each motion tidied the impression of struggle to nothing. He settled the kettle back on the hook above the coals and set it to murmur, nudging the embers until a low sound began beneath the lid. The hearth answered his coaxing with a steady, kept glow, turning the room into a kept secret. He snapped the powder tin shut and hid it beneath the washstand. Wolf pushed the spectacles higher on his snout until the smudge hid the shine of his eyes, and he left the shutter hook fast so the lamp made corners kinder, blurrier.
+
+Wolf shook the feather quilt once to loosen the crease of struggle, smoothed it flat across the bed, and drew the curtains to a half-closed drape that framed a small, resting silhouette. In the mirror’s dim, Wolf’s mouth learned a smaller smile. He tried on a cough the way one tries on a glove: dry, modest, tested once, then again until the third sat ordinary and harmless. At last he settled into the pillows, sinking until the quilt erased his breadth and left only the gentle rise where a head ought to be.

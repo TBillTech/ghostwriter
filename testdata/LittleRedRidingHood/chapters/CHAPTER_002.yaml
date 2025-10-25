@@ -1,0 +1,103 @@
+Touch-Points:
+  - setting:
+      factoids:
+        - "Grandmother's Cottage"
+        - "Forest Path"
+        - "Basket of Goodies"
+        - "Red Hood"
+      actors:
+        - "Wolf"
+        - "Grandmother"
+
+  - scene:
+      name: "At the Cottage Gate"
+      description: |
+        Having slipped from the deer track ahead of Red, the Wolf reaches a small cottage tucked in thyme and smoke.
+        The garden is a patchwork of herbs and cabbages, the door sun-bleached and simple; inside, a kettle hums and an old clock ticks.
+        The world here smells of mint and ash and rest, vulnerable in its quiet routine.
+      props:
+        - name: "Cottage Door-Latch"
+          significance: "Threshold of trust; a simple defense turned invitation"
+          description: |
+            A thumb-worn iron latch, warm from afternoon light.
+            It answers to a familiar knock and an even more familiar voice.
+        - name: "Hearth and Kettle"
+          significance: "Homeliness to be imitated; cover for small sounds"
+          description: |
+            A blackened iron kettle keeps time in soft breaths over banked coals,
+            its steam sewing the room together with the smell of nettle tea.
+        - name: "Teacup on Saucer"
+          significance: "Grandmother’s pause interrupted"
+          description: |
+            Porcelain with a hairline crack, rim blushed by tea.
+            It waits beside a chair draped with a shawl.
+        - name: "Walking Stick"
+          significance: "Measure of frailty the Wolf will exploit"
+          description: |
+            A hazel stick, polished by years of palms, leaning by the door.
+
+  - actors:
+      - "Wolf"
+      - "Grandmother"
+
+  - narration: |
+      The Wolf stands in the garden’s stillness and listens: no Red yet, only bees and the slow metronome of the clock.
+      He smooths his voice in his throat like a blade in a sheath, then pads to the door.
+
+  - dialog: |
+      Wolf (mimicking Red, soft and breathy): "Grandmother, it’s me. Mama sent bread and jam. May I come in?"
+      Grandmother (from within, muffled with age): "Lift the latch, child. I’ve been waiting."
+
+  - implicit: |
+      The latch lifts with an unthreatening click; the kettle sighs.
+      The cottage, accustomed to gentle footfalls, does not yet recognize the weight of a predator.
+
+  - scene:
+      name: "Inside, the Disguise"
+      description: |
+        The aftermath of swallowing Grandma: The chair is knocked over, and the teapot is still warm. But Wolf organizes the room halfway through the scene.
+      props:
+        - name: "Grandmother’s Nightcap and Spectacles"
+          significance: "Tools of disguise; innocence repurposed"
+          description: |
+            A soft cap with a blue ribbon, and spectacles smudged with use.
+            They pinch the Wolf’s ears and blur his eyes, but lend him a silhouette.
+        - name: "Feather Quilt and Bed Curtains"
+          significance: "Stage for the masquerade"
+          description: |
+            A puffed quilt stitched with strawberries, curtains that turn a bed into a small theater.
+            They muffle size and shape, smooth the outline of teeth.
+        - name: "Shutter Hook"
+          significance: "Conspiracy with the dark"
+          description: |
+            A simple hook-and-eye that tames daylight.
+            Once fastened, the room agrees to keep secrets.
+        - name: "Powder Tin"
+          significance: "A trick to soften a snout"
+          description: |
+            A little tin of rice powder; a dab on the muzzle keeps the fur from gleaming.
+
+  - actors:
+      - "Wolf"
+
+  - narration: |
+      Wolf enters, then swallows Grandma up in one bite. His belly is distended, but Wolf doesn't mind.
+      
+  - narration: | 
+      He tidies the impression of struggle to nothing, sets the kettle to murmur, and folds the shawl around his shoulders.
+      In the mirror’s dim, his mouth learns a smaller smile. He tries on a cough the way one tries on a glove.
+
+  - foreshadowing: |
+      A faint thread of humming drifts through the garden—the tune Red kept on the path—then fades as the wind shifts.
+      The Wolf’s ears lift under the nightcap. He smiles with care, and waits.
+
+  - dialog: |
+      Wolf (testing): "Come in, dear heart. Mind the step."
+      Wolf (again, higher, kinder): "Oh, what a day you must have had."
+      The words fit. He settles deeper into the quilt.
+
+  - implicit: |
+      Dust shivers in a bar of light that escaped the shutters; the clock’s tick grows loud enough to measure nerves.
+      From far off, a rhythm of axe on wood answers the kettle’s breath, iron and sap interlacing on the air.
+
+

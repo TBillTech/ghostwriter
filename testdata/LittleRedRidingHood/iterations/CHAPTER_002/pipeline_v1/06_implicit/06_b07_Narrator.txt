@@ -1,0 +1,63 @@
+=== SYSTEM ===
+You write third-person narrative prose without quotation marks.
+
+=== USER ===
+You are writing third-person narrative prose that bridges or frames the surrounding dialog.
+
+Rules:
+- Do not use quotation marks.
+- Keep the voice consistent with the current chapter’s style and scene.
+- Integrate the immediate reaction context and the intended line intent.
+- Be concise but evocative. Just a sentence or two. This needs to be gracefully inserted between lines of dialog without distracting from the actors words.
+- Avoid actor attributions; this is narration, not a spoken line.
+
+Context (may be partial and pre-formatted):
+
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['The Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+Active actors: The, Wolf, Grandmother
+Scene: {'name': 'At the Cottage Gate', 'description': 'Having slipped from the deer track ahead of Red, the Wolf reaches a small cottage tucked in thyme and smoke.\nThe garden is a patchwork of herbs and cabbages, the door sun-bleached and simple; inside, a kettle hums and an old clock ticks.\nThe world here smells of mint and ash and rest, vulnerable in its quiet routine.\n', 'props': [{'name': 'Cottage Door-Latch', 'significance': 'Threshold of trust; a simple defense turned invitation', 'description': 'A thumb-worn iron latch, warm from afternoon light.\nIt answers to a familiar knock and an even more familiar voice.\n'}, {'name': 'Hearth and Kettle', 'significance': 'Homeliness to be imitated; cover for small sounds', 'description': 'A blackened iron kettle keeps time in soft breaths over banked coals,\nits steam sewing the room together with the smell of nettle tea.\n'}, {'name': 'Teacup on Saucer', 'significance': 'Grandmother’s pause interrupted', 'description': 'Porcelain with a hairline crack, rim blushed by tea.\nIt waits beside a chair draped with a shawl.\n'}, {'name': 'Walking Stick', 'significance': 'Measure of frailty the Wolf will exploit', 'description': 'A hazel stick, polished by years of palms, leaning by the door.\n'}]}
+
+Recent dialog context (tail):
+{
+  "The": [],
+  "Wolf": [
+    "That small latch click speaks softly to us both. Come with me to a quieter door, where you can pace the moment and decide on your own terms.",
+    "That latch keeps time with our breath, does it not? The hazel stick in your hand is a plain thing—the sort of ordinary tool that makes a quieter door feel safer. Come with me at your pace, and you’ll decide on your own terms.",
+    "That latch keeps time with our breath; I’ll move at your pace and step through when you’re ready.\nLet the quiet guide us; a moment shared is a moment earned.\nWhenever you’re ready, we’ll take the door and see where it leads."
+  ],
+  "Grandmother": []
+}
+
+Agenda notes (may be empty):
+
+
+Immediate cues:
+- Line intent: You watch the clock hand move on while you count, silently, how far until the next knock would be too late.
+- Reaction to previous line: You watch the clock hand and count the beats that stretch toward an unmade knock, cataloguing how patience and timing might be answered.
+
+Write the narrative prose now (no quotes):
+
+=== RESPONSE ===
+The clock hand slides its measured arc, counting the breath between tapping moments and the quiet that follows each pause. Patience gathers at the door like thyme and smoke, pacing the space until the next knock is more invitation than interruption.

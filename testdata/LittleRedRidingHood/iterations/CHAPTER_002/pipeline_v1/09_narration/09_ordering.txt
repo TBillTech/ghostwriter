@@ -1,0 +1,155 @@
+=== SYSTEM ===
+You will order and refine brainstormed bullet points for coherent flow.
+
+=== USER ===
+You are a director examining the output of a creative brainstorming session, also working from structured YAML notes.  
+Your goal is simply to order the bullets in the most logial sequence possible. You are not allowed to take bullets away.
+You are however, allowed to add new intermediate bullets to help the sequence make more sense.
+
+# Setting in general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['The Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "No gore; avoids explicit violent imagery in first person.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+
+
+# Prior paragraph
+This is only for context. Do NOT repeat this:
+The latch clicked; the kettle sighed. The Wolf purred, "Grandmother, it's me. Mama sent bread and jam." Grandmother murmured, "Come in, child. Sit by the stove — tea's hot. The hazel stick's by the door." The Wolf purred, "Take your time; I'll wait where the door is smallest."
+
+# Scene
+Here is the scene they actors are placed in:
+{'name': 'Inside, the Disguise', 'description': 'The aftermath of swallowing Grandma: The chair is knocked over, and the teapot is still warm.\n', 'props': [{'name': 'Grandmother’s Nightcap and Spectacles', 'significance': 'Tools of disguise; innocence repurposed', 'description': 'A soft cap with a blue ribbon, and spectacles smudged with use.\nThey pinch the Wolf’s ears and blur his eyes, but lend him a silhouette.\n'}, {'name': 'Feather Quilt and Bed Curtains', 'significance': 'Stage for the masquerade', 'description': 'A puffed quilt stitched with strawberries, curtains that turn a bed into a small theater.\nThey muffle size and shape, smooth the outline of teeth.\n'}, {'name': 'Shutter Hook', 'significance': 'Conspiracy with the dark', 'description': 'A simple hook-and-eye that tames daylight.\nOnce fastened, the room agrees to keep secrets.\n'}, {'name': 'Powder Tin', 'significance': 'A trick to soften a snout', 'description': 'A little tin of rice powder; a dab on the muzzle keeps the fur from gleaming.\n'}]}
+
+# Actors
+Here are the actors in the scene:
+The, Wolf
+
+# Rules for generation:
+1. **Bullet Points**: Provide your results as bullet points, starting the line with '*' character.
+2. **Clean Lines**: If there are intent words at the beginning of the given bullets, for example "Clarity - ", or "Flavor: " leave those out and just recover the point without a title.
+3. **Just Bullets Output**: Strip off, ignore, and do not output any markdown or other formatting, other than just only '*' character at line start.
+
+Now, Here are the Bullets to be ordered in as logical a way as possible:
+* The door eased inward, and wolf slipped through the gap like a shadow finding its shape.
+* Grandmother rose from her chair, one hand on the hazel stick, the other reaching toward the stove.
+* The floorboards creaked once; the chair tipped and skated, knocking the tea-cup askew.
+* Wolf crossed the hearth stones in two silent bounds, breath warm, intent neatly folded.
+* A single gulp took Grandmother whole, swift as a lantern snuffed; the room answered with a thud of chair leg and a soft settling sigh.
+* The teapot kept its whisper; the spoon in the cup rattled and went still.
+* Wolf’s belly rounded, heavy beneath his ribs, and he adjusted his stance until the weight found its place.
+* He fastened the shutter hook, letting the room trade daylight for secrecy and lamplight gloss.
+* He pinched the powder tin between claws, dabbed rice dust along his muzzle to dim the telltale gleam.
+* The nightcap slid over pricked ears; the blue ribbon bowed above a brow too broad for human comfort.
+* Spectacles perched on a bridge made for scent, lenses fogging, smudges turning the world to blur.
+* He smoothed the feather quilt, plumping strawberries into a hill that disguised his breadth.
+* Wolf settled, belly distended under quilted fruit, untroubled by the burden as the cottage kept his secret.
+
+
+=== RESPONSE ===
+* The door eased inward, and wolf slipped through the gap like a shadow finding its shape.
+* He paused on the threshold, scenting the warmth and counting heartbeats in the hush.
+* Grandmother rose from her chair, one hand on the hazel stick, the other reaching toward the stove.
+* Wolf crossed the hearth stones in two silent bounds, breath warm, intent neatly folded.
+* The floorboards creaked once; the chair tipped and skated, knocking the tea-cup askew.
+* A single gulp took Grandmother whole, swift as a lantern snuffed; the room answered with a thud of chair leg and a soft settling sigh.
+* The teapot kept its whisper; the spoon in the cup rattled and went still.
+* Wolf’s belly rounded, heavy beneath his ribs, and he adjusted his stance until the weight found its place.
+* He smoothed the feather quilt, plumping strawberries into a hill that disguised his breadth.
+* Wolf settled, belly distended under quilted fruit, untroubled by the burden as the cottage kept his secret.
+* He pinched the powder tin between claws, dabbed rice dust along his muzzle to dim the telltale gleam.
+* The nightcap slid over pricked ears; the blue ribbon bowed above a brow too broad for human comfort.
+* Spectacles perched on a bridge made for scent, lenses fogging, smudges turning the world to blur.
+* He fastened the shutter hook, letting the room trade daylight for secrecy and lamplight gloss.

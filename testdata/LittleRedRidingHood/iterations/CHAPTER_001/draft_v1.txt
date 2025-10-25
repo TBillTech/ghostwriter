@@ -1,0 +1,65 @@
+BEGIN_TOUCHPOINT id=1 type=setting
+
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=2 type=scene
+
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=3 type=actors
+
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=4 type=narration
+
+END_TOUCHPOINT
+BEGIN_RESULT
+Red stepped along the winding dirt trail, the red hood bright against the pines, humming a small steady tune that kept time in her chest. The basket of goodies hung from her arm, wicker creaking softly with each swing—a gift for Grandmother, filled with bread and jam. Shafts of pale light crossed the path; birds stirred in the boughs and a lift of air nudged the jam-sweet smell toward the bracken. Damp earth clung to her shoes and pine needles softened every footfall. She passed a mossy stump, glanced at a cluster of flowers, and moved on, the tune on her lips.
+
+Wolf paced unseen among the bracken, keeping parallel to her course, the forest swallowing claws and breath. The scents reached Wolf faintly when the wind favored, and Wolf matched her stride—silently moving when she moved, pausing when she paused—following her every step at the edge of the bracken.
+END_RESULT
+
+BEGIN_TOUCHPOINT id=5 type=dialog
+
+END_TOUCHPOINT
+BEGIN_RESULT
+The Wolf bowed. "Good day, little one. Where are you headed? That basket marks a tempting errand; the woods are full of ways—if you’d trust a patient guide, I can show a quicker, kinder route."
+
+Red clutched her basket. "To my grandmother’s cottage—bread and jam for her. I’ll stay on the path and hurry. Thank you."
+
+The Wolf smiled. "Such a charming hood—it brightens these shadows."
+END_RESULT
+
+BEGIN_TOUCHPOINT id=6 type=implicit
+
+END_TOUCHPOINT
+BEGIN_RESULT
+The Wolf purred, "Good day, little one. Where are you headed? The woods can be kinder with a guide."
+
+Little Red blinked. "To my grandmother's cottage. I'm bringing her bread and jam; I must hurry and stay on the path."
+
+The Wolf chuckled. "A noble errand. There are shrewd shortcuts through the pines—faster ways for those who care to try. Just a friendly offer, if you'd like company."
+
+Little Red straightened. "No, thank you. I'll stay on the path."
+END_RESULT
+
+BEGIN_TOUCHPOINT id=7 type=dialog
+The Wolf suggests a shortcut to Grandmother's, and Red decides to take it.
+END_TOUCHPOINT
+BEGIN_RESULT
+The Wolf offered, "I know a little deer track that will get you to your grandmother faster. Trust me and I'll guide you."
+
+Red clutched her basket tighter. "Mother told me to stay on the path," she said, "but Grandmother needs this basket. All right — I'll try the shorter way."
+
+The Wolf gestured toward a narrow, mossy deer track and slipped onto it. "Very well. Lead the way," Red said, and followed onto the deer path.
+END_RESULT
+

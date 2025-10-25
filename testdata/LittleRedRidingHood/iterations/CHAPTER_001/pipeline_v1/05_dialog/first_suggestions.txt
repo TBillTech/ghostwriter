@@ -1,0 +1,21 @@
+- Remove the repeated assurances from Red. Delete one of these blocks: either Red's second speech ("Yes, the path goes on toward Grandmother’s cottage..." through "...bring bread and jam to her. Thank you for listening; I’ll do right by Grandmother.") or her final short line ("Thank you kindly..."), and keep a single clear, concise reply.
+
+- Collapse redundant Wolf offers. Combine the two similar Wolf lines that offer a shortcut into one single, clearer line. Replace both with one line that both greets and offers the alternate route (see suggested wording below).
+
+- Avoid literal or awkward metaphors: replace "The basket whispers of a shortcut you might be tempted to take" with a less anthropomorphic, subtler hint (suggested: "That basket marks a tempting errand; there are quicker paths if you’re curious.").
+
+- Remove repetitive phrasing about destination and items. Red should state purpose once, plainly. Suggested compact Red reply: "I’m taking these bread and jam to my Grandmother's cottage. I’ll stick to the path and hurry."
+
+- Tighten greetings to satisfy touch-point succinctly. Make Wolf's opening both a greeting and a clear question: Suggested Wolf opening line: "Good day, little one. Where are you headed? The woods are full of ways—perhaps I know a quicker, kinder route."
+
+- Vary compliments and avoid repeating the same admiration. Keep either "Such a charming hood" or another short phrase, but don’t repeat similar praise twice. If keeping it, place it after Red's answer as a single line.
+
+- Remove meta or stage-direction feel from speech. Change lines that sound like narration inside dialogue (none egregious, but watch for lines like "That destination sits plain as bread and jam" — replace with direct phrasing).
+
+- Ensure each actor speaks distinctly:
+  - Wolf: concise greeting + question + single offer of an alternate route.
+  - Red: one clear statement of destination and promise to stay on the path; one brief polite acknowledgment if needed.
+
+- Final suggested minimal exchange (replace current scattered lines):
+  - Wolf: "Good day, little one. Where are you headed? The woods hide many turns—if you’d trust a patient guide, I can show a quicker, kinder path."
+  - Red: "To my Grandmother’s cottage—bread and jam for her. I’ll stay on the path and hurry. Thank you."

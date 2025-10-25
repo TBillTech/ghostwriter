@@ -1,0 +1,54 @@
+=== SYSTEM ===
+You are a ghostwriter polishing and cleaning prose.
+
+=== USER ===
+You are a ghostwriter working from a more rough version of a novel chapter.  
+Your job is to write polished clean prose for a novel chapter.  
+
+# Setting in general 
+[SETTING]
+
+# Characters
+[CHARACTERS]
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red promised to bring goodies to her ailing grandmother.
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+{
+  "Story-Relative-To": {
+    "Red": "Eager to help, trusts strangers.",
+    "Wolf": "Hungry, looking for an opportunity.",
+    "Forest Path": "Quiet, but shadows watch."
+  }
+}
+
+# Rules for generation:
+1. Produce **continuous prose only** (no lists or notes or markup or obnoxious formatting unless central to the text like litRPG stats).  
+2. Make sure to fix the commas, spacing, and capitalization when prose includes quoted dialog.
+
+# Previous rough version
+Please clean up the following text:
+The Wolf offered, "I know a little deer track that will get you to your grandmother faster. Trust me and I'll guide you."
+
+Red clutched her basket tighter. "Mother told me to stay on the path, but Grandmother needs this basket. All right—I'll try the shorter way."
+
+[The Wolf gestures toward a narrow, mossy deer-track.]
+
+[The Wolf slips onto the deer path.]
+
+Red: "Very well. Lead the way."
+
+[Red follows onto the deer path.]
+
+Now, draft the chapter prose, sticking as close to possible to the words and sentences in the rough_draft, only adding words and filler where absolutely necessary.
+
+=== RESPONSE ===
+The Wolf offered, "I know a little deer track that will get you to your grandmother faster. Trust me and I'll guide you."
+
+Red clutched her basket tighter. "Mother told me to stay on the path," she said, "but Grandmother needs this basket. All right — I'll try the shorter way."
+
+The Wolf gestured toward a narrow, mossy deer track and slipped onto it. "Very well. Lead the way," Red said, and followed onto the deer path.

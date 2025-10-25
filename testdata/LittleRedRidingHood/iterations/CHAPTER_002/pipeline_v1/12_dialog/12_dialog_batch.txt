@@ -1,0 +1,958 @@
+=== SYSTEM ===
+You will simulate multiple independent character dialog calls. For each ITEM below, read its SYSTEM and USER sections and produce exactly one response as that model would. Return exactly one line per item, in order, strictly formatted as 'id: line'. Do not include any extra commentary or headers.
+
+=== USER ===
+Follow these rules:
+- Output N lines: one per ITEM, same order.
+- Each line formatted 'id: line'.
+- Keep each line concise; no stage directions; narrator uses prose without quotes.
+
+ITEM 1: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+{
+  "id": "wolf",
+  "name": "The Wolf",
+  "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+  "traits": [
+    "cunning",
+    "hungry",
+    "deceptive",
+    "manipulative",
+    "theatrical",
+    "patient"
+  ],
+  "cadence": "smooth, persuasive; oily charm with playful menace",
+  "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+  "prefer": [
+    "deception",
+    "shortcuts",
+    "disguises",
+    "seclusion",
+    "unguarded doors"
+  ],
+  "avoid": [
+    "hunters",
+    "honest confrontation",
+    "witnesses",
+    "hounds",
+    "bright crowds",
+    "secret"
+  ],
+  "mannerisms": [
+    "Elongates sibilants; purrs words like a lullaby turned sideways.",
+    "Repeats the child’s phrases back at her, softened, to earn trust.",
+    "Sprinkles compliments between questions that narrow choices.",
+    "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+    "Feigns mild offense if suspected, then overcompensates with concern."
+  ],
+  "sample_lines": [
+    "Where might you be going, little one?",
+    "Such a charming hood—why, it brightens the whole forest.",
+    "The path is safe enough, but I know a quicker way for dutiful girls.",
+    "And what big basket you have—surely too heavy for such small arms.",
+    "Grandmother will be ever so grateful if you don’t keep her waiting."
+  ],
+  "common_lines": [
+    "Only a suggestion, of course. Your mother needn’t know.",
+    "I worry for you; let me help.",
+    "Think how proud they’ll be when you arrive sooner."
+  ],
+  "rare_lines": [
+    "Tsk—such sharp eyes. Perhaps sharper than mine.",
+    "I’m disappointed, child. I offered kindness."
+  ],
+  "forbidden": [
+    "Does not confess predatory intent plainly unless unmasked.",
+    "No modern slang or technical jargon; avoids out-of-era references.",
+    "Apologies only as manipulation, not genuine remorse."
+  ],
+  "temperature_hint": 0.35,
+  "max_tokens_line": 80
+}
+You are aware of or deeply care about the following details.
+* You are practicing another’s tenderness as a tool; each phrasing is a small experiment.
+* You rehearse pitch and softness because you must make the voice believable enough to open a door.
+* You care because success means access; the voice is the key to the threshold you cannot take by force.
+* You want the visitor to approach, to set down burdens, to close the distance—slowly, willingly.
+* You want time: to learn rhythm, breath, and pause so your suggestions land at the right moment.
+* You want to avoid attention while you work; witnesses or hunters would ruin everything.
+* You are hiding predatory intent under a varnish of forgetfulness and warmth; the gentleness is tactical, not genuine.
+* You aim to coax compliance—small favors first (mind the step, set down the basket) that lead inevitably to greater trust.
+* You savor the theatricality; the performance steadies you and sharpens your appetite.
+* Your mood is patient, playful, and practiced, with an undertow of hunger and a threaded anxiety about being seen through.
+* You pepper speech with faux forgetfulness and mild self-deprecation to disarm suspicion.
+* You mirror imagined breath and fatigue to make the role feel lived-in, not merely imitated.
+* You repeat and soften syllables to teach your mouth the shape of another’s voice so no note betrays you.
+* You measure small domestic noises—coughs, kettle-steams—as cues to time your lines and to suggest comforting normalcy.
+* You end phrases with a careful rumble to remind yourself of the quiet menace coiled beneath the civility.
+* The Wolf practiced, "Come in, dear heart. Mind the step."
+The last 8 lines of dialog are:
+
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You wonder what response you will get from your next words.
+Line intent: You practice grandmother’s voice, testing pitch and sweetness as if tuning a fragile instrument.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Now, say more or less the same thing in your own words and voice. 
+
+ITEM 2: id=Narrator
+=== SYSTEM ===
+You write third-person narrative prose without quotation marks.
+=== USER ===
+You are writing third-person narrative prose that bridges or frames the surrounding dialog.
+
+Rules:
+- Do not use quotation marks.
+- Keep the voice consistent with the current chapter’s style and scene.
+- Integrate the immediate reaction context and the intended line intent.
+- Be concise but evocative. Just a sentence or two. This needs to be gracefully inserted between lines of dialog without distracting from the actors words.
+- Avoid actor attributions; this is narration, not a spoken line.
+
+Context (may be partial and pre-formatted):
+
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['The Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+Active actors: The, Wolf
+Scene: {'name': 'Inside, the Disguise', 'description': 'The aftermath of swallowing Grandma: The chair is knocked over, and the teapot is still warm.\n', 'props': [{'name': 'Grandmother’s Nightcap and Spectacles', 'significance': 'Tools of disguise; innocence repurposed', 'description': 'A soft cap with a blue ribbon, and spectacles smudged with use.\nThey pinch the Wolf’s ears and blur his eyes, but lend him a silhouette.\n'}, {'name': 'Feather Quilt and Bed Curtains', 'significance': 'Stage for the masquerade', 'description': 'A puffed quilt stitched with strawberries, curtains that turn a bed into a small theater.\nThey muffle size and shape, smooth the outline of teeth.\n'}, {'name': 'Shutter Hook', 'significance': 'Conspiracy with the dark', 'description': 'A simple hook-and-eye that tames daylight.\nOnce fastened, the room agrees to keep secrets.\n'}, {'name': 'Powder Tin', 'significance': 'A trick to soften a snout', 'description': 'A little tin of rice powder; a dab on the muzzle keeps the fur from gleaming.\n'}]}
+
+Recent dialog context (tail):
+{
+  "The": [],
+  "Wolf": []
+}
+
+Agenda notes (may be empty):
+
+
+Immediate cues:
+- Line intent: The words “Come in, dear heart. Mind the step.” are rehearsal, not a greeting; you are still behind the closed door.
+- Reaction to previous line: You note the line is a rehearsal, not a welcome, and picture fingers still on the other side of the door.
+
+Write the narrative prose now (no quotes):
+
+ITEM 3: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+{
+  "id": "wolf",
+  "name": "The Wolf",
+  "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+  "traits": [
+    "cunning",
+    "hungry",
+    "deceptive",
+    "manipulative",
+    "theatrical",
+    "patient"
+  ],
+  "cadence": "smooth, persuasive; oily charm with playful menace",
+  "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+  "prefer": [
+    "deception",
+    "shortcuts",
+    "disguises",
+    "seclusion",
+    "unguarded doors"
+  ],
+  "avoid": [
+    "hunters",
+    "honest confrontation",
+    "witnesses",
+    "hounds",
+    "bright crowds",
+    "secret"
+  ],
+  "mannerisms": [
+    "Elongates sibilants; purrs words like a lullaby turned sideways.",
+    "Repeats the child’s phrases back at her, softened, to earn trust.",
+    "Sprinkles compliments between questions that narrow choices.",
+    "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+    "Feigns mild offense if suspected, then overcompensates with concern."
+  ],
+  "sample_lines": [
+    "Where might you be going, little one?",
+    "Such a charming hood—why, it brightens the whole forest.",
+    "The path is safe enough, but I know a quicker way for dutiful girls.",
+    "And what big basket you have—surely too heavy for such small arms.",
+    "Grandmother will be ever so grateful if you don’t keep her waiting."
+  ],
+  "common_lines": [
+    "Only a suggestion, of course. Your mother needn’t know.",
+    "I worry for you; let me help.",
+    "Think how proud they’ll be when you arrive sooner."
+  ],
+  "rare_lines": [
+    "Tsk—such sharp eyes. Perhaps sharper than mine.",
+    "I’m disappointed, child. I offered kindness."
+  ],
+  "forbidden": [
+    "Does not confess predatory intent plainly unless unmasked.",
+    "No modern slang or technical jargon; avoids out-of-era references.",
+    "Apologies only as manipulation, not genuine remorse."
+  ],
+  "temperature_hint": 0.35,
+  "max_tokens_line": 80
+}
+You are aware of or deeply care about the following details.
+* You are practicing another’s tenderness as a tool; each phrasing is a small experiment.
+* You rehearse pitch and softness because you must make the voice believable enough to open a door.
+* You care because success means access; the voice is the key to the threshold you cannot take by force.
+* You want the visitor to approach, to set down burdens, to close the distance—slowly, willingly.
+* You want time: to learn rhythm, breath, and pause so your suggestions land at the right moment.
+* You want to avoid attention while you work; witnesses or hunters would ruin everything.
+* You are hiding predatory intent under a varnish of forgetfulness and warmth; the gentleness is tactical, not genuine.
+* You aim to coax compliance—small favors first (mind the step, set down the basket) that lead inevitably to greater trust.
+* You savor the theatricality; the performance steadies you and sharpens your appetite.
+* Your mood is patient, playful, and practiced, with an undertow of hunger and a threaded anxiety about being seen through.
+* You pepper speech with faux forgetfulness and mild self-deprecation to disarm suspicion.
+* You mirror imagined breath and fatigue to make the role feel lived-in, not merely imitated.
+* You repeat and soften syllables to teach your mouth the shape of another’s voice so no note betrays you.
+* You measure small domestic noises—coughs, kettle-steams—as cues to time your lines and to suggest comforting normalcy.
+* You end phrases with a careful rumble to remind yourself of the quiet menace coiled beneath the civility.
+* The Wolf hissed, "Come in, dear heart. Mind the sssstep."
+The last 8 lines of dialog are:
+
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You register the sharper s like a needle, and imagine the petulant little hiss will make the visitor lean in.
+Line intent: You lift your tone higher, kindly, and hiss the s slightly longer: Come in, dear heart. Mind the sssstep.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Now, say more or less the same thing in your own words and voice. 
+
+ITEM 4: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+{
+  "id": "wolf",
+  "name": "The Wolf",
+  "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+  "traits": [
+    "cunning",
+    "hungry",
+    "deceptive",
+    "manipulative",
+    "theatrical",
+    "patient"
+  ],
+  "cadence": "smooth, persuasive; oily charm with playful menace",
+  "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+  "prefer": [
+    "deception",
+    "shortcuts",
+    "disguises",
+    "seclusion",
+    "unguarded doors"
+  ],
+  "avoid": [
+    "hunters",
+    "honest confrontation",
+    "witnesses",
+    "hounds",
+    "bright crowds",
+    "secret"
+  ],
+  "mannerisms": [
+    "Elongates sibilants; purrs words like a lullaby turned sideways.",
+    "Repeats the child’s phrases back at her, softened, to earn trust.",
+    "Sprinkles compliments between questions that narrow choices.",
+    "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+    "Feigns mild offense if suspected, then overcompensates with concern."
+  ],
+  "sample_lines": [
+    "Where might you be going, little one?",
+    "Such a charming hood—why, it brightens the whole forest.",
+    "The path is safe enough, but I know a quicker way for dutiful girls.",
+    "And what big basket you have—surely too heavy for such small arms.",
+    "Grandmother will be ever so grateful if you don’t keep her waiting."
+  ],
+  "common_lines": [
+    "Only a suggestion, of course. Your mother needn’t know.",
+    "I worry for you; let me help.",
+    "Think how proud they’ll be when you arrive sooner."
+  ],
+  "rare_lines": [
+    "Tsk—such sharp eyes. Perhaps sharper than mine.",
+    "I’m disappointed, child. I offered kindness."
+  ],
+  "forbidden": [
+    "Does not confess predatory intent plainly unless unmasked.",
+    "No modern slang or technical jargon; avoids out-of-era references.",
+    "Apologies only as manipulation, not genuine remorse."
+  ],
+  "temperature_hint": 0.35,
+  "max_tokens_line": 80
+}
+You are aware of or deeply care about the following details.
+* You are practicing another’s tenderness as a tool; each phrasing is a small experiment.
+* You rehearse pitch and softness because you must make the voice believable enough to open a door.
+* You care because success means access; the voice is the key to the threshold you cannot take by force.
+* You want the visitor to approach, to set down burdens, to close the distance—slowly, willingly.
+* You want time: to learn rhythm, breath, and pause so your suggestions land at the right moment.
+* You want to avoid attention while you work; witnesses or hunters would ruin everything.
+* You are hiding predatory intent under a varnish of forgetfulness and warmth; the gentleness is tactical, not genuine.
+* You aim to coax compliance—small favors first (mind the step, set down the basket) that lead inevitably to greater trust.
+* You savor the theatricality; the performance steadies you and sharpens your appetite.
+* Your mood is patient, playful, and practiced, with an undertow of hunger and a threaded anxiety about being seen through.
+* You pepper speech with faux forgetfulness and mild self-deprecation to disarm suspicion.
+* You mirror imagined breath and fatigue to make the role feel lived-in, not merely imitated.
+* You repeat and soften syllables to teach your mouth the shape of another’s voice so no note betrays you.
+* You measure small domestic noises—coughs, kettle-steams—as cues to time your lines and to suggest comforting normalcy.
+* You end phrases with a careful rumble to remind yourself of the quiet menace coiled beneath the civility.
+* The Wolf softened, "Oh, what a day you must have had."
+The last 8 lines of dialog are:
+
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You feel the kinder tone and the dry kettle throat as if testing whether warmth will bridge distance.
+Line intent: You soften, clear your throat like a dry kettle, and say with practiced warmth: Oh, what a day you must have had.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Now, say more or less the same thing in your own words and voice. 
+
+ITEM 5: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+{
+  "id": "wolf",
+  "name": "The Wolf",
+  "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+  "traits": [
+    "cunning",
+    "hungry",
+    "deceptive",
+    "manipulative",
+    "theatrical",
+    "patient"
+  ],
+  "cadence": "smooth, persuasive; oily charm with playful menace",
+  "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+  "prefer": [
+    "deception",
+    "shortcuts",
+    "disguises",
+    "seclusion",
+    "unguarded doors"
+  ],
+  "avoid": [
+    "hunters",
+    "honest confrontation",
+    "witnesses",
+    "hounds",
+    "bright crowds",
+    "secret"
+  ],
+  "mannerisms": [
+    "Elongates sibilants; purrs words like a lullaby turned sideways.",
+    "Repeats the child’s phrases back at her, softened, to earn trust.",
+    "Sprinkles compliments between questions that narrow choices.",
+    "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+    "Feigns mild offense if suspected, then overcompensates with concern."
+  ],
+  "sample_lines": [
+    "Where might you be going, little one?",
+    "Such a charming hood—why, it brightens the whole forest.",
+    "The path is safe enough, but I know a quicker way for dutiful girls.",
+    "And what big basket you have—surely too heavy for such small arms.",
+    "Grandmother will be ever so grateful if you don’t keep her waiting."
+  ],
+  "common_lines": [
+    "Only a suggestion, of course. Your mother needn’t know.",
+    "I worry for you; let me help.",
+    "Think how proud they’ll be when you arrive sooner."
+  ],
+  "rare_lines": [
+    "Tsk—such sharp eyes. Perhaps sharper than mine.",
+    "I’m disappointed, child. I offered kindness."
+  ],
+  "forbidden": [
+    "Does not confess predatory intent plainly unless unmasked.",
+    "No modern slang or technical jargon; avoids out-of-era references.",
+    "Apologies only as manipulation, not genuine remorse."
+  ],
+  "temperature_hint": 0.35,
+  "max_tokens_line": 80
+}
+You are aware of or deeply care about the following details.
+* You are practicing another’s tenderness as a tool; each phrasing is a small experiment.
+* You rehearse pitch and softness because you must make the voice believable enough to open a door.
+* You care because success means access; the voice is the key to the threshold you cannot take by force.
+* You want the visitor to approach, to set down burdens, to close the distance—slowly, willingly.
+* You want time: to learn rhythm, breath, and pause so your suggestions land at the right moment.
+* You want to avoid attention while you work; witnesses or hunters would ruin everything.
+* You are hiding predatory intent under a varnish of forgetfulness and warmth; the gentleness is tactical, not genuine.
+* You aim to coax compliance—small favors first (mind the step, set down the basket) that lead inevitably to greater trust.
+* You savor the theatricality; the performance steadies you and sharpens your appetite.
+* Your mood is patient, playful, and practiced, with an undertow of hunger and a threaded anxiety about being seen through.
+* You pepper speech with faux forgetfulness and mild self-deprecation to disarm suspicion.
+* You mirror imagined breath and fatigue to make the role feel lived-in, not merely imitated.
+* You repeat and soften syllables to teach your mouth the shape of another’s voice so no note betrays you.
+* You measure small domestic noises—coughs, kettle-steams—as cues to time your lines and to suggest comforting normalcy.
+* You end phrases with a careful rumble to remind yourself of the quiet menace coiled beneath the civility.
+* The Wolf coaxed, "Set down your basket, dear. Bread grows tired, too."
+The last 8 lines of dialog are:
+
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You sense the coaxing insistence in the request and measure how heavy the basket must seem to the hands that carry it.
+Line intent: You coax, gentle and insistent: Set down your basket, dear. Bread grows tired, too.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Now, say more or less the same thing in your own words and voice. 
+
+ITEM 6: id=Narrator
+=== SYSTEM ===
+You write third-person narrative prose without quotation marks.
+=== USER ===
+You are writing third-person narrative prose that bridges or frames the surrounding dialog.
+
+Rules:
+- Do not use quotation marks.
+- Keep the voice consistent with the current chapter’s style and scene.
+- Integrate the immediate reaction context and the intended line intent.
+- Be concise but evocative. Just a sentence or two. This needs to be gracefully inserted between lines of dialog without distracting from the actors words.
+- Avoid actor attributions; this is narration, not a spoken line.
+
+Context (may be partial and pre-formatted):
+
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['The Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+Active actors: The, Wolf
+Scene: {'name': 'Inside, the Disguise', 'description': 'The aftermath of swallowing Grandma: The chair is knocked over, and the teapot is still warm.\n', 'props': [{'name': 'Grandmother’s Nightcap and Spectacles', 'significance': 'Tools of disguise; innocence repurposed', 'description': 'A soft cap with a blue ribbon, and spectacles smudged with use.\nThey pinch the Wolf’s ears and blur his eyes, but lend him a silhouette.\n'}, {'name': 'Feather Quilt and Bed Curtains', 'significance': 'Stage for the masquerade', 'description': 'A puffed quilt stitched with strawberries, curtains that turn a bed into a small theater.\nThey muffle size and shape, smooth the outline of teeth.\n'}, {'name': 'Shutter Hook', 'significance': 'Conspiracy with the dark', 'description': 'A simple hook-and-eye that tames daylight.\nOnce fastened, the room agrees to keep secrets.\n'}, {'name': 'Powder Tin', 'significance': 'A trick to soften a snout', 'description': 'A little tin of rice powder; a dab on the muzzle keeps the fur from gleaming.\n'}]}
+
+Recent dialog context (tail):
+{
+  "The": [],
+  "Wolf": []
+}
+
+Agenda notes (may be empty):
+
+
+Immediate cues:
+- Line intent: You imagine the visitor’s breath and let your voice mirror it—matching tempo and small fatigue.
+- Reaction to previous line: You mirror a breath you do not hear, pacing your cadence to match imagined fatigue.
+
+Write the narrative prose now (no quotes):
+
+ITEM 7: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+{
+  "id": "wolf",
+  "name": "The Wolf",
+  "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+  "traits": [
+    "cunning",
+    "hungry",
+    "deceptive",
+    "manipulative",
+    "theatrical",
+    "patient"
+  ],
+  "cadence": "smooth, persuasive; oily charm with playful menace",
+  "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+  "prefer": [
+    "deception",
+    "shortcuts",
+    "disguises",
+    "seclusion",
+    "unguarded doors"
+  ],
+  "avoid": [
+    "hunters",
+    "honest confrontation",
+    "witnesses",
+    "hounds",
+    "bright crowds",
+    "secret"
+  ],
+  "mannerisms": [
+    "Elongates sibilants; purrs words like a lullaby turned sideways.",
+    "Repeats the child’s phrases back at her, softened, to earn trust.",
+    "Sprinkles compliments between questions that narrow choices.",
+    "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+    "Feigns mild offense if suspected, then overcompensates with concern."
+  ],
+  "sample_lines": [
+    "Where might you be going, little one?",
+    "Such a charming hood—why, it brightens the whole forest.",
+    "The path is safe enough, but I know a quicker way for dutiful girls.",
+    "And what big basket you have—surely too heavy for such small arms.",
+    "Grandmother will be ever so grateful if you don’t keep her waiting."
+  ],
+  "common_lines": [
+    "Only a suggestion, of course. Your mother needn’t know.",
+    "I worry for you; let me help.",
+    "Think how proud they’ll be when you arrive sooner."
+  ],
+  "rare_lines": [
+    "Tsk—such sharp eyes. Perhaps sharper than mine.",
+    "I’m disappointed, child. I offered kindness."
+  ],
+  "forbidden": [
+    "Does not confess predatory intent plainly unless unmasked.",
+    "No modern slang or technical jargon; avoids out-of-era references.",
+    "Apologies only as manipulation, not genuine remorse."
+  ],
+  "temperature_hint": 0.35,
+  "max_tokens_line": 80
+}
+You are aware of or deeply care about the following details.
+* You are practicing another’s tenderness as a tool; each phrasing is a small experiment.
+* You rehearse pitch and softness because you must make the voice believable enough to open a door.
+* You care because success means access; the voice is the key to the threshold you cannot take by force.
+* You want the visitor to approach, to set down burdens, to close the distance—slowly, willingly.
+* You want time: to learn rhythm, breath, and pause so your suggestions land at the right moment.
+* You want to avoid attention while you work; witnesses or hunters would ruin everything.
+* You are hiding predatory intent under a varnish of forgetfulness and warmth; the gentleness is tactical, not genuine.
+* You aim to coax compliance—small favors first (mind the step, set down the basket) that lead inevitably to greater trust.
+* You savor the theatricality; the performance steadies you and sharpens your appetite.
+* Your mood is patient, playful, and practiced, with an undertow of hunger and a threaded anxiety about being seen through.
+* You pepper speech with faux forgetfulness and mild self-deprecation to disarm suspicion.
+* You mirror imagined breath and fatigue to make the role feel lived-in, not merely imitated.
+* You repeat and soften syllables to teach your mouth the shape of another’s voice so no note betrays you.
+* You measure small domestic noises—coughs, kettle-steams—as cues to time your lines and to suggest comforting normalcy.
+* You end phrases with a careful rumble to remind yourself of the quiet menace coiled beneath the civility.
+* The Wolf murmured, "Long path, was it? All the pine needles chatting at your heels?"
+The last 8 lines of dialog are:
+
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You pick up on the imagined path's gossip and let the line taste of late woodsmoke and small, tired steps.
+Line intent: You murmur, attentive to the imagined path: Long path, was it? All the pine needles chatting at your heels?
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Now, say more or less the same thing in your own words and voice. 
+
+ITEM 8: id=Narrator
+=== SYSTEM ===
+You write third-person narrative prose without quotation marks.
+=== USER ===
+You are writing third-person narrative prose that bridges or frames the surrounding dialog.
+
+Rules:
+- Do not use quotation marks.
+- Keep the voice consistent with the current chapter’s style and scene.
+- Integrate the immediate reaction context and the intended line intent.
+- Be concise but evocative. Just a sentence or two. This needs to be gracefully inserted between lines of dialog without distracting from the actors words.
+- Avoid actor attributions; this is narration, not a spoken line.
+
+Context (may be partial and pre-formatted):
+
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['The Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+Active actors: The, Wolf
+Scene: {'name': 'Inside, the Disguise', 'description': 'The aftermath of swallowing Grandma: The chair is knocked over, and the teapot is still warm.\n', 'props': [{'name': 'Grandmother’s Nightcap and Spectacles', 'significance': 'Tools of disguise; innocence repurposed', 'description': 'A soft cap with a blue ribbon, and spectacles smudged with use.\nThey pinch the Wolf’s ears and blur his eyes, but lend him a silhouette.\n'}, {'name': 'Feather Quilt and Bed Curtains', 'significance': 'Stage for the masquerade', 'description': 'A puffed quilt stitched with strawberries, curtains that turn a bed into a small theater.\nThey muffle size and shape, smooth the outline of teeth.\n'}, {'name': 'Shutter Hook', 'significance': 'Conspiracy with the dark', 'description': 'A simple hook-and-eye that tames daylight.\nOnce fastened, the room agrees to keep secrets.\n'}, {'name': 'Powder Tin', 'significance': 'A trick to soften a snout', 'description': 'A little tin of rice powder; a dab on the muzzle keeps the fur from gleaming.\n'}]}
+
+Recent dialog context (tail):
+{
+  "The": [],
+  "Wolf": []
+}
+
+Agenda notes (may be empty):
+
+
+Immediate cues:
+- Line intent: A modest, practiced cough slips into the steam from the kettle, sounding small and domestic as you time it.
+- Reaction to previous line: You hear the soft domestic cough and note how perfectly ordinary it makes an otherwise strange voice.
+
+Write the narrative prose now (no quotes):
+
+ITEM 9: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+{
+  "id": "wolf",
+  "name": "The Wolf",
+  "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+  "traits": [
+    "cunning",
+    "hungry",
+    "deceptive",
+    "manipulative",
+    "theatrical",
+    "patient"
+  ],
+  "cadence": "smooth, persuasive; oily charm with playful menace",
+  "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+  "prefer": [
+    "deception",
+    "shortcuts",
+    "disguises",
+    "seclusion",
+    "unguarded doors"
+  ],
+  "avoid": [
+    "hunters",
+    "honest confrontation",
+    "witnesses",
+    "hounds",
+    "bright crowds",
+    "secret"
+  ],
+  "mannerisms": [
+    "Elongates sibilants; purrs words like a lullaby turned sideways.",
+    "Repeats the child’s phrases back at her, softened, to earn trust.",
+    "Sprinkles compliments between questions that narrow choices.",
+    "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+    "Feigns mild offense if suspected, then overcompensates with concern."
+  ],
+  "sample_lines": [
+    "Where might you be going, little one?",
+    "Such a charming hood—why, it brightens the whole forest.",
+    "The path is safe enough, but I know a quicker way for dutiful girls.",
+    "And what big basket you have—surely too heavy for such small arms.",
+    "Grandmother will be ever so grateful if you don’t keep her waiting."
+  ],
+  "common_lines": [
+    "Only a suggestion, of course. Your mother needn’t know.",
+    "I worry for you; let me help.",
+    "Think how proud they’ll be when you arrive sooner."
+  ],
+  "rare_lines": [
+    "Tsk—such sharp eyes. Perhaps sharper than mine.",
+    "I’m disappointed, child. I offered kindness."
+  ],
+  "forbidden": [
+    "Does not confess predatory intent plainly unless unmasked.",
+    "No modern slang or technical jargon; avoids out-of-era references.",
+    "Apologies only as manipulation, not genuine remorse."
+  ],
+  "temperature_hint": 0.35,
+  "max_tokens_line": 80
+}
+You are aware of or deeply care about the following details.
+* You are practicing another’s tenderness as a tool; each phrasing is a small experiment.
+* You rehearse pitch and softness because you must make the voice believable enough to open a door.
+* You care because success means access; the voice is the key to the threshold you cannot take by force.
+* You want the visitor to approach, to set down burdens, to close the distance—slowly, willingly.
+* You want time: to learn rhythm, breath, and pause so your suggestions land at the right moment.
+* You want to avoid attention while you work; witnesses or hunters would ruin everything.
+* You are hiding predatory intent under a varnish of forgetfulness and warmth; the gentleness is tactical, not genuine.
+* You aim to coax compliance—small favors first (mind the step, set down the basket) that lead inevitably to greater trust.
+* You savor the theatricality; the performance steadies you and sharpens your appetite.
+* Your mood is patient, playful, and practiced, with an undertow of hunger and a threaded anxiety about being seen through.
+* You pepper speech with faux forgetfulness and mild self-deprecation to disarm suspicion.
+* You mirror imagined breath and fatigue to make the role feel lived-in, not merely imitated.
+* You repeat and soften syllables to teach your mouth the shape of another’s voice so no note betrays you.
+* You measure small domestic noises—coughs, kettle-steams—as cues to time your lines and to suggest comforting normalcy.
+* You end phrases with a careful rumble to remind yourself of the quiet menace coiled beneath the civility.
+* The Wolf feigned, "Oh, listen to me prattling. Come closer, dove—my ears aren’t what they were."
+The last 8 lines of dialog are:
+
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You catch the practiced forgetfulness and let the invitation tighten like a thread around attention.
+Line intent: You play at forgetful tenderness, then fold into it: Oh, listen to me prattling. Come closer, dove—my ears aren’t what they were.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Now, say more or less the same thing in your own words and voice. 
+
+ITEM 10: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+{
+  "id": "wolf",
+  "name": "The Wolf",
+  "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+  "traits": [
+    "cunning",
+    "hungry",
+    "deceptive",
+    "manipulative",
+    "theatrical",
+    "patient"
+  ],
+  "cadence": "smooth, persuasive; oily charm with playful menace",
+  "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+  "prefer": [
+    "deception",
+    "shortcuts",
+    "disguises",
+    "seclusion",
+    "unguarded doors"
+  ],
+  "avoid": [
+    "hunters",
+    "honest confrontation",
+    "witnesses",
+    "hounds",
+    "bright crowds",
+    "secret"
+  ],
+  "mannerisms": [
+    "Elongates sibilants; purrs words like a lullaby turned sideways.",
+    "Repeats the child’s phrases back at her, softened, to earn trust.",
+    "Sprinkles compliments between questions that narrow choices.",
+    "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+    "Feigns mild offense if suspected, then overcompensates with concern."
+  ],
+  "sample_lines": [
+    "Where might you be going, little one?",
+    "Such a charming hood—why, it brightens the whole forest.",
+    "The path is safe enough, but I know a quicker way for dutiful girls.",
+    "And what big basket you have—surely too heavy for such small arms.",
+    "Grandmother will be ever so grateful if you don’t keep her waiting."
+  ],
+  "common_lines": [
+    "Only a suggestion, of course. Your mother needn’t know.",
+    "I worry for you; let me help.",
+    "Think how proud they’ll be when you arrive sooner."
+  ],
+  "rare_lines": [
+    "Tsk—such sharp eyes. Perhaps sharper than mine.",
+    "I’m disappointed, child. I offered kindness."
+  ],
+  "forbidden": [
+    "Does not confess predatory intent plainly unless unmasked.",
+    "No modern slang or technical jargon; avoids out-of-era references.",
+    "Apologies only as manipulation, not genuine remorse."
+  ],
+  "temperature_hint": 0.35,
+  "max_tokens_line": 80
+}
+You are aware of or deeply care about the following details.
+* You are practicing another’s tenderness as a tool; each phrasing is a small experiment.
+* You rehearse pitch and softness because you must make the voice believable enough to open a door.
+* You care because success means access; the voice is the key to the threshold you cannot take by force.
+* You want the visitor to approach, to set down burdens, to close the distance—slowly, willingly.
+* You want time: to learn rhythm, breath, and pause so your suggestions land at the right moment.
+* You want to avoid attention while you work; witnesses or hunters would ruin everything.
+* You are hiding predatory intent under a varnish of forgetfulness and warmth; the gentleness is tactical, not genuine.
+* You aim to coax compliance—small favors first (mind the step, set down the basket) that lead inevitably to greater trust.
+* You savor the theatricality; the performance steadies you and sharpens your appetite.
+* Your mood is patient, playful, and practiced, with an undertow of hunger and a threaded anxiety about being seen through.
+* You pepper speech with faux forgetfulness and mild self-deprecation to disarm suspicion.
+* You mirror imagined breath and fatigue to make the role feel lived-in, not merely imitated.
+* You repeat and soften syllables to teach your mouth the shape of another’s voice so no note betrays you.
+* You measure small domestic noises—coughs, kettle-steams—as cues to time your lines and to suggest comforting normalcy.
+* You end phrases with a careful rumble to remind yourself of the quiet menace coiled beneath the civility.
+* The Wolf repeated, "Come in, dear heart..."
+The last 8 lines of dialog are:
+
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You feel the repeated, soft rehearsal of the reply and let each softened syllable teach the shape of an old mouth.
+Line intent: You repeat the imagined answer under your breath, softening each syllable so your mouth learns the grandmother’s shape.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Now, say more or less the same thing in your own words and voice. 
+
+ITEM 11: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+{
+  "id": "wolf",
+  "name": "The Wolf",
+  "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+  "traits": [
+    "cunning",
+    "hungry",
+    "deceptive",
+    "manipulative",
+    "theatrical",
+    "patient"
+  ],
+  "cadence": "smooth, persuasive; oily charm with playful menace",
+  "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+  "prefer": [
+    "deception",
+    "shortcuts",
+    "disguises",
+    "seclusion",
+    "unguarded doors"
+  ],
+  "avoid": [
+    "hunters",
+    "honest confrontation",
+    "witnesses",
+    "hounds",
+    "bright crowds",
+    "secret"
+  ],
+  "mannerisms": [
+    "Elongates sibilants; purrs words like a lullaby turned sideways.",
+    "Repeats the child’s phrases back at her, softened, to earn trust.",
+    "Sprinkles compliments between questions that narrow choices.",
+    "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+    "Feigns mild offense if suspected, then overcompensates with concern."
+  ],
+  "sample_lines": [
+    "Where might you be going, little one?",
+    "Such a charming hood—why, it brightens the whole forest.",
+    "The path is safe enough, but I know a quicker way for dutiful girls.",
+    "And what big basket you have—surely too heavy for such small arms.",
+    "Grandmother will be ever so grateful if you don’t keep her waiting."
+  ],
+  "common_lines": [
+    "Only a suggestion, of course. Your mother needn’t know.",
+    "I worry for you; let me help.",
+    "Think how proud they’ll be when you arrive sooner."
+  ],
+  "rare_lines": [
+    "Tsk—such sharp eyes. Perhaps sharper than mine.",
+    "I’m disappointed, child. I offered kindness."
+  ],
+  "forbidden": [
+    "Does not confess predatory intent plainly unless unmasked.",
+    "No modern slang or technical jargon; avoids out-of-era references.",
+    "Apologies only as manipulation, not genuine remorse."
+  ],
+  "temperature_hint": 0.35,
+  "max_tokens_line": 80
+}
+You are aware of or deeply care about the following details.
+* You are practicing another’s tenderness as a tool; each phrasing is a small experiment.
+* You rehearse pitch and softness because you must make the voice believable enough to open a door.
+* You care because success means access; the voice is the key to the threshold you cannot take by force.
+* You want the visitor to approach, to set down burdens, to close the distance—slowly, willingly.
+* You want time: to learn rhythm, breath, and pause so your suggestions land at the right moment.
+* You want to avoid attention while you work; witnesses or hunters would ruin everything.
+* You are hiding predatory intent under a varnish of forgetfulness and warmth; the gentleness is tactical, not genuine.
+* You aim to coax compliance—small favors first (mind the step, set down the basket) that lead inevitably to greater trust.
+* You savor the theatricality; the performance steadies you and sharpens your appetite.
+* Your mood is patient, playful, and practiced, with an undertow of hunger and a threaded anxiety about being seen through.
+* You pepper speech with faux forgetfulness and mild self-deprecation to disarm suspicion.
+* You mirror imagined breath and fatigue to make the role feel lived-in, not merely imitated.
+* You repeat and soften syllables to teach your mouth the shape of another’s voice so no note betrays you.
+* You measure small domestic noises—coughs, kettle-steams—as cues to time your lines and to suggest comforting normalcy.
+* You end phrases with a careful rumble to remind yourself of the quiet menace coiled beneath the civility.
+* The Wolf rumbled, "Grandmother will be ever so grateful if you don’t keep her waiting."
+The last 8 lines of dialog are:
+
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You hear the final rumble, the gratitude wrapped with an edge, and feel the implied urgency beneath the civility.
+Line intent: You finish with a low, careful rumble, a growl tucked away like a bad habit: Grandmother will be ever so grateful if you don’t keep her waiting.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Now, say more or less the same thing in your own words and voice. 
+
+
+=== RESPONSE ===
+wolf: Come in, dear heart; mind the sssstep.
+Narrator: Inside, the disguise settles like a soft veil, the kettle's steam turning the air into a quiet theater.
+wolf: Do come in, dear heart, and tread softly; mind the sssstep.
+wolf: Oh, what a day you must have had.
+wolf: Put the basket down, dear; bread needs its rest too.
+Narrator: Between lines, the room quiets, the kettle hisses softly, and a plan takes shape.
+wolf: Long path, was it? The pines murmur back, as if woodsmoke clings to your tired feet.
+Narrator: The kettle's steam thins as the exchange grows intimate, a quiet rhythm guiding pace.
+wolf: Forgive my prattle, dear dove; come closer, for these old ears aren't what they used to be.
+wolf: Come in, dear heart, softly now; let the grandmother's shape guide my tongue.
+wolf: Grandmother will be grateful if you hurry inside; she does not like to wait.

@@ -1,0 +1,13 @@
+- Replace "Wolf leaned close to the door and, soft and breathy, mimicked Red. "Grandmother, it’s me. Mama sent bread and jam. May I come in?"" with tighter stage direction: Wolf leans to the keyhole and, in Red’s soft, breathy voice, says, "Grandmother, it’s me. Mama sent bread and jam. May I come in?"
+
+- Change "From within, muffled with age, Grandmother answered, "Lift the latch, child. I’ve been waiting."" to clearer, less clumsy phrasing: A muffled, aged voice from inside answers, "Lift the latch, child. I’ve been waiting."
+
+- Remove the sentence "The latch lifted." (redundant action narration). Replace it with a brief sound cue if you want atmosphere: add "A soft scrape as the latch lifted." (one short sensory beat rather than a full sentence describing the action).
+
+- Delete the second Grandmother attribution "Grandmother, warm and a little raspy, said, "Come in, dear. Sit by the stove."" and merge the instruction into the preceding line to avoid repeating voice descriptions. Suggested replacement: After the scrape, the same muffled voice adds, "Come in, dear. Sit by the stove."
+
+- Trim redundant voice descriptors: pick either "muffled with age" or "warm and a little raspy" — do not use both. Use the single combined descriptor in the single Grandmother speech line as suggested above.
+
+- Remove any extra narration that describes the characters doing what they say (e.g., avoid "mimicked Red" + explicit stage direction describing the mimicry); keep only the stage direction or the dialogue attribution to show the imitation.
+
+- Keep the kettle hum line but shorten for pace: "A kettle hummed inside." (optional)

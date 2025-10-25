@@ -1,0 +1,55 @@
+=== SYSTEM ===
+You write third-person narrative prose without quotation marks.
+
+=== USER ===
+You are writing third-person narrative prose that bridges or frames the surrounding dialog.
+
+Rules:
+- Do not use quotation marks.
+- Keep the voice consistent with the current chapter’s style and scene.
+- Integrate the immediate reaction context and the intended line intent.
+- Be concise but evocative. Just a sentence or two. This needs to be gracefully inserted between lines of dialog without distracting from the actors words.
+- Avoid actor attributions; this is narration, not a spoken line.
+
+Context (may be partial and pre-formatted):
+
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+Active actors: Red, Wolf
+Scene: {'name': 'Forest Path', 'description': 'A winding dirt trail beneath tall, shadowed pines. Shafts of light\nthread through the branches; birds rustle, then fall silent when the\nwind shifts. The air smells of damp earth and sweet jam.\n', 'props': [{'name': 'Basket', 'significance': 'Gift and responsibility; symbol of trust', 'description': "A small wicker basket filled with bread and jam, carried on Red's arm."}, {'name': 'Red Hood', 'significance': 'Identity and innocence; visible target in the woods', 'description': 'A bright red cloak and hood, a gift from Grandmother that draws the eye.'}]}
+
+Recent dialog context (tail):
+{
+  "Red": [
+    "Mother told me I must keep to the path."
+  ],
+  "Wolf": [
+    "Such a bright little traveler. I know a shorter way—a kindness—that would spare you the wait. If you trust me, I’ll lead you there.",
+    "Purring softly, I offer a sly shortcut, dear traveler—a kindness that spares you the wait. Your mother need never know; trust me, and we’ll slip ahead together, just out of sight."
+  ]
+}
+
+Agenda notes (may be empty):
+
+
+Immediate cues:
+- Line intent: You point with a paw toward a narrow, mossy deer-track running between the pines.
+- Reaction to previous line: You treat the narrator's paw-pointing as proof in the world, turning the narrow, mossy deer-track into tangible evidence for your suggestion.
+
+Write the narrative prose now (no quotes):
+
+=== RESPONSE ===
+The Wolf lifts a paw and gestures to the narrow mossy deer-track slipping between the pines, and the scene seems to lean in, the ground answering as if the woods themselves confirm the shortcut. Red tightens the basket at her arm, a quiet tremor of trust threading through the air as the path narrows into a deliberate invitation.

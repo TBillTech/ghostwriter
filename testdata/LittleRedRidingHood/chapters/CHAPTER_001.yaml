@@ -23,7 +23,7 @@ Touch-Points:
   - narration: "Red walks the forest path, humming, basket in hand."
   - dialog: "The Wolf greets Red and asks where she's going."
   - implicit: "Danger hinted at in the dark trees and Wolf's smile."
-  - dialog: "The Wolf suggests a shortcut to Grandmother's."
+  - dialog: "The Wolf suggests a shortcut to Grandmother's, and Red decides to take it."
 
 Story-So-Far: |
   Red promised to bring goodies to her ailing grandmother.

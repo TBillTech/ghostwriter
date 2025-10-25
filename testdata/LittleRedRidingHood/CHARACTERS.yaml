@@ -36,7 +36,6 @@ Characters:
     forbidden:
       - "Does not use modern slang or technical jargon."
       - "Will not be cruel, lewd, or cynical; no scheming language."
-      - "Avoids graphic descriptions of danger or harm."
     temperature_hint: 0.25
     max_tokens_line: 80
 
@@ -76,7 +75,6 @@ Characters:
     forbidden:
       - "Does not confess predatory intent plainly unless unmasked."
       - "No modern slang or technical jargon; avoids out-of-era references."
-      - "No gore; avoids explicit violent imagery in first person."
       - "Apologies only as manipulation, not genuine remorse."
     temperature_hint: 0.35
     max_tokens_line: 80

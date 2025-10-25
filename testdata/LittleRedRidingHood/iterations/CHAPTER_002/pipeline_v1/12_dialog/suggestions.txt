@@ -1,0 +1,14 @@
+- Remove "Listen—" (redundant; interrupts flow).
+- Keep the opening narration short; retain "The kettle hissed softly." Drop "The Wolf practiced." or make it a stage direction instead of spoken text.
+- First touch-point line should be delivered low/testing. Update stage direction: (testing, low) "Come in, dear heart. Mind the step."
+- Second touch-point line should be higher and kinder. Replace current second line with: (higher, kinder) "Oh, what a day you must have had." Add stage direction: He settles deeper into the quilt.
+- Replace "Put the basket down, dear — the bread needs its rest." with a simpler, more natural line: "Set the basket down, child." or "Set the basket down, dear."
+- Combine/reduce redundancy in the tired/ear lines. Replace
+  - "Long path, was it? You must be tired from the pines." and
+  - "Forgive my prattle — come closer, my ears aren't what they were."
+  with a single, concise line: "Long walk, then. Come closer — my ears aren't what they used to be."
+- Soften or remove the explicit urging about Grandmother waiting. Replace
+  - "Grandmother will be grateful if you hurry inside; she does not like to wait."
+  with a subtler suggestion: "Grandmother likes company—come in out of the cold."
+- Avoid characters describing their own physical acting. Convert any self-descriptive bits into stage directions (e.g., "He pauses." → stage direction) rather than spoken lines.
+- Keep total narration minimal; ensure remaining dialogue is spoken and characterful, not prose.

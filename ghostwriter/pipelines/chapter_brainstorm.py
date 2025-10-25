@@ -174,6 +174,14 @@ def run_chapter_brainstorm(*, ctx: RunContext, log_llm: bool = False) -> None:
     ssf, srt = _load_prior_summaries(prev_id)
 
     # Build replacements for prompt
+    # Load format hint template (only used when creating a new chapter outline)
+    try:
+        _format_hint_text = _read_text(Path("prompts") / "chapter_hint.yaml")
+    except Exception:
+        _format_hint_text = (
+            "Output must be valid YAML for the chapter file, containing Touch-Points and an optional 'setting' with 'factoids' (list of names), 'actors' (list of character ids or names), and 'scene' (string). Do NOT include Story-So-Far or Story-Relative-To sections."
+        )
+
     reps: Dict[str, str] = {
         "[CHAPTER_ID]": chapter_id,
         "[CONTENT_TABLE.yaml]": content_tbl_text,
@@ -183,7 +191,7 @@ def run_chapter_brainstorm(*, ctx: RunContext, log_llm: bool = False) -> None:
         "[NAMES_ONLY]": names_only_block,
         "[CHAPTER_NUM]": str(ch_num),
         "[VERSION_NUM]": str(version_num),
-        "[FORMAT_HINT]": ("Output must be valid YAML for the chapter file, containing Touch-Points and an optional 'setting' with 'factoids' (list of names), 'actors' (list of character ids or names), and 'scene' (string). Do NOT include Story-So-Far or Story-Relative-To sections." if not chapter_file.exists() else ""),
+        "[FORMAT_HINT]": (_format_hint_text if not chapter_file.exists() else ""),
     }
 
     # Apply template and call LLM

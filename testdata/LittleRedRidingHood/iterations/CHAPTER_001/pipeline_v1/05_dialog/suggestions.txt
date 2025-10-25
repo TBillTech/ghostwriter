@@ -1,0 +1,19 @@
+- Wolf line 1: Replace awkward phrase "That basket marks a tempting errand; the woods are full of ways—if you’d trust a patient guide, I can show a quicker, kinder route." with a clearer, more natural temptation. Example options:
+  - "That basket gives you away. The woods have many paths—if you trust a guide, I can show a quicker route."
+  - "Carrying goodies for someone, are you? There are easier ways through the trees; I could show you one."
+
+- Remove or simplify "patient" and "kinder" (redundant qualifiers) so the Wolf's offer sounds smoother and more persuasive, not repetitive.
+
+- Red line: Remove the slightly formal/awkward triplet. Make it more direct and childlike. Example fixes:
+  - "To my grandmother’s cottage. Bread and jam for her. I’ll stay on the path."
+  - Or combine: "To my grandmother’s cottage — I’m taking bread and jam, and I’ll stay on the path." (Drop the extra "hurry" or "Thank you" to keep tone firm and concise.)
+
+- Wolf compliment line: Tone down or rephrase to avoid unnecessary purple prose and repetition of brightness. Suggestions:
+  - Replace "Such a charming hood—it brightens these shadows." with a shorter line like "Nice hood. Bright enough to spot from here."
+  - Or remove the compliment entirely if you want the Wolf to sound less flattering and more calculating.
+
+- Stage directions: Consider moving "The Wolf bowed." out of the same line as dialogue into a brief action tag before the line for clarity (e.g., The Wolf bowed. "Good day..."), but keep it minimal — avoid narration that restates visible actions.
+
+- Check for repetition across lines: make sure the Wolf's temptation and the compliment don't echo the same idea ("bright" repeated). Apply one clear angle per Wolf line: first offers guidance; second reacts to the hood or Red's answer — avoid repeating praise about brightness.
+
+- Maintain required touch-point: ensure Wolf still explicitly asks where Red is going in his opening line (keep "Where are you headed?" or equivalent).

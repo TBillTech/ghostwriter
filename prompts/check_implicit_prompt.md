@@ -4,6 +4,8 @@ You are trying to make sure that the lines match the storyline as described in t
 
 One thing to watch out for is that these actors have tendency to repeat themselves.  If you notice this, point out where some text is redundant and should be removed. The audience won't like hearing the same thing over and over.
 
+Also watch out for the wrong balance of Narration. A few sentences where needed are OK to paint the picture, but this should be dialog not long prose.
+
 Things to look for also include weird constructions, and overly literal similies.  For example:
 * It is weird for a character to describe their own actions.  For example, if a character says "I nod, and I agree with you" that is weird. Better would be: Henry nodded, "I agree with you".
 * It is weird to slap the reader in the when something is a symbol.  For example, "The ball, symbolizing fun, was thrown".  Better would be "The ball, like an atom of entertainment, was thrown".

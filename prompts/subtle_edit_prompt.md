@@ -21,10 +21,7 @@ Please carefully read and understand this Touch-Point. It is what the story need
 [TOUCH_POINT]
 
 # Rules for generation:
-1. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
-2. **Scenes**: Describe indirectly via character impressions/dialog where possible.  
-3. **Character Dialog**: Most of the story, if possible, should be told via character dialog.  This will keep the public invested and interested in the story instead of just dry narration. 
-4. Favor **continuous prose** like you will find in a normal novel.
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
 
 # Prior draft copy
 What follows is the most recent draft text of what was written which needs to be revised:

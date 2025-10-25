@@ -1,0 +1,32 @@
+- Remove redundant lines that repeat the same image or phrase:
+  - Delete one of the Wolf’s repeated "that latch keeps time with our breath" passages (keep only a single, sharper version).
+  - Remove the second instance of Grandmother mentioning "I’ve left my hazel walking stick by the door" (keep it once, earlier or later, not both).
+
+- Cut long, poetic narration that reads like stage direction rather than dialogue:
+  - Remove the paragraph beginning "The room greets the moment with mint and ash..." — compress its essential atmosphere into one short, spoken or implied image instead.
+
+- Tighten the Wolf’s dialogue to be fewer, more suggestive lines:
+  - Replace verbose Wolf lines with one concise line that implies mimicry and coaxing. Example replacement: The Wolf (softly), "Open up, dear — a quiet visit, bread and jam." Then follow with one sly line: "Take your time; I’ll wait where the door is smallest."
+  - Avoid the Wolf describing rhythm/metaphor twice; choose either the "latch keeps time" image or the "quiet guide us" image, not both.
+
+- Make Grandmother’s speech more character-specific and less explanatory:
+  - Replace long polite announcements with warm, slightly raspy, short phrases. Example: "Come in, child. Sit by the stove — tea’s hot." Keep only one mention of the walking stick as a grounding detail: "The hazel stick’s by the door."
+
+- Remove meta-descriptive constructions where characters narrate their own actions or inner states:
+  - Delete lines like "The Wolf, smoothing his voice, purred again" and "Grandmother, slow and deliberate, answered" — instead show through the line itself (use simple speech tag: The Wolf purred, "..." or Grandmother murmured, "...").
+
+- Reduce overly literal or awkward similes and metaphors:
+  - Remove phrases such as "The latch speaks softly to us both" and "Patience gathers at the door like thyme and smoke." If needed, replace with a single simple sensory image: "The latch clicked; the cottage smelled of thyme and tea."
+
+- Preserve the touch-point subtlety (do not state the foreshadowing explicitly):
+  - Keep any mention of the latch and kettle faint and indirect; ensure no line declares the cottage's ignorance of danger. Replace any explicit claim about "the cottage does not yet recognize the weight of a predator" with quieter wording or implication (e.g., Grandmother's voice is untroubled; the kettle sighs).
+
+- Dialogue length and balance:
+  - Aim for short exchanges: alternate one-line Wolf coaxing, one-line Grandmother reply, then one brief Wolf follow-up. Eliminate long monologues by both characters.
+
+- Final suggested rearrangement (concise example to follow when rewriting):
+  - Wolf (soft): "Grandmother, it’s me. Mama sent bread and jam."
+  - Grandmother (raspy, warm): "Lift the latch, child. Come in and sit by the stove — tea’s waiting."
+  - Wolf (purring): "I’ll wait at the smaller door." (optional single closing tug)
+
+Implement these cuts and swaps to remove repetition, reduce narration, keep speech natural, and preserve the scene’s subtle tension.

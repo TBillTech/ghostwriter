@@ -1,0 +1,37 @@
+=== SYSTEM ===
+You are a ghostwriter polishing and cleaning prose.
+
+=== USER ===
+You are a ghostwriter working from a more rough version of a novel chapter.  
+Your job is to write polished clean prose for a novel chapter.  
+
+# Setting in general 
+[SETTING]
+
+# Characters
+[CHARACTERS]
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+
+
+# Rules for generation:
+1. Produce **continuous prose only** (no lists or notes or markup or obnoxious formatting unless central to the text like litRPG stats).  
+2. Make sure to fix the commas, spacing, and capitalization when prose includes quoted dialog.
+
+# Previous rough version
+Please clean up the following text:
+The door eased inward, and Wolf slipped through the gap like a shadow finding its shape. Wolf paused on the threshold, scenting the warmth and counting heartbeats in the hush. Grandmother rose from her chair, one hand on the hazel stick, the other reaching toward the stove. Wolf crossed the hearth stones in two silent bounds, breath warm, intent neatly folded. The floorboards creaked once; the chair tipped and skated, knocking the teacup askew.
+
+A single gulp took Grandmother whole, swift as a lantern snuffed; the room answered with a thud of chair leg and a soft settling sigh. The teapot kept its whisper; the spoon in the cup rattled and went still. Wolf’s belly rounded, heavy beneath his ribs, and Wolf adjusted his stance until the weight found its place. Wolf smoothed the feather quilt, plumping strawberries into a hill that disguised his breadth. Wolf settled, belly distended under quilted fruit, untroubled by the burden as the cottage kept Wolf’s secret. Wolf pinched the powder tin between claws, dabbed rice dust along the muzzle to dim the telltale gleam. The nightcap slid over pricked ears; the blue ribbon bowed above a brow too broad for human comfort. Spectacles perched on a bridge made for scent, lenses fogging, smudges turning the world to blur. Wolf fastened the shutter hook, letting the room trade daylight for secrecy and lamplight gloss.
+
+Now, draft the chapter prose, sticking as close to possible to the words and sentences in the rough_draft, only adding words and filler where absolutely necessary.
+
+=== RESPONSE ===
+The door eased inward and Wolf slipped through the gap like a shadow finding its shape. He paused on the threshold, scenting the warmth and counting heartbeats in the hush. Grandmother rose from her chair, one hand on the hazel stick, the other reaching toward the stove. Wolf crossed the hearthstones in two silent bounds, breath warm, intent neatly folded. The floorboards creaked once; the chair tipped and skated, knocking the teacup askew.
+
+A single gulp took Grandmother whole, swift as a lantern snuffed; the room answered with a thud of chair leg and a soft, settling sigh. The teapot kept its whisper; the spoon in the cup rattled and went still. Wolf’s belly rounded, heavy beneath his ribs, and he adjusted his stance until the weight found its place. He smoothed the feather quilt, plumping strawberries into a hill that disguised his breadth. Wolf settled, belly distended under quilted fruit, untroubled by the burden as the cottage kept his secret. He pinched the powder tin between claws, dabbed rice dust along the muzzle to dim the telltale gleam. The nightcap slid over pricked ears; the blue ribbon bowed above a brow too broad for human comfort. Spectacles perched on a bridge made for scent, lenses fogging, smudges turning the world to blur. He fastened the shutter hook, letting the room trade daylight for secrecy and lamplight gloss.

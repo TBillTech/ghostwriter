@@ -1,0 +1,37 @@
+=== SYSTEM ===
+You are a ghostwriter polishing and cleaning prose.
+
+=== USER ===
+You are a ghostwriter working from a more rough version of a novel chapter.  
+Your job is to write polished clean prose for a novel chapter.  
+
+# Setting in general 
+[SETTING]
+
+# Characters
+[CHARACTERS]
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+
+
+# Rules for generation:
+1. Produce **continuous prose only** (no lists or notes or markup or obnoxious formatting unless central to the text like litRPG stats).  
+2. Make sure to fix the commas, spacing, and capitalization when prose includes quoted dialog.
+
+# Previous rough version
+Please clean up the following text:
+The Wolf arrived first, having left the deer track where Red would later wander; beyond the gate the lane lay empty, no bright hood anywhere on the winding path. The garden held its breath—still save for bees and the far, steady tick of an unseen clock—and thyme and cabbages brushed against the Wolf's fur like a soft accusation, carrying mint and ash that hid whatever stray musk the Wolf brought with him. He paused among the herbs, testing the air for bread and jam and finding only the kettle's soft breath threading through the door seams, the sound of a household at ease. The cottage windows were small and clean, curtains barely stirring; a teacup on its saucer waited by a chair draped with Grandmother's shawl, a hairline crack glinting when a cloud shifted. Through the narrow crack where door met frame the walking stick leaned by the jamb—hazel, polished by years of palms—and the sun-bleached latch on the door showed thumb-worn iron, warm from afternoon light.
+
+The clock inside kept its slow metronome and the Wolf counted its beats against his own breaths as he padded from shadow to sill, placing careful paws between the creaking boards of the step. He noted the hinge pins bright with use and pictured the quiet swing that would follow if the latch fell; he measured the latch's height and memorized the rhythm of familiar knocks that would open this particular threshold. The Wolf smoothed his voice in his throat like a blade in a sheath, shaping a borrowed civility—cadence and pause formed without sound—and with the garden listening and the clock steady he closed the last steps to the cottage door.
+
+Now, draft the chapter prose, sticking as close to possible to the words and sentences in the rough_draft, only adding words and filler where absolutely necessary.
+
+=== RESPONSE ===
+The Wolf arrived first, having left the deer track where Red would later wander. Beyond the gate the lane lay empty, no bright hood anywhere on the winding path. The garden held its breath—still save for bees and the far, steady tick of an unseen clock—and thyme and cabbages brushed against the Wolf's fur like a soft accusation, their mint and ash hiding whatever stray musk he brought with him. He paused among the herbs, testing the air for bread and jam and finding only the kettle's soft breath threading through the door seams, the sound of a household at ease. The cottage windows were small and clean, curtains barely stirring; a teacup on its saucer waited by a chair draped with Grandmother's shawl, a hairline crack glinting when a cloud shifted. Through the narrow split where door met frame the walking stick leaned by the jamb—hazel, polished by years of palms—and the sun-bleached latch showed thumb-worn iron, warm from afternoon light.
+
+Inside, the clock kept its slow metronome and the Wolf counted its beats against his own breaths as he padded from shadow to sill, placing careful paws between the creaking boards of the step. He noted the hinge pins bright with use and pictured the quiet swing that would follow if the latch fell; he measured the latch's height and memorized the rhythm of familiar knocks that would open this particular threshold. He smoothed his voice in his throat like a blade in a sheath, shaping a borrowed civility—cadence and pause formed without sound—and with the garden listening and the clock steady he closed the last steps to the cottage door.
