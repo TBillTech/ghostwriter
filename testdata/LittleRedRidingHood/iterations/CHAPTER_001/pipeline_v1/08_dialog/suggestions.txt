@@ -1,8 +1,20 @@
-- Delete "Warmth lifted from the basket in a faint breath of sweet jam." It reads like awkward narration and interrupts the exchange; show Red clutching the basket instead if needed.
-- Remove "The hoofprints were small and neat." It's unnecessary detail and breaks pacing; if you want a sensory beat, replace with a short action tied to Red ("She glanced at the narrow ruts, then back to the Wolf.") to keep it scene-focused.
-- Trim the repeated stage directions for Little Red. Replace "Little Red tightened her hood and steeled herself to hurry, determined not to linger for flowers." with a brief, characterful action + line that preserves her voice, e.g.: Red tugs her hood tighter. "All right. I’ll take the deer track—thank you, but I must go."
-- Soften or tighten the Wolf's simile "Your memory is a bright lantern, child—handy for a hastening step." Consider either keeping a shorter compliment in his oily cadence ("Bright memory. It will find the birch for you.") or keep the existing line but remove extra adjectives to avoid purple prose.
-- Combine and simplify Red’s farewell to reduce repetition: change "Then I'll take the deer track. Thank you—goodbye, Wolf. Grandmother's waiting." to "I'll take the deer track. Thank you. Grandmother's waiting." Keeps politeness and hurry without stilted repetition.
-- Keep the shortcut touch-point explicit and decisive: ensure the line where Red accepts the shortcut is a spoken decision (see suggested replacement above) rather than purely narration.
-- Optional: add a tiny hesitation beat in Red's dialogue (a short comma or pause) before she agrees, to show her naivety and thought process without long narration (e.g., "Is it—will it still lead to Grandmother's?" … "All right. I'll take it.").
-- Verify no mention of the Wolf's hunger or other forbidden foreshadowing appears elsewhere in the scene.
+- Remove the sentence "Warmth lifted from the basket in a faint breath of sweet jam." It reads oddly and personifies the basket in a way that distracts. Replace with a small physical beat showing Red's attachment to the basket (e.g., "She hugged the basket closer" or "The basket creaked against her arm").
+
+- Replace repeated "Little Red said" tags with action beats to vary rhythm and keep voice: use tags like "Red hesitated," "Red tightened her hood," "Red said softly," or simply a beat before the line. Example changes:
+  - Change "Little Red hesitated, 'Will the shortcut lead to Grandmother's?'" → "Red hesitated. 'Will the shortcut lead to Grandmother's?'"
+  - Change "Little Red said, 'I remember the birch.'" → "Red nodded. 'I remember the birch.'"
+  - Change "Little Red said, 'Then I'll take the deer track. Thank you—farewell, Wolf. Grandmother's waiting.'" → "Red clutched the basket. 'I'll take the deer-track. Thank you. Farewell, Wolf—Grandmother's waiting.'"
+
+- Tighten the Wolf's phrasing to keep his oily charm while avoiding clunky info-dump. Revise: "It rejoins the main path by the birch with the lightning scar. Follow that, and you'll be right on time." → "It meets the path again by the birch with the lightning scar — follow that and you'll be right on time." (Keeps clue but reads smoother.)
+
+- Avoid the line that explicitly states Red "steeled herself to hurry" as internal narration; show it physically. Replace "Little Red tightened her hood and steeled herself to hurry, determined not to linger for flowers." with a concise action-beat: "Red tightened her hood and quickened her step, fingers curled around the basket — she wouldn't stop for flowers."
+
+- Remove or soften the Wolf's final "Happy trails—until we meet again." If you want lingering menace, keep it but make it more sly and less overtly reciprocal: e.g., "Good trails, child. Until our paths cross." (Keeps theatrical menace without promising future meeting too plainly.)
+
+- Hyphenate "deer track" to "deer-track" when used as a compound modifier (if you prefer tighter fairy-tale diction): "I'll take the deer-track."
+
+- Cut one instance of the idea that Red is anxious about shadows: earlier lines already establish unease. If that thread needs to remain, keep only one crisp instance (the branch across wicker + tightened fingers) and delete the other similar lines to avoid repetition.
+
+- Keep the wolf's flattery but vary wording so he echoes Red without repeating her exact phrasing verbatim too often. E.g., change "Your memory is a bright lantern, child—handy for a hastening step." to "Your memory is a bright lantern, child — it will light a quicker road." (Preserves poetic voice and manipulative compliment.)
+
+- Ensure the final exchange clearly shows Red chooses the shortcut (touch-point). Make her decision active and immediate: end her line with the choice and a leaving action (e.g., "'I'll take the deer-track,' she said, and set off along the narrow trail.")

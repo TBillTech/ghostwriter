@@ -1,0 +1,11 @@
+- Replace the blunt opener "He knocked once." with a short, characterful beat that shows the Wolf’s performative cunning and avoids narrating action the character would describe. Example to insert: The Wolf let a practiced knock fall soft as a coin. (Keep it one sentence only.)
+
+- Keep the Wolf’s required line verbatim but move the parenthetical into a compact speaker tag to preserve cadence and stage direction: Wolf (mimicking Red, soft and breathy): "Grandmother, it’s me. Mama sent bread and jam. May I come in?" — ensure the line follows immediately after the single knock.
+
+- Tidy the Grandmother tag to the required muffled-with-age direction but make her voice warm and homey while keeping the exact wording: Grandmother (from within, muffled with age): "Lift the latch, child. I’ve been waiting." — place this immediately after the Wolf’s line with no extra narration between.
+
+- Remove any extra narration or sensory detail between the two lines (no description of ears, latches, or external sounds) so the exchange reads as a tight call-and-response and stays focused on dialog.
+
+- Adjust punctuation and formatting so each speaker’s attribution is on its own line and the quoted speech follows directly (no extra blank lines or stage directions breaking flow).
+
+- Optional polish (if you want a tiny mood cue): add one brief ambient beat after Grandmother’s reply — a faint creak or the scrape of a latch — but only as a single short sentence and only after both lines, to preserve momentum.

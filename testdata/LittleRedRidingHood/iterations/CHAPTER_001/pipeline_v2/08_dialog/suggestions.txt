@@ -1,0 +1,27 @@
+- Remove one of the repeated basket/clutch images. Delete either "The basket creaked against her arm." or the later "Red clutched the basket." (keep just one to avoid redundancy).
+
+- Replace the awkward narrated quote line:
+  Current: "'I'll take the deer-track,' she said, and set off along the narrow trail. 'Thank you. Farewell, Wolf—Grandmother's waiting,' she called over her shoulder."
+  Suggested rewrite (direct speech + brief gesture): Red tucked the basket closer and called over her shoulder, "I'll take the deer-track. Thank you — farewell, Wolf. Grandmother's waiting."
+  (This removes the strange mix of narration inside quotes and keeps it dialog-forward.)
+
+- Tighten/delete internal narration that duplicates action:
+  Delete "Red tightened her hood and quickened her step, fingers curled around the basket — she wouldn't stop for flowers." Replace with a short showy action if you want her resolve visible: "Red tightened her hood and stepped onto the narrow trail, not looking at the verge." (Keeps her earnest cadence without repeating clutch/creak imagery.)
+
+- Tone down the final animalistic verb to match Wolf's sly, theatrical manner rather than obvious menace:
+  Replace: Then, low and quiet, Wolf growled "Until our paths cross again."
+  With: He bowed and let a low, amused purr slip out, "Until our paths cross again."
+  (Keeps menace implied via tone rather than blunt growl; preserves his oily charm.)
+
+- Minor clarity/flow tweak to Wolf's birch line: make it sound more suggestive, not overly directive:
+  Current: "It meets the path again by the birch with the lightning scar — follow that and you'll be right on time."
+  Suggested: "It meets the path again by the birch with the lightning scar. Follow that and you'll be right on time."
+  (Split into two sentences to smooth the cadence and match Wolf's sibilant pacing.)
+
+- Remove the extra echo of Red's memory that serves no new purpose:
+  Delete or compress "Red nodded. 'I remember the birch.'" If you want to keep acknowledgement, fold it into her spoken line (e.g., Red said, "I remember the birch," right before she steps onto the track) so it doesn't read as a separate redundant beat.
+
+- Optional: Add one small sensory beat to show Red's decision in keeping with her character (short, earnest):
+  Insert after she accepts: "She gave a small, polite nod, as if promising." (One quick sentence only — keeps narration light and character-true.)
+
+These changes remove repetition, fix the weird narrated-quote construction, keep the scene dialog-forward, and preserve the writer's voice while sharpening Wolf's manipulative charm.

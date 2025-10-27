@@ -43,9 +43,12 @@ Wolf purred, "Good morning, little traveler — where are you headed with that b
 
 The forest quieted. 
 
-"To my Grandmother's cottage, please." She hugged the basket closer. "Bread and jam — she is ill." 
+"To my Grandmother's cottage." She hugged the basket closer.
 
-"And what treasures have you tucked inside for a sick grandmother?" Wolf asked, voice as smooth as oil. "How far is she from here, if you don't mind my asking?" 
+"And what treasures have you tucked inside for a sick grandmother?" Wolf asked, voice as smooth as oil.
+"Bread and jam — she is ill." 
+ 
+"I'm sorry to hear that. How far is she from here, if you don't mind my asking?" 
 
 "Past the three tall pines and the crooked stump — not far."
 END_RESULT
@@ -54,19 +57,19 @@ BEGIN_TOUCHPOINT id=7 type=mixed
 
 END_TOUCHPOINT
 BEGIN_RESULT
-Wolf smirks. "Soft and practiced, I offer warmth, not fear. The quickest way lies in the hush between the trees, and I can guide you to it if your courage keeps pace."
+Wolf smirks. "The quickest way lies in the hush between the trees, and I can guide you to it if your courage keeps pace."
 
 He lets the last word ripple, repeating "quicker" with an extra sweetness.
 
 Red clutches the basket. "The shadows feel strange. My eyes aren't used to them yet."
 
-The wind shifts, carrying the scent of jam farther than her voice can reach. A jay cackles once and vanishes, leaving a silence heavier than the basket's weight.
+The wind shifts. A jay cackles once and vanishes, leaving a silence heavier than the basket's weight.
 
 A branch slides across the wicker. Her fingers tighten until it creaks. The crooked stump throws a long shadow across her boots, and her next step falters on loose needles.
 
 Red tugs her hood. "Thank you. Grandmother is waiting; I mustn't be late."
 
-"Is there a quicker way? Would it be safe, please?"
+"Is there really a quicker way? Would it be safe?"
 
 A pine needle crunches underfoot. Sunlight threads through the pines as the path tilts toward a choice the forest keeps for itself.
 END_RESULT
@@ -79,9 +82,7 @@ The Wolf inclined forward, "That narrow deer track cuts straight to Grandmother'
 
 Warmth lifted from the basket in a faint breath of sweet jam.
 
-Little Red hesitated, "Is that shortcut safe? Will it still lead to Grandmother's?"
-
-The hoofprints were small and neat.
+Little Red hesitated, "Will the shortcut lead to Grandmother's?"
 
 The Wolf said, "It rejoins the main path by the birch with the lightning scar. Follow that, and you'll be right on time."
 
@@ -91,7 +92,7 @@ The Wolf purred, "Your memory is a bright lantern, child—handy for a hastening
 
 Little Red tightened her hood and steeled herself to hurry, determined not to linger for flowers.
 
-Little Red said, "Then I'll take the deer track. Thank you—goodbye, Wolf. Grandmother's waiting."
+Little Red said, "Then I'll take the deer track. Thank you—farewell, Wolf. Grandmother's waiting."
 
 The Wolf bowed, "Happy trails—until we meet again."
 END_RESULT

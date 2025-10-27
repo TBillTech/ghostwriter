@@ -1,0 +1,17 @@
+1. Replace the Wolf’s first line with a short, in-character knock and a single spoken sentence—drop the self-descriptive narration. Suggested replacement: Knock sound + Wolf: "Grandmother, it’s me. Mama sent bread and jam. May I come in?" (this matches the touch-point and keeps his mimicking cadence).
+
+2. Remove the second Wolf line that narrates smoothing his voice ("I smooth the sound..."). Keep the required mimicked line above; do not paraphrase it elsewhere.
+
+3. Delete the Wolf’s later self-descriptive pause line ("I pause at the threshold..."). If you want a brief stage beat, use an action tag outside dialogue: He paused. But do not have the Wolf narrate his own pause in quotes.
+
+4. Remove redundant complaint lines about the basket and latch that repeat the same trouble (both "The basket is heavy..." and "Could you coax it..."). If a complaint is needed, compress into one brief line of dialogue or a short action beat: Wolf (softly): "The latch sticks; could you lift it for me?" — but only if this doesn't undermine the touch-point phrasing.
+
+5. Replace Grandmother’s current reply lines with the required muffled touch-point line. Use exactly: Grandmother (muffled): "Lift the latch, child. I’ve been waiting." Remove or fold in any extra directions ("Mind the latch and wipe your feet") into a separate, brief action or later speech if necessary—do not stack them at the same moment as the touch-point line.
+
+6. Clean up punctuation and tone: remove double question marks and ellipsis-heavy phrasing inside spoken lines. Use single-question marks and spare periods to preserve cadence without melodrama.
+
+7. Ensure only Wolf and Grandmother speak in this scene; remove any stray narrative voices embedded in quoted dialogue. If you need minimal description, place it outside quotation marks as short stage directions (one or two words max): e.g., He knocked once. Her voice came through the door, muffled.
+
+8. Preserve the Wolf’s sly cadence by keeping his line brief and breathy, but avoid literal stage directions inside dialogue (no "I mean no harm" narrated lines). Let his word choice convey flattery—short, suggestive lines are better than meta-commentary.
+
+9. After applying the above, read for redundancy and trim any repeated ideas (waiting, latch problems, basket weight) so the exchange feels taut and focused on the required misidentification and the latch being lifted.

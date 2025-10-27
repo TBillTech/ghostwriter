@@ -1,0 +1,100 @@
+BEGIN_TOUCHPOINT id=1 type=setting
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=2 type=scene
+{'name': 'Forest Path', 'description': 'A winding dirt trail beneath tall, shadowed pines. Shafts of light\nthread through the branches; birds rustle, then fall silent when the\nwind shifts. The air smells of damp earth and sweet jam.\n', 'props': [{'name': 'Basket', 'significance': 'Gift and responsibility; symbol of trust', 'description': "A small wicker basket filled with bread and jam, carried on Red's arm."}, {'name': 'Red Hood', 'significance': 'Identity and innocence; visible target in the woods', 'description': 'A bright red cloak and hood, a gift from Grandmother that draws the eye.'}]}
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=3 type=actors
+Red, Wolf
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=4 type=foreshadowing
+Wolf hasn't eaten in a while.
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=5 type=narration
+Red walks the forest path, humming, basket in hand.
+END_TOUCHPOINT
+BEGIN_RESULT
+Red walks the forest path humming, a basket in her hand. Sunbeams fall in narrow bands, sliding over her hood and the winding dirt trail. The hood shines bright against the tall, shadowed pines as the path bends around an oak with black bark and the forest deepens a shade. Red steps along the trail with a small, steady stride; the wicker basket hangs on her arm, creaking with each swing. It seems to carry trust as much as bread and jam. Pine needles soften her steps and pale dust lifts behind her. A tuft of blue flowers leans from the verge, nodding as Red passes. Red keeps to the trail. Red hums a nursery tune as she keeps to the path.
+
+The wolf moves parallel through the undergrowth, low and quiet between bramble shadows. The wolf lifts his muzzle to the trail air, noting the drift of jam through the pines. When Red pauses, the wolf stills; when Red moves, the wolf resumes, each step measured, patient and watchful in the dim forest.
+END_RESULT
+
+BEGIN_TOUCHPOINT id=6 type=dialog
+The Wolf greets Red and asks where she's going.
+END_TOUCHPOINT
+BEGIN_RESULT
+Wolf purred, "Good morning, little traveler — where are you headed with that bright hood?"
+
+The pines listened.
+
+"To my Grandmother's cottage." Red clutched the basket.
+
+"And what have you tucked into that pretty basket for a sick grandmother?" he said, all slipper and smile.
+
+"Bread and jam—Grandmother's ill."
+
+The wolf's tail flicked once. "How far is she from here?" he asked.
+
+"Past the three tall pines and the crooked stump—not far."
+
+"Three tall pines... the crooked stump. Not far at all," he echoed softly.
+END_RESULT
+
+BEGIN_TOUCHPOINT id=7 type=mixed
+Danger hinted at in the dark trees and Wolf's smile.
+END_TOUCHPOINT
+BEGIN_RESULT
+"The quickest way lies in the hush between the trees," he purred, "and I can guide you—if your courage keeps pace." He let the sibilant linger and murmured, "Quicker, little one..." He licked his lips; a faint musk edged the air.
+
+A shadow of a branch twitches across the wicker; Red clutches the basket and the wicker creaks under her fingers.
+
+"The shadows feel odd. My eyes can't see well there yet."
+
+A jay cackles once and goes; the forest hush that follows presses against the path.
+
+The crooked stump's shadow slides over her boots; she falters on loose needles. She glances at the dappled light on the deer track, takes an involuntary step, then straightens.
+
+Red tugs her hood. "Thank you, but Grandmother waits—I mustn't keep her. But a quicker way? Would that be safe?"
+
+A pine needle crunches underfoot. Sunlight threads the pines; the path forks, and the woods hush around the choice.
+END_RESULT
+
+BEGIN_TOUCHPOINT id=8 type=dialog
+The Wolf suggests a shortcut to Grandmother's, and Red decides to take it.
+END_TOUCHPOINT
+BEGIN_RESULT
+The Wolf inclined forward. "That narrow deer track cuts straight to Grandmother's cottage—a shortcut if you follow it."
+
+The basket creaked against her arm.
+
+Red hesitated. "Will the shortcut lead to Grandmother's?"
+
+The Wolf said, "It meets the path again by the birch with the lightning scar — follow that and you'll be right on time."
+
+Red nodded. "I remember the birch."
+
+The Wolf purred, "Your memory is a bright lantern, child — it will light a quicker road."
+
+Red tightened her hood and quickened her step, fingers curled around the basket — she wouldn't stop for flowers.
+
+Red clutched the basket. "'I'll take the deer-track,' she said, and set off along the narrow trail. 'Thank you. Farewell, Wolf—Grandmother's waiting,' she called over her shoulder."
+
+The Wolf bowed. "Good trails, child." Then, low and quiet, Wolf growled "Until our paths cross again."
+END_RESULT
+

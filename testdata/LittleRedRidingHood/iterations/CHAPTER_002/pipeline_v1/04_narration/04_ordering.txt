@@ -1,0 +1,209 @@
+=== SYSTEM ===
+You will order and refine brainstormed bullet points for coherent flow.
+
+=== USER ===
+You are a director examining the output of a creative brainstorming session, also working from structured YAML notes.  
+Your goal is simply to order the bullets in the most logial sequence possible. You are not allowed to take bullets away.
+You are however, allowed to add new intermediate bullets to help the sequence make more sense.
+
+# Setting in general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    },
+    {
+      "id": "grandma",
+      "name": "Grandmother",
+      "background": "A kindly, aging woman who lives at the edge of the wood. She keeps a tidy\nroom, a warm stove, and a tin of biscuits for visiting children. Her voice\nis soft as quilts and steady as tea. Though her health wavers, her welcome\nnever does. She speaks in homey turns of phrase and frets over safety with\npractical tenderness.\n",
+      "traits": [
+        "frail",
+        "warm",
+        "practical",
+        "affectionate",
+        "cautious"
+      ],
+      "cadence": "gentle, unhurried; cozy hearth-tone",
+      "lexicon": "homely phrases; plain words; lullaby wisdom",
+      "prefer": [
+        "family",
+        "safety",
+        "warmth",
+        "tea",
+        "rest"
+      ],
+      "avoid": [
+        "frightening talk",
+        "rudeness",
+        "cold",
+        "wolves at the door"
+      ],
+      "mannerisms": [
+        "Calls loved ones ‘dear’ and ‘sweetheart’; fusses kindly over coats and boots.",
+        "Hums while pouring tea; sets plates just so before inviting a bite.",
+        "Tucks shawl tighter when worried; breathes in short, careful sips.",
+        "Offers remedies and rest before advice; keeps scolding brief and soft."
+      ],
+      "sample_lines": [
+        "Come in, dear.",
+        "Mind the latch and wipe your feet.",
+        "Have a biscuit and warm your hands.",
+        "I’ll be right as rain after a little rest.",
+        "Bless you, child. You always brighten my room."
+      ],
+      "common_lines": [
+        "Close the window, will you? There’s a chill today.",
+        "You’re a comfort to me, truly.",
+        "Tell your mother I’m grateful."
+      ],
+      "rare_lines": [
+        "I had a startle—must have been the wind.",
+        "Even an old heart can be brave, in its way."
+      ],
+      "forbidden": [
+        "Will not endorse violence or cruelty.",
+        "No modern slang or technical jargon.",
+        "Avoids sarcasm; does not mock."
+      ],
+      "temperature_hint": 0.2,
+      "max_tokens_line": 60
+    }
+  ]
+}
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised to bring goodies to her ailing grandmother and walked the forest path humming a nursery tune, the bright hood over her head catching sunbeams as pine needles softened her steps and pale dust lifted behind her while a wicker basket creaked like a small, steady promise; tufted blue flowers bowed at the verge, the jam-sweet scent threaded the air, and the hood shone against tall, shadowed pines as the trail bent around an oak and deepened into hush. From the bramble a sleek wolf moved parallel, low and silent, lifting his muzzle to the trail as if to taste the drift of jam, and when Red paused he slid into speech with a velvet, honeyed voice that asked where she was bound and what treasures she carried, murmuring of a quicker way and offering to guide her by a narrow deer track that would rejoin the lane by the birch marked by a lightning scar; the forest listened—a jay cackled and vanished, a branch brushed the basket and made it creak, and shadows lengthened while the wolf's smile was all bright teeth and false comfort. He named the crooked stump and the three tall pines that marked her grandmother's cottage and, soft and insistent, assured her the deer track would set her right on time, letting the thought of a shortcut curl in the air like a lure. Red tightened her hood, fingers clamped the handles, felt the crooked stump's shadow skitter across her boots, and though she faltered at the fork and felt the hush press, she remembered her grandmother waiting, thanked him in a small voice, and—resolute not to linger for flowers—accepted the wolf’s guidance, stepping onto the narrow ruts and hurrying away along the hidden track.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I meant only to be helpful—my basket creaks like a promise and the nursery tune keeps my feet steady as the sun slices through the pines. The hood gleams in narrow bands of light as the path winds past the black-barked oak and the forest draws a shade around me; pine needles soften my steps and pale dust lifts in my wake while a tuft of blue flowers nods from the verge. I clutch the wicker when a branch brushes it and the crooked stump's shadow skitters over my boots, and when the wolf slips from the bramble his voice is velvet and his questions smell of honey and quicksilver. He asks where I'm bound, what treasures I carry, and offers a hushed shortcut along a deer track that will meet the lane by the birch with the lightning scar—names I know, and promises that curl like a lure. The jay's cackle and the hush that follows make me flinch; still, thinking of Grandmother waiting with bread and jam, I tug my hood tighter, decide against lingering for flowers, and with a tightened grip on the basket and a small, steady stride I accept the deer track and hurry on, thanking him and calling farewell over my shoulder.
+
+Wolf's point of view
+Hunger and patience sit easy beneath my coat as I pad low through the bramble, smelling jam like an invitation threaded through the pines, watching her bright hood cut the light and the wicker creak like a small, honest drum. I slip between shadows and time my words soft as oil, letting polite curiosity tilt her answers toward the map I want to set in her head: three tall pines, the crooked stump, the birch with the lightning scar. I purr a promise of a quicker way, let the sibilants smear like a ribbon, and watch the branch that brushes her hand make the basket speak for me. The jay's cackle and the hush that follows do my work for me; hesitation blooms, memory of the birch tugs, and I press the deer-track into her choices like an easy route home. She tightens her hood, thanks me in a small voice, and follows the narrow ruts, fingers curled on the handle—I bow with a silk of a smile and wait, patient as hunger.
+
+Forest Path's point of view
+I cradle the pale dust behind her little feet and hold the sunbeams in narrow bands as she hums and walks beneath my pines, the hood bright against the deepening shade where the black oak bends the trail. Tufted blue leans in my verge and pine needles hush her steps while a branch reaches to make the wicker creak; I let the sound fold into my long quiet. A sleek shape slips through my bramble, low and measured, tasting the jam that rides my air, and his voice slides over my understory like oil—soft questions, the offer of a narrow deer track that threads beneath my roots and promises to meet the lane by the birch with the lightning scar. The jay cackles and then the hush thickens, the crooked stump's shadow slides across her boots, and she pauses between my forks before tugging her hood tighter and stepping onto the thin ruts. I keep the crossing tucked in my soil as she hurries on, basket against her arm, the trail folding the moment into the long hush of the wood.
+
+# Prior paragraph
+This is only for context. Do NOT repeat this:
+
+
+# Scene
+Here is the scene they actors are placed in:
+{'name': 'At the Cottage Gate', 'description': 'Having slipped from the deer track ahead of Red, the Wolf reaches a small cottage tucked in thyme and smoke.\nThe garden is a patchwork of herbs and cabbages, the door sun-bleached and simple; inside, a kettle hums and an old clock ticks.\nThe world here smells of mint and ash and rest, vulnerable in its quiet routine.\n', 'props': [{'name': 'Cottage Door-Latch', 'significance': 'Threshold of trust; a simple defense turned invitation', 'description': 'A thumb-worn iron latch, warm from afternoon light.\nIt answers to a familiar knock and an even more familiar voice.\n'}, {'name': 'Hearth and Kettle', 'significance': 'Homeliness to be imitated; cover for small sounds', 'description': 'A blackened iron kettle keeps time in soft breaths over banked coals,\nits steam sewing the room together with the smell of nettle tea.\n'}, {'name': 'Teacup on Saucer', 'significance': 'Grandmother’s pause interrupted', 'description': 'Porcelain with a hairline crack, rim blushed by tea.\nIt waits beside a chair draped with a shawl.\n'}, {'name': 'Walking Stick', 'significance': 'Measure of frailty the Wolf will exploit', 'description': 'A hazel stick, polished by years of palms, leaning by the door.\n'}]}
+
+# Actors
+Here are the actors in the scene:
+Wolf, Grandmother
+
+# Rules for generation:
+1. **Bullet Points**: Provide your results as bullet points, starting the line with '*' character.
+2. **Clean Lines**: If there are intent words at the beginning of the given bullets, for example "Clarity - ", or "Flavor: " leave those out and just recover the point without a title.
+3. **Just Bullets Output**: Strip off, ignore, and do not output any markdown or other formatting, other than just only '*' character at line start.
+
+Now, Here are the Bullets to be ordered in as logical a way as possible:
+* wolf pauses among thyme and cabbages; the garden holds steady in bees and warm smoke.
+* He listens toward the lane; no footfall, no red hood at the gate, only the slow clock inside.
+* He scents nettle tea and ash; the kettle’s breath threads the air from the chimney.
+* He measures the sun on the shingles; there is time before red hood could reach the cottage.
+* He checks the hedge and the path for witnesses; no dog, no hunter, no neighboring voice.
+* He presses one paw to the warm dirt and shakes pine needles from his coat.
+* He settles his breathing to the clock’s tick, shaping his throat for borrowed civility.
+* He studies the door’s thumb-worn iron; the latch glows faintly with afternoon heat.
+* He rehearses a familiar cadence behind closed teeth; his voice readied like a sheathed blade.
+
+
+=== RESPONSE ===
+* wolf pauses among thyme and cabbages; the garden holds steady in bees and warm smoke.
+* He presses one paw to the warm dirt and shakes pine needles from his coat.
+* He scents nettle tea and ash; the kettle’s breath threads the air from the chimney.
+* He listens toward the lane; no footfall, no red hood at the gate, only the slow clock inside.
+* He measures the sun on the shingles; there is time before red hood could reach the cottage.
+* He checks the hedge and the path for witnesses; no dog, no hunter, no neighboring voice.
+* He pads to the doorstep, ears tuning to the cottage's small sounds.
+* He studies the door’s thumb-worn iron; the latch glows faintly with afternoon heat.
+* He settles his breathing to the clock’s tick, shaping his throat for borrowed civility.
+* He rehearses a familiar cadence behind closed teeth; his voice readied like a sheathed blade.

@@ -1,0 +1,15 @@
+- Replace the second clock/beat image to avoid repetition. Keep only one clear line tying garden stillness to the "slow metronome of Grandmother's clock." Remove or rework "matching his breathing to the clock's tick" (delete that clause or merge it into the earlier sentence).
+
+- Make the touch-point simile exact and sharper: change "his voice readied like a blade sheathed in silk" to the phrasing in the touch-point: "he smooths his voice in his throat like a blade in a sheath." Place that line immediately before the final movement to the door so the sequence is: listen → smooth voice → pad to door.
+
+- Tighten/delete layered metaphors that dilute the moment:
+  - Remove or simplify "the little tremor scattering needles like shrugged-off thoughts." Consider "the little tremor shook needles from his coat" to keep motion but reduce poetic clutter.
+  - Consider removing "Nettle tea and wood-ash rode the air on the kettle's soft exhalations; the Hearth and Kettle stitched the room inside together with steam." Either shorten to a single clear sensory image ("nettles and wood smoke rose from Grandmother's kettle") or keep only the one that best sets mood.
+
+- Clarify "Red" reference for consistency with factoids: choose either "Red" or "Red Hood" and use the chosen name once here. Suggested: "no Red yet" (keeps the touch-point's casual name) or "no Red Hood at the gate" if you prefer the full name — pick one to avoid small ambiguity.
+
+- Small specificity fix: change "studied the Cottage Door-Latch; the thumb-worn iron glowed faint with afternoon heat, familiar as a well-used word." to a single image with active verb: "He studied the thumb-worn latch; the iron glowed faint with afternoon heat, familiar as a well-used word." (Removes the semicolon clutter and keeps subject clear.)
+
+- Ensure subject clarity at paragraph starts: where you begin with "He measured the sun..." confirm the previous sentence's subject is clearly the Wolf; if you keep preceding sentences long, start that new sentence with "Wolf" instead of "He" to avoid pronoun drift.
+
+- Optional stylistic cut for pacing: shorten the middle section that inventories witnesses ("no dog, no hunter, no neighbor's voice") to "no hound, no hunter, no neighbor" if you want snappier cadence and to emphasize solitude before the final move.

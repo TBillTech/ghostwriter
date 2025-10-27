@@ -200,6 +200,30 @@ def run_mixed_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_parag
     from ..characters import build_character_call_prompt
 
     items_sections: List[str] = []
+    # Collect unique character ids (exclude narrator) to build a single CHARACTER DATA section
+    unique_actor_ids: List[str] = []
+    for aid, _ in lines_pairs:
+        low = aid.strip().lower()
+        if low != "narrator" and aid not in unique_actor_ids:
+            unique_actor_ids.append(aid)
+    # Build CHARACTER DATA block to de-duplicate character YAML and include agenda notes
+    character_data_sections: List[str] = []
+    if unique_actor_ids:
+        character_data_sections.append("CHARACTER DATA (reference for all ITEMS; do not repeat below):")
+        for aid in unique_actor_ids:
+            yaml_text = char_yaml_by_id.get(aid.strip().lower(), "")
+            agenda_block_top = agenda_by_actor.get(aid, "").strip()
+            block_lines: List[str] = []
+            block_lines.append(f"=== CHARACTER: id={aid} ===")
+            if yaml_text:
+                block_lines.append(yaml_text.strip())
+            else:
+                block_lines.append("id: {aid}\nname: Unknown\n")
+            if agenda_block_top:
+                block_lines.append("")
+                block_lines.append("Agenda notes (focus for this scene):")
+                block_lines.append(agenda_block_top)
+            character_data_sections.append("\n".join(block_lines))
     for b_index, (actor_id, line_hint) in enumerate(lines_pairs, start=1):
         agenda_block = agenda_by_actor.get(actor_id, "")
         reaction_line = reactions_pairs[b_index - 1][1] if 1 <= b_index <= len(reactions_pairs) else ""
@@ -220,6 +244,14 @@ def run_mixed_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_parag
                 f"Write a short narrative/action beat (no quotes) that fits this scene.\n\n"
                 f"Line intent: {line_hint}\nReaction to prior line: {reaction_line}\nAgenda notes: {agenda_block}\n"
             )
+            # Pre-process narrator instructions per request
+            try:
+                userN = userN.replace(
+                    "Write the narrative prose now (no quotes):",
+                    "Append the narrative prose for this ITEM at the very end.",
+                )
+            except Exception:
+                pass
             systemN = "You write third-person narrative prose without quotation marks."
             item = (
                 f"ITEM {b_index}: id={actor_id}\n=== SYSTEM ===\n{systemN}\n=== USER ===\n{userN}\n"
@@ -241,6 +273,31 @@ def run_mixed_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_parag
             agenda=agenda_combined,
             character_yaml=char_yaml_by_id.get(actor_id.strip().lower()),
         )
+        # Pre-process per-item USER prompt to reduce repetition and move agenda into the top character block
+        try:
+            # Replace the character YAML block with a reference
+            intro_marker = "You are role playing/acting out the following character:"
+            aware_marker = "You are aware of or deeply care about the following details"
+            last_marker = "The last"
+            if intro_marker in user_i:
+                before_intro, rest = user_i.split(intro_marker, 1)
+                idx_aware = rest.find(aware_marker)
+                if idx_aware != -1:
+                    after_intro = rest[idx_aware:]
+                    user_i = before_intro + intro_marker + "\nSee character data above\n" + after_intro
+            # Remove the per-item agenda section entirely (moved to CHARACTER DATA)
+            idx_aware_full = user_i.find(aware_marker)
+            if idx_aware_full != -1:
+                idx_next = user_i.find(last_marker, idx_aware_full)
+                if idx_next != -1:
+                    user_i = user_i[:idx_aware_full] + user_i[idx_next:]
+            # Replace final instruction line wording
+            user_i = user_i.replace(
+                "Now, say more or less the same thing in your own words and voice.",
+                "Append more or less the same thing in your own voice at the end of this document.",
+            )
+        except Exception:
+            pass
         item = (
             f"ITEM {b_index}: id={actor_id}\n=== SYSTEM ===\n{system_i}\n=== USER ===\n{user_i}\n"
         )
@@ -253,8 +310,11 @@ def run_mixed_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_parag
         "Return exactly one line per item, in order, strictly formatted as 'id: line'. "
         "Do not include any extra commentary or headers."
     )
+    # Prepend CHARACTER DATA section if available
+    header_block = ("\n\n".join(character_data_sections) + "\n\n") if character_data_sections else ""
     batch_user = (
-        "Follow these rules:\n"
+        header_block
+        + "Follow these rules:\n"
         "- Output N lines: one per ITEM, same order.\n"
         "- Each line formatted 'id: line'.\n"
         "- Keep dialog concise; narrator uses brief action/prose without quotes.\n\n"

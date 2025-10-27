@@ -194,6 +194,29 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
     if batch_mode:
         # Build a single prompt asking for N lines in order, formatted as 'id: line'
         spec_lines: List[str] = []
+        # Preload character YAML by id was done earlier; build CHARACTER DATA header with agendas
+        unique_actor_ids: List[str] = []
+        for aid, _ in actor_pairs:
+            low = aid.strip().lower()
+            if low != "narrator" and aid not in unique_actor_ids:
+                unique_actor_ids.append(aid)
+        character_data_sections: List[str] = []
+        if unique_actor_ids:
+            character_data_sections.append("CHARACTER DATA (reference for all items; do not repeat in spec):")
+            for aid in unique_actor_ids:
+                yaml_text = char_yaml_by_id.get(aid.strip().lower(), "")
+                agenda_block_top = agenda_by_actor.get(aid, "").strip()
+                block_lines: List[str] = []
+                block_lines.append(f"=== CHARACTER: id={aid} ===")
+                if yaml_text:
+                    block_lines.append(yaml_text.strip())
+                else:
+                    block_lines.append("id: {aid}\nname: Unknown\n")
+                if agenda_block_top:
+                    block_lines.append("")
+                    block_lines.append("Agenda notes (focus for this scene):")
+                    block_lines.append(agenda_block_top)
+                character_data_sections.append("\n".join(block_lines))
         def _pick(text: str, n: int) -> str:
             cnt = [ln.lstrip()[1:].lstrip() for ln in text.splitlines() if ln.lstrip().startswith(('*', '-'))]
             if 1 <= n <= len(cnt):
@@ -202,8 +225,9 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
         for b_index, (actor_id, line_hint) in enumerate(actor_pairs, start=1):
             reaction_line = reactions_pairs[b_index - 1][1] if 1 <= b_index <= len(reactions_pairs) else ""
             agenda_block = agenda_by_actor.get(actor_id, "")
+            # Do not inline agenda here; it's provided in the CHARACTER DATA header above
             spec_lines.append(
-                f"- id: {actor_id}\n  intent: {line_hint}\n  reaction: {reaction_line}\n  agenda: {agenda_block}"
+                f"- id: {actor_id}\n  intent: {line_hint}\n  reaction: {reaction_line}"
             )
         dialog_history_map = {}
         try:
@@ -211,8 +235,10 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
         except Exception:
             dialog_history_map = {}
         from ..utils import to_text as _to_text
+        header_block = ("\n\n".join(character_data_sections) + "\n\n") if character_data_sections else ""
         batch_user = (
-            "You will produce the entire dialog exchange in one go (implicit subtext).\n"
+            header_block
+            + "You will produce the entire dialog exchange in one go (implicit subtext).\n"
             "- Return exactly the same number of lines as the specification, in order.\n"
             "- Format each line strictly as 'id: line'.\n"
             "- Keep each line concise; avoid exposition; imply more than you say.\n"
@@ -320,21 +346,6 @@ def run_implicit_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_pa
                 state.add_dialog_line(actor_id, resp.strip())
                 appended.setdefault(actor_id, []).append(resp.strip())
     text = "\n".join(outputs)
-    # Polish
-    from ..templates import build_polish_prompt
-    polish_prompt = build_polish_prompt(ctx.setting, ctx.chapter, ctx.chapter_id, ctx.version, text)
-    modelp, tempp, maxp = env_for_prompt("polish_prose_prompt.md", "POLISH_PROSE", default_temp=0.2, default_max_tokens=2000)
-    rp = reasoning_for_prompt("polish_prose_prompt.md", "POLISH_PROSE")
-    polished = llm_call_with_validation(
-        system="You are a ghostwriter polishing and cleaning prose.",
-        user=polish_prompt,
-        model=modelp,
-        temperature=tempp,
-        max_tokens=maxp,
-        reasoning_effort=rp,
-        validator=validate_text,
-        log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_polish{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
-        context_tag=f"tp={tp_index:02d} type=implicit template=polish_prose_prompt.md step=POLISH_PROSE",
-    )
+    # Feature Tuning: remove polish; subtle_edit or later stages will handle cleanup
     state.last_appended_dialog = appended
-    return polished
+    return text

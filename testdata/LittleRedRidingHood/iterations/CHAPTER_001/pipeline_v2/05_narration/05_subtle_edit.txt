@@ -1,0 +1,81 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised to bring goodies to her ailing grandmother and walked the forest path humming a nursery tune, the bright hood over her head catching sunbeams as she kept to the trail with a wicker basket creaking on her arm like a quiet promise; pine needles softened her steps and pale dust lifted behind her as she passed tufted blue flowers and a crooked stump, the hood shining against tall, shadowed pines while the jam-sweet scent threaded the air. From the bramble a sleek wolf moved parallel, low and silent, lifting his muzzle to the trail and speaking in a velvet, honeyed voice that asked where she was bound and what treasures she carried, murmuring of a quicker way and offering to guide her by a narrow deer track that would rejoin the main road by a birch with a lightning scar; the forest hushed, a jay cackled and vanished, shadows lengthened, a branch brushed the basket and made it creak, and Red tightened her hood, fingers clamping the handles when the wolf, smiling with bright teeth, promised the shortcut would cut straight to her grandmother's cottage. She hesitated, voice small, naming the crooked stump and the three tall pines that marked the cottage, and when the wolf assured her—softly, insistently—that the deer track would bring her to the birch and set her right on time, she glanced from the narrow ruts back to the path, tugged her hood tighter, remembered her grandmother waiting, and, resolute not to linger for flowers, accepted the wolf’s guidance and hurried away along the hidden track.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I meant only to be helpful—my basket creaks like a promise and the nursery tune keeps my feet steady as the sun slices through the pines. I notice small things: the blue flowers nodding, dust rising behind me, the crooked stump casting a long shadow that makes my next step hesitate. Today the black-barked oak looms where the path bends and the forest deepens a shade; pine needles soften my steps and pale dust lifts. When the wolf appears from the bramble his voice is velvet and the jam on my air smells like comfort and worry. My fingers clamp the wicker when a branch brushes it and the jay’s single cackle makes me flinch; I hug the basket closer and tell him Grandmother is ill and waiting with bread and jam. He speaks sweetly of a quicker way, promises the deer track will rejoin the road by the birch with the lightning scar, and I remember the birch—so, with my hood tugged tighter and my resolve set not to be late, I accept the shortcut and hurry along the hidden ruts, trusting my bright hood and my small, steady stride to carry me straight.
+
+Wolf's point of view
+Hunger and patience sit easy beneath my coat as I pad low through the bramble, smelling jam like an invitation on the trail where sunlight threads between pines. I watch her—bright hood, steady stride, the creak of woven promises—and I choose my words soft as oil, letting sweetness draw the shape of her answers. When she pauses by the crooked stump, when a branch brushes her basket and her fingers tighten, I slip my suggestion forward like a friendly hand: a narrow deer track, a quicker way, a secret map that rejoins the road by the birch with the lightning scar. I linger on the syllables, let my teeth flash a polite smile, and press the shortcut into her head with the easy confidence of one who knows the forest's hush. She hesitates, remembers the birch, tugs her hood, and because her hope to be timely outweighs her fear, she accepts; I bow with a silk of a promise and go patient for what comes next.
+
+Forest Path's point of view
+I cradle the dust behind her little feet and hold the sunbeams in narrow bands as she wanders beneath pines, the hood bright against the deepening shade where the black-barked oak bends the trail. My undergrowth breathes jam and the tufted blue leans toward her as pine needles soften each step; a branch reaches and brushes the wicker until it creaks. I let a sleek shape slip through my bramble—low, measured, hungry—and watch him lift his muzzle to the jam-scented air, his voice smoothing the hush. A jay's cackle breaks the moment and then silence settles like leaf litter; the wolf names a secret deer track that runs thin and sure beneath my feet and promises it will meet the main path by the birch with the lightning scar. She tugs her hood tighter and follows the narrow ruts, and I fold the scene into my long quiet, keeping the crossroads and the birch tucked between my roots as she hurries on.
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+Red walks the forest path, humming, basket in hand.
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+Red walked the forest path humming, a basket in her hand. Sunbeams fell in narrow bands, sliding over her hood and the winding dirt trail. The hood shone bright against the tall, shadowed pines as the path bent around a black-barked tree and the forest deepened a shade. She stepped along the trail with a small, steady stride; the wicker basket hung on her arm, creaking with each swing as if it carried trust as much as bread and jam. She hummed a nursery tune while pine needles softened her steps and pale dust rose and fell behind her. A tuft of blue flowers leaned from the verge, nodding as she passed. She kept to the trail.
+
+Wolf moved parallel through the undergrowth, low and quiet between bramble shadows. He lifted his muzzle toward the trail-stirred air, catching the sweetness of jam that drifted through the pines. When Red paused, he stilled; when she moved, he resumed, each step measured, watchful and patient in the watching forest.
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Change tense to present throughout to match the touch-point: e.g., "Red walks the forest path, humming, a basket in her hand." Update all verbs (walked → walks, hummed → hums, moved → moves, lifted → lifts, stilled → stills, resumed → resumes, etc.).
+
+- Strengthen subject names at sentence starts to avoid pronoun ambiguity: replace any sentence that begins with "She" or "He" where the previous sentence could confuse the referent (e.g., "When Red pauses, the Wolf stills; when Red moves, the Wolf resumes").
+
+- Remove or rephrase the mildly suggestive hunger cue about the Wolf to avoid explicit foreshadowing: change "catching the sweetness of jam that drifted through the pines" to a more neutral sensory note (e.g., "lifting his muzzle to the trail air and noting the drift of jam"). Avoid words implying appetite.
+
+- Tighten repetitive wording and awkward modifiers: revise "watchful and patient in the watching forest" to a single clear phrase (e.g., "patient and watchful in the dim forest").
+
+- Vary sentence rhythm by trimming one long sentence that piles metaphors: consider splitting "The wicker basket hung on her arm, creaking with each swing as if it carried trust as much as bread and jam." into two short lines to preserve the writer's quirks but increase clarity (e.g., keep the simile but make it a punchy follow-up).
+
+- Emphasize the touch-point action one more time toward the paragraph's start or end to anchor the scene: add a brief line like "Red hums a nursery tune as she keeps to the path" (present tense, simple diction in Little Red's voice).
+
+- Keep concrete, simple details that fit Red's persona (flowers, creaking basket, polite cadence) but remove any line that risks sounding modern or out-of-era; ensure language remains fairy-tale simple and earnest.
+
+- Small copy edits: change "black-barked tree" to "black-barked oak" or another specific tree type if you want concreteness, or drop the hyphen for smoother flow; change "pale dust rose and fell behind her" to "pale dust lifts behind her" to stay present-tense and tighter.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+Red walks the forest path humming, a basket in her hand. Sunbeams fall in narrow bands, sliding over her hood and the winding dirt trail. The hood shines bright against the tall, shadowed pines as the path bends around an oak with black bark and the forest deepens a shade. Red steps along the trail with a small, steady stride; the wicker basket hangs on her arm, creaking with each swing. It seems to carry trust as much as bread and jam. Pine needles soften her steps and pale dust lifts behind her. A tuft of blue flowers leans from the verge, nodding as Red passes. Red keeps to the trail. Red hums a nursery tune as she keeps to the path.
+
+The wolf moves parallel through the undergrowth, low and quiet between bramble shadows. The wolf lifts his muzzle to the trail air, noting the drift of jam through the pines. When Red pauses, the wolf stills; when Red moves, the wolf resumes, each step measured, patient and watchful in the dim forest.

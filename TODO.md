@@ -61,15 +61,14 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - [X] Find all instances of implicit in the program, and rename to mixed, in the context of the implicit touch-point
     - [X] Update the language in the implicit_brainstorm and check_implicit to reflect that the AI should generate mixed dialog and narrative (for eample, action sequences).
 
-
-6. **Feature Tuning**
-    The touch_point_first_draft.txt can sometimes be really good, but after the subtle edit, they are sometimes gutted. Here are some things to fix: 
-    - [ ] Don't need a polish after a subtle edit. 
-    - [ ] Don't need a polish after substituting lines into body_language either.
-    - [ ] So, let's just remove polish altogether. I've updated the subtle_edit_prompt to now take on the job of cleaning up formatting, if necessary.
-    - [ ] Need the program to save off the check prompt + response for debugging. This should be for narration, dialog, and mixed
-    - [ ] story-so-far and story-relative-to are not being substituted into narrative, dialog, mixed. Note that these should come from the prior chapter if there was one.
-    - [ ] run.log and crash_trace.log should be trimmed to be no longer than N lines when the program first starts up. It would be nice to have an env variable to configure N. There should also be a clear log when the program starts up, to distinguish for the user between runs.
+6. **Chapter Global Editing**
+    So I was using the application to generate the first chapter, and I realized that it would be super convenient for user-in-the-loop to be able to edit the chapter "globally", which means to be able to see the whole chapter and edit it.  However, this presents a problem, because currently the ground-truth is in the pipeline files. What I would like to do is to modify the draft_vN.txt files, and have the program detect these changes and propagate them back to the pipeline files.  The feature should work like this:
+    - [X] When starting the chapter pipeline check each section in the latest draft_vN.txt against the pipeline_vN touch_point_draft.txt files. 
+    - [X] For each different section detected, copy that data from the section to replace the touch_point_draft.txt.
+    - [X] Then, also, after replacing touch_point_draft.txt, re-run the check prompt and replace the suggestions.txt (the user might fix things that were previously suggested, and we don't want to confuse the next LLM prompt).
+    - [X] Regenerate final.txt unconditionally
+    - [X] If story_relative_to.txt or story_so_far.txt are absent, then regenerate them.
+    - [X] Once there are no differences, then stop gracefully.
 
 7. **Scaffolding for MockLLM**
     The plan is to use the LRRH book as a database for the MockLLM, and to make it deterministic. In addition, since the LRRH book under testdata has been built originally using a real LLM response, it should help with good code coverage. Now, in order for this to work, we need some scaffolding and helper functions so that the MockLLM can operate effectively and be coded somewhat generically. 
@@ -99,7 +98,12 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - [ ] A function which can be given a path to a partial copy of LRRH, and return the response for the current touch-point pipeline step. Expect this to be "independent" of the prompt, since the LRRH is taken to be the golden output.
     - [ ] A function which can be given a path to a partial copy of LRRH, and return the prompt for the current touch-point pipeline step. Expect this to be "equal" to the prompt, since the LRRH is taken to be the golden output.
 
-8. **Add Mock LLM for Testing**
+8. **Exhaustive Unit tests for MockLLM Scaffolding Functions**
+    - [ ] Create hash function unit tests
+    - [ ] Create unit tests for updating a prompt in the "prompt + response" format. This is the same format used in the pipeline touch-point output.files.
+    - [ ] Create unit tests for each of the functions in section 7.
+
+9. **Add Mock LLM for Testing**
     - [ ] Rely on the fact that for testing, we will use the Little Red Riding Hood book
     - [ ] Use the LRRH text as the return values for the MockLLM.  This way, the outputs can be tested in detail.
     - [ ] Create MockLLM class that returns predictable responses

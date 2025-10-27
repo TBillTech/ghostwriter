@@ -1,0 +1,23 @@
+- Remove or tighten: "He let the sibilant linger and murmured, 'Quicker, little one...'" — redundant with the earlier line; replace with a single compact beat that shows his sibilant cadence (e.g., "Quicker, little one," he purred, the s hiss soft as smoke).
+
+- Remove or rephrase: "He licked his lips; a faint musk edged the air." — too explicit about predation. Replace with a subtler physical cue (e.g., "He smiled, and the air smelled faintly of brine and old leaves.") to keep menace implied, not stated.
+
+- Replace the flat line, "The shadows feel odd. My eyes can't see well there yet." with Red's more literal, polite voice and mannerism—make it a short, character-authentic sentence (e.g., Red: "The shadows make me nervous. I can't see well there yet.") so her voice reads true.
+
+- Trim: "A jay cackles once and goes; the forest hush that follows presses against the path." — long and slightly melodramatic. Shorten to one crisp beat to maintain pace (e.g., "A jay cackles; the woods fall quieter.").
+
+- Tighten the sequence around the crooked stump and deer track: compress three beats into two clearer ones. Remove one descriptive repetition (either "falters on loose needles" or "takes an involuntary step") and keep whichever shows Red's small, distracted movement most vividly.
+
+- Add a brief wolf dialog echo to demonstrate his tactic of repeating Red's phrasing (character trait): after Red mentions the crooked stump, insert a soft echo from Wolf: "The crooked stump," he repeated, slow and pleased. This heightens manipulation without adding exposition.
+
+- Insert one tiny narrative action between Red's lines to ground dialog (she should clutch basket/muse as per mannerisms). For example, after Red's "Grandmother waits..." line, add "She clutched the basket rim a breath tighter." This balances dialog with action and keeps her physical habit present.
+
+- Rework the fork/moment of choice to be leaner and more tensioned. Replace "A pine needle crunches underfoot. Sunlight threads the pines; the path forks, and the woods hush around the choice." with two short sentences that prioritize danger hint and decision (e.g., "A pine needle crunches. The path forks; the woods tighten like a held breath.").
+
+- Remove explicit foreshadowing of the wolf's hunger anywhere else in the scene. Keep menace in his smile, tone, and small physical cues rather than direct statements.
+
+- Watch repetition of "quicker/quick" — the draft uses "quickest" and "quicker" multiple times. Keep one instance in Wolf's first line, then vary his phrasing (e.g., "shorter way," "a little-known path") to avoid echoing.
+
+- Ensure Red's politeness shows—consider changing her "But a quicker way? Would that be safe?" to "A quicker way? Please—would that be safe?" if you want to tilt her toward helpfulness/pleading; otherwise leave but keep one "please/thank you" in the exchange.
+
+- Final pass: read aloud to check cadence—keep Wolf's lines smooth and slightly elongated; keep Red's short, earnest, literal. Remove any remaining lines where narration tells rather than shows (e.g., "the forest hush presses") and make them sensory or physical instead.

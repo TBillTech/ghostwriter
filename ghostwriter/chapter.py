@@ -148,6 +148,206 @@ def generate_story_so_far_and_relative(ctx: RunContext, pre_draft_text: str) -> 
     save_text(iter_dir_for(chapter_id) / "story_relative_to.txt", srt)
 
 
+def _tp_dir_path(chapter_id: str, version_num: int, tp_index: int, tp_type: str) -> Path:
+    return iter_dir_for(chapter_id) / f"pipeline_v{version_num}" / f"{tp_index:02d}_{tp_type}"
+
+
+def _read_tp_draft_or_empty(tp_dir: Path) -> str:
+    try:
+        return read_file(str(tp_dir / "touch_point_draft.txt"))
+    except Exception:
+        return ""
+
+
+def reconcile_chapter_global_edits(ctx: RunContext, version_num: int) -> bool:
+    """Propagate edits from draft_vN.txt into per-touch-point drafts and refresh suggestions.
+
+    Returns True if any per-touch-point draft was updated.
+    """
+    chapter_id = ctx.chapter_id
+    # Always reconcile against the latest existing draft_vN.txt (not necessarily the run version)
+    try:
+        latest_existing = get_latest_version(chapter_id)
+    except Exception:
+        latest_existing = 0
+    if latest_existing <= 0:
+        return False
+    target_version = latest_existing
+    draft_path = iter_dir_for(chapter_id) / f"draft_v{target_version}.txt"
+    if not draft_path.exists():
+        return False
+    try:
+        records = read_draft_records(str(draft_path))
+    except Exception:
+        return False
+    if not records:
+        return False
+    any_changes = False
+    # Iterate records in order and compare with pipeline drafts
+    # Maintain a rolling context of prior polished to build suggestions' [context]
+    polished_so_far: List[str] = []
+    for rec in records:
+        tp_id = rec.get("id", "").strip()
+        tp_type = rec.get("type", "").strip()
+        tp_text = rec.get("touchpoint", "")
+        polished = rec.get("result", "")
+        if not tp_id or not tp_type:
+            continue
+        try:
+            tp_index = int(tp_id)
+        except Exception:
+            # Fallback: try to parse numeric prefix
+            try:
+                tp_index = int(tp_id.split("_")[0])
+            except Exception:
+                continue
+        tp_dir = _tp_dir_path(chapter_id, target_version, tp_index, tp_type)
+        if not tp_dir.exists():
+            # Nothing to sync
+            if polished.strip():
+                polished_so_far.append(polished.strip())
+            continue
+        current = _read_tp_draft_or_empty(tp_dir)
+        if (current or "").strip() != (polished or "").strip():
+            # Overwrite draft to reflect global edit
+            try:
+                tp_dir.mkdir(parents=True, exist_ok=True)
+                save_text(tp_dir / "touch_point_draft.txt", polished)
+                any_changes = True
+            except Exception:
+                pass
+            # Rebuild suggestions for this touch-point using stored state and nearby context
+            try:
+                # Load minimal state snapshot captured at pipeline time, if available
+                try:
+                    import json as _json
+                    st_path = tp_dir / "touch_point_state.json"
+                    st_info = _json.loads(read_file(str(st_path))) if st_path.exists() else {}
+                except Exception:
+                    st_info = {}
+                foreshadowing = ", ".join(st_info.get("foreshadowing", []) or [])
+                actors_csv = ", ".join(st_info.get("active_actors", []) or [])
+                setting_block = st_info.get("setting_block", "") or ""
+                characters_block = st_info.get("characters_block", "") or ""
+                # If characters block is missing, select from CHARACTERS by active actors
+                if not characters_block:
+                    try:
+                        selected: List[dict] = []
+                        all_chars = load_characters_list(ctx)
+                        if isinstance(all_chars, list) and all_chars:
+                            active = [a.strip() for a in (st_info.get("active_actors", []) or []) if a.strip()]
+                            if active:
+                                wanted = {a.lower() for a in active}
+                                for ch in all_chars:
+                                    cid = str(ch.get("id", "")).strip().lower()
+                                    cname = str(ch.get("name", "")).strip().lower()
+                                    if cid in wanted or cname in wanted:
+                                        selected.append(ch)
+                            else:
+                                selected = list(all_chars)
+                        if selected:
+                            characters_block = _gw_to_text({"Selected-Characters": selected})
+                    except Exception:
+                        characters_block = characters_block or ""
+                # Build short context from recent polished
+                try:
+                    recent_polished = []
+                    for chunk in polished_so_far[-3:]:
+                        if chunk and str(chunk).strip():
+                            recent_polished.append(str(chunk).strip())
+                    context_block = "\n\n---\n\n".join(recent_polished)
+                except Exception:
+                    context_block = ""
+                # Template selection and replacements
+                check_tpl = {
+                    "narration": "check_narration_prompt.md",
+                    "dialog": "check_dialog_prompt.md",
+                    "implicit": "check_implicit_prompt.md",
+                    "mixed": "check_mixed_prompt.md",
+                }.get(tp_type, "check_narration_prompt.md")
+                from .templates import build_common_replacements
+                check_reps = build_common_replacements(ctx.setting, ctx.chapter, ctx.chapter_id, target_version)
+                check_reps.update({
+                    "[SETTING]": _merge_setting_with_factoids(setting_block, ctx.setting, chapter=ctx.chapter),
+                    "[CHARACTERS]": characters_block,
+                    "[context]": context_block,
+                    "[foreshadowing]": foreshadowing,
+                    "[actors]": actors_csv,
+                    "[TOUCH_POINT]": tp_text,
+                    "[prose]": polished,
+                })
+                check_user = _apply_step(check_tpl, check_reps)
+                suggestions_user = check_user + "\n\n---\nNow produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions."
+                sugg_model, sugg_temp, sugg_max_tokens = _env_for_prompt(check_tpl, "SUGGESTIONS", default_temp=0.0, default_max_tokens=800)
+                suggestions_out = llm_complete(
+                    suggestions_user,
+                    system="You are an evaluator extracting actionable suggestions only.",
+                    temperature=sugg_temp,
+                    max_tokens=sugg_max_tokens,
+                    model=sugg_model,
+                )
+                # Save suggestions and a check.txt debug mirror of the single prompt+response
+                try:
+                    with (tp_dir / "check.txt").open("w", encoding="utf-8") as f:
+                        f.write("=== SYSTEM ===\nYou are an evaluator extracting actionable suggestions only.\n\n")
+                        f.write("=== USER ===\n" + suggestions_user + "\n\n")
+                        f.write("=== RESPONSE ===\n" + (suggestions_out or "") + "\n")
+                except Exception:
+                    pass
+                save_text(tp_dir / "suggestions.txt", suggestions_out or "")
+            except Exception:
+                # Do not fail reconciliation on suggestions errors
+                pass
+        # Update rolling context
+        if polished.strip():
+            polished_so_far.append(polished.strip())
+
+    # Always regenerate final.txt from current per-TP drafts
+    try:
+        rec_tuples: List[Tuple[str, str, str, str]] = []
+        for rec in records:
+            tp_id = rec.get("id", "").strip()
+            tp_type = rec.get("type", "").strip()
+            tp_text = rec.get("touchpoint", "")
+            try:
+                tp_index = int(tp_id)
+            except Exception:
+                try:
+                    tp_index = int(tp_id.split("_")[0])
+                except Exception:
+                    tp_index = 0
+            tp_dir = _tp_dir_path(chapter_id, target_version, tp_index, tp_type) if (tp_id and tp_type) else None
+            pol = _read_tp_draft_or_empty(tp_dir) if tp_dir else rec.get("result", "")
+            rec_tuples.append((tp_id, tp_type, tp_text, pol))
+        final_path = _generate_final_txt_from_records(chapter_id, rec_tuples)
+        try:
+            _log_info(f"Global edits: rebuilt final.txt from v{target_version} per-TP drafts at {final_path}")
+        except Exception:
+            pass
+    except Exception as e:
+        try:
+            _log_warning(f"Global edits: failed to rebuild final.txt: {e}")
+        except Exception:
+            pass
+
+    # Regenerate summaries if missing
+    try:
+        base = iter_dir_for(chapter_id)
+        ssf_missing = not (base / "story_so_far.txt").exists()
+        srt_missing = not (base / "story_relative_to.txt").exists()
+        if ssf_missing or srt_missing:
+            full_text = ""
+            try:
+                full_text = (base / "final.txt").read_text(encoding="utf-8")
+            except Exception:
+                full_text = ""
+            generate_story_so_far_and_relative(ctx, full_text)
+    except Exception:
+        pass
+
+    return any_changes
+
+
 TouchPoint = Dict[str, str]
 
 
@@ -525,6 +725,22 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
     # Logging
     base_log_dir = iter_dir_for(chapter_id) / f"pipeline_v{version_num}"
     base_log_dir.mkdir(parents=True, exist_ok=True)
+
+    # Chapter Global Editing: if user edited draft_vN.txt, propagate to per-touch-point drafts and refresh suggestions
+    try:
+        changed = reconcile_chapter_global_edits(ctx, version_num)
+        if changed:
+            # Stop gracefully to allow user to review/edit regenerated suggestions before next revision
+            try:
+                latest_existing = get_latest_version(chapter_id)
+            except Exception:
+                latest_existing = version_num
+            raise UserActionRequired(f"Reconciled version v{latest_existing} and regenerated suggestions.")
+    except UserActionRequired:
+        # Bubble up to CLI for a clean exit and message
+        raise
+    except Exception as e:
+        _log_warning(f"Global edit reconciliation skipped due to error: {e}", base_log_dir)
 
     # Iterate touch-points and run pipelines
     total = len(tps)

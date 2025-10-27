@@ -1,0 +1,113 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised to bring goodies to her ailing grandmother and walked the forest path humming a nursery tune, the bright hood over her head catching sunbeams as she kept to the trail with a wicker basket creaking on her arm like a quiet promise; pine needles softened her steps and pale dust lifted behind her as she passed tufted blue flowers and a crooked stump, the hood shining against tall, shadowed pines while the jam-sweet scent threaded the air. From the bramble a sleek wolf moved parallel, low and silent, lifting his muzzle to the trail and speaking in a velvet, honeyed voice that asked where she was bound and what treasures she carried, murmuring of a quicker way and offering to guide her by a narrow deer track that would rejoin the main road by a birch with a lightning scar; the forest hushed, a jay cackled and vanished, shadows lengthened, a branch brushed the basket and made it creak, and Red tightened her hood, fingers clamping the handles when the wolf, smiling with bright teeth, promised the shortcut would cut straight to her grandmother's cottage. She hesitated, voice small, naming the crooked stump and the three tall pines that marked the cottage, and when the wolf assured her—softly, insistently—that the deer track would bring her to the birch and set her right on time, she glanced from the narrow ruts back to the path, tugged her hood tighter, remembered her grandmother waiting, and, resolute not to linger for flowers, accepted the wolf’s guidance and hurried away along the hidden track.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I meant only to be helpful—my basket creaks like a promise and the nursery tune keeps my feet steady as the sun slices through the pines. I notice small things: the blue flowers nodding, dust rising behind me, the crooked stump casting a long shadow that makes my next step hesitate. Today the black-barked oak looms where the path bends and the forest deepens a shade; pine needles soften my steps and pale dust lifts. When the wolf appears from the bramble his voice is velvet and the jam on my air smells like comfort and worry. My fingers clamp the wicker when a branch brushes it and the jay’s single cackle makes me flinch; I hug the basket closer and tell him Grandmother is ill and waiting with bread and jam. He speaks sweetly of a quicker way, promises the deer track will rejoin the road by the birch with the lightning scar, and I remember the birch—so, with my hood tugged tighter and my resolve set not to be late, I accept the shortcut and hurry along the hidden ruts, trusting my bright hood and my small, steady stride to carry me straight.
+
+Wolf's point of view
+Hunger and patience sit easy beneath my coat as I pad low through the bramble, smelling jam like an invitation on the trail where sunlight threads between pines. I watch her—bright hood, steady stride, the creak of woven promises—and I choose my words soft as oil, letting sweetness draw the shape of her answers. When she pauses by the crooked stump, when a branch brushes her basket and her fingers tighten, I slip my suggestion forward like a friendly hand: a narrow deer track, a quicker way, a secret map that rejoins the road by the birch with the lightning scar. I linger on the syllables, let my teeth flash a polite smile, and press the shortcut into her head with the easy confidence of one who knows the forest's hush. She hesitates, remembers the birch, tugs her hood, and because her hope to be timely outweighs her fear, she accepts; I bow with a silk of a promise and go patient for what comes next.
+
+Forest Path's point of view
+I cradle the dust behind her little feet and hold the sunbeams in narrow bands as she wanders beneath pines, the hood bright against the deepening shade where the black-barked oak bends the trail. My undergrowth breathes jam and the tufted blue leans toward her as pine needles soften each step; a branch reaches and brushes the wicker until it creaks. I let a sleek shape slip through my bramble—low, measured, hungry—and watch him lift his muzzle to the jam-scented air, his voice smoothing the hush. A jay's cackle breaks the moment and then silence settles like leaf litter; the wolf names a secret deer track that runs thin and sure beneath my feet and promises it will meet the main path by the birch with the lightning scar. She tugs her hood tighter and follows the narrow ruts, and I fold the scene into my long quiet, keeping the crossroads and the birch tucked between my roots as she hurries on.
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+Danger hinted at in the dark trees and Wolf's smile.
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+Wolf smirks. "The quickest way lies in the hush between the trees, and I can guide you to it if your courage keeps pace."
+
+He lets the last word ripple, repeating "quicker" with an extra sweetness.
+
+Red clutches the basket. "The shadows feel strange. My eyes aren't used to them yet."
+
+The wind shifts. A jay cackles once and vanishes, leaving a silence heavier than the basket's weight.
+
+A branch slides across the wicker. Her fingers tighten until it creaks. The crooked stump throws a long shadow across her boots, and her next step falters on loose needles.
+
+Red tugs her hood. "Thank you. Grandmother is waiting; I mustn't be late."
+
+"Is there really a quicker way? Would it be safe?"
+
+A pine needle crunches underfoot. Sunlight threads through the pines as the path tilts toward a choice the forest keeps for itself.
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Remove or rewrite: "He lets the last word ripple, repeating 'quicker' with an extra sweetness." Replace with a brief Wolf mannerism that shows his cadence: e.g., let him draw out the sibilant and repeat Red's phrase softly ("Quicker, little one...") so the manipulation lives in voice, not in meta-description.
+
+- Cut redundancy between "Red clutches the basket." and "Her fingers tighten until it creaks." Combine into one tighter beat that shows physical reaction and the basket's sound in one line (e.g., "Red clutches the basket; the wicker creaks under her fingers.").
+
+- Soften the explicitness of threat/foreshadowing. Instead of any line that hints directly at Wolf's hunger, add a tiny, ambiguous physical detail after Wolf speaks (a lip lick, a low swallow, a scent of musk) to imply appetite without stating it.
+
+- Make Wolf's opening line more in-character: add sly flattery and a trailing theatrical pause. Suggest replacing the first sentence with a version that elongates sibilants and repeats Red's words back to her: e.g., "The quickest way lies in the hush between the trees," he purred, "and I can guide you—if your courage keeps pace." Then follow with a whispered echo of "quicker" as a vocal beat rather than narration.
+
+- Tweak Red's next line to stay in her earnest, literal voice and avoid phrasing that sounds adult/performative. Change "The shadows feel strange. My eyes aren't used to them yet." to something simpler and more childlike: "The shadows feel odd. My eyes can't see well there yet."
+
+- Replace "The wind shifts. A jay cackles once and vanishes, leaving a silence heavier than the basket's weight." with a single lean sensory sentence: pick either the jay or the silence (not both). E.g., "A jay cackles once and goes; the forest hush that follows presses against the path." This trims imagery clutter.
+
+- Remove or rework "The crooked stump throws a long shadow across her boots, and her next step falters on loose needles." Keep one concrete image: either the faltering step or the shadow. Suggest: "The crooked stump's shadow slides over her boots; she falters on loose needles." (Shorter, directional.)
+
+- Change Red's hurried line "Thank you. Grandmother is waiting; I mustn't be late." to one that shows her politeness and conflict: "Thank you, but Grandmother waits— I mustn't keep her." Keeps cadence and implies internal tug.
+
+- Adjust the question cluster ("Is there really a quicker way? Would it be safe?") into a single, character-driven question that shows naivety and politeness: e.g., "Is it... truly shorter? Is it safe?" or "A quicker way? Would that be safe, please?" This tightens dialog and preserves Red's cadence.
+
+- Add a brief, silent beat after Wolf's invitation that shows Red's temptation: a glance at the dappled light off the path or an involuntary step toward the side, then her recovery. This gives visual cause for her falter and keeps momentum without long prose.
+
+- Tighten final line: "Sunlight threads through the pines as the path tilts toward a choice the forest keeps for itself." Consider making it more immediate and less abstract: "Sunlight threads the pines; the path forks, and the woods hush around the choice." Keeps mood but reduces vagueness.
+
+- Overall balance: trim one or two atmospheric sentences (suggested above) so dialog remains dominant. Where dialog pauses, insert single-line beats of action or sensory detail only—avoid paragraph-long descriptions that stall rhythm.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+"The quickest way lies in the hush between the trees," he purred, "and I can guide you—if your courage keeps pace." He let the sibilant linger and murmured, "Quicker, little one..." He licked his lips; a faint musk edged the air.
+
+A branch slides across the wicker; Red clutches the basket and the wicker creaks under her fingers.
+
+"The shadows feel odd. My eyes can't see well there yet."
+
+A jay cackles once and goes; the forest hush that follows presses against the path.
+
+The crooked stump's shadow slides over her boots; she falters on loose needles. She glances at the dappled light on the deer track, takes an involuntary step, then straightens.
+
+Red tugs her hood. "Thank you, but Grandmother waits—I mustn't keep her."
+
+"A quicker way? Would that be safe, please?"
+
+A pine needle crunches underfoot. Sunlight threads the pines; the path forks, and the woods hush around the choice.

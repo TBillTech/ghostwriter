@@ -1,0 +1,207 @@
+=== SYSTEM ===
+You are an evaluator extracting actionable suggestions only.
+
+=== USER ===
+You are reviewing the work of an genious writer who sometimes loses track of key ideas in their wordsmithing.
+
+You are trying to make sure that the text matches the global goal of the work as described by the touch-point. You are trying to describe needed edits that are focused and surgical, and you wish to keep the voice and quirks of the writer alive to best interest the reader. A completely predictable and "normal" text would actually be bad, so it is a balance between interesting and clear. I will provide you here with the setting, context, things to watch out for, and the draft provided by the writer.  Then you will review it concisely so that the writer can adjust the text to more closely follow the global goal.
+
+Watch out for pronouns that have unclear references, like starting a paragraph with "They".  Using proper names is preferred in our narration IF there is any ambiguity.
+
+# Setting in general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    },
+    {
+      "id": "grandma",
+      "name": "Grandmother",
+      "background": "A kindly, aging woman who lives at the edge of the wood. She keeps a tidy\nroom, a warm stove, and a tin of biscuits for visiting children. Her voice\nis soft as quilts and steady as tea. Though her health wavers, her welcome\nnever does. She speaks in homey turns of phrase and frets over safety with\npractical tenderness.\n",
+      "traits": [
+        "frail",
+        "warm",
+        "practical",
+        "affectionate",
+        "cautious"
+      ],
+      "cadence": "gentle, unhurried; cozy hearth-tone",
+      "lexicon": "homely phrases; plain words; lullaby wisdom",
+      "prefer": [
+        "family",
+        "safety",
+        "warmth",
+        "tea",
+        "rest"
+      ],
+      "avoid": [
+        "frightening talk",
+        "rudeness",
+        "cold",
+        "wolves at the door"
+      ],
+      "mannerisms": [
+        "Calls loved ones ‘dear’ and ‘sweetheart’; fusses kindly over coats and boots.",
+        "Hums while pouring tea; sets plates just so before inviting a bite.",
+        "Tucks shawl tighter when worried; breathes in short, careful sips.",
+        "Offers remedies and rest before advice; keeps scolding brief and soft."
+      ],
+      "sample_lines": [
+        "Come in, dear.",
+        "Mind the latch and wipe your feet.",
+        "Have a biscuit and warm your hands.",
+        "I’ll be right as rain after a little rest.",
+        "Bless you, child. You always brighten my room."
+      ],
+      "common_lines": [
+        "Close the window, will you? There’s a chill today.",
+        "You’re a comfort to me, truly.",
+        "Tell your mother I’m grateful."
+      ],
+      "rare_lines": [
+        "I had a startle—must have been the wind.",
+        "Even an old heart can be brave, in its way."
+      ],
+      "forbidden": [
+        "Will not endorse violence or cruelty.",
+        "No modern slang or technical jargon.",
+        "Avoids sarcasm; does not mock."
+      ],
+      "temperature_hint": 0.2,
+      "max_tokens_line": 60
+    }
+  ]
+}
+
+# Prior touch points
+The most recent 3 touch-points for context.
+
+
+# Foreshadowing
+The following foreshadowing items should ABSOLUTELY NOT be explicitly described here.  If they are, that is a problem. These should only be vaguely alluded to:
+
+
+# Actors
+The following actors are allowed to speak in the dialog.  If other actors are speaking, that is a problem.  The actors are:
+Wolf, Grandmother
+
+# Touch-Point
+This is the most important thing that the writer needs to say one way or another, and fits into the global goal of the work:
+The Wolf stands in the garden’s stillness and listens: no Red yet, only bees and the slow metronome of the clock.
+He smooths his voice in his throat like a blade in a sheath, then pads to the door.
+
+
+# The Draft
+The polished text that needs to be evaluated for Touch-Point satisfaction, and actor and spoiler safety is as follows:
+Wolf paused among the thyme and cabbage, letting the garden hold him in its slow, sunlit breath—bees droning, warm smoke rising from Grandmother's chimney. He pressed one paw to the warm dirt and shook pine needles from his coat. Nettle and wood smoke rose from Grandmother's kettle. Wolf listened toward the lane: no footfall, no Red yet, only the slow metronome of Grandmother's clock ticking somewhere beyond the door.
+
+Wolf measured the sun on the shingles and counted the light like small reckonings—there would be time before Red could reach the Cottage. Wolf checked the hedge and the path for witnesses: no hound, no hunter, no neighbor. He smoothed his voice in his throat like a blade in a sheath. He padded to the doorstep, ears tuning to the room’s tiny sounds, and studied the thumb-worn latch; the iron glowed faint with afternoon heat, familiar as a well-used word. Behind closed teeth he rehearsed the cadence he would wear.
+
+Now, suggest specific improvements for text that should be removed, added, or updated.
+
+
+
+---
+Now produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions.
+
+=== RESPONSE ===
+- Remove one of the duplicated smoke/household images to avoid clutter (either "warm smoke rising from Grandmother's chimney" or "Nettle and wood smoke rose from Grandmother's kettle" — keep the stronger single image).
+
+- Delete or tighten the near-duplicate statements about sound: combine "bees droning, warm smoke rising..." with "no footfall, no Red yet, only the slow metronome of Grandmother's clock ticking somewhere beyond the door" into one tighter listening sentence that foregrounds the touch-point (the garden's stillness and the clock).
+
+- Move "He smoothed his voice in his throat like a blade in a sheath" earlier so the sequence clearly follows the touch-point: first listen/confirm no Red, then smooth his voice, then pad to the door. (Suggested placement: immediately after the sentence that ends with "no Red yet, only the slow metronome...".)
+
+- Replace "pressed one paw to the warm dirt and shook pine needles from his coat" with a single, sharper image (e.g., "rested a paw in the warm earth, shaking pine needles from his coat") to reduce wordiness and keep cadence nimble.
+
+- Change "Wolf measured the sun on the shingles and counted the light like small reckonings—there would be time before Red could reach the Cottage." to something more active and concise that reinforces the Wolf's patient calculation (e.g., "He measured the sun on the shingles—time enough before Red could reach the cottage.").
+
+- Shorten the hedge/witness list to remove redundancy: replace "no hound, no hunter, no neighbor" with "no hound, no hunter" (neighbors feel unnecessary here).
+
+- Clarify antecedent where needed: in "the iron glowed faint with afternoon heat, familiar as a well-used word" make explicit that the latch is Grandmother's latch to avoid possible ambiguity (e.g., "Grandmother's iron latch glowed faint...").
+
+- Soften or specify "Behind closed teeth he rehearsed the cadence he would wear." Consider replacing with a brief wolf-voice sample or a hint of his theatrical manner (one short line in his voice) to keep the writer's quirks alive and show rather than tell (e.g., add: ' "Such a charming hood," he murmured to himself, testing the shape of the lie.').
+
+- Remove passive or redundant modifiers that slow rhythm ("would be time" → "time"; "checked the hedge and the path for witnesses" → "scanned hedge and path for witnesses") to preserve the Wolf's sleekness.
+
+- Ensure the final sentence leads directly into the doorway action: end the paragraph with the Wolf padding to the doorstep and listening to the room's tiny sounds—keep that as the closing image so the touch-point is the dominant takeaway.

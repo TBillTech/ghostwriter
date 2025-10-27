@@ -1,0 +1,243 @@
+=== SYSTEM ===
+Produce an agenda list grouped by actor id.
+
+=== USER ===
+You are a Director working from structured YAML notes.  
+The overall goal is to produce polished prose to go into a novel.
+The actors already know what to say, but you suspect they need help to concentrate on roleplaying.  The actors know what their characters are like, but they need more background to give their lines life.
+The writer has already given you each of the lines that the actors will say.  Each actor line begins with the id field matching the character, followed by a colon, followed by the line spoken. The actors need to know why they care enough to speak, and what the want. The actors also need to know what they are trying to get out of the interaction.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters in this chapter
+These are the characters you should give agenda output for.  You should ignore other characters mentioned above, but not given below.
+{
+  "Selected-Characters": [
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    },
+    {
+      "id": "grandma",
+      "name": "Grandmother",
+      "background": "A kindly, aging woman who lives at the edge of the wood. She keeps a tidy\nroom, a warm stove, and a tin of biscuits for visiting children. Her voice\nis soft as quilts and steady as tea. Though her health wavers, her welcome\nnever does. She speaks in homey turns of phrase and frets over safety with\npractical tenderness.\n",
+      "traits": [
+        "frail",
+        "warm",
+        "practical",
+        "affectionate",
+        "cautious"
+      ],
+      "cadence": "gentle, unhurried; cozy hearth-tone",
+      "lexicon": "homely phrases; plain words; lullaby wisdom",
+      "prefer": [
+        "family",
+        "safety",
+        "warmth",
+        "tea",
+        "rest"
+      ],
+      "avoid": [
+        "frightening talk",
+        "rudeness",
+        "cold",
+        "wolves at the door"
+      ],
+      "mannerisms": [
+        "Calls loved ones ‘dear’ and ‘sweetheart’; fusses kindly over coats and boots.",
+        "Hums while pouring tea; sets plates just so before inviting a bite.",
+        "Tucks shawl tighter when worried; breathes in short, careful sips.",
+        "Offers remedies and rest before advice; keeps scolding brief and soft."
+      ],
+      "sample_lines": [
+        "Come in, dear.",
+        "Mind the latch and wipe your feet.",
+        "Have a biscuit and warm your hands.",
+        "I’ll be right as rain after a little rest.",
+        "Bless you, child. You always brighten my room."
+      ],
+      "common_lines": [
+        "Close the window, will you? There’s a chill today.",
+        "You’re a comfort to me, truly.",
+        "Tell your mother I’m grateful."
+      ],
+      "rare_lines": [
+        "I had a startle—must have been the wind.",
+        "Even an old heart can be brave, in its way."
+      ],
+      "forbidden": [
+        "Will not endorse violence or cruelty.",
+        "No modern slang or technical jargon.",
+        "Avoids sarcasm; does not mock."
+      ],
+      "temperature_hint": 0.2,
+      "max_tokens_line": 60
+    }
+  ]
+}
+
+# Specifics in the Chapter
+Here is central theme of the dialog lines being "filmed"/"recorded":
+Wolf (mimicking Red, soft and breathy): "Grandmother, it’s me. Mama sent bread and jam. May I come in?"
+Grandmother (from within, muffled with age): "Lift the latch, child. I’ve been waiting."
+
+
+# Rules for generation:
+1. **Continuity**: Respect "Story-So-Far" and especially "Story-Relative-To".  
+2. **Motivation**: There must be some reason for the actors to say what they do.  Tell them what it is. 
+3. **Desires**: List out things that the actor wants. Specifically explain if the actor is trying to hide a motive.
+4. **Current Mood**: Explain the actors mood. If the actor is feeling good, explain this.  If the actor is angry at the facts of the situation, but loves the other character, explain this. The more nuanced the better.
+5. **Format**: Each actor should generate one bullet list starting with the id of the character followed by a colon. After this, as many bullets as necessary to list the above items.  Do exactly ONE list for EACH character, and no more.
+6. **Abstract**: Stick to abstract langauge. Describe mental states. DO NOT desccribe anything.
+
+Below is an example showing input format given for four lines, showing the specific actor id and line direction:
+Below that is an example output. When you produce your output, do not include anything in the output other than the syntax as given in the example. Each entry is limited to a single name, like "Henry:" followed by a list of simple statements.  Do not put titles or markdown in the list of statements.
+
+## Examples of actor prompt lines (3 lines):
+
+Henry: You say there is a hole in the bucket.  You use Liza's name several times for emphasis.  But you are careful to be polite.
+
+Liza: You shortly tell Henry to just fix the dang thing!  Already!  Politely of course.
+
+Henry: You ask how on earth to fix a bucket? Maybe it is not rocket sience, but you don't think you have a way to do it.
+
+Liza: "With a dowel dear Henry, dear Henry, dear Henry, with a dowel dear Henry, dear Henry, with a dowel"
+
+## Examples of Agenda output for each line:
+
+Henry:
+* You love your wife Liza.
+* You don't like being henpecked, but have gotten used to it over the years.
+* You are frustrated because there is a hole in the bucket.
+* You are always polite to your wife Liza. 
+* You might even fix the bucket if you could.
+* You know after all these years you cannot just say something like "we can't fix the bucket"
+* Instead, you plan to gradually walk Liza through the whole problem.
+* OK, who are you fooling, yeah, you'd rather be having a beer.
+
+Liza:
+* You think Henry is lazy.
+* It is just a stupid bucket, and should not be a problem.
+* You want Henry to show a little initiative and fix the bucket himself.
+* You are very frustrated that Henry would even ask you something like this, instead of going ahead and solving the problem.
+* You are in the habit of being polite just like Henry.
+
+# Lines from the Writer:
+These are the lines the writer is giving you.
+wolf: You stand at the sun-bleached door and tap the wood with small-knuckle politeness.
+
+wolf: You smooth your voice until it goes small and bright and tell her that it’s you, that Mama sent bread and jam, and you ask if you may come in.
+
+grandma: You answer from within, muffled and warm, calling for the latch to be lifted and saying you’ve been waiting.
+
+wolf: You let a careful pause bloom, as if shy feet shift on the step.
+
+wolf: You, still playing the child, complain that the basket is heavy and that the latch sometimes sticks.
+
+grandma: You, fond and practical, tell them to thumb it hard and mind the hinge.
+
+## Job to do
+Now, convert each line from the writer to the new actor centric second person format with third person identity narratives.
+
+=== RESPONSE ===
+wolf:
+* You aim to sound harmless and familiar to lower the other's guard.
+* You are using practiced warmth and slight artifice to imitate a child’s voice.
+* You care because gaining entry advances a deeper appetite and a plan; the words are a means, not an end.
+* You want the latch opened and the door unbarred without suspicion.
+* You also want reassurance that no one else is watching or will intervene.
+* You deliberately soften pauses and small complaints to appear genuine and self-effacing.
+* You hide the predatory intent behind concern and flattery; you will not admit this motive.
+* You are patient and measuring: each phrase is a test of trust and timing.
+* Your mood is coolly amused and focused; there is an undercurrent of hunger that you steady with charm.
+* You prefer to steer the interaction toward solitude and compliance.
+* You fear being unmasked by blunt skepticism or unexpected witnesses, so you escalate only as trust is given.
+
+grandma:
+* You respond from a place of habitual hospitality and mild dependence on company.
+* You care because receiving visitors comforts you and keeps routines intact.
+* You want the latch lifted quickly so the visit can proceed to its comforting rhythm.
+* You also want the other to be safe and to feel welcomed; your words aim to soothe and direct.
+* You conceal worry beneath practical instruction; you will not dwell on fears but will hint at them through caution.
+* Your mood is warm and steady, threaded with fragility that you buffer with firmness.
+* You prefer clear, simple directions that restore order and ease anxious moments.
+* You avoid alarmist language; instead you use small authority to speed the other’s cooperation.
+* You hope the exchange remains ordinary and untroubling, preserving the comfort you cherish.

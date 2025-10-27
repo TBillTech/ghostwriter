@@ -170,7 +170,7 @@ Red, Wolf
 
 # Touch-Point
 Please note that the actors should at some point directly address the following touch-point:
-The Wolf greets Red and asks where she's going.
+
 
 # The Draft
 The polished lines that need to be evaluated for Touch-Point satisfaction, and actor and spoiler safety is as follows:
@@ -178,9 +178,12 @@ Wolf purred, "Good morning, little traveler — where are you headed with that b
 
 The forest quieted. 
 
-"To my Grandmother's cottage, please." She hugged the basket closer. "Bread and jam — she is ill." 
+"To my Grandmother's cottage." She hugged the basket closer.
 
-"And what treasures have you tucked inside for a sick grandmother?" Wolf asked, voice as smooth as oil. "How far is she from here, if you don't mind my asking?" 
+"And what treasures have you tucked inside for a sick grandmother?" Wolf asked, voice as smooth as oil.
+"Bread and jam — she is ill." 
+ 
+"I'm sorry to hear that. How far is she from here, if you don't mind my asking?" 
 
 "Past the three tall pines and the crooked stump — not far."
 
@@ -191,10 +194,22 @@ Now, suggest specific improvements for lines that should be removed, added, or u
 Now produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions.
 
 === RESPONSE ===
-- Remove the separate sentence "The forest quieted." Fold the sense of hush into action or voice to avoid interrupting dialog.
-- Replace Wolf's opening line with a tighter version to remove redundancy: e.g. "Good morning, little one. Where are you headed with that bright hood and basket?"
-- Make Red's reaction show rather than tell: change "She hugged the basket closer." to something like "Red hugged the basket closer, voice small." and keep her line immediately after.
-- Combine Wolf's two follow-up questions into one compact, sly prompt to avoid repetition: e.g. "And what have you tucked inside for your sick grandmother—and how far is her cottage?"
-- Replace the cliché simile "voice as smooth as oil" with something more original and in-character for the Wolf, but still suggestive of slick charm: e.g. "his voice a silk-smoke hush" or "his words slipping like warm honey."
-- Tighten Red's location reply by removing the flat "not far." Make it specific and in her earnest cadence: e.g. "Just past the three tall pines and the crooked stump—Grandmother's cottage isn't far."
-- Optional: if you want to keep a short, atmospheric beat between exchanges, insert a tiny sensory line tied to Red (not an abstract narrator): e.g. "A nearby bird stilled; Red's fingers tightened on the basket." instead of "The forest quieted."
+- Remove or replace "The forest quieted." — it's a blunt narration beat. Instead add a short, evocative line that belongs to scene-setting or to an actor (e.g., have Wolf's next line pick up the hush: "The forest seemed to lean closer," or "The pines listened,"), but keep it minimal.
+
+- Trim Wolf's first question to avoid clumsy doubling ("bright hood" + "basket in hand"). Suggested rewrite: Wolf purred, "Good morning, little traveler — where are you headed with that bright hood?" or "— and that basket?" (choose one).
+
+- Replace the simile "voice as smooth as oil" with something less literal and more in-voice for Wolf (e.g., "his voice low and oily" or "he said, all slipper and smile"). Keep the sly menace, but avoid heavy literal similes.
+
+- Make Red's reply more character-specific and concise. Replace "To my Grandmother's cottage." / "She hugged the basket closer." with a single short line plus a brief, natural action: Red: "To my grandmother's cottage." (then a stage direction: Red clutched the basket.) Avoid a character narrating their own motion.
+
+- Tighten the exchange about the basket's contents. Combine into one natural line for Red: instead of separate lines, use: Red: "Bread and jam—Grandmother's ill." (Keeps her plainness and politeness.)
+
+- Shorten Wolf's follow-up question to remove filler "if you don't mind my asking?" Keep his tone coaxing but economical: Wolf: "How far is she from here?" or Wolf: "How far is that cottage?" Consider adding a sly echo of Red's phrasing to show manipulation: Wolf: "Past the three tall pines and the crooked stump, you say? Not far, then."
+
+- Remove redundancy between "And what treasures..." and "what tucked inside for a sick grandmother?" They repeat the same idea. Replace the first with a single, characterful solicitation: Wolf: "And what have you tucked inside that pretty basket for a sick grandmother?" or simply Wolf: "What treats march in that basket?"
+
+- Add a brief Wolf line that mirrors Red's phrasing (repetition as manipulation), but avoid implying hunger or predation. Example: after Red names the landmarks, Wolf repeats them softly: Wolf: "Three tall pines... the crooked stump. Not far at all." Keeps his mimicry without foreshadowing he's hungry.
+
+- Ensure all narration remains sparse and belongs to scene-setting, not exposition. Any remaining stage directions should be one short clause (e.g., "Red clutched the basket," "The wolf's tail flicked once") and placed between dialogue lines rather than as separate paragraphs.
+
+- Check tone consistency: make sure Red's lines stay simple and polite (please/thank you if present); Wolf's lines should slip compliments and mimicry subtly rather than outright flattery in every line. Remove any overly florid phrases that clash with the fairy-tale cadence.
