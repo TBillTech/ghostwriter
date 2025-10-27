@@ -1,0 +1,78 @@
+=== SYSTEM ===
+You write narrative prose from ordered bullets, keeping voice consistent.
+
+=== USER ===
+You are to write narrative prose that realizes the ordered outline below.
+
+Context
+=======
+- Setting and chapter:
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+- Story so far:
+Red promised to bring goodies to her ailing grandmother.
+
+
+- Story relative to:
+{
+  "Story-Relative-To": {
+    "Red": "Eager to help, trusts strangers.",
+    "Wolf": "Hungry, looking for an opportunity.",
+    "Forest Path": "Quiet, but shadows watch."
+  }
+}
+
+Touch-Point
+===========
+Text: Red walks the forest path, humming, basket in hand.
+
+State
+=====
+- Scene: {'name': 'Forest Path', 'description': 'A winding dirt trail beneath tall, shadowed pines. Shafts of light\nthread through the branches; birds rustle, then fall silent when the\nwind shifts. The air smells of damp earth and sweet jam.\n', 'props': [{'name': 'Basket', 'significance': 'Gift and responsibility; symbol of trust', 'description': "A small wicker basket filled with bread and jam, carried on Red's arm."}, {'name': 'Red Hood', 'significance': 'Identity and innocence; visible target in the woods', 'description': 'A bright red cloak and hood, a gift from Grandmother that draws the eye.'}]}
+- Actors: Red, Wolf
+- Foreshadowing: Wolf hasn't eaten in a while.
+- Prior paragraph (if any): 
+
+Ordered bullets
+===============
+* Sunbeams fall in narrow bands, sliding over the red_hood and the path.
+* The red_hood shows bright against the tall, shadowed pines.
+* The path bends around a black-barked pine, and the forest deepens a shade.
+* red steps along the winding dirt trail, her stride small and steady.
+* The basket of goodies hangs on her arm, wicker creaking with each swing.
+* The sweet scent of jam from the basket waft's behind red like a ribbon.
+* Pine needles hush her footfalls; dust lifts and settles behind her heels.
+* A tuft of blue flowers leans from the verge, nodding as she passes.
+* A light hum threads from red’s lips, soft as a nursery tune.
+* wolf moves parallel through the undergrowth, low and quiet between bramble shadows.
+* wolf lifts his muzzle, tasting the trail-stirred air and the sweetness of jam.
+* Wolf pauses when red pauses, and moves again when red continues.
+
+Instructions
+============
+- Convert the ordered bullets into a continuous narrative paragraph or two.
+- Keep it vivid, concise, and in the established voice.
+- Do not include bullet markers or headings in your output.
+- Return only the prose.
+- DO NOT say "a symbol of", be sure to transform this into "seemed like" or just "like" or some other simile.
+- Be sure to reformat spaces so that it looks natural.
+- Strongly prefer using proper names over pronouns like "they", "him", "it".
+
+
+=== RESPONSE ===
+Sunbeams fell in narrow bands, sliding over the Red Hood and the winding dirt trail. The Red Hood shone bright against the tall, shadowed pines as the path bent around a black-barked tree and the forest deepened a shade. Red stepped along the trail with a small, steady stride; the wicker Basket hung on Red's arm, creaking with each swing and seeming like trust wrapped in bread and jam. The sweet scent of jam trailed behind Red like a ribbon. Pine needles hushed Red's footfalls; dust lifted and settled behind Red's heels. A tuft of blue flowers leaned from the verge, nodding as Red passed, and a light hum threaded from Red’s lips, soft as a nursery tune.
+
+Wolf moved parallel through the undergrowth, low and quiet between bramble shadows. Wolf lifted the muzzle, tasting the trail-stirred air and the sweetness of jam that drifted through the pines. When Red paused, Wolf froze; when Red continued, Wolf moved again, each step measured, hungry and patient in the watching forest.

@@ -1,0 +1,103 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red promised to bring goodies to her ailing grandmother.
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+{
+  "Story-Relative-To": {
+    "Red": "Eager to help, trusts strangers.",
+    "Wolf": "Hungry, looking for an opportunity.",
+    "Forest Path": "Quiet, but shadows watch."
+  }
+}
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+The Wolf greets Red and asks where she's going.
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+Wolf purred, "Good morning, little traveler; the woods hush for a polite seeker.."
+Birds hush as his smooth voice slides into the path's quiet, and the basket at Red's arm glints like a promise in the dim light.
+Wolf tilted his head, "And what have you there, little one, a wicker basket with secrets inside??"
+Red hugged her basket, "To my Grandmother’s cottage.."
+Wolf dropped his gaze, "And what have you there, child, a wicker basket perhaps carrying more than bread??"
+Red clutched the basket, "Bread and jam, to make her strong. She is ailing.."
+Wolf inclined his head, "How far to the cottage from here, child??"
+Red pointed ahead, "Beyond the three tall pines and the crooked stump lies the path ahead.."
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Remove the duplicated Wolf line "And what have you there, little one, a wicker basket with secrets inside??" and the near-duplicate "And what have you there, child, a wicker basket perhaps carrying more than bread??" — keep one sly variant instead.
+
+- Delete or trim the narrator sentence "Birds hush as his smooth voice slides into the path's quiet, and the basket at Red's arm glints like a promise in the dim light." It both interrupts dialog-heavy scene and repeats the basket imagery. If you want a single small beat, replace with: "The forest quieted." 
+
+- Replace Wolf's opening line with a single greeting that also asks where she's going (satisfies touch-point) and keeps his oily charm. Suggested replacement:
+  Wolf (one line): "Good morning, little traveler — where are you headed with that bright hood and a basket in hand?"
+
+- Keep one concise, suggestive Wolf question about the basket. Suggested replacement (follow-up line):
+  Wolf: "And what treasures do you carry for a sick grandmother?"
+
+- Tighten Red's replies to sound polite, plain, and literal. Replace her two short replies with one clear line and one physiologically believable gesture (avoid characters describing their own actions aloud). Suggested replacements:
+  Red (reply to greeting): "To my Grandmother's cottage, please."
+  (action beat, not spoken): She hugged the basket closer.
+  Red (clarifying): "Bread and jam — she is ill."
+
+- Remove Wolf's repeated "How far to the cottage from here, child??" and replace with a single measured follow-up that funnels her toward the idea of a shortcut without stating overt malice:
+  Wolf: "How far is she from here, if you don't mind my asking?"
+
+- Replace Red's awkward directional line with something simpler and less expository:
+  Red: "Past the three tall pines and the crooked stump — not far."
+
+- Delete multiple question marks and double punctuation throughout; use single punctuation to keep cadence natural.
+
+- Ensure no line has a character narrating their own physical motions. Convert any "Red hugged her basket" or "Red clutched the basket" into brief action beats between dialog lines rather than spoken lines.
+
+- Preserve the writer's quirks by keeping a touch of repetition only where it means persuasion (Wolf echoing a phrase once), but avoid verbatim repeats of the same question.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+Wolf purred, "Good morning, little traveler — where are you headed with that bright hood and a basket in hand?"
+
+The forest quieted.
+
+"To my Grandmother's cottage, please." She hugged the basket closer. "Bread and jam — she is ill."
+
+"And what treasures have you tucked inside for a sick grandmother?" Wolf asked, voice as smooth as oil. "How far is she from here, if you don't mind my asking?"
+
+"Past the three tall pines and the crooked stump — not far."

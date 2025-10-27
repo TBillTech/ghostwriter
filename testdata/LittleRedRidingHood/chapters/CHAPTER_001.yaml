@@ -20,9 +20,10 @@ Touch-Points:
           significance: "Identity and innocence; visible target in the woods"
           description: "A bright red cloak and hood, a gift from Grandmother that draws the eye."
   - actors: [Red, Wolf]
+  - foreshadowing: Wolf hasn't eaten in a while.
   - narration: "Red walks the forest path, humming, basket in hand."
   - dialog: "The Wolf greets Red and asks where she's going."
-  - implicit: "Danger hinted at in the dark trees and Wolf's smile."
+  - mixed: "Danger hinted at in the dark trees and Wolf's smile."
   - dialog: "The Wolf suggests a shortcut to Grandmother's, and Red decides to take it."
 
 Story-So-Far: |

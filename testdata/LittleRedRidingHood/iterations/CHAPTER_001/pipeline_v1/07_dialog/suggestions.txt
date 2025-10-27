@@ -1,7 +1,0 @@
-- Remove the tag "she said" after Red's first line; replace with a tighter line: Red: "Mother told me to stay on the path, but Grandmother needs this basket. All right — I'll try the shortcut." (removes redundancy of "shorter way"/"deer track" and tightens speech)
-- Change Wolf's first line to sound more coaxing and less literal: Wolf: "I know a deer track that will get you there faster. Trust me—I'll guide you." (keep offer clear and temptingly helpful)
-- Fix the third sentence's speaker attribution and phrasing. Replace "The Wolf gestured toward a narrow, mossy deer track and slipped onto it. 'Very well. Lead the way,' Red said, and followed onto the deer path." with two clear beats:
-  - Wolf gestures toward the narrow mossy track. "This way."
-  - Red hesitates, then: "Very well. Lead the way." She stepped onto the track behind him.
-- Remove duplicate mentions of "deer track"/"deer path" — use "track" or "shortcut" consistently.
-- Trim descriptive intrusion into dialogue (avoid lines like "and slipped onto it" attached to dialogue); separate action beats from spoken lines for clarity.

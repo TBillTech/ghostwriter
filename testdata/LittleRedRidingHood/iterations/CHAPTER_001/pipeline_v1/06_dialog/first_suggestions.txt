@@ -1,0 +1,26 @@
+- Remove the duplicated Wolf line "And what have you there, little one, a wicker basket with secrets inside??" and the near-duplicate "And what have you there, child, a wicker basket perhaps carrying more than bread??" — keep one sly variant instead.
+
+- Delete or trim the narrator sentence "Birds hush as his smooth voice slides into the path's quiet, and the basket at Red's arm glints like a promise in the dim light." It both interrupts dialog-heavy scene and repeats the basket imagery. If you want a single small beat, replace with: "The forest quieted." 
+
+- Replace Wolf's opening line with a single greeting that also asks where she's going (satisfies touch-point) and keeps his oily charm. Suggested replacement:
+  Wolf (one line): "Good morning, little traveler — where are you headed with that bright hood and a basket in hand?"
+
+- Keep one concise, suggestive Wolf question about the basket. Suggested replacement (follow-up line):
+  Wolf: "And what treasures do you carry for a sick grandmother?"
+
+- Tighten Red's replies to sound polite, plain, and literal. Replace her two short replies with one clear line and one physiologically believable gesture (avoid characters describing their own actions aloud). Suggested replacements:
+  Red (reply to greeting): "To my Grandmother's cottage, please."
+  (action beat, not spoken): She hugged the basket closer.
+  Red (clarifying): "Bread and jam — she is ill."
+
+- Remove Wolf's repeated "How far to the cottage from here, child??" and replace with a single measured follow-up that funnels her toward the idea of a shortcut without stating overt malice:
+  Wolf: "How far is she from here, if you don't mind my asking?"
+
+- Replace Red's awkward directional line with something simpler and less expository:
+  Red: "Past the three tall pines and the crooked stump — not far."
+
+- Delete multiple question marks and double punctuation throughout; use single punctuation to keep cadence natural.
+
+- Ensure no line has a character narrating their own physical motions. Convert any "Red hugged her basket" or "Red clutched the basket" into brief action beats between dialog lines rather than spoken lines.
+
+- Preserve the writer's quirks by keeping a touch of repetition only where it means persuasion (Wolf echoing a phrase once), but avoid verbatim repeats of the same question.

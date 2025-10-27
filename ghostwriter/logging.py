@@ -123,3 +123,48 @@ def log_run(msg: str) -> None:
             f.write(f"[{ts}] {msg}\n")
     except Exception:
         pass
+
+
+def _trim_file_to_last_lines(path: Path, max_lines: int) -> None:
+    try:
+        if not path.exists() or max_lines <= 0:
+            return
+        with path.open("r", encoding="utf-8") as f:
+            lines = f.readlines()
+        if len(lines) <= max_lines:
+            return
+        trimmed = lines[-max_lines:]
+        with path.open("w", encoding="utf-8") as f:
+            f.writelines(trimmed)
+    except Exception:
+        pass
+
+
+def init_run_logs() -> None:
+    """Trim run.log and crash_trace.log to N lines at startup and add a clear header later.
+
+    Controlled by env GW_LOG_MAX_LINES (default 2000). Safe no-op if paths missing.
+    """
+    try:
+        from .env import get_book_base_dir  # lazy import
+        base = get_book_base_dir()
+        base.mkdir(parents=True, exist_ok=True)
+        max_lines = 0
+        try:
+            max_lines = int(os.getenv("GW_LOG_MAX_LINES", "2000"))
+        except Exception:
+            max_lines = 2000
+        # Trim run.log
+        _trim_file_to_last_lines(base / "run.log", max_lines)
+        # Trim crash_trace.log if present
+        crash_file_env = os.getenv("GW_CRASH_TRACE_FILE")
+        if crash_file_env:
+            try:
+                _trim_file_to_last_lines(Path(crash_file_env), max_lines)
+            except Exception:
+                pass
+        else:
+            # If default location is used later, pre-trim if it exists
+            _trim_file_to_last_lines(base / "crash_trace.log", max_lines)
+    except Exception:
+        pass

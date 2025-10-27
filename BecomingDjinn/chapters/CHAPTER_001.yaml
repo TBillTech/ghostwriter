@@ -31,7 +31,7 @@ Touch-Points:
         The Story begins with Arthur and Misty leaving the 73rd Crèche, for the first time in their lives. They haven't left yet, and this narration point should try hard to pull in the reader's attention. No action has taken place yet.  This moment is the calm before the storm.  In particular, Arthur and Misty are on the cusp of leaving the complex, trying to work themselves up to the biggest step in their lives so far.
     - dialog: |
         Moving Day is also the birthday of all 10000 in the cohort. A birthday is not as special when it is shared by 9999 other kids at the same time! But it is special when you get permission to move somwhere new for the first time!
-    - implicit: | 
+    - mixed: | 
         Arthur and Misty notice that they feel nostalgic and slightly reluctant to go. A flat cake for 10,000 kids is impersonal, but still sometimes tasty. 
     - actors: [Arthur, Misty, AURA]
     - dialog: |
@@ -59,7 +59,7 @@ Touch-Points:
     - dialog: The New Philadelphia semi arcology comes into view. It is a pyramid with lovely green stripes covering much of its slopes, with organic shaped silvery patches covering the rest of its struture. It keeps growning and growing in size.
     - dialog: |
         When it is obviously the size of a mountain, suddenly they realize: The green stripes are _forests_! Arthur asks the car if they can wander on those forests. The car responds that there are numerous balconies and flat areas where it is allowed, but also a lot of it is too steep to be safe.
-    - implicit: After trying to wrap their minds around the scale, they eventually arrive at the gate.
+    - mixed: After trying to wrap their minds around the scale, they eventually arrive at the gate.
     - scene: 
         name: "New Philadelphia Arcology"
         description: |
@@ -68,7 +68,7 @@ Touch-Points:
     - dialog: Arthur and Misty disembark through a security gate, and ride a moving walkway which runs quickly through a suprisingly long tunnel.
     - narration: They are awed again by the massive mall they find inside, interspersed with tropical tree parks with a large variety of colorful birds. The pyramid is partially hollow, with living areas interpersed with agricultural levels in the thick outer shell of the pyramid.  The layers can be observed from the ground mall level.
     - dialog: A hovering AI drone guide arrives and offers to lead them to their destination.
-    - implicit: Is this really a place where sheltered youngsters can thrive? The two agree, and they walk over to another moving walkway at the periphery of the mall. This escalator has progressively faster strips all moving clockwise around the base of the pyramid. This is something they have to get used to.
+    - mixed: Is this really a place where sheltered youngsters can thrive? The two agree, and they walk over to another moving walkway at the periphery of the mall. This escalator has progressively faster strips all moving clockwise around the base of the pyramid. This is something they have to get used to.
     - dialog: Finally, their guide tells them they have arrived at the optimum elevator.  All the elevators go one way, each up elevator paired with a down elevator. This allows roughly 100 elevator cars to share the same tracks. Even so, there must be 1200 elevator pairs around the inside of the whole pyramid, though not all of the elevators go to the top.
     - dialog: They ride the elevator up to the 408th floor, where they get off, and ride another moving walkway outward toward their apartment block.
     - dialog: The guide points out several restaurants with good reviews, and where the parks and gyms are located. 

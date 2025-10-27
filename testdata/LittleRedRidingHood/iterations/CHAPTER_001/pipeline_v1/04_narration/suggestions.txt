@@ -1,8 +1,0 @@
-- Start the second sentence of the first paragraph with "Red" (use name instead of pronouns) to foreground the actor: e.g., "Red hummed a small steady tune..."  
-- Remove redundant phrasing about humming (avoid "humming... that kept time in her chest" and later "the tune on her lips"); keep one concise image of humming.  
-- Move or condense the explicit basket detail so "basket in hand" appears earlier and more directly ties to the touch-point (ensure the touch-point line "Red walks the forest path, humming, basket in hand" is clearly echoed).  
-- Replace "the jam-sweet smell toward the bracken" with a clearer construction that ties the scent to Red's basket (e.g., "the jam-sweet scent from the basket drifted toward the bracken").  
-- In the Wolf paragraph, replace vague metaphors like "the forest swallowing claws and breath" with concrete language (e.g., "the forest hid Wolf's paws and breath") to avoid confusion.  
-- Change "The scents reached Wolf faintly when the wind favored" to "The scents reached Wolf when the wind favored Wolf" (use the proper name to avoid ambiguous pronouns).  
-- Clarify distance and movement: specify how close Wolf is (e.g., "just inside the bracken, keeping pace") rather than only "unseen among the bracken" and "edge of the bracken" to make the parallel pursuit explicit.  
-- Tighten prose by removing small, nonessential sensory details that compete with the core image (suggest deleting either "damp earth clung to her shoes" or "pine needles softened every footfall," not both).

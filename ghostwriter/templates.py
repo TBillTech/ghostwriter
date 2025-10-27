@@ -94,8 +94,34 @@ def _yaml_section_fallback(chapter: dict, key: str) -> str:
 
 def build_common_replacements(setting: dict, chapter: dict, chapter_id: str, current_version: int) -> Dict[str, str]:
     d = iter_dir_for(chapter_id)
-    story_so_far = (d / "story_so_far.txt").read_text(encoding="utf-8") if (d / "story_so_far.txt").exists() else chapter.get("Story-So-Far", "")
-    story_relative = (d / "story_relative_to.txt").read_text(encoding="utf-8") if (d / "story_relative_to.txt").exists() else _yaml_section_fallback(chapter, "Story-Relative-To")
+    # Prefer story summaries from the previous chapter if current chapter doesn't have them yet
+    def _prev_chapter_id(cid: str) -> Optional[str]:
+        import re as _re
+        m = _re.match(r"^(.*?)(\d+)$", cid.replace("CHAPTER_", ""))
+        # Common chapter id format: CHAPTER_001
+        m2 = _re.match(r"^CHAPTER_(\d+)$", cid)
+        if m2:
+            n = int(m2.group(1))
+            if n > 1:
+                return f"CHAPTER_{n-1:03d}"
+            return None
+        if m:
+            prefix = "CHAPTER_"
+            try:
+                n = int(m.group(2))
+                if n > 1:
+                    return f"{prefix}{n-1:03d}"
+            except Exception:
+                return None
+        return None
+    prev_id = _prev_chapter_id(chapter_id)
+    prev_dir = iter_dir_for(prev_id) if prev_id else None
+    story_so_far = (d / "story_so_far.txt").read_text(encoding="utf-8") if (d / "story_so_far.txt").exists() else (
+        (prev_dir / "story_so_far.txt").read_text(encoding="utf-8") if (prev_dir and (prev_dir / "story_so_far.txt").exists()) else chapter.get("Story-So-Far", "")
+    )
+    story_relative = (d / "story_relative_to.txt").read_text(encoding="utf-8") if (d / "story_relative_to.txt").exists() else (
+        (prev_dir / "story_relative_to.txt").read_text(encoding="utf-8") if (prev_dir and (prev_dir / "story_relative_to.txt").exists()) else _yaml_section_fallback(chapter, "Story-Relative-To")
+    )
     include_raw = os.getenv("GW_INCLUDE_RAW_YAML", "0") == "1"
     rep: Dict[str, str] = {
         "[SETTING.yaml]": to_text(setting) if include_raw else "",
@@ -103,6 +129,9 @@ def build_common_replacements(setting: dict, chapter: dict, chapter_id: str, cur
         "[story_so_far.txt]": story_so_far,
         "[story_relative_to.txt]": story_relative,
     }
+    # Provide uppercase synonym keys to improve template compatibility
+    rep["[STORY_SO_FAR]"] = story_so_far
+    rep["[STORY_RELATIVE_TO]"] = story_relative
     for key, pref in (
         ("[draft_v?.txt]", "draft"),
         ("[suggestions_v?.txt]", "suggestions"),

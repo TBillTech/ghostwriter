@@ -1,0 +1,27 @@
+1. Remove duplicated/near-duplicated Wolf lines. Keep one strong instance—prefer the sly, persuasive version ("The quickest way lies in the hush between trees...")—and delete the repeated smirk/murmur variants.
+
+2. Delete the repeated bird/wind/jam scent sentences. Keep a single, vivid sensory line (e.g., "The wind shifts, carrying the scent of jam farther than her voice can reach.") and remove the second echo.
+
+3. Tighten Red’s dialogue: change "These shadows feel strange; my eyes still haven't adjusted, and I feel a little unsteady.!" to a simpler, character-true line that sounds earnest and literal, e.g., "The shadows feel strange. My eyes aren't used to them yet." Remove the stray exclamation/extra punctuation.
+
+4. Remove the line that explicitly names the Wolf as "Soft and oily, the Wolf murmurs:" — it feels stagey and redundant after keeping one strong Wolf line. Let his cadence and word choice show the slyness.
+
+5. Cut overwrought, repeated phrases about "hush between trees" and "quicker way" to one clear temptation from Wolf and one questioning response from Red. Repetition currently reads like self-echo; one compact exchange is stronger.
+
+6. Replace "Red admitted, unsteady" and "Red tugged her hood snug" with brief action beats attached to her dialogue to avoid odd reporting-of-action phrasing. Example: Red clutches the basket. "To my Grandmother's cottage..." and later, Red tugs her hood. "Thank you... I mustn't be late."
+
+7. Remove explicit physical-description lines that state feelings rather than show them: e.g., delete "Red's fingers tighten until the wicker creaks under the weight of her fear." Instead show the action plainly: "Her fingers tightened until the basket creaked." Leave the emotion implied.
+
+8. Trim poetic sentences that obscure motion: pick either "Sunlight threads..." or "Light threads through the pines..." and keep the clearer one. Ensure the remaining one serves as a scene beat between dialogue.
+
+9. Replace rhetorical/question clutter in Red's line "Is there a quicker way, and would it be safe??" with one crisp question true to her polite naivety: "Is there a quicker way? Would it be safe, please?" Remove double question marks.
+
+10. Add one short narrative beat after Wolf tempts her to show his mannerism (soft sibilant, repeats her phrase) instead of telling it: e.g., "Wolf let the last word ripple, repeating 'quicker' with an extra sweetness." This keeps his voice theatrical without over-explaining.
+
+11. Insert one grounding sensory detail before the choice moment (small, concrete—needle crunch, a beetle skittering, the smell of pine resin) so the reader feels the threshold without heavy exposition.
+
+12. Remove the explicit foreshadowing "Wolf hasn't eaten in a while" if present; if you want hunger implied, let a single sly line (e.g., "Grandmother will be ever so grateful") or a tiny physical hint (a too-bright smile) imply appetite indirectly.
+
+13. Normalize punctuation and remove ellipses/extra periods in dialogue endings. Use single clear sentence punctuation to keep cadence clean and the voice intact.
+
+14. Preserve the writer's quirky, slightly lyrical voice but pare repetitive ornaments and let actions carry meaning—aim for alternating short dialogue lines and brief, concrete beats rather than multiple consecutive metaphors.

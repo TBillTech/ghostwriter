@@ -1,7 +1,0 @@
-- Change tense to present to match the touch-point's immediacy (e.g., "The Wolf stands..." instead of "The Wolf arrived first").
-- Replace/open with the touch-point sentence or integrate it verbatim: "The Wolf stands in the garden’s stillness and listens: no Red yet, only bees and the slow metronome of the clock."
-- After that line, keep the existing "He smooths his voice in his throat like a blade in a sheath" phrase and follow with an explicit motion that mirrors the touch-point: "then pads to the door" (replace "he closed the last steps to the cottage door" with "then pads to the door").
-- Remove or condense small, extraneous details that pull focus from the touch-point (e.g., shorten the teacup/hairline-crack sentence and the long enumerations of hinge pins/knock rhythms). Keep only details that support the Wolf's listening/staging.
-- Avoid ambiguous pronoun openings in new/rewritten paragraphs—start with "The Wolf" or "Grandmother" rather than "He" or "They" when introducing actions or shifts.
-- Keep sensory lines tied to the main idea of listening and preparation (trim descriptive asides like "thyme and cabbages brushed..." to one concise image that reinforces scent masking and the Wolf's vigilance).
-- Ensure no new dialogue or lines are attributed to actors other than "The Wolf" or "Grandmother."

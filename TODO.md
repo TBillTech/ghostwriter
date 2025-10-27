@@ -56,7 +56,22 @@ This document outlines the tasks necessary to get the driver.py working correctl
         - [x] However, if the above point is difficult or hard to achive, you may create a derived exception class that could be caught gracefully without terminating the program.s
             - Note: We now use a derived exception `UserActionRequired` and catch it in both CLI and driver; no sys.exit remains in pipelines or touch-point gates.
 
-5. **Scaffolding for MockLLM**
+5. **Change Implicit to Mixed**
+    The Implicit touch-point was origionally intended to guide the LLM to make symbolic dialog.  While this is still interesting to me, I think this will be achieved by simply putting such instructions into the touch-point. However, I also noticed another thing I want to be able to do: Have a touch-point that is half and half:  Half dialog, and half narration, especially action.  So, let's reuse the implicit and rename it to mixed:
+    - [X] Find all instances of implicit in the program, and rename to mixed, in the context of the implicit touch-point
+    - [X] Update the language in the implicit_brainstorm and check_implicit to reflect that the AI should generate mixed dialog and narrative (for eample, action sequences).
+
+
+6. **Feature Tuning**
+    The touch_point_first_draft.txt can sometimes be really good, but after the subtle edit, they are sometimes gutted. Here are some things to fix: 
+    - [ ] Don't need a polish after a subtle edit. 
+    - [ ] Don't need a polish after substituting lines into body_language either.
+    - [ ] So, let's just remove polish altogether. I've updated the subtle_edit_prompt to now take on the job of cleaning up formatting, if necessary.
+    - [ ] Need the program to save off the check prompt + response for debugging. This should be for narration, dialog, and mixed
+    - [ ] story-so-far and story-relative-to are not being substituted into narrative, dialog, mixed. Note that these should come from the prior chapter if there was one.
+    - [ ] run.log and crash_trace.log should be trimmed to be no longer than N lines when the program first starts up. It would be nice to have an env variable to configure N. There should also be a clear log when the program starts up, to distinguish for the user between runs.
+
+7. **Scaffolding for MockLLM**
     The plan is to use the LRRH book as a database for the MockLLM, and to make it deterministic. In addition, since the LRRH book under testdata has been built originally using a real LLM response, it should help with good code coverage. Now, in order for this to work, we need some scaffolding and helper functions so that the MockLLM can operate effectively and be coded somewhat generically. 
     By far the thorniest issue to come up in this design is that the prompts may be updated in the future, while the previously generated LRRH book would then mismatch the prompt templates.  To fix this we will have to create an update process for the LRRH book to update the prompting (however, the reponses from the LLM, and pure artifacts like brainstorm.txt and touch_point_draft.txt can remain the same).  Pure artifacts are outputs and files that do not have the prompt prior to the RESPONSE in them.
     
@@ -84,13 +99,13 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - [ ] A function which can be given a path to a partial copy of LRRH, and return the response for the current touch-point pipeline step. Expect this to be "independent" of the prompt, since the LRRH is taken to be the golden output.
     - [ ] A function which can be given a path to a partial copy of LRRH, and return the prompt for the current touch-point pipeline step. Expect this to be "equal" to the prompt, since the LRRH is taken to be the golden output.
 
-6. **Add Mock LLM for Testing**
-    - Rely on the fact that for testing, we will use the Little Red Riding Hood book
-    - Use the LRRH text as the return values for the MockLLM.  This way, the outputs can be tested in detail.
-    - Create MockLLM class that returns predictable responses
-    - Implement different response scenarios (successful, missing touch-points, API errors)
-    - Have the MockLLM not only provide the response from the correct touch-point pipeline step, but also check the prompt for that step against the LRRH prompt up to whitespace. This should be possible because of applying the update functio to the LRRH book when prompts change.
-    - Use for unit testing without requiring actual API calls
+8. **Add Mock LLM for Testing**
+    - [ ] Rely on the fact that for testing, we will use the Little Red Riding Hood book
+    - [ ] Use the LRRH text as the return values for the MockLLM.  This way, the outputs can be tested in detail.
+    - [ ] Create MockLLM class that returns predictable responses
+    - [ ] Implement different response scenarios (successful, missing touch-points, API errors)
+    - [ ] Have the MockLLM not only provide the response from the correct touch-point pipeline step, but also check the prompt for that step against the LRRH prompt up to whitespace. This should be possible because of applying the update functio to the LRRH book when prompts change.
+    - [ ] Use for unit testing without requiring actual API calls
 
 ## Testing and Quality Assurance
 

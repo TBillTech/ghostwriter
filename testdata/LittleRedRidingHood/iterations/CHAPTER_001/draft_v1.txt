@@ -19,47 +19,80 @@ BEGIN_RESULT
 
 END_RESULT
 
-BEGIN_TOUCHPOINT id=4 type=narration
+BEGIN_TOUCHPOINT id=4 type=foreshadowing
 
 END_TOUCHPOINT
 BEGIN_RESULT
-Red stepped along the winding dirt trail, the red hood bright against the pines, humming a small steady tune that kept time in her chest. The basket of goodies hung from her arm, wicker creaking softly with each swing—a gift for Grandmother, filled with bread and jam. Shafts of pale light crossed the path; birds stirred in the boughs and a lift of air nudged the jam-sweet smell toward the bracken. Damp earth clung to her shoes and pine needles softened every footfall. She passed a mossy stump, glanced at a cluster of flowers, and moved on, the tune on her lips.
 
-Wolf paced unseen among the bracken, keeping parallel to her course, the forest swallowing claws and breath. The scents reached Wolf faintly when the wind favored, and Wolf matched her stride—silently moving when she moved, pausing when she paused—following her every step at the edge of the bracken.
 END_RESULT
 
-BEGIN_TOUCHPOINT id=5 type=dialog
+BEGIN_TOUCHPOINT id=5 type=narration
 
 END_TOUCHPOINT
 BEGIN_RESULT
-The Wolf bowed. "Good day, little one. Where are you headed? That basket marks a tempting errand; the woods are full of ways—if you’d trust a patient guide, I can show a quicker, kinder route."
+Red walked the forest path humming, a basket in her hand. Sunbeams fell in narrow bands, sliding over her hood and the winding dirt trail. The hood shone bright against the tall, shadowed pines as the path bent around a black-barked tree and the forest deepened a shade. She stepped along the trail with a small, steady stride; the wicker basket hung on her arm, creaking with each swing as if it carried trust as much as bread and jam. She hummed a nursery tune while pine needles softened her steps and pale dust rose and fell behind her. A tuft of blue flowers leaned from the verge, nodding as she passed. She kept to the trail.
 
-Red clutched her basket. "To my grandmother’s cottage—bread and jam for her. I’ll stay on the path and hurry. Thank you."
-
-The Wolf smiled. "Such a charming hood—it brightens these shadows."
+Wolf moved parallel through the undergrowth, low and quiet between bramble shadows. He lifted his muzzle toward the trail-stirred air, catching the sweetness of jam that drifted through the pines. When Red paused, he stilled; when she moved, he resumed, each step measured, watchful and patient in the watching forest.
 END_RESULT
 
-BEGIN_TOUCHPOINT id=6 type=implicit
+BEGIN_TOUCHPOINT id=6 type=dialog
 
 END_TOUCHPOINT
 BEGIN_RESULT
-The Wolf purred, "Good day, little one. Where are you headed? The woods can be kinder with a guide."
+Wolf purred, "Good morning, little traveler — where are you headed with that bright hood and a basket in hand?" 
 
-Little Red blinked. "To my grandmother's cottage. I'm bringing her bread and jam; I must hurry and stay on the path."
+The forest quieted. 
 
-The Wolf chuckled. "A noble errand. There are shrewd shortcuts through the pines—faster ways for those who care to try. Just a friendly offer, if you'd like company."
+"To my Grandmother's cottage, please." She hugged the basket closer. "Bread and jam — she is ill." 
 
-Little Red straightened. "No, thank you. I'll stay on the path."
+"And what treasures have you tucked inside for a sick grandmother?" Wolf asked, voice as smooth as oil. "How far is she from here, if you don't mind my asking?" 
+
+"Past the three tall pines and the crooked stump — not far."
 END_RESULT
 
-BEGIN_TOUCHPOINT id=7 type=dialog
+BEGIN_TOUCHPOINT id=7 type=mixed
+
+END_TOUCHPOINT
+BEGIN_RESULT
+Wolf smirks. "Soft and practiced, I offer warmth, not fear. The quickest way lies in the hush between the trees, and I can guide you to it if your courage keeps pace."
+
+He lets the last word ripple, repeating "quicker" with an extra sweetness.
+
+Red clutches the basket. "The shadows feel strange. My eyes aren't used to them yet."
+
+The wind shifts, carrying the scent of jam farther than her voice can reach. A jay cackles once and vanishes, leaving a silence heavier than the basket's weight.
+
+A branch slides across the wicker. Her fingers tighten until it creaks. The crooked stump throws a long shadow across her boots, and her next step falters on loose needles.
+
+Red tugs her hood. "Thank you. Grandmother is waiting; I mustn't be late."
+
+"Is there a quicker way? Would it be safe, please?"
+
+A pine needle crunches underfoot. Sunlight threads through the pines as the path tilts toward a choice the forest keeps for itself.
+END_RESULT
+
+BEGIN_TOUCHPOINT id=8 type=dialog
 The Wolf suggests a shortcut to Grandmother's, and Red decides to take it.
 END_TOUCHPOINT
 BEGIN_RESULT
-The Wolf offered, "I know a little deer track that will get you to your grandmother faster. Trust me and I'll guide you."
+The Wolf inclined forward, "That narrow deer track cuts straight to Grandmother's cottage—a shortcut if you follow it."
 
-Red clutched her basket tighter. "Mother told me to stay on the path," she said, "but Grandmother needs this basket. All right — I'll try the shorter way."
+Warmth lifted from the basket in a faint breath of sweet jam.
 
-The Wolf gestured toward a narrow, mossy deer track and slipped onto it. "Very well. Lead the way," Red said, and followed onto the deer path.
+Little Red hesitated, "Is that shortcut safe? Will it still lead to Grandmother's?"
+
+The hoofprints were small and neat.
+
+The Wolf said, "It rejoins the main path by the birch with the lightning scar. Follow that, and you'll be right on time."
+
+Little Red said, "I remember the birch."
+
+The Wolf purred, "Your memory is a bright lantern, child—handy for a hastening step."
+
+Little Red tightened her hood and steeled herself to hurry, determined not to linger for flowers.
+
+Little Red said, "Then I'll take the deer track. Thank you—goodbye, Wolf. Grandmother's waiting."
+
+The Wolf bowed, "Happy trails—until we meet again."
 END_RESULT
 

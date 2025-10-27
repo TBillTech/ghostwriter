@@ -41,4 +41,4 @@ Please carefully read and understand this Touch-Point; This is the core idea tha
 4. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
 5. **Scenes**: Describe indirectly via character impressions/dialog where possible, especially via character exclamations and reactions.
 
-Now, brainstorm creative ideas to suggest things to the readers mind, with the goal of making the touch point seem to emerge like an aha-moment. Consider the probabilities of items up to 2 or 3 sigma in the sampled distribution.
+Now, brainstorm creative ideas to suggest things to the readers mind, with the goal of making the touch point seem to emerge like an aha-moment. Consider the probabilities of items up to 2 or 3 sigma in the sampled distribution (but do not make this explicit).

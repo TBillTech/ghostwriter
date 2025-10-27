@@ -36,21 +36,6 @@ def run_subtle_edit_pipeline(tp, state, *, setting: dict, chapter: dict, chapter
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_subtle_edit{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
         context_tag=f"tp={tp_index:02d} type={tp.get('type','')} template={tpl_se} step=SUBTLE_EDIT",
     )
-    # Final polish
-    from ..templates import build_polish_prompt
-    polish_prompt = build_polish_prompt(setting, chapter, chapter_id, version, edited)
-    mp, tpv, kp = env_for_prompt("polish_prose_prompt.md", "POLISH_PROSE", default_temp=0.2, default_max_tokens=2000)
-    rp = reasoning_for_prompt("polish_prose_prompt.md", "POLISH_PROSE")
-    out = llm_call_with_validation(
-        system="You are a ghostwriter polishing and cleaning prose.",
-        user=polish_prompt,
-        model=mp,
-        temperature=tpv,
-        max_tokens=kp,
-        reasoning_effort=rp,
-        validator=validate_text,
-        log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_polish_edit{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
-        context_tag=f"tp={tp_index:02d} type={tp.get('type','')} template=polish_prose_prompt.md step=POLISH_PROSE",
-    )
+    # Feature Tuning: remove final polish; subtle_edit is the final pass
     state.last_appended_dialog = {}
-    return out
+    return edited

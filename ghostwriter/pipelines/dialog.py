@@ -213,6 +213,30 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
     from ..characters import build_character_call_prompt
 
     items_sections: List[str] = []
+    # Collect unique character ids (exclude narrator) to build a single CHARACTER DATA section
+    unique_actor_ids: List[str] = []
+    for aid, _ in lines_pairs:
+        low = aid.strip().lower()
+        if low != "narrator" and aid not in unique_actor_ids:
+            unique_actor_ids.append(aid)
+    # Build CHARACTER DATA block to de-duplicate character YAML and include agenda notes
+    character_data_sections: List[str] = []
+    if unique_actor_ids:
+        character_data_sections.append("CHARACTER DATA (reference for all ITEMS; do not repeat below):")
+        for aid in unique_actor_ids:
+            yaml_text = char_yaml_by_id.get(aid.strip().lower(), "")
+            agenda_block_top = agenda_by_actor.get(aid, "").strip()
+            block_lines: List[str] = []
+            block_lines.append(f"=== CHARACTER: id={aid} ===")
+            if yaml_text:
+                block_lines.append(yaml_text.strip())
+            else:
+                block_lines.append("id: {aid}\nname: Unknown\n")
+            if agenda_block_top:
+                block_lines.append("")
+                block_lines.append("Agenda notes (focus for this scene):")
+                block_lines.append(agenda_block_top)
+            character_data_sections.append("\n".join(block_lines))
     for b_index, (actor_id, line_hint) in enumerate(lines_pairs, start=1):
         agenda_block = agenda_by_actor.get(actor_id, "")
         reaction_line = reactions_vals[b_index - 1] if 1 <= b_index <= len(reactions_vals) else ""
@@ -233,6 +257,14 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
                 f"Write a short narrative beat (no quotes) that fits this scene.\n\n"
                 f"Line intent: {line_hint}\nReaction to prior line: {reaction_line}\nAgenda notes: {agenda_block}\n"
             )
+            # Pre-process narrator instructions per request
+            try:
+                userN = userN.replace(
+                    "Write the narrative prose now (no quotes):",
+                    "Append the narrative prose for this ITEM at the very end.",
+                )
+            except Exception:
+                pass
             systemN = "You write third-person narrative prose without quotation marks."
             item = (
                 f"ITEM {b_index}: id={actor_id}\n=== SYSTEM ===\n{systemN}\n=== USER ===\n{userN}\n"
@@ -255,6 +287,35 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
             agenda=agenda_combined,
             character_yaml=char_yaml_by_id.get(actor_id.strip().lower()),
         )
+        # Pre-process per-item USER prompt to reduce repetition and move agenda into the top character block
+        try:
+            # Replace the character YAML block with a reference
+            intro_marker = "You are role playing/acting out the following character:"
+            aware_marker = "You are aware of or deeply care about the following details"
+            last_marker = "The last"
+            if intro_marker in user_i:
+                # Insert reference text after intro marker
+                before_intro, rest = user_i.split(intro_marker, 1)
+                # Find the next marker (aware of details) within rest
+                idx_aware = rest.find(aware_marker)
+                if idx_aware != -1:
+                    # Keep intro line + reference, then drop original YAML
+                    after_intro = rest[idx_aware:]
+                    user_i = before_intro + intro_marker + "\nSee character data above\n" + after_intro
+            # Remove the per-item agenda section entirely (moved to CHARACTER DATA)
+            idx_aware_full = user_i.find(aware_marker)
+            if idx_aware_full != -1:
+                # Find the beginning of the next section (starts with 'The last') after the aware section
+                idx_next = user_i.find(last_marker, idx_aware_full)
+                if idx_next != -1:
+                    user_i = user_i[:idx_aware_full] + user_i[idx_next:]
+            # Replace final instruction line wording
+            user_i = user_i.replace(
+                "Now, say more or less the same thing in your own words and voice.",
+                "Append more or less the same thing in your own voice at the end of this document.",
+            )
+        except Exception:
+            pass
         item = (
             f"ITEM {b_index}: id={actor_id}\n=== SYSTEM ===\n{system_i}\n=== USER ===\n{user_i}\n"
         )
@@ -267,8 +328,11 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
         "Return exactly one line per item, in order, strictly formatted as 'id: line'. "
         "Do not include any extra commentary or headers."
     )
+    # Prepend CHARACTER DATA section if available
+    header_block = ("\n\n".join(character_data_sections) + "\n\n") if character_data_sections else ""
     batch_user = (
-        "Follow these rules:\n"
+        header_block
+        + "Follow these rules:\n"
         "- Output N lines: one per ITEM, same order.\n"
         "- Each line formatted 'id: line'.\n"
         "- Keep each line concise; no stage directions; narrator uses prose without quotes.\n\n"
@@ -307,21 +371,6 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
             state.add_dialog_line(actor_id, (line_text or "").strip())
             appended.setdefault(actor_id, []).append((line_text or "").strip())
     text = "\n".join(outputs)
-    # Polish
-    from ..templates import build_polish_prompt
-    polish_prompt = build_polish_prompt(ctx.setting, ctx.chapter, ctx.chapter_id, ctx.version, text)
-    modelp, tempp, maxp = env_for_prompt("polish_prose_prompt.md", "POLISH_PROSE", default_temp=0.2, default_max_tokens=2000)
-    rp = reasoning_for_prompt("polish_prose_prompt.md", "POLISH_PROSE")
-    polished = llm_call_with_validation(
-        system="You are a ghostwriter polishing and cleaning prose.",
-        user=polish_prompt,
-        model=modelp,
-        temperature=tempp,
-        max_tokens=maxp,
-        reasoning_effort=rp,
-        validator=validate_text,
-        log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_polish{'_r'+str(attempt) if attempt>1 else ''}.txt")) if log_dir else None,
-        context_tag="tp={:02d} type=dialog template=polish_prose_prompt.md step=POLISH_PROSE".format(tp_index),
-    )
+    # Feature Tuning: remove polish; subtle_edit will handle cleanup later
     state.last_appended_dialog = appended
-    return polished
+    return text

@@ -1,7 +1,0 @@
-- Replace generic object/name mentions with factoid names where appropriate: call the basket the "Basket of Goodies" and her cloak the "Red Hood" at least once to align with the factoids.
-- In paragraph 1, cut or tighten the line "seeming like both gift and responsibility" — instead explicitly link the Basket of Goodies to its origin (e.g., a gift from Grandmother) if you want that meaning, or remove the sentiment to avoid vagueness.
-- Change pronouns to proper names for clarity and narration preference: replace "him" and "he" in paragraph 2 with "Wolf" (e.g., "the scents reached Wolf... and Wolf matched her stride").
-- Remove or rework the metaphor "like a shadow practicing another life" — it is vague and distracts from the clear action of following; replace with a concrete description of Wolf's movements (e.g., "following her every step at the edge of the bracken").
-- Trim redundancy in sentence endings (for example, "the tune on her lips as steady as the trail") — either shorten to "the tune on her lips" or rephrase to add new detail about her humming.
-- Consider reducing overly lush sensory lines that slow pacing (e.g., "Shafts of pale light..." and "A brief lift of air nudged the jam-sweet smell...") by combining or simplifying so the core touch-point (Red walking, humming, basket in hand) stays central.
-- Ensure no forbidden foreshadowing is made explicit — keep any hints vague and avoid naming future events or consequences.

@@ -1,0 +1,110 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red promised to bring goodies to her ailing grandmother.
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+{
+  "Story-Relative-To": {
+    "Red": "Eager to help, trusts strangers.",
+    "Wolf": "Hungry, looking for an opportunity.",
+    "Forest Path": "Quiet, but shadows watch."
+  }
+}
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+The Wolf suggests a shortcut to Grandmother's, and Red decides to take it.
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+The Wolf inclined forward, "That narrow deer track cuts straight to Grandmother’s cottage, a quicker way if you follow it.."
+Steam climbs from the basket and drifts down the deer track, as if the bread and jam themselves know the way.
+Little Red hesitated, "Is this shortcut safe, and will the deer track still lead to Grandmother’s door without getting us lost??"
+Little Red observed, "The deer track is stitched with tiny hoof-prints, just like Grandmother’s stitching lessons.."
+The Wolf purred, "Yes, the deer track rejoins the main path by the old birch with the lightning scar; follow it and you will stay on course.."
+Little Red glanced down, "The lightning-scarred birch is fixed in my mind as I glance at the basket and weigh the time.."
+The Wolf applauded, "Your memory is a bright mind's lantern, child; it steadies your steps and keeps the path clear.."
+Red tightens her hood and steels herself to hurry, determined not to linger for flowers.
+Little Red decided, "Then I will take the deer track and bid you farewell, Wolf, and hurry to Grandmother's.."
+The Wolf bowed smoothly, "Happy trails until we meet again.!"
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Remove or reword any narrator lines that anthropomorphize props or state symbol meanings: delete "Steam climbs from the basket and drifts down the deer track, as if the bread and jam themselves know the way." If you want atmosphere, replace with a short sensory line in narration: "Warmth lifted from the basket in a faint breath of sweet jam." (one brief image only).
+
+- Tighten Red's questions so she sounds literal and polite, not stagey or redundant: change "Is this shortcut safe, and will the deer track still lead to Grandmother’s door without getting us lost??" to "Is that shortcut safe? Will it still lead to Grandmother's?" (single question mark; no double punctuation).
+
+- Remove the awkward simile about stitching lessons—it's overly literal and odd for Red: delete "The deer track is stitched with tiny hoof-prints, just like Grandmother’s stitching lessons.." Replace with a simple observational line if you want her literalness: "The hoofprints are small and neat, like someone took care to tread them." Or let her say nothing here and show the hoofprints in narration (one short sentence).
+
+- Fix the Wolf's directional line to avoid repeating "quicker"/overly didactic phrasing and to sound sly: change "Yes, the deer track rejoins the main path by the old birch with the lightning scar; follow it and you will stay on course.." to "It rejoins the main path by the birch with the lightning scar. Follow that, and you'll be right on time." (keeps flattery/assurance, less clunky).
+
+- Remove or condense redundant memory/reassurance lines. Either keep the Wolf's compliment or Red's second mention of the birch, not both. Suggested: delete "Little Red glanced down, 'The lightning-scarred birch is fixed in my mind as I glance at the basket and weigh the time..'" and instead have Red reply simply: "I remember the birch." That keeps her literal tone and removes repetition.
+
+- Soften the Wolf's applause line to avoid stage direction in dialogue and keep his theatricality containing menace: change "The Wolf applauded, 'Your memory is a bright mind's lantern, child; it steadies your steps and keeps the path clear..'" to "The Wolf purred, 'Your memory is a bright lantern, child—handy for a hastening step.'" (shorter, less on-the-nose praise).
+
+- Make Red's decision crisp and in character—polite, decisive, and a little anxious: change "Little Red decided, 'Then I will take the deer track and bid you farewell, Wolf, and hurry to Grandmother's..'" to "Little Red said, 'Then I'll take the deer track. Thank you—goodbye, Wolf. Grandmother's waiting.'" (preserves politeness and haste).
+
+- Fix punctuation and tone issues in the Wolf's final line: change "The Wolf bowed smoothly, 'Happy trails until we meet again.!'" to "The Wolf bowed, 'Happy trails—until we meet again.'" (remove extra punctuation, keep sly politeness).
+
+- Remove any explicit suggestion of wolf hunger or predatory intent in dialogue or narration here. Do not add lines implying he hasn't eaten; keep his menace only in tone and implication.
+
+- Preserve voice quirks: keep Red's literal phrasing and gentle politeness but cut any multiple lines that repeat the same thought (shorten where suggested). Keep Wolf's oily charm and theatrical sibilants but avoid repetitive adjectives like "quicker" or repeated reassurances.
+
+- Overall: aim for leaner narration (one brief sensory sentence maximum), keep the scene mostly dialogue-driven, and ensure each spoken line advances choice or manipulation—cut lines that simply restate what just happened.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+The Wolf inclined forward, "That narrow deer track cuts straight to Grandmother's cottage—a shortcut if you follow it."
+
+Warmth lifted from the basket in a faint breath of sweet jam.
+
+Little Red hesitated, "Is that shortcut safe? Will it still lead to Grandmother's?"
+
+The hoofprints were small and neat.
+
+The Wolf said, "It rejoins the main path by the birch with the lightning scar. Follow that, and you'll be right on time."
+
+Little Red said, "I remember the birch."
+
+The Wolf purred, "Your memory is a bright lantern, child—handy for a hastening step."
+
+Little Red tightened her hood and steeled herself to hurry, determined not to linger for flowers.
+
+Little Red said, "Then I'll take the deer track. Thank you—goodbye, Wolf. Grandmother's waiting."
+
+The Wolf bowed, "Happy trails—until we meet again."

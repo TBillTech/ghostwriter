@@ -1,0 +1,7 @@
+- Remove the separate sentence "The forest quieted." Fold the sense of hush into action or voice to avoid interrupting dialog.
+- Replace Wolf's opening line with a tighter version to remove redundancy: e.g. "Good morning, little one. Where are you headed with that bright hood and basket?"
+- Make Red's reaction show rather than tell: change "She hugged the basket closer." to something like "Red hugged the basket closer, voice small." and keep her line immediately after.
+- Combine Wolf's two follow-up questions into one compact, sly prompt to avoid repetition: e.g. "And what have you tucked inside for your sick grandmother—and how far is her cottage?"
+- Replace the cliché simile "voice as smooth as oil" with something more original and in-character for the Wolf, but still suggestive of slick charm: e.g. "his voice a silk-smoke hush" or "his words slipping like warm honey."
+- Tighten Red's location reply by removing the flat "not far." Make it specific and in her earnest cadence: e.g. "Just past the three tall pines and the crooked stump—Grandmother's cottage isn't far."
+- Optional: if you want to keep a short, atmospheric beat between exchanges, insert a tiny sensory line tied to Red (not an abstract narrator): e.g. "A nearby bird stilled; Red's fingers tightened on the basket." instead of "The forest quieted."

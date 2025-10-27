@@ -1,0 +1,9 @@
+* [Clarity] wolf slips from the bramble’s edge and says, "Good morning, little traveler."
+* [Flavor] Birds hush as his smooth voice slides into the path’s quiet.
+* [Clarity] wolf tilts his head and asks, "Where might you be going, little one?"
+* [Clarity] red hugs her basket and answers, "To my Grandmother’s cottage."
+* [Clarity] wolf’s gaze dips to the wicker. "And what have you there?"
+* [Clarity] red says, "Bread and jam, to make her strong.  She is ailing."
+* [Clarity] wolf nods solemnly. "How dutiful. Is the cottage far from here?"
+* [Clarity] red points ahead. "Past the three tall pines and the crooked stump."
+DONE

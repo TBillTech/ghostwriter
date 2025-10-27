@@ -1,0 +1,16 @@
+{
+  "id": "8",
+  "type": "dialog",
+  "touchpoint": "The Wolf suggests a shortcut to Grandmother's, and Red decides to take it.",
+  "active_actors": [
+    "Red",
+    "Wolf"
+  ],
+  "scene": "{'name': 'Forest Path', 'description': 'A winding dirt trail beneath tall, shadowed pines. Shafts of light\\nthread through the branches; birds rustle, then fall silent when the\\nwind shifts. The air smells of damp earth and sweet jam.\\n', 'props': [{'name': 'Basket', 'significance': 'Gift and responsibility; symbol of trust', 'description': \"A small wicker basket filled with bread and jam, carried on Red's arm.\"}, {'name': 'Red Hood', 'significance': 'Identity and innocence; visible target in the woods', 'description': 'A bright red cloak and hood, a gift from Grandmother that draws the eye.'}]}",
+  "foreshadowing": [
+    "Wolf hasn't eaten in a while."
+  ],
+  "setting_block": "{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}",
+  "characters_block": "",
+  "appended_dialog": {}
+}

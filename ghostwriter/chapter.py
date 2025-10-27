@@ -4,12 +4,14 @@ try:
         run_narration_pipeline as gw_run_narration_pipeline,
         run_dialog_pipeline as gw_run_dialog_pipeline,
         run_implicit_pipeline as gw_run_implicit_pipeline,
+        run_mixed_pipeline as gw_run_mixed_pipeline,
         run_subtle_edit_pipeline as gw_run_subtle_edit_pipeline,
     )
 except Exception:
     gw_run_narration_pipeline = None  # type: ignore
     gw_run_dialog_pipeline = None  # type: ignore
     gw_run_implicit_pipeline = None  # type: ignore
+    gw_run_mixed_pipeline = None  # type: ignore
     gw_run_subtle_edit_pipeline = None  # type: ignore
 
 # Standard library imports
@@ -168,7 +170,7 @@ def parse_touchpoints_from_chapter(chapter: dict) -> List[TouchPoint]:
     if not isinstance(tps_raw, list):
         return result
     # Supported touch-point types
-    allowed = {"actors", "scene", "foreshadowing", "narration", "implicit", "setting", "dialog"}
+    allowed = {"actors", "scene", "foreshadowing", "narration", "implicit", "mixed", "setting", "dialog"}
 
     def _normalize(item) -> List[TouchPoint]:
         # Dict form: {key: value}
@@ -550,8 +552,8 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 polished = ""
             # Recreate basic record (tp_id unknown here; assign i)
             records.append((str(i), tp_type_i, "", polished))
-            # Only contentful types (narration/dialog/implicit) should influence prior_paragraph
-            if tp_type_i in ("narration", "dialog", "implicit") and polished.strip():
+            # Only contentful types (narration/dialog/implicit/mixed) should influence prior_paragraph
+            if tp_type_i in ("narration", "dialog", "implicit", "mixed") and polished.strip():
                 prior_paragraph = polished.strip()
 
     # Parsing complete marker: YAML files loaded and touch-points parsed
@@ -586,12 +588,14 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
             run_narration_pipeline as gw_run_narration_pipeline,
             run_dialog_pipeline as gw_run_dialog_pipeline,
             run_implicit_pipeline as gw_run_implicit_pipeline,
+            run_mixed_pipeline as gw_run_mixed_pipeline,
             run_subtle_edit_pipeline as gw_run_subtle_edit_pipeline,
         )
     except Exception:
         gw_run_narration_pipeline = None  # type: ignore
         gw_run_dialog_pipeline = None  # type: ignore
         gw_run_implicit_pipeline = None  # type: ignore
+        gw_run_mixed_pipeline = None  # type: ignore
         gw_run_subtle_edit_pipeline = None  # type: ignore
 
     for i, tp in enumerate(tps, start=1):
@@ -642,7 +646,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 state.characters_block = _gw_to_text({"Selected-Characters": sel_chars}) if sel_chars else ""
             except Exception:
                 state.characters_block = ""
-        elif tp_type in ("narration", "dialog", "implicit"):
+        elif tp_type in ("narration", "dialog", "implicit", "mixed"):
             # Before running pipelines, if brainstorm exists but lacks DONE, enforce resume gating
             try:
                 if not branch_b:  # Skip brainstorm enforcement for edit branches (v2+)
@@ -731,7 +735,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                             if gw_run_dialog_pipeline is None:
                                 raise GWError("ghostwriter.pipelines.run_dialog_pipeline not available")
                             polished_text = gw_run_dialog_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
-                    else:  # implicit
+                    else:  # implicit/mixed
                         if branch_b:
                             prev_polished_tp = ""
                             prev_suggestions_tp = ""
@@ -755,9 +759,11 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                                 raise GWError("ghostwriter.pipelines.run_subtle_edit_pipeline not available")
                             polished_text = gw_run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=use_pol, prior_suggestions=use_sugg, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
                         else:
-                            if gw_run_implicit_pipeline is None:
-                                raise GWError("ghostwriter.pipelines.run_implicit_pipeline not available")
-                            polished_text = gw_run_implicit_pipeline(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
+                            # Prefer mixed pipeline; fall back to implicit if mixed unavailable
+                            runner = gw_run_mixed_pipeline or gw_run_implicit_pipeline
+                            if runner is None:
+                                raise GWError("ghostwriter.pipelines.run_mixed_pipeline not available")
+                            polished_text = runner(tp, state, ctx=ctx, tp_index=i, prior_paragraph=prior_paragraph, log_dir=tp_log_dir)
                 except Exception as e:
                     # If this is a human-in-the-loop pause, log as INFO and stop gracefully
                     if isinstance(e, UserActionRequired):
@@ -788,24 +794,28 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
         # Record (for actors/scene/foreshadowing, polished_text may be empty)
         records.append((tp_id, tp_type, tp_text, polished_text))
         # After producing content for narration/dialog/implicit, enforce the new first-draft user-in-the-loop gate
-        if tp_type in ("narration", "dialog", "implicit") and polished_text and tp_log_dir is not None:
+        if tp_type in ("narration", "dialog", "implicit", "mixed") and polished_text and tp_log_dir is not None:
             try:
                 # Build replacements shared by suggestions prompt
                 setting_block = getattr(state, "setting_block", "") or ""
                 characters_block = getattr(state, "characters_block", "") or ""
-                if not characters_block and state.active_actors:
+                if not characters_block:
                     try:
-                        sel_chars = []
-                        all_chars = setting.get("Characters") if isinstance(setting, dict) else None
-                        if isinstance(all_chars, list):
-                            wanted = {a.strip().lower() for a in state.active_actors if a.strip()}
-                            for ch in all_chars:
-                                cid = str(ch.get("id", "")).strip().lower()
-                                cname = str(ch.get("name", "")).strip().lower()
-                                if cid in wanted or cname in wanted:
-                                    sel_chars.append(ch)
-                        if sel_chars:
-                            characters_block = _gw_to_text({"Selected-Characters": sel_chars})
+                        # Prefer selecting by active actors; else include all characters
+                        selected: List[dict] = []
+                        all_chars = load_characters_list(ctx)
+                        if isinstance(all_chars, list) and all_chars:
+                            if state.active_actors:
+                                wanted = {a.strip().lower() for a in state.active_actors if a.strip()}
+                                for ch in all_chars:
+                                    cid = str(ch.get("id", "")).strip().lower()
+                                    cname = str(ch.get("name", "")).strip().lower()
+                                    if cid in wanted or cname in wanted:
+                                        selected.append(ch)
+                            else:
+                                selected = list(all_chars)
+                        if selected:
+                            characters_block = _gw_to_text({"Selected-Characters": selected})
                     except Exception:
                         characters_block = characters_block or ""
                 try:
@@ -822,6 +832,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                     "narration": "check_narration_prompt.md",
                     "dialog": "check_dialog_prompt.md",
                     "implicit": "check_implicit_prompt.md",
+                    "mixed": "check_mixed_prompt.md",
                 }.get(tp_type, "check_narration_prompt.md")
                 from .templates import build_common_replacements
                 check_reps = build_common_replacements(setting, chapter, chapter_id, version_num)
@@ -844,6 +855,14 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 except Exception:
                     pass
                 suggestions_out = llm_complete(suggestions_user, system="You are an evaluator extracting actionable suggestions only.", temperature=sugg_temp, max_tokens=sugg_max_tokens, model=sugg_model)
+                # Save the single prompt+response that produced suggestions as check.txt (debugging artifact)
+                try:
+                    with (tp_log_dir / "check.txt").open("w", encoding="utf-8") as f:
+                        f.write("=== SYSTEM ===\nYou are an evaluator extracting actionable suggestions only.\n\n")
+                        f.write("=== USER ===\n" + suggestions_user + "\n\n")
+                        f.write("=== RESPONSE ===\n" + suggestions_out + "\n")
+                except Exception:
+                    pass
                 try:
                     tp_log_dir.mkdir(parents=True, exist_ok=True)
                     if not branch_b:

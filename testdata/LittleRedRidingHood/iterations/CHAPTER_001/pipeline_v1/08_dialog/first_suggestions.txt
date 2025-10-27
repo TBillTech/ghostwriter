@@ -1,0 +1,21 @@
+- Remove or reword any narrator lines that anthropomorphize props or state symbol meanings: delete "Steam climbs from the basket and drifts down the deer track, as if the bread and jam themselves know the way." If you want atmosphere, replace with a short sensory line in narration: "Warmth lifted from the basket in a faint breath of sweet jam." (one brief image only).
+
+- Tighten Red's questions so she sounds literal and polite, not stagey or redundant: change "Is this shortcut safe, and will the deer track still lead to Grandmother’s door without getting us lost??" to "Is that shortcut safe? Will it still lead to Grandmother's?" (single question mark; no double punctuation).
+
+- Remove the awkward simile about stitching lessons—it's overly literal and odd for Red: delete "The deer track is stitched with tiny hoof-prints, just like Grandmother’s stitching lessons.." Replace with a simple observational line if you want her literalness: "The hoofprints are small and neat, like someone took care to tread them." Or let her say nothing here and show the hoofprints in narration (one short sentence).
+
+- Fix the Wolf's directional line to avoid repeating "quicker"/overly didactic phrasing and to sound sly: change "Yes, the deer track rejoins the main path by the old birch with the lightning scar; follow it and you will stay on course.." to "It rejoins the main path by the birch with the lightning scar. Follow that, and you'll be right on time." (keeps flattery/assurance, less clunky).
+
+- Remove or condense redundant memory/reassurance lines. Either keep the Wolf's compliment or Red's second mention of the birch, not both. Suggested: delete "Little Red glanced down, 'The lightning-scarred birch is fixed in my mind as I glance at the basket and weigh the time..'" and instead have Red reply simply: "I remember the birch." That keeps her literal tone and removes repetition.
+
+- Soften the Wolf's applause line to avoid stage direction in dialogue and keep his theatricality containing menace: change "The Wolf applauded, 'Your memory is a bright mind's lantern, child; it steadies your steps and keeps the path clear..'" to "The Wolf purred, 'Your memory is a bright lantern, child—handy for a hastening step.'" (shorter, less on-the-nose praise).
+
+- Make Red's decision crisp and in character—polite, decisive, and a little anxious: change "Little Red decided, 'Then I will take the deer track and bid you farewell, Wolf, and hurry to Grandmother's..'" to "Little Red said, 'Then I'll take the deer track. Thank you—goodbye, Wolf. Grandmother's waiting.'" (preserves politeness and haste).
+
+- Fix punctuation and tone issues in the Wolf's final line: change "The Wolf bowed smoothly, 'Happy trails until we meet again.!'" to "The Wolf bowed, 'Happy trails—until we meet again.'" (remove extra punctuation, keep sly politeness).
+
+- Remove any explicit suggestion of wolf hunger or predatory intent in dialogue or narration here. Do not add lines implying he hasn't eaten; keep his menace only in tone and implication.
+
+- Preserve voice quirks: keep Red's literal phrasing and gentle politeness but cut any multiple lines that repeat the same thought (shorten where suggested). Keep Wolf's oily charm and theatrical sibilants but avoid repetitive adjectives like "quicker" or repeated reassurances.
+
+- Overall: aim for leaner narration (one brief sensory sentence maximum), keep the scene mostly dialogue-driven, and ensure each spoken line advances choice or manipulation—cut lines that simply restate what just happened.

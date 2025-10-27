@@ -1,0 +1,238 @@
+=== SYSTEM ===
+Brainstorm dialog beats as bullet points.
+
+=== USER ===
+You are a creative writer working from structured YAML notes.  
+Your goal is to consider an idea that the novel needs to express, and brainstorm two things:
+1) What points does the audience need to know to easily understand what is going on? This adds clarity.
+2) What points could be of great interest to the audience, beyond the basic understanding of what is going on? This adds flavor.
+
+# Setting in general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "red",
+      "name": "Little Red Riding Hood",
+      "background": "A bright, tender-hearted village girl sent to bring food and comfort to her\nailing grandmother. She’s been warned to keep to the path and not speak to\nstrangers, but curiosity and kindness tug at her feet. She loves flowers,\nbirdsong, and the way sunlight freckles through the trees. Her iconic red\nhood and basket are more than props—they’re little anchors of bravery when\nthe woods press close. She’s polite by upbringing, literal in her\nunderstanding, and brave in small, practical ways.\n",
+      "traits": [
+        "curious",
+        "kind",
+        "naive",
+        "brave",
+        "easily-distracted",
+        "polite"
+      ],
+      "cadence": "light, earnest",
+      "lexicon": "simple words, fairy-tale tone; polite forms like \"please\" and \"thank you\"",
+      "prefer": [
+        "flowers",
+        "Grandmother",
+        "safe path",
+        "helpfulness",
+        "honesty"
+      ],
+      "avoid": [
+        "lying",
+        "strangers' tricks",
+        "dark thickets",
+        "leaving the path"
+      ],
+      "mannerisms": [
+        "Clutches her basket when nervous; relaxes as soon as she can offer help.",
+        "Answers questions plainly; takes idioms literally before catching on.",
+        "Soft little gasps of wonder at woodland sights; quiet hums of nursery tunes.",
+        "Uses simple, sincere phrases over fancy words; sprinkles in ‘please’ and ‘thank you.’",
+        "When scolded, lowers her eyes and apologizes, then tries to fix things at once."
+      ],
+      "sample_lines": [
+        "I'm bringing goodies to Grandmother.",
+        "I promised to stay on the path—well, mostly.",
+        "These flowers will cheer her right up, don’t you think?",
+        "Mama says it’s safest if I hurry, but I can help for just a minute.",
+        "If you know a shorter way, I suppose that would be kind…"
+      ],
+      "common_lines": [
+        "Grandmother’s waiting; I mustn’t dawdle.",
+        "Oh! I didn’t mean to be rude.",
+        "Thank you, but I should be on my way."
+      ],
+      "rare_lines": [
+        "I’m frightened, but I won’t run.",
+        "I did wrong to wander. I’ll make it right."
+      ],
+      "forbidden": [
+        "Does not use modern slang or technical jargon.",
+        "Will not be cruel, lewd, or cynical; no scheming language."
+      ],
+      "temperature_hint": 0.25,
+      "max_tokens_line": 80
+    },
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red promised to bring goodies to her ailing grandmother.
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+{
+  "Story-Relative-To": {
+    "Red": "Eager to help, trusts strangers.",
+    "Wolf": "Hungry, looking for an opportunity.",
+    "Forest Path": "Quiet, but shadows watch."
+  }
+}
+
+# Prior paragraph
+This is only for context. Do NOT repeat this:
+Wolf smirks. "Soft and practiced, I offer warmth, not fear. The quickest way lies in the hush between the trees, and I can guide you to it if your courage keeps pace."
+
+He lets the last word ripple, repeating "quicker" with an extra sweetness.
+
+Red clutches the basket. "The shadows feel strange. My eyes aren't used to them yet."
+
+The wind shifts, carrying the scent of jam farther than her voice can reach. A jay cackles once and vanishes, leaving a silence heavier than the basket's weight.
+
+A branch slides across the wicker. Her fingers tighten until it creaks. The crooked stump throws a long shadow across her boots, and her next step falters on loose needles.
+
+Red tugs her hood. "Thank you. Grandmother is waiting; I mustn't be late."
+
+"Is there a quicker way? Would it be safe, please?"
+
+A pine needle crunches underfoot. Sunlight threads through the pines as the path tilts toward a choice the forest keeps for itself.
+
+# Scene
+Here is the scene they actors are placed in:
+{'name': 'Forest Path', 'description': 'A winding dirt trail beneath tall, shadowed pines. Shafts of light\nthread through the branches; birds rustle, then fall silent when the\nwind shifts. The air smells of damp earth and sweet jam.\n', 'props': [{'name': 'Basket', 'significance': 'Gift and responsibility; symbol of trust', 'description': "A small wicker basket filled with bread and jam, carried on Red's arm."}, {'name': 'Red Hood', 'significance': 'Identity and innocence; visible target in the woods', 'description': 'A bright red cloak and hood, a gift from Grandmother that draws the eye.'}]}
+
+# Actors
+Here are the actors in the scene:
+Red, Wolf
+
+# The Touch-Point
+Please carefully read and understand this Touch-Point; This is the core idea that needs to be expounded upon:
+The Wolf suggests a shortcut to Grandmother's, and Red decides to take it.
+
+
+# Rules for generation:
+1. **Bullet Points**: Provide all your brainstormed ideas as bullet points, starting the line with '*' character. Use only simple statements, NOT additional markdown.  Do NOT put dashes at the front of the lines.
+2. **Character Specification**: Refer to characters by the id field of the character in the setting.  
+3. **Touch-Point**: Expressing this touch point creatively IS YOUR GOAL.  
+4. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
+5. **Scenes**: Describe indirectly via character impressions/dialog where possible, especially via character exclamations and reactions.
+
+Now, brainstorm creative lines to give the readers clarity and flavor, with the goal of building upon and making the touch point real. Consider the probabilities of items up to 2 or 3 sigma in the sampled distribution (but do not make this explicit).
+
+* [Clarity] wolf points with his muzzle toward a narrow deer track and says it is a quicker way to grandmother’s cottage
+* [Flavor] a breath of steam from the basket blows down the deer track eagerly, as if it, too, knows the way
+* [Clarity] red asks if it is safe and if it still leads to grandmother’s door without getting lost
+* [Flavor] red notes the deer track is stitched with tiny hoof-prints and thinks of grandmother’s stitching lessons
+* [Clarity] wolf assures red the track meets the main path by the old birch with the lightning scar
+* [Clarity] red repeats the landmark to remember it and glances at her basket as if weighing time
+* [Flavor] wolf praises her careful memory when she names the lightning-scarred birch, calling it “a bright mind’s lantern”
+* [Clarity] red adjusts her red hood and tells herself she will hurry and not dawdle for flowers
+* [Clarify] Red decides to take the path, and bids wolf farewell.
+* [Flavor] Wolf, replies, "happy trails until we meet again!"
+
+
+=== RESPONSE ===
+* [Clarity] wolf tilts his head toward a narrow deer track and says it is a quicker way to grandmother’s cottage
+* [Flavor] the deer track looks like a seam through moss, neat as a hem only small feet have pressed
+* [Clarity] red asks if the deer track will truly meet the main road and not wander into a thicket
+* [Flavor] red whispers that the needles smell like bread crust when the sun warms them
+* [Clarity] wolf promises the track joins the path by the old birch with a lightning scar, white as bone
+* [Flavor] wolf calls the scar a friendly finger pointing home, and chuckles low
+* [Clarity] red repeats “the lightning-scarred birch” to fix it in her mind and nods
+* [Flavor] wolf praises her careful memory, saying her hood is bright, and her wits brighter
+* [Clarity] red asks if she should keep left when the track forks
+* [Clarity] wolf says keep left at the fallen log, then straight until the birch greets her
+* [Flavor] a ribbon of jam-scent seems to drift down the deer track as if tugged by a sweet-toothed breeze
+* [Clarity] red says she will not stop for flowers and will hurry as mother asked
+* [Flavor] red clutches the basket, then loosens her grip as if the promise steadies her
+* [Clarity] wolf offers to walk beside her for the first few steps, “only to the log,” he says
+* [Clarity] red declines politely and says she must go quick and quiet
+* [Flavor] wolf feigns mild offense, then bows with a velvet smile and “only a suggestion, of course”
+* [Clarity] red thanks him for the direction and sets her boots onto the deer track
+* [Flavor] the shadows thin for a breath, and a thread of sun lights the start of the shortcut like a blessing
+* [Clarity] wolf reminds her to watch for the white birch and the path will find her feet again
+* [Flavor] wolf hums a soft, syrupy tune that follows behind her like a trailing ribbon
+* [Clarity] red says farewell and promises to tell grandmother she hurried
+* [Flavor] wolf replies that duty loves a swift step and “happy trails until we meet again”

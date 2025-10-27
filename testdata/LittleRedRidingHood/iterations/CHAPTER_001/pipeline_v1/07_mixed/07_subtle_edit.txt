@@ -1,0 +1,115 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red promised to bring goodies to her ailing grandmother.
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+{
+  "Story-Relative-To": {
+    "Red": "Eager to help, trusts strangers.",
+    "Wolf": "Hungry, looking for an opportunity.",
+    "Forest Path": "Quiet, but shadows watch."
+  }
+}
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+Danger hinted at in the dark trees and Wolf's smile.
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+Wolf smirked, "Soft and practiced, I offer warmth not fear; the fastest way lies in the hush between trees, and I can guide you to it if your courage keeps pace.."
+Red admitted, unsteady, "These shadows feel strange; my eyes still haven't adjusted, and I feel a little unsteady.!"
+Sunlight threads through the pines as the path tightens, a quiet threshold where caution and curiosity push a traveler toward a hidden door.
+Birds hush mid rustle, and the wind shifts, carrying the scent of jam farther than her voice can reach.
+Wolf murmured, teeth showing, "Soft and practiced, the contrast is mine to keep; the quickest way lives in the hush between trees, and I can guide you to it if your courage keeps pace.."
+Red tugged her hood snug, "Thank you for your kindness; Grandmother is waiting, and I must not be late.."
+A branch slides across the basket, and Red's fingers tighten until the wicker creaks under the weight of her fear.
+Wolf purred, honeyed, "Soft and oily, the Wolf murmurs: there’s a quicker way, little one, if you trust the hush and slip along where no eyes linger.."
+Birds hush mid rustle as the wind shifts, carrying the jam scent beyond her small voice.
+A jay cackles once and vanishes, leaving a silence heavier than the basket's weight.
+The crooked stump throws a long shadow across her boots, and Red's next step falters on the loose needles.
+Red asked, earnest, "Is there a quicker way, and would it be safe??"
+Light threads through the pines as the path tilts toward a choice the forest keeps for itself.
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+1. Remove duplicated/near-duplicated Wolf lines. Keep one strong instance—prefer the sly, persuasive version ("The quickest way lies in the hush between trees...")—and delete the repeated smirk/murmur variants.
+
+2. Delete the repeated bird/wind/jam scent sentences. Keep a single, vivid sensory line (e.g., "The wind shifts, carrying the scent of jam farther than her voice can reach.") and remove the second echo.
+
+3. Tighten Red’s dialogue: change "These shadows feel strange; my eyes still haven't adjusted, and I feel a little unsteady.!" to a simpler, character-true line that sounds earnest and literal, e.g., "The shadows feel strange. My eyes aren't used to them yet." Remove the stray exclamation/extra punctuation.
+
+4. Remove the line that explicitly names the Wolf as "Soft and oily, the Wolf murmurs:" — it feels stagey and redundant after keeping one strong Wolf line. Let his cadence and word choice show the slyness.
+
+5. Cut overwrought, repeated phrases about "hush between trees" and "quicker way" to one clear temptation from Wolf and one questioning response from Red. Repetition currently reads like self-echo; one compact exchange is stronger.
+
+6. Replace "Red admitted, unsteady" and "Red tugged her hood snug" with brief action beats attached to her dialogue to avoid odd reporting-of-action phrasing. Example: Red clutches the basket. "To my Grandmother's cottage..." and later, Red tugs her hood. "Thank you... I mustn't be late."
+
+7. Remove explicit physical-description lines that state feelings rather than show them: e.g., delete "Red's fingers tighten until the wicker creaks under the weight of her fear." Instead show the action plainly: "Her fingers tightened until the basket creaked." Leave the emotion implied.
+
+8. Trim poetic sentences that obscure motion: pick either "Sunlight threads..." or "Light threads through the pines..." and keep the clearer one. Ensure the remaining one serves as a scene beat between dialogue.
+
+9. Replace rhetorical/question clutter in Red's line "Is there a quicker way, and would it be safe??" with one crisp question true to her polite naivety: "Is there a quicker way? Would it be safe, please?" Remove double question marks.
+
+10. Add one short narrative beat after Wolf tempts her to show his mannerism (soft sibilant, repeats her phrase) instead of telling it: e.g., "Wolf let the last word ripple, repeating 'quicker' with an extra sweetness." This keeps his voice theatrical without over-explaining.
+
+11. Insert one grounding sensory detail before the choice moment (small, concrete—needle crunch, a beetle skittering, the smell of pine resin) so the reader feels the threshold without heavy exposition.
+
+12. Remove the explicit foreshadowing "Wolf hasn't eaten in a while" if present; if you want hunger implied, let a single sly line (e.g., "Grandmother will be ever so grateful") or a tiny physical hint (a too-bright smile) imply appetite indirectly.
+
+13. Normalize punctuation and remove ellipses/extra periods in dialogue endings. Use single clear sentence punctuation to keep cadence clean and the voice intact.
+
+14. Preserve the writer's quirky, slightly lyrical voice but pare repetitive ornaments and let actions carry meaning—aim for alternating short dialogue lines and brief, concrete beats rather than multiple consecutive metaphors.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+Wolf smirked. "Soft and practiced, I offer warmth, not fear. The quickest way lies in the hush between the trees, and I can guide you to it if your courage keeps pace."
+
+He let the last word ripple, repeating "quicker" with an extra sweetness.
+
+Red clutches the basket. "The shadows feel strange. My eyes aren't used to them yet."
+
+The wind shifts, carrying the scent of jam farther than her voice can reach. A jay cackles once and vanishes, leaving a silence heavier than the basket's weight.
+
+A branch slides across the basket. Her fingers tightened until the wicker creaked. The crooked stump throws a long shadow across her boots, and her next step falters on the loose needles.
+
+Red tugs her hood. "Thank you. Grandmother is waiting; I mustn't be late."
+
+"Is there a quicker way? Would it be safe, please?"
+
+A pine needle crunches underfoot. Sunlight threads through the pines as the path tilts toward a choice the forest keeps for itself.

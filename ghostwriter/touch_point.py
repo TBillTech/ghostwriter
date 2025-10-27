@@ -143,7 +143,7 @@ def _strip_trailing_done(text: str) -> str:
 
 def _ensure_brainstorm_done_on_resume(tp_type: str, reps: Dict[str, str], *, log_dir: Optional[Path], tp_index: int) -> None:
     # Accept only supported types
-    if tp_type not in ("narration", "dialog", "implicit"):
+    if tp_type not in ("narration", "dialog", "implicit", "mixed"):
         return
     if log_dir is None:
         return
@@ -161,8 +161,13 @@ def _ensure_brainstorm_done_on_resume(tp_type: str, reps: Dict[str, str], *, log
         sys1 = "Brainstorm dialog beats as bullet points."
         tpl1 = "dialog_brain_storm_prompt.md"
     else:
-        sys1 = "Brainstorm implicit dialog beats (indirect, subtext) as bullet points."
-        tpl1 = "implicit_brain_storm_prompt.md"
+        # Treat 'mixed' as blended dialog + brief narration/action beats
+        if tp_type == "mixed":
+            sys1 = "Brainstorm mixed dialog + brief narrative/action beats as bullet points."
+            tpl1 = "mixed_brain_storm_prompt.md"
+        else:
+            sys1 = "Brainstorm implicit dialog beats (indirect, subtext) as bullet points."
+            tpl1 = "implicit_brain_storm_prompt.md"
     user1_base = _apply_step(tpl1, reps)
     model, temp, max_toks = _env_for_prompt(tpl1, "BRAIN_STORM", default_temp=0.45 if tp_type != "narration" else 0.4, default_max_tokens=600)
     seed_bullets = _strip_trailing_done(existing_bs)

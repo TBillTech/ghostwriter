@@ -23,6 +23,7 @@ from .context import RunContext
 from .utils import _norm_token
 from .env import get_chapters_dir
 from .logging import breadcrumb as _breadcrumb
+from .logging import init_run_logs as _init_run_logs, log_run as _log_run
 from .templates import iter_dir_for, get_latest_version
 
 
@@ -85,7 +86,7 @@ def main(argv: list[str] | None = None) -> int:
         def _chapter_id_from_path(chapter_path: str) -> str:
             return Path(chapter_path).stem
         chapter_id = _chapter_id_from_path(chapter_path)
-        # Determine version number
+    # Determine version number
         if ns.version and str(ns.version).startswith("v"):
             try:
                 version_num = int(str(ns.version)[1:])
@@ -96,6 +97,18 @@ def main(argv: list[str] | None = None) -> int:
             version_num = get_latest_version(chapter_id) + 1
         else:
             version_num = get_latest_version(chapter_id) + 1
+
+        # Now that GW_BOOK_BASE_DIR is resolved (env or --book-base), trim logs for that base
+        try:
+            _init_run_logs()
+        except Exception:
+            pass
+
+        # Mark the start of a run clearly in run.log once chapter/version are known
+        try:
+            _log_run(f"=== START RUN === chapter_id={chapter_id} version={version_num}")
+        except Exception:
+            pass
 
         # Enable crash tracing early, so breadcrumbs below are captured to base/crash_trace.log
         try:
