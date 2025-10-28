@@ -1,0 +1,106 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. If you see a line that is "escaped", with single quotes in double quotes, un-escape it. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood', 'Basket'], 'actors': ['Red', 'Grandmother', 'Wolf', 'Huntsman']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    },
+    {
+      "name": "Basket",
+      "description": "Gift and responsibility; symbol of trust. A mcguffin"
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised sweets and walked the pine-smelling path with her hood catching the light and the basket creaking like a vow, while the sleek, flattering wolf slipped away along a deer-track to the cottage, reached it first, and with practiced calm swallowed Grandmother whole before setting the room into a careful masquerade; he powdered his muzzle, tugged on cap and spectacles, soothed the quilt and set the teapot whispering so the house would answer Red with the warmth of kin. She stepped inside to net curtains that sifted the afternoon into green pools and called softly, basket in hand, and a coaxing, grandmotherly coo—too slick, too practiced—bade her nearer; thyme and tea rose but a sour, wrong musk threaded the bed's shadow, the candle bent light into pooling dark, spectacles glinted on an oddly shaped silhouette and the nightcap drooped over a curious ear-tip. Red, humming a nursery tune, hesitated as angles read wrong and the cover shifted with a weight not belonging to age; the voice purred, urging her closer, patting the quilt in a deliberate, inviting rhythm, and when she asked the small questions—about eyes, ears, nose, nails—the answers came honeyed and false until whiskers powdered like flour in the gloom and the quilt yawned: a paw hooked the edge, spectacles fogged and were wiped with a slow, contented sigh, the basket toppled, a scream was swallowed as warm dark folded around Red, Grandmother folded within the wolf's belly, and the cottage smoothed back into its domestic hush with only the steady, indifferent tick of the clock.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I had meant only to be helpful—basket creaking like a promise, my hood catching the light as I stepped into the cottage that seemed to lean toward me—and the room answered with a wrongness that tugged at the edges of my certainty. Sun freckled the floor; net curtains sliced the afternoon into green pools and thyme and tea rose from the kettle, but a sour musk threaded beneath those homely smells and the curtain’s hem still swayed though the window was latched. The voice that answered was too slick, too practiced; it cooed and patted and urged me closer until small things read wrong: a chair nudged askew as if staged, spectacles glinting on a long shadow, a nightcap pulled too low over a pricked ear-tip, powder scored the pillow like a careless hand. I set the basket down at the foot of the bed because I trusted the voice, because the coaxing sounded like Grandmother, and when I stepped forward to kiss the pillow the breath beneath it answered too deep. Each question I asked—the eyes, the ears, the nose, the nails—was met with honeyed falsehoods that flattened the room around me, and the clock stuttered one late tick as the quilt rustled wrong. Whiskers powdered the gloom, a paw hooked the cover, the patchwork yawned like a mouth, and my scream was swallowed as warm dark folded over me and the cottage smoothed back into its domestic hush with only the steady tick remaining.
+
+Wolf's point of view
+Hunger and patient craft kept me light on the shingles and warm in the thyme; I slipped in before her, checked the latch, let the house breathe out mint and ash and the teapot hiss to keep up appearances, and set the stage with little disarrangements—a chair nudged, the nightcap tugged low, spectacles tilted, powder scored the pillow—so everything would look like age and forgetting. When Red stepped across the threshold, hood bright against the dim, I pooled my voice into a kinder thing and let it purr through the room, coaxing her to set the basket by the bed and come closer. Sun freckled the floor, the curtain hem moved though the window was latched, a sour musk threaded beneath the thyme to distract her, and I answered every soft question with a sweeter lie until muscles gathered under the quilt. I timed the stutter of the clock and the teapot’s chatter, watched her fingers tighten on the napkin, felt the basket tilt as her heel skidded—then the patchwork opened. Whiskers powdered the gloom, I wiped the spectacles with a slow contented sigh, hooked the cover with a paw, and the bed swallowed them both; I smoothed my sleeve, the candle thinned to a bead, and the cottage resumed its ordinary pose with a new warmth at the hip and the steady tick marking my patient satisfaction.
+
+Forest Path's point of view
+I kept the pale dust and sunbeams for her small feet and felt the wolf uncoil through my thyme long before either of them reached the cottage; I watched him time his knock to the tilt of the light and saw the house lean in as Red hummed her way along, hood bright, basket creaking like a promise. Sun freckled the floor when she nudged the door and called, and I took in the little betrayals inside—the curtained green pools, the kettle’s steam, the chair nudged as if left in a hurry, the candle bending light into dark pools—signs the wolf had been working his stagecraft. The voice that came back was slick and coaxing, and I felt the room hold its breath when Red stepped closer, fingers tightening at the napkin, the basket set at the bed's foot. The clock stuttered, the teapot chattered, the quilt rustled with breaths too long for age; whiskers powdered the gloom, spectacles fogged and were wiped, a paw hooked the edge, and the patchwork yawned. I kept the thin bar of light where her footsteps had passed as the bed closed over a new fullness, the cottage smoothed, and the mantle's tick resumed, carrying the echo of her vanished song along my lane.
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+Grandmother and Red have tea, bread and jam.  The End.
+
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+The latch clicks and the door settles into its frame behind me. I step inside and hang my Red Hood over the chair-back; the cloth catches a bit of the late light and throws a warm splash across the back of the chair. I set the Basket of Goodies on the table and watch Grandmother smooth the tablecloth; a floorboard answers with a small creak as if the house is settling around us. The clock on the mantel counts a steady beat.
+
+I lift the lid of the basket and take out the loaf, its crust split with a clean village cut. I slice two rounds, crumbs falling in a neat trail across the board. Butter softens under the knife's edge and the blade smooths the bread's face. Grandmother unwraps the jam; the spoon glints and rests in the ruby shine, and the jam spreads thick, leaving a glossy path and a small ridge. Grandmother pours tea into two cups; porcelain answers with a thin chime. We lift the cups and steam curls around our noses, drifting up toward the rafters. We eat bread and jam, the table taking the gentle thrum of our small motions. Before the light goes, I check the latch one last time, remembering the Huntsman's caution, and dusk leans on the window until the day closes over the cottage. The End.
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Make POV explicitly Red: replace opening "behind me" with "behind Red" or "behind me — Red" (or start "I step inside" and add a brief internal tag like "I — Red — hang my hood...") so reader knows narrator is Little Red Riding Hood.
+
+- Tone the prose to match Red's light, earnest cadence: simplify a few sentences (e.g., "the cloth catches a bit of the late light..." → "the hood catches the late light and warms the chair") to keep language plain and sincere.
+
+- Lower or normalize object capitalization: change "Basket of Goodies" → "basket" (or "basket of goodies") unless you intend it as a repeatedly significant proper item; keep "Red Hood" if you want it iconic but consider "Red's hood" for intimacy.
+
+- Add one short line of spoken dialog between Red and Grandmother (allowed actors) to animate the scene and honor their warmth — e.g., Red: "I brought bread and jam, Grandmother." Grandmother: "Come in, dear." Keep lines simple, polite, and in-character.
+
+- Show Red's habitual mannerism once (clutching the basket when nervous, curtsying, or thanking) to reinforce character: insert a small action like "I clutch the basket and curtsy" or "I tuck the basket under my arm and curtsy."
+
+- Make the Huntsman's mention a clear remembered line rather than vague: replace "remembering the Huntsman's caution" with a brief, specific memory in Red's voice — e.g., "I remember the Huntsman's warning: 'Latch the door at dusk.'" (short quoted line fits character and prior touch-point).
+
+- Trim one overly ornate phrase to keep the fairy-tale plainness — e.g., replace "the jam spreads thick, leaving a glossy path and a small ridge" with "the jam spreads thick and glossy" to avoid purple patches.
+
+- End with a tiny closing dialog or tag from Grandmother or Red (one sentence) to make "The End" feel part of the world not a narration sign-off — e.g., Grandmother: "Stay a while, dear," or Red: "We'll be safe here." Then either remove the literal "The End." or keep it but ensure it's tonal (if you keep it, make it a gentle Red line: "The End." is optional).
+
+- Check pronoun clarity across the paragraph — replace any lone "we" or "us" that might confuse with explicit "Grandmother and I" when needed (e.g., "We eat bread and jam" → "Grandmother and I eat bread and jam").
+
+- Ensure final sentence underlines the touch-point simply: explicitly state they have tea, bread, and jam together (if not already explicit) in one plain line: "Grandmother and I have tea, bread, and jam."
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+I step inside and hang my red hood over the chair-back; the hood catches the late light and warms the chair. I set the basket of goodies on the table and watch Grandmother smooth the tablecloth; a floorboard answers with a small creak as the house settles around us. The clock on the mantel counts a steady beat.
+
+"I brought bread and jam, Grandmother," I say, clutching the basket and curtsying.
+
+"Come in, dear," Grandmother answers, smiling.
+
+I lift the lid of the basket and take out the loaf, its crust split with a clean village cut. I slice two rounds, crumbs falling in a neat trail across the board. Butter softens under the knife's edge and the blade smooths the bread's face. Grandmother unwraps the jam; the spoon glints and rests in the ruby shine, and the jam spreads thick and glossy. Grandmother pours tea into two cups; porcelain answers with a thin chime. Grandmother and I lift the cups and steam curls around our noses, drifting up toward the rafters. Grandmother and I eat bread and jam; the table takes the gentle thrum of our small motions. Before the light goes, I check the latch one last time; I remember the Huntsman's warning: "Latch the door at dusk." Dusk leans on the window until the day closes over the cottage.
+
+"Stay a while, dear," Grandmother says.
+
+Grandmother and I have tea, bread, and jam.

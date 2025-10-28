@@ -1,0 +1,233 @@
+=== SYSTEM ===
+You brainstorm and draft a chapter outline as YAML.
+
+=== USER ===
+You are an expert story architect. Draft or revise a chapter outline for CHAPTER_004.
+
+Context:
+- CONTENT_TABLE.yaml (full):
+
+TABLE_OF_CONTENTS:
+  - Author: "Collected Fairy Tale"
+  - Title: "Little Red Riding Hood"
+  - 001: |
+      A Meeting on the Path. Red meets the Wolf along the forest trail; he coaxes
+      her into revealing her destination and suggests a shortcut to Grandmother’s cottage.
+  - 002: |
+      The Cottage Deception. The Wolf reaches Grandmother’s cottage first, tricks his way in, and takes her place, waiting for Red to arrive.
+  - 003: |
+      What Big Eyes You Have. Red arrives and notices oddities as the Wolf, disguised as Grandmother, flatters and lures her closer.
+  - 004: |
+      The Rescue. A huntsman tracking the wolf hears Red scream. Grandmother and Red are saved, and the Wolf is dispatched. Red learns that the best wolves are dead wolves.
+
+
+- Story-So-Far (from the prior completed chapter):
+
+Red had promised sweets and walked the pine-smelling path with her hood catching the light and the basket creaking like a vow, while the sleek, flattering wolf slipped away along a deer-track to the cottage, reached it first, and with practiced calm swallowed Grandmother whole before setting the room into a careful masquerade; he powdered his muzzle, tugged on cap and spectacles, soothed the quilt and set the teapot whispering so the house would answer Red with the warmth of kin. She stepped inside to net curtains that sifted the afternoon into green pools and called softly, basket in hand, and a coaxing, grandmotherly coo—too slick, too practiced—bade her nearer; thyme and tea rose but a sour, wrong musk threaded the bed's shadow, the candle bent light into pooling dark, spectacles glinted on an oddly shaped silhouette and the nightcap drooped over a curious ear-tip. Red, humming a nursery tune, hesitated as angles read wrong and the cover shifted with a weight not belonging to age; the voice purred, urging her closer, patting the quilt in a deliberate, inviting rhythm, and when she asked the small questions—about eyes, ears, nose, nails—the answers came honeyed and false until whiskers powdered like flour in the gloom and the quilt yawned: a paw hooked the edge, spectacles fogged and were wiped with a slow, contented sigh, the basket toppled, a scream was swallowed as warm dark folded around Red, Grandmother folded within the wolf's belly, and the cottage smoothed back into its domestic hush with only the steady, indifferent tick of the clock.
+
+- Current chapter YAML (if present), with Story-* sections removed (you may revise its Touch-Points and setting):
+
+
+
+- Setting/Characters context:
+
+
+
+- If the above is empty, only names are provided; use these to propose an appropriate setting block:
+
+{
+  "Factoid-Names": [
+    "Basket of Goodies",
+    "Red Hood",
+    "Forest Path",
+    "Grandmother's Cottage",
+    "Basket"
+  ],
+  "Character-Names": [
+    "Little Red Riding Hood",
+    "The Wolf",
+    "Grandmother"
+  ]
+}
+
+Instructions:
+- Look at the synopsis for 4 in CONTENT_TABLE.yaml and brainstorm an exciting, engaging chapter at a high directional level.
+- Output must be VALID YAML for chapters/CHAPTER_004.yaml.
+- Do NOT include Story-So-Far or Story-Relative-To sections.
+- The YAML SHOULD include:
+  - Touch-Points: a list of items (narration/dialog/mixed/actors/scene/foreshadowing/setting) in the order they should be executed.
+  - The first touch-point should be a 'setting' block with:
+    - factoids: [list of factoid names]
+    - actors: [list of character ids or names]
+  - The second touch-point should be a 'scene' block with:
+    - name: the name of the scene
+    - description: The 1 or two paragraph description of the scene
+    - props: a list of 'prop' blocks
+  - The third touch-point should be an 'actors: [list of character ids or names]'  
+  - You may include another 'scene' block touch-point if the scene changes significantly during the chapter.
+  - You may change the on-scene actors by using another actors touch-point.
+- Keep Touch-Points specific enough to guide pipelines. Each touch-point should dwell on a single idea or narrative link; be focussed.
+- Prefer clarity and coherence over exhaustiveness.
+
+If the current chapter is absent, here is a formatting hint.
+Touch-Points:
+  - setting:
+      factoids:
+        - "Basket of Goodies"
+        - "Red Hood"
+      actors:
+        - "Red"
+        - "Wolf"
+
+  - scene:
+      name: "Forest Path"
+      description: |
+        A winding dirt trail threads through a forest of tall, whispering pines. 
+        Shafts of sunlight pierce the canopy, striping the ground in gold and shadow. 
+        The scent of damp earth mingles with the sweetness of berry jam wafting from Red’s basket. 
+        Each step stirs a quiet rhythm of leaves and birdsong — until the woods fall suddenly, unnervingly still.
+      props:
+        - name: "Basket"
+          significance: "Gift and responsibility; symbol of trust"
+          description: |
+            A small wicker basket filled with bread and jars of strawberry jam, carefully wrapped in linen.
+            Its weight is modest, but to Red it carries both duty and pride — a token of her mother’s faith in her.
+        - name: "Red Hood"
+          significance: "Identity and innocence; visible target in the woods"
+          description: |
+            A bright red cloak and hood, lovingly stitched by her grandmother.
+            It marks her as special, and yet in the shadowed woods it burns like a signal fire.
+
+  - actors: [Red, Wolf]
+
+  - narration: |
+      Red walks the forest path with a light step and a tune on her lips, the basket swinging from her arm.
+      She hums to keep herself company, unaware that the forest has grown too quiet, as though holding its breath.
+
+  - dialog: |
+      The Wolf steps out from behind a tree, his voice smooth and almost courteous.
+      “Good morning, little traveler,” he says, eyes glinting beneath the canopy. “And where might you be headed with such a fine basket?”
+
+  - mixed: |
+      The silence of the forest feels heavier now; even the wind seems to listen.
+      The Wolf’s smile is friendly, but his gaze lingers too long on Red’s hands, the basket, the vulnerable path ahead.
+      Somewhere unseen, a crow caws once — harsh and short — before taking flight.
+
+  - dialog: |
+      The Wolf tilts his head, feigning thoughtfulness. “You know,” he murmurs, “there’s a quicker way to your grandmother’s house.
+      Through the meadow, just past the stream — far prettier than this gloomy path.”
+      Red hesitates, glancing at the shadows between the trees. “Really?” she asks. “I suppose... that might be nice.”
+      And with that small decision, the forest seems to close behind her like a secret.
+
+Now, provide touch points creatively for this chapter outline from 2 or 3 sigma in the sampled distribution:
+
+
+
+
+=== RESPONSE ===
+Touch-Points:
+  - setting:
+      factoids:
+        - "Grandmother's Cottage"
+        - "Forest Path"
+        - "Basket of Goodies"
+        - "Red Hood"
+        - "Basket"
+      actors:
+        - "Little Red Riding Hood"
+        - "Grandmother"
+        - "The Wolf"
+        - "Huntsman"
+
+  - scene:
+      name: "Approach to the Silent Cottage"
+      description: |
+        Evening lays a green hush over the pines as a huntsman follows a ribbon of prints that lope from streambank to door. A child's cry—brief, strangled, then swallowed by the trees—has already sent him off the trail and toward the cottage with his axe low and his breath held.
+        The door stands ajar. Inside, no chatter of kettle, no clatter of cups—only the measured ticking of a clock and a smell that is not illness, not age, but wild.
+      props:
+        - name: "Huntsman's Axe"
+          significance: "Instrument of rescue and judgment"
+          description: "A well-kept woodsman’s axe with a keen edge and a handle polished by years of use."
+        - name: "Wolf Tracks"
+          significance: "Trail of intrusion"
+          description: "Wide pads and claw marks pressed into damp earth, leading straight to the cottage threshold."
+        - name: "Teapot"
+          significance: "Interrupted domesticity"
+          description: "A squat iron pot, warm no longer, its lid beaded with cooled steam."
+        - name: "Clock"
+          significance: "Tension and timing"
+          description: "A mantle clock that ticks with stubborn steadiness, marking a calm that feels wrong."
+        - name: "Hearthstones"
+          significance: "Future means to end the threat"
+          description: "Smooth river stones stacked by the hearth, heavy and clean with ash-dust."
+
+  - actors: ["Huntsman"]
+
+  - narration: |
+      He circles once, listens again, and slips inside. The quiet feels manufactured, the air thick with fur-musk and flour dust. His eye takes in the neat room, the undisturbed table, the bed with its extra-round quilt.
+
+  - foreshadowing: |
+      By the hearth, a row of river stones waits in a wooden bin, each the size of a fist. He notes their weight in passing, the way a craftsman catalogs what the room can offer.
+
+  - scene:
+      name: "Inside: The Belly and the Blade"
+      description: |
+        The bed inhales and exhales in heavy bellows. Beneath the nightcap and spectacles, the sleeper’s muzzle peeks powder-white, and the quilt mounds like a harvest sack. The huntsman recognizes the trespass not only in scent and shape but in the cruel satisfaction resting on those whiskered lips.
+        He does not shout. He lays a palm to the quilt, feels the wrong warmth and the faint, frantic flutter beneath, and chooses steel over noise.
+      props:
+        - name: "Quilt"
+          significance: "Concealment and cradle"
+          description: "A hand-stitched patchwork pulled high, hiding both predator and prize within."
+        - name: "Nightcap and Spectacles"
+          significance: "The predator’s disguise"
+          description: "Borrowed garments perched absurdly on a wolfish brow."
+        - name: "Sewing Kit"
+          significance: "Tool for repair and closure"
+          description: "A tin with needles, coarse thread, and small scissors, tucked by the bedside."
+        - name: "Basin and Towels"
+          significance: "Practical aid for a quiet operation"
+          description: "A porcelain bowl and clean cloths ready from earlier tea-making and tidying."
+
+  - actors: ["Huntsman", "The Wolf"]
+
+  - mixed: |
+      He eases the quilt aside and, with a practiced woodsman’s calm, slides steel through fur and hide just enough, just once. A warm gust and a wet hush answer his cut.
+
+  - narration: |
+      First Grandmother spills out—pale, blinking, shocked with breath and alive. Then Red, slick with the wolf’s last lies, coughing tea and dark. He helps them to the towels, shushing gently, eyes never leaving the sleeper.
+
+  - actors: ["Little Red Riding Hood", "Grandmother", "Huntsman"]
+
+  - dialog: |
+      Grandmother whispers, “Bless you,” clutching his sleeve. Red gasps, “I—I should have kept to the path.”
+      “Then keep to it,” the huntsman murmurs. “But first, make sure the path stays safe. Bring me stones from the hearth.”
+
+  - mixed: |
+      Red’s hands tremble but obey; the stones are cool, absolute. Grandmother threads a needle with stiff, stubborn fingers. One by one the river’s weight drops into the emptied belly until the quilted mound is all gravity and no hunger. The huntsman sews with swift, ugly stitches—function over grace.
+
+  - actors: ["Little Red Riding Hood", "Grandmother", "Huntsman", "The Wolf"]
+
+  - narration: |
+      The wolf wakes to a world gone heavy. He snarls, staggers off the bed, and lurches for the door. The stones drag him broadside; he collapses in a thunder of crockery. The huntsman ends it with one clean stroke. The ticking clock keeps time, indifferent.
+
+  - scene:
+      name: "Aftermath: Tea and a Vow"
+      description: |
+        Steam returns to the teapot; cups are set out with shaking care. The room smells of thyme again, and ash, and a sharpness of iron fading. Outside, the forest breathes as birdsong stitches back the silence.
+        Red draws her hood close and meets the huntsman’s eye, then her grandmother’s. The lesson is not whispered but laid like a stone.
+      props:
+        - name: "Teacups"
+          significance: "Return to ordinary life"
+          description: "Thin porcelain cups that rattle a little against their saucers in relieved hands."
+        - name: "Red Hood"
+          significance: "A pledge remembered"
+          description: "The bright cloth pulled snug, its color no longer just a flourish but a warning to herself."
+        - name: "Basket of Goodies"
+          significance: "Duty resumed, innocence tempered"
+          description: "Uprighted and repacked, its contents fewer but its meaning heavier."
+
+  - actors: ["Little Red Riding Hood", "Grandmother", "Huntsman"]
+
+  - dialog: |
+      “I’ll keep to the path,” Red says, voice steady now. “And if a wolf smiles, I’ll remember: the only safe wolf is a dead one.”
+      “Then you’ll live long,” Grandmother replies, pouring tea. The huntsman nods once, already listening to the forest again.

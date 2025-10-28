@@ -1,0 +1,11 @@
+{
+  "id": "1",
+  "type": "setting",
+  "touchpoint": "{'factoids': [\"Grandmother's Cottage\", 'Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}",
+  "active_actors": [],
+  "scene": null,
+  "foreshadowing": [],
+  "setting_block": "{'factoids': [\"Grandmother's Cottage\", 'Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}",
+  "characters_block": "",
+  "appended_dialog": {}
+}

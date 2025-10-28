@@ -1,0 +1,26 @@
+- Introduce the hunter by name once near the start to avoid repeating "He" and to anchor POV: change opening sentence to include "the huntsman" (e.g., "A hundred yards out the huntsman heard Red's brief...").
+
+- Replace ambiguous pronouns with "the huntsman" where clarity helps (first clause of paragraph 2 and start of paragraph 3).
+
+- Tighten or simplify florid phrases that undercut the huntsman's economical voice:
+  - Change "followed wide pads and claw marks pressed into the damp, pine-scented earth—wolf spoor, pads and claw marks that ran fat and straight to the sill and did not lead away." to a leaner line: "He tracked fat wolf pads and claw marks straight to the sill; they did not lead away."
+
+- Fix awkward wording about the teapot/steam: remove redundancy. Example: "The teapot was no longer warm; a ring of cooled steam rimmed the lid." → "The teapot was cold; a ring of condensed steam rimmed the lid."
+
+- Make the sensory detail about the interior match the huntsman's tactile lexicon (concrete nouns, tactile verbs). Example: change "The air inside told him things: sour fur-musk, flour dust, ash by the hearth." → "The air told him—fur-musk, flour dust, hearth ash."
+
+- Clarify whose objects lie on the bed to reduce momentary ambiguity: specify "Grandmother's spectacles glinted on the bolster; powder dented the pillow." (or "her spectacles") rather than just "Spectacles."
+
+- Preserve mysterious tension over the bed while keeping wording precise:
+  - Recast "The bed’s quilt bulged extra-round, a mound too full for a single elder’s frame." to "Grandmother's quilt bulged—an extra-round mound, too full for an old woman's frame."
+  - Keep the long-muzzled hint but avoid labeling it outright: "the outline beneath it was long-muzzled" is fine; consider "the outline under the cap ran long and muzzled" for tighter voice.
+
+- Make the huntsman's action sequence sharper and in his cadence:
+  - Replace "He eased his boot. Set his range. Nocked. Drove the bow up. Steady." with a compact, hunterly rhythm: "He eased his boot. Set his range. Nocked. Drew. Breathe. Count."
+
+- Soften or rephrase the final revelation line to align with the touch-point's alertness without telegraphing an explicit predator ID:
+  - Change "The mound moved. The beast smelled him." to something like "The mound moved. The scent changed—close, warm, animal." (If you prefer clearer naming, use "wolf" only if you want the huntsman to call it by kind: "The mound moved. That scent—wolf—found him.")
+
+- Remove or revise "The huntsman slipped over the threshold and let the door fall without a sound." to avoid mixed metaphors about silence and falling doors; e.g., "The huntsman slipped over the threshold and let the door close soundlessly."
+
+- Ensure final sentence ties back to the touch-point: add one brief line that mirrors "the quiet feels manufactured" if you choose to keep that exact phrase—otherwise keep the existing "Its steady tick measured a calm that was forced." but consider appending: "He readied his bow, alerted to the strangeness." to fully match the required touch-point.

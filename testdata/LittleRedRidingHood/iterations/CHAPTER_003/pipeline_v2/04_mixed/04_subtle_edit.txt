@@ -1,0 +1,129 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. If you see a line that is "escaped", with single quotes in double quotes, un-escape it. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised to bring goodies and walked the pine-smelling path with her hood catching the light and the basket creaking like a vow, unaware the sleek, flattering wolf had slipped away onto a deer-track, reached the cottage first, and with practiced calm had swallowed her grandmother whole before arranging the room into a careful masquerade; he pried open the latch, powdered his muzzle, tugged on cap and spectacles, soothed the quilt and set the teapot whispering so the cottage would answer Red with the warmth of kin. She stepped inside to net curtains that sifted the afternoon into green pools and called softly, basket in hand, while a coaxing, grandmotherly coo bade her nearer; the house leaned in, thyme and tea rose, but a sour, wrong musk threaded the bed's shadow, the candle bent light into pooling dark, spectacles glinted on an oddly shaped silhouette and the nightcap drooped over a curious ear-tip. Red, humming the nursery tune, hesitated as the bed's angles read wrong and the cover shifted with a weight not belonging to age; urged by that sweet, purling voice she leaned to kiss the bed and listened as beneath the quilt a breath that was too deep answered her. Questions fell into the hush—about eyes, ears, nose, nails—and each answer, honeyed and false, tightened the room's intent until the climax: a splintering creak, whiskers powdered like flour in the gloom, the quilt yawned, and the mockery of a grandmother's teeth closed on Red. The basket tumbled, the scream was swallowed by a ticking clock, and when the house smoothed back into its domestic hush the wolf sat content, a new fullness beneath the patchwork, Grandmother folded within his belly, and the cottage waited with the steady, indifferent tick of time.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I had meant only to be helpful—basket creaking like a promise, my hood catching the light as I stepped into the cottage that seemed to lean toward me—but the room answered with a wrongness that tugged at the edges of my certainty. Net curtains sliced the afternoon into green pools and thyme and tea rose from the kettle, and I called for Grandmother, thinking to place the bread and jam and give her a quick kiss; her voice came back soft and coaxing, and I let my feet carry me closer. Everything hesitated odd and small: a draught that tugged the curtain though the window was latched, a chair askew as if left in a hurry, spectacles glaring on a shadow that read wrong, a nightcap drooping over a pricked shape. There was a sour, foreign musk by the bed, the quilt's silhouette sat too sharp, and when I leaned in to kiss the pillow the breath beneath it answered too deep. The voice bade me nearer and each question I asked—about the eyes, the ears, the nose—was answered with a honeyed lie that drew the room tight around me until the quilt bunched, whiskers powdered in the dark, and the bed yawned open; my scream was swallowed by the ticking clock and the basket tumbled as the patchwork smoothed itself over a new fullness, and the cottage hummed back into its ordinary hush with me gone.
+
+Wolf's point of view
+Hunger and patient craft had kept me light on the shingles and warm in the thyme as I slipped in before her; I checked the latch, pooled my voice into a kinder thing, and watched the cottage breathe out mint and ash as if expecting a visitor. When Red stepped inside, bright and trusting, the stage was set: net curtains dimpled light, the kettle hissed to keep up appearances, the chair was nudged askew and a sour note placed near the bed to pass for age’s forgetting. I let my voice soften into a grandmother’s purl, steered her with coaxing phrases so she would set the basket by the bed and lean in; each question she offered I answered in a sweeter falsehood, sewing the room tighter until the moment I needed. The clock stuttered, the candle bowed, and the quilt gathered as muscles readied under the stitches; whiskers powdered the gloom and a paw hooked the edge. When the patchwork opened like a mouth the work finished itself in a single surge—then I smoothed my sleeve, breathed out contentment, and the cottage folded back into its domestic pose with a new warmth at the hip and the steady tick of time marking the waiting.
+
+Forest Path's point of view
+I had watched her small feet press my pale dust and held the sunbeams as she hummed beneath my pines, and I felt the wolf uncoil and slip through my thyme toward the cottage, timing his knock to the tilt of the light. The lane answered in the soft click of a latch and the sigh of a kettle; I watched the house lean in as Red stepped across the threshold, her bright hood brisk against the shaded room. Inside, net curtains turned the afternoon green and the air filled with thyme and tea while an odd musk lingered by the bed—an arrhythmic mark against the homely smells I keep. The wolf had nudged a chair, powdered a pillow, let the nightcap droop and the spectacles glint wrong, and I saw the way his coaxing voice pulled her closer until the quilt breathed too deep. The clock faltered, the candle bowed, the patchwork shivered, and then the bed opened its mouth; the lane held its breath as Red's cry was swallowed and the cottage smoothed over a new fullness, the tick of the mantle resumed, and I kept the thin bar of light that caught the dust where footsteps had passed.
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+Red nudges the door and peers inside. “Grandmother?” she calls, the word softening in the warm air.
+From the inner room, a cough answers, followed by a coaxing, “Come in, dear heart. Mind the draught.”
+Red: “I brought the bread and jam. Are you resting?”
+Wolf (as Grandmother): “So thoughtful, my little bird. Set it down and come kiss your old granny.”
+
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+The latch sighed. The cottage seemed to lean in as Red stepped inside, the basket creaking like a promise.
+
+Net curtains sifted the afternoon light into greenish pools.
+
+Red nudged the door and peered in. "Grandmother? It's Red. I brought bread and jam."
+
+A cough answered from the inner room. "Come in, dear heart. Mind the draught."
+
+His voice softened into a grandmotherly coo.
+
+"Are you resting?" Red asked, clutching the basket.
+
+"How thoughtful, my little bird. Set it down by the bed, and come—give your old granny a kiss."
+
+Light trimmed the bed's silhouette. Nothing moved. Red hesitated, eyes dropping for a moment as she hummed the nursery tune under her breath, then stepped closer and reached toward the table. "May I put the basket on the table?" she asked.
+
+"Set it by the bed, please, so I needn't reach," the voice purred.
+
+"All right. Don't strain yourself," Red said, lowering the basket with careful hands.
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Remove or rework one of the two "basket" images to avoid repetition (either drop "the basket creaking like a promise" or the later "lowering the basket with careful hands"). Keep the stronger image and delete the weaker.
+
+- Replace "Net curtains sifted the afternoon light into greenish pools." with a shorter, more immediate sensory beat that ties to Red's perception (e.g., note the sun freckling the floor or a small motes-of-dust image). Avoid the oddly colored "greenish pools."
+
+- Change "His voice softened into a grandmotherly coo." — this is clumsy and tells rather than shows. Instead, show the voice's wrongness: e.g., "The voice softened, too smooth by half—grandmotherly on the edge." Or: "A voice cooed from the bed—too slick, too practiced." (Keeps mystery that it's the Wolf.)
+
+- Tighten the exchange about where to set the basket:
+  - Make the Wolf's line more in-character: coaxing, flattering and subtly manipulative (use phrasing that echoes Red's words back to her and elongates sibilants). Example rewrite suggestion (not literal text required): "How thoughtful, my little bird. Set it down by the bed—do come closer, won't you?" — then Red replies.
+  - Remove the clunky clause "so I needn't reach" and replace with a short, suggestive phrase from the Wolf that invites Red nearer (see above).
+
+- Adjust Red's reply "All right. Don't strain yourself," — it reads oddly practical and adult. Make it more in-voice: polite, literal, and caring but a little naive. Suggest: "All right. Please don't try to sit up." or "All right. Let me set it close so you won't have to move."
+
+- Add one or two tiny action beats to break the dialogue and ground the scene:
+  - After Red hesitates, show a small, telling physical detail (she tucks a lock of hair back, clutches her hood, sniffs the air, or notices the bed's shape is wrong). Keep it subtle and short—this will heighten tension without losing momentum.
+  - Example beats: a soft hum trailing off; a momentary sniff of something too sweet; Red noticing the bedclothes lie unnaturally smooth.
+
+- Trim the line "Light trimmed the bed's silhouette. Nothing moved." into a single, sharper sentence that combines atmosphere and unease (e.g., "Light cut the bed's silhouette; stillness answered."), then follow immediately with Red's hesitation beat.
+
+- Avoid explicit explanation that the speaker is the Wolf in disguise; instead, let the dialogue carry the wrongness. Remove any narratorial labels that identify the voice as male ("His voice...") or wolf unless you want to reveal. If you must keep a subtle hint, use sensory cues (breath that smells of the wood, a too-low chuckle) rather than naming the speaker.
+
+- Ensure cadence/lexicon match:
+  - Keep Red's lines short, polite, literal, and earnest (add "please"/"thank you" if needed).
+  - Make the Wolf's lines slippier and more flattering—have him mirror Red's words once to build trust.
+
+- Final pass: read the scene aloud to check rhythm; cut any remaining duplicated emotional beats (hesitation + humming + long description) so the scene stays taut and suspenseful.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+The latch sighed. The cottage seemed to lean in as Red stepped inside, the basket creaking like a promise.
+
+Sun freckled the floor.
+
+Red nudged the door and peered in. "Grandmother? It's Red. I brought bread and jam."
+
+A cough answered from the inner room. "Come in, dear heart. Mind the draught." The voice cooed—too slick, too practiced.
+
+"Are you resting?" Red asked, clutching the basket.
+
+"How thoughtful, my little bird. Set it down by the bed—do come closer, won't you?"
+
+Light cut the bed's silhouette; stillness answered. She hesitated, tucking a lock of hair behind her ear. The hum trailed off. Then she stepped closer and reached toward the table. "May I put it on the table?" she asked.
+
+"Set it by the bed—do come closer," the voice purred.
+
+"All right. Let me set it close so you won't have to move."

@@ -1,0 +1,258 @@
+=== SYSTEM ===
+You are an evaluator extracting actionable suggestions only.
+
+=== USER ===
+You are reviewing the work of an genious writer who sometimes loses track of key ideas in their wordsmithing.
+
+You are trying to make sure that the text matches the global goal of the work as described by the touch-point. You are trying to describe needed edits that are focused and surgical, and you wish to keep the voice and quirks of the writer alive to best interest the reader. A completely predictable and "normal" text would actually be bad, so it is a balance between interesting and clear. I will provide you here with the setting, context, things to watch out for, and the draft provided by the writer.  Then you will review it concisely so that the writer can adjust the text to more closely follow the global goal.
+
+Watch out for pronouns that have unclear references, like starting a paragraph with "They".  Using proper names is preferred in our narration IF there is any ambiguity.
+
+# Setting in general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood', 'Basket'], 'actors': ['Red', 'Grandmother', 'Wolf', 'Huntsman']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    },
+    {
+      "name": "Basket",
+      "description": "Gift and responsibility; symbol of trust. A mcguffin"
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    },
+    {
+      "id": "huntsman",
+      "name": "Huntsman",
+      "background": "The Huntsman is a skilled hunter who make a living hunting rabbits, boars, and deer.  However, he also earns bounties for killing exceptionally dangerous beasts (like Wolf).  In fact, Wolf had killed some livestock in a neighboring parish. The huntsman was on a mission to hunt Wolf down.  Usually the Huntsman uses a bow and arrow to take down game, and a skinning knife to dress kills.\n",
+      "traits": [
+        "patient",
+        "observant",
+        "disciplined",
+        "pragmatic",
+        "protective",
+        "stoic",
+        "law-abiding",
+        "soft-spoken",
+        "decisive"
+      ],
+      "cadence": "low, economical, deliberate; a hunter’s whisper that wastes no breath",
+      "lexicon": "plain woodsman’s speech; concrete nouns, hunting terms, tactile verbs; avoids fancy rhetoric and modern slang",
+      "prefer": [
+        "beast",
+        "wolf",
+        "trail",
+        "tracks",
+        "spoor",
+        "sign",
+        "scent",
+        "wind",
+        "range",
+        "clear shot",
+        "draw",
+        "loose",
+        "bow",
+        "string",
+        "arrow",
+        "knife",
+        "field-dress",
+        "quiet",
+        "quarry",
+        "hearthstones",
+        "clock"
+      ],
+      "avoid": [
+        "target acquired",
+        "epic",
+        "hero",
+        "bro",
+        "dude",
+        "LOL",
+        "monster",
+        "magic bullet",
+        "glorious",
+        "cute"
+      ],
+      "mannerisms": [
+        "Counts heartbeats to steady his release; breathes through the nose, slow and even.",
+        "Keeps his bow low until the shot; eyes sweep corners, rafters, and doorframes.",
+        "Names quarry by kind—wolf, boar, buck—never by pet names; calls them beasts, not monsters.",
+        "Cleans blade methodically and salvages arrows, checking fletching and nock by touch.",
+        "Speaks in short, calm statements; leaves silence to do half the work.",
+        "Notes small domestic details—warm iron, ticking clocks—as signs of timing and disturbance."
+      ],
+      "sample_lines": [
+        "Tracks run fat and straight to this door.",
+        "That smell is wolf, and fresh.",
+        "If you were human, I would stay my hand. For beasts, I am the law.",
+        "Breathe. Count. Loose.",
+        "Hold steady now; I’ll make it quick.",
+        "The belly moves. Easy—knife, then cloths.",
+        "I'm glad I could be of service Maam."
+      ],
+      "forbidden": [
+        "Does not use modern slang, military call-outs, or internet jargon.",
+        "No grandstanding, taunts, or cruel jokes at quarry.",
+        "Avoids florid metaphors and courtly speech.",
+        "Will not threaten innocents or speak lewdly.",
+        "Does not monologue while aiming or tracking.",
+        "No technical jargon beyond simple hunting terms."
+      ],
+      "temperature_hint": 0.25,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# Prior touch points
+The most recent 3 touch-points for context.
+Night pooled in the corner; the quilt swelled with something alive. A white muzzle glinted from beneath the cover.
+
+The huntsman lowered the bow an inch. "I have found you, wolf. Your terrible deeds end here."
+
+Whiskers twitching, the wolf purred, "Such accusations. Grandmother is all aches and coughs; mind your tone in a sickroom."
+
+The bed exhaled; the patchwork hid a predator's line. The clock ticked, counting down to the draw.
+
+The huntsman stepped closer, eyes narrowed. "Tracks run fat and straight to this door. They don't leave." He pinched the seam between thumb and forefinger; a puff of flour rose and the whiskers brushed his skin. He drew a breath; a sour fur-musk threaded with flour dust rose to his nostrils. "Tracks, the sour musk, spectacles perched on a snout."
+
+The wolf's voice went honeyed. "You mistake frailty for brutality, hunter. Come closer—see how feeble she is."
+
+The nightcap drooped; a long brow showed through the patchwork. The quilt twitched and the seam gave—a pair of spectacles slid down the long snout.
+
+Silence.
+
+The huntsman's jaw set. "If you were human, I could not do this. For beasts, I am judge, jury, and executioner."
+
+# Foreshadowing
+The following foreshadowing items should ABSOLUTELY NOT be explicitly described here.  If they are, that is a problem. These should only be vaguely alluded to:
+
+
+# Actors
+The following actors are allowed to speak in the dialog.  If other actors are speaking, that is a problem.  The actors are:
+Huntsman, Wolf
+
+# Touch-Point
+This is the most important thing that the writer needs to say one way or another, and fits into the global goal of the work:
+The Huntsman fires the arrow, and it flys true. Wolf slumps dead in the bed, with an arrow in the eye. 
+The huntsman notices the moving belly of Wolf, and partly in shock, party in fascination, cuts wolf's belly open with his skinning knife. 
+First Grandmother spills out—pale, blinking, shocked with breath and alive. Then Red, slick with Wolf’s remains.
+
+
+# The Draft
+The polished text that needs to be evaluated for Touch-Point satisfaction, and actor and spoiler safety is as follows:
+The room held its breath as the Huntsman drew, counted, and loosed. The arrow hummed through candle air and bedsheets and struck the wolf, burying itself in the wolf's eye. The wolf's spectacles leapt; the nightcap flipped; powder rose like ash and settled on the quilt. The bed heaved once; the wolf shuddered and sank, jaw slack beneath the patchwork, the arrow shaft tilting toward the ceiling. The feathering trembled in the ruined eye; the borrowed garments lay askew on the pillow. Beneath the patchwork the belly still moved, round and slow, as if something trapped remembered air. Herb-sour breath pressed through the cloth.
+
+The Huntsman turned back the quilt to the chin and the ruin of the eye, confirming the kill, then lowered the bow and set it against the hearthstones. He laid a steady palm on the mound to feel life within. He froze, breath low; curiosity and disbelief in equal measure. He rolled the body a hand’s width to free the mattress and drew a basin and laid towels on the stool. The Huntsman set the skinning knife's edge at the soft seam, then cut with the steady, practiced hand of a hunter.
+
+The mound slackened and shifted; something small worked forward through the rent. Grandmother spilled out first—pale, blinking, coughing the tea air and powder, alive and startled. The belly sagged flat; the quilt puddled around the ribs; the room’s shapes righted themselves. Red slid free next, slick with the wolf’s blood and flour dust; the Huntsman set a towel over her hair and face, guided her to the chair, wrapped another towel about her shoulders, and steadied her feet. The Huntsman wiped the knife on a cloth, checked Grandmother’s breath and pulse, checked Red’s, and the cottage began, very slowly, to remember how to be a house again.
+
+Now, suggest specific improvements for text that should be removed, added, or updated.
+
+
+
+---
+Now produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions.
+
+=== RESPONSE ===
+- Replace vague nouns with names to remove ambiguity: e.g., change "He laid a steady palm on the mound" → "The Huntsman laid a steady palm on the wolf's belly" (or "on the quilted mound covering the wolf's belly") so it's clear whose body/mound is meant.
+
+- Make the arrow-in-eye impact explicit and final: emphasize death in same sentence as the shot (e.g., "the arrow struck the wolf's eye; the wolf slumped, dead") so the kill reads unequivocally and matches the touch-point.
+
+- Clarify which garments belong to whom: replace "the borrowed garments lay askew" with "Grandmother's nightcap and spectacles lay askew" (or "the wolf's borrowed nightgown lay askew") to avoid reader confusion about who wore what.
+
+- Fix mixed imagery of "powder" vs "flour": pick one term and use it consistently (the prior touch-points use "flour"; prefer "flour dust" here). Change all instances of "powder" to "flour" if that is the intended detail.
+
+- Remove passive/indirect phrasing where it blunts the sequence: change "The Huntsman turned back the quilt to the chin and the ruin of the eye" → "The Huntsman turned back the quilt to the chin, exposing the ruined eye" for tighter clarity.
+
+- Reorder minor actions for logical flow: draw the basin and lay towels before rolling the body (or state clearly why he rolls first). For example: "He set the bow against the hearthstones, drew a basin and laid towels on the stool, then rolled the body a hand's width to free the mattress."
+
+- Make the Huntsman's procedure language match his character (spare, technical): replace "set the skinning knife's edge at the soft seam, then cut with the steady, practiced hand of a hunter" → "He set the skinning knife to the seam and cut, steady and economical." (Keeps hunter cadence, removes florid phrasing.)
+
+- Replace "something small worked forward through the rent" with a clearer but still slightly strange image: "A thin arm slipped through the rent—then Grandmother tumbled out" (this preserves surprise but names first emergent actor to reduce ambiguity).
+
+- State discovery sequence explicitly and starkly: ensure sentence order reads: arrow hits → wolf slumps dead → Huntsman notices moving belly → Huntsman cuts belly → Grandmother emerges → Red emerges. Consider condensing into a tightened paragraph so the reader cannot mis-order events.
+
+- Clarify Red's condition and handling more concretely: change "Red, slick with the wolf’s blood and flour dust; the Huntsman set a towel over her hair and face..." → "Red slid out next, slick with wolf's blood and flour dust. The Huntsman covered her hair with a towel, guided her to a chair, wrapped another about her shoulders, and steadied her feet." (Make actions discrete and subject clear.)
+
+- Make medical checks explicit: replace "checked Grandmother’s breath and pulse, checked Red’s" → "checked Grandmother's breath and pulse, then checked Red's pulse and breathing" to remove trailing ambiguity.
+
+- Tighten or remove mild repetition: consider cutting "the cottage began, very slowly, to remember how to be a house again" or make it more concise to preserve the eerie tone without diluting the surgical moment (e.g., "the cottage slowly remembered itself").

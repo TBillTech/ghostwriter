@@ -1,0 +1,223 @@
+=== SYSTEM ===
+You are an evaluator extracting actionable suggestions only.
+
+=== USER ===
+You are reviewing the work of an genious writer who sometimes loses track of key ideas in their wordsmithing.
+
+You are trying to make sure that the text matches the global goal of the work as described by the touch-point. You are trying to describe needed edits that are focused and surgical, and you wish to keep the voice and quirks of the writer alive to best interest the reader. A completely predictable and "normal" text would actually be bad, so it is a balance between interesting and clear. I will provide you here with the setting, context, things to watch out for, and the draft provided by the writer.  Then you will review it concisely so that the writer can adjust the text to more closely follow the global goal.
+
+Your job is to verify the passage aligns with the touch-point, character personalities, and setting, while keeping a healthy balance: crisp dialog lines, and brief narrative/action sentences where needed to paint the picture or advance motion.
+
+Watch for the following:
+* Redundancy and repetition—call out lines that repeat the same idea and should be trimmed.
+* Wrong balance—if there are long prose sections crowding out dialog, recommend shortening; if dialog lacks needed action context, recommend inserting brief narrative beats.
+* Weird constructions—e.g., characters describing their own actions in first person instead of letting narration carry it; overly literal symbols (“symbolizing …”). Prefer subtlety and implication.
+
+# Setting in general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    },
+    {
+      "id": "grandma",
+      "name": "Grandmother",
+      "background": "A kindly, aging woman who lives at the edge of the wood. She keeps a tidy\nroom, a warm stove, and a tin of biscuits for visiting children. Her voice\nis soft as quilts and steady as tea. Though her health wavers, her welcome\nnever does. She speaks in homey turns of phrase and frets over safety with\npractical tenderness.\n",
+      "traits": [
+        "frail",
+        "warm",
+        "practical",
+        "affectionate",
+        "cautious"
+      ],
+      "cadence": "gentle, unhurried; cozy hearth-tone",
+      "lexicon": "homely phrases; plain words; lullaby wisdom",
+      "prefer": [
+        "family",
+        "safety",
+        "warmth",
+        "tea",
+        "rest"
+      ],
+      "avoid": [
+        "frightening talk",
+        "rudeness",
+        "cold",
+        "wolves at the door"
+      ],
+      "mannerisms": [
+        "Calls loved ones ‘dear’ and ‘sweetheart’; fusses kindly over coats and boots.",
+        "Hums while pouring tea; sets plates just so before inviting a bite.",
+        "Tucks shawl tighter when worried; breathes in short, careful sips.",
+        "Offers remedies and rest before advice; keeps scolding brief and soft."
+      ],
+      "sample_lines": [
+        "Come in, dear.",
+        "Mind the latch and wipe your feet.",
+        "Have a biscuit and warm your hands.",
+        "I’ll be right as rain after a little rest.",
+        "Bless you, child. You always brighten my room."
+      ],
+      "common_lines": [
+        "Close the window, will you? There’s a chill today.",
+        "You’re a comfort to me, truly.",
+        "Tell your mother I’m grateful."
+      ],
+      "rare_lines": [
+        "I had a startle—must have been the wind.",
+        "Even an old heart can be brave, in its way."
+      ],
+      "forbidden": [
+        "Will not endorse violence or cruelty.",
+        "No modern slang or technical jargon.",
+        "Avoids sarcasm; does not mock."
+      ],
+      "temperature_hint": 0.2,
+      "max_tokens_line": 60
+    }
+  ]
+}
+
+# Prior touch points
+The most recent 3 touch-points for context.
+Wolf paused among the thyme and cabbage, letting the garden hold him in its slow, sunlit breath—bees droning and Grandmother's clock ticking somewhere beyond the door; no footfall, no Red yet. He smoothed his voice in his throat like a blade in a sheath.
+
+He rested a paw in the warm earth, shaking pine needles from his coat. Warm smoke rose from Grandmother's chimney. He measured the sun on the shingles—time enough before Red could reach the cottage. He scanned hedge and path for witnesses: no hound, no hunter. He studied Grandmother's iron latch, which glowed faint with afternoon heat, familiar as a well-used word. "Such a charming hood," he murmured to himself, testing the shape of the lie, and padded to the doorstep, ears tuning to the room's tiny sounds.
+
+---
+
+The Wolf let a practiced knock fall soft as a coin.
+Wolf (mimicking Red, soft and breathy): "Grandmother, it’s me. Mama sent bread and jam. May I come in?"
+Grandmother (from within, muffled with age): "Lift the latch, child. I’ve been waiting."
+A faint creak answered.
+
+# Foreshadowing
+The following foreshadowing items should generally not be stated outright; prefer subtle hints. If they are explicit, flag it:
+
+
+# Actors
+The following actors are allowed to speak in the dialog portions:
+Wolf, Grandmother
+
+# Touch-Point
+This is the core idea to realize through a mix of dialog and narrative action. Avoid hammering it directly; let it emerge:
+The latch lifts with an unthreatening click; the kettle sighs.
+The cottage, accustomed to gentle footfalls, does not yet recognize the weight of a predator.
+
+
+# The Draft
+The mixed draft (dialog + brief narration) to be evaluated is as follows:
+Wolf paused, paw brushing the doorframe. The latch clicked; the kettle sighed as if nothing were odd, and warm air—mint and ash—spilled from the doorway. The moment held, equal parts invitation and caution.
+
+Wolf's whiskers twitched. "So cosy—your cottage smells of the best things. Shall I shut the door for you?" He let the pause count; no other footfall answered the lane.
+
+Grandmother, shawl tightened, urged, "Mind the latch, dear—there's a little chill today; warm yourself by the fire."
+
+The floorboards creaked under new weight.
+
+Now, suggest specific improvements: lines to remove, add, or update; places to tighten or expand, and how to improve the dialog/action balance without losing momentum.
+
+---
+Now produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions.
+
+=== RESPONSE ===
+- Remove or rephrase "So cosy—your cottage smells of the best things." It's generic and flattens the Wolf's slyness. Replace with a line that echoes his cadence and manipulative habit (soft repetition, elongated sibilants). Example direction: make him flatter and suggestive while echoing Red’s voice—short, coaxing phrase that repeats a word the child might use.
+
+- Change the Wolf's question "Shall I shut the door for you?" to something more manipulative and character-true (offer framed as concern/suggestion). Keep it brief and slippery (e.g., "Let me shut that draught for you, dear—no need to catch cold"). This preserves the kettle/latch touch-point while revealing intent.
+
+- Make Grandmother's line sound muffled, homey, and slightly confused rather than advisory about the latch (she already knows the latch). Replace "Mind the latch, dear—there's a little chill today; warm yourself by the fire." with something like: a muffled, warm exhortation from inside—"Come in, dear. Sit by the fire; it's a chill day." or "Lift the latch, child—I've been waiting." (Choose one that matches prior knock/voice.)
+
+- Remove the sentence "The floorboards creaked under new weight." It's redundant with earlier creak and echoes rather than advancing motion. Instead, insert a small, specific beat showing the Wolf's movement across the threshold (e.g., "He eased a shoulder through the doorway, listening—") so the action reads as deliberate and predatory without naming it.
+
+- Add one brief internal or observational beat that reinscribes the Wolf's habit of checking for witnesses (short line, one clause): a glancing note about hedges, hounds, or the undisturbed path—keeps continuity with earlier touch-points and his character without heavy exposition.
+
+- Tighten the opening sentence: "Wolf paused, paw brushing the doorframe." feels awkwardly blunt. Either cut "paw brushing the doorframe" (already implied) or make it more vivid and characterful (e.g., "He paused, a paw resting at the doorframe as if waiting for permission").
+
+- Preserve the kettle/latch imagery but avoid stating both as if they're expository tags. Keep the sensory pair ("The latch clicked; the kettle sighed") but follow with a single concrete sensory image (mint-and-ash warmth is good). Remove "as if nothing were odd"—it tells the reader what to feel; instead let the scene imply normalcy.
+
+- Shift one short line of narration into an embedded action tag for dialog pacing. For example, attach "He let the pause count; no other footfall answered the lane." to a speech beat ("He let the pause count; no other footfall answered the lane." → after Wolf's line) so dialog and action breathe together.
+
+- Maintain the writer's quirks (soft menace, playful phrasing) by adding a tiny flourish to a Wolf line—an elongated sibilant or a repeated word—rather than neutralizing voice.
+
+- Ensure Grandmother's diction stays homey and unhurried; avoid any modern phrasing. If you choose the "lift the latch" variant, use "child" or "dear" and a slightly breathy/muffled tone.

@@ -1,0 +1,38 @@
+- Remove or trim "Mind your boots—you'll track the forest into my rug." It reads modern and clunky; replace with a shorter, homier line (e.g., "Mind your boots, dear—there's enough forest in my rug already.") or simply "Mind your boots."
+
+- Change "I'm glad I could be of service, ma'am," to Huntsman-speech: make it shorter and more economical. Example: "Glad to help, ma'am." (Drop "I could be of service, ma'am"—too formal/long for him.)
+
+- Combine Red's two sentences into one crisp beat to avoid small redundancy: replace
+  "Red tucked the basket under her arm and curtsied. 'Please take a bit of bread for your road.' She looked at him with hopeful eyes."
+  with
+  "Red tucked the basket under her arm, curtsied and offered, 'Please—take a bit of bread for the road,' her eyes hopeful."
+  (Keeps her cadence and saves space.)
+
+- The huntsman's reply "Keep the basket. You need it," then the next two lines ("No need. I'll take care of the beast." "He inclines his head...") feel disjointed and ambiguous about speaker. Make speakers explicit and trim stilted phrasing:
+  - Have Huntsman say one concise refusal: "No—keep it. You'll need it." 
+  - Then compress action to a single tight beat: "He inclined his head, shouldered his bow, and moved for the door."
+
+- Remove/merge "He inclines his head, shoulders the bow, moves to the door." with following similar beats; choose one clear tense and stick to it (past tense throughout). Example: "He inclined his head, shouldered his bow, and stepped toward the door."
+
+- Rework the advisory line "Latch the door at dusk... mind the night." to sound like the Huntsman and less like exposition. Shorten to: "Latch your door at dusk. The woods are quiet for now, but not forever." Or, even briefer: "Latch the door at dusk. The night keeps its own counsel."
+
+- Cut "He checked the way with a quick look." (redundant with stepping toward the path). If you want a beat, replace with "He checked the path once more."
+
+- Remove the passive, slightly awkward sentence "The room settled; the clock counted a quieter pace as the wolf was carried away." Replace with a single sensory image: "The room eased; the clock's ticking sounded softer as they carried the wolf from the threshold." (This keeps mood without abstract phrasing.)
+
+- Replace "Warmth pooled by the stove as if the house remembered how to be itself." with a more domestic image in Grandmother's voice: e.g., "Warmth pooled by the stove; the cottage sighed as if it, too, could breathe again." (Keeps lyricism but tighter.)
+
+- Change the Huntsman's parting "Take care of one another." and tipping cap to a slightly more huntsman-like sendoff. Make it brief and deliberate: either leave as "Take care of one another," or compress: "Take care." Then give one small physical beat: "He tipped his cap and stepped onto the path."
+
+- Add one brief action beat after the Huntsman leaves to ground Red and Grandmother's thanks without overwriting: for example, insert Grandmother's quiet "Bless you" or Red's murmured "Thank you, truly," followed by a small domestic gesture (Grandmother smoothing Red's hood or offering her a biscuit). Keep these to one short sentence to avoid slowing momentum.
+
+- Check tense consistency: some lines use present ("He inclines") while most are past. Make all narration past tense.
+
+- Trim redundancy in gratitude: there are three explicit thank-yous (Grandmother's opening thanks, "You're a comfort..." and later "thank you" implied). Reduce to two: Grandmother's initial thanks and a final, quiet "Thank you" from Red or Grandmother after Huntsman departs to close the scene.
+
+- Maintain character voice constraints:
+  - Ensure Grandmother's lines remain cozy and homey (use "dear," "bless you").
+  - Keep Huntsman's lines short, plain, and pragmatic.
+  - Keep Red's lines earnest, simple, and polite.
+
+- Final pass: run for 1–2 tight sensory beats (a smell of warmed tea, the click of the latch, a towel on Red's shoulders) and remove any extra adjectives that don't advance mood or action.

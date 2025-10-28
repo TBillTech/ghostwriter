@@ -1,0 +1,268 @@
+=== SYSTEM ===
+Assign lines to actors as 'id: line' entries (Narrator allowed for brief prose beats).
+
+=== USER ===
+You are a Director working from structured YAML notes.  
+The overall goal is to produce polished prose to go into a novel.
+Your job is to tell the actors what to say.  The actors know what their characters are like, but they need to be prompted as if they forgot their lines.
+The writer has already given you each line that needs to be said, but didn't tell us which actors should say what, and the voice should be cast to second person.  Each line (bullet point) which needs to be spoken by an actor starts with a '*' character.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood', 'Basket'], 'actors': ['Red', 'Grandmother', 'Wolf', 'Huntsman']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    },
+    {
+      "name": "Basket",
+      "description": "Gift and responsibility; symbol of trust. A mcguffin"
+    }
+  ]
+}
+
+# Characters in this chapter
+{
+  "Selected-Characters": [
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    },
+    {
+      "id": "huntsman",
+      "name": "Huntsman",
+      "background": "The Huntsman is a skilled hunter who make a living hunting rabbits, boars, and deer.  However, he also earns bounties for killing exceptionally dangerous beasts (like Wolf).  In fact, Wolf had killed some livestock in a neighboring parish. The huntsman was on a mission to hunt Wolf down.  Usually the Huntsman uses a bow and arrow to take down game, and a skinning knife to dress kills.\n",
+      "traits": [
+        "patient",
+        "observant",
+        "disciplined",
+        "pragmatic",
+        "protective",
+        "stoic",
+        "law-abiding",
+        "soft-spoken",
+        "decisive"
+      ],
+      "cadence": "low, economical, deliberate; a hunter’s whisper that wastes no breath",
+      "lexicon": "plain woodsman’s speech; concrete nouns, hunting terms, tactile verbs; avoids fancy rhetoric and modern slang",
+      "prefer": [
+        "beast",
+        "wolf",
+        "trail",
+        "tracks",
+        "spoor",
+        "sign",
+        "scent",
+        "wind",
+        "range",
+        "clear shot",
+        "draw",
+        "loose",
+        "bow",
+        "string",
+        "arrow",
+        "knife",
+        "field-dress",
+        "quiet",
+        "quarry",
+        "hearthstones",
+        "clock"
+      ],
+      "avoid": [
+        "target acquired",
+        "epic",
+        "hero",
+        "bro",
+        "dude",
+        "LOL",
+        "monster",
+        "magic bullet",
+        "glorious",
+        "cute"
+      ],
+      "mannerisms": [
+        "Counts heartbeats to steady his release; breathes through the nose, slow and even.",
+        "Keeps his bow low until the shot; eyes sweep corners, rafters, and doorframes.",
+        "Names quarry by kind—wolf, boar, buck—never by pet names; calls them beasts, not monsters.",
+        "Cleans blade methodically and salvages arrows, checking fletching and nock by touch.",
+        "Speaks in short, calm statements; leaves silence to do half the work.",
+        "Notes small domestic details—warm iron, ticking clocks—as signs of timing and disturbance."
+      ],
+      "sample_lines": [
+        "Tracks run fat and straight to this door.",
+        "That smell is wolf, and fresh.",
+        "If you were human, I would stay my hand. For beasts, I am the law.",
+        "Breathe. Count. Loose.",
+        "Hold steady now; I’ll make it quick.",
+        "The belly moves. Easy—knife, then cloths.",
+        "I'm glad I could be of service Maam."
+      ],
+      "forbidden": [
+        "Does not use modern slang, military call-outs, or internet jargon.",
+        "No grandstanding, taunts, or cruel jokes at quarry.",
+        "Avoids florid metaphors and courtly speech.",
+        "Will not threaten innocents or speak lewdly.",
+        "Does not monologue while aiming or tracking.",
+        "No technical jargon beyond simple hunting terms."
+      ],
+      "temperature_hint": 0.25,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# Specifics in the Chapter
+Here is central theme of the dialog lines being "filmed"/"recorded":
+I have found you wolf, says the huntsman. Your terrible deeds end here. 
+The wolf protests once that he is an old Grandma, how dare he accuse of such.  The Huntsman points out all the clues, the and to double underline it, wolf muzzles are recognizably not the profile of an old woman.
+The huntsman declares, "If you were human, I couldn't do this, but for the beasts of the forest, I am judge, jury, and executioner."
+
+
+# Rules for generation:
+1. **Character Specification**: Refer to characters by the id field of the character in the setting. Each line must start with the id of the best character to speak it. 
+2. **Narrator**: Some lines cannot easily be conveyed to a reader as dialog.  You should use "Narrator:" to assign lines that would be strange for any of the characters to say.
+3. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
+4. **Character Dialog**: When you tell the actor what to say, be sure to transform the words into second person, using the "you" pronoun. This helps the character role play and not get distracted by other points of view. 
+5. **Multi-way Dialog**: Prefer switching which character says what on each successive line, if possible.  Sometimes, a character has to have two lines in a row, but this can get confusing for the reader. If you are tempted to have the same character say two consecutive dialogs, consider if one line should be Narrator.
+6. **Avoid**: DO NOT put - or * at the beginning of the line. DO NOT add any other text or markdown other than the name, colon, and line. 
+
+## Examples of actor prompt lines
+
+Below is an example showing the format desired for three bullets, showing both the identity narration bits, followed by the specific actor id and line direction:
+
+Henry: You say there is a hole in the bucket.  You use Liza's name several times for emphasis.  But you are careful to be polite.
+
+Liza: You shortly tell Henry to just fix the dang thing!  Already!  Politely of course.
+
+Narrator: Liza points her finger directly at the bucket hole.
+
+Henry: You ask how on earth to fix a bucket? Maybe it is not rocket science, but you don't think you have a way to do it.
+
+# Lines from the Writer:
+These are the lines the writer is giving you. Note that there should always be one actor line output per bullet:
+* Narrator: The bed bellows slow, the quilt mounded like a harvest sack; nightcap cocked, spectacles fogged, a powder-white muzzle just peeking.
+* "I have found you, wolf. Your terrible deeds end here," says huntsman, bow rising with a quiet draw.
+* "Wolf?" purrs wolf, thin as old tea. "Grandmama is all aches and coughs. Mind your tone in a sickroom."
+* Narrator: The clock ticks stubborn, ash slumps on the grate, and sour musk rides under flour-dust and thyme.
+* "Tracks run fat and straight to this door," says huntsman. "None leaving."
+* Narrator: He keeps his bow low until the shot, then brings it level; eyes sweep rafters, corners, underbed shadow.
+* "Such accusations," says wolf, breath smoothing the quilt. "Would you point arrows at a frail old woman?"
+* Narrator: The mound lifts and settles in a rhythm too strong for age; whiskered lips curve with a lazy satisfaction.
+* "That smell is wolf, and fresh," says huntsman. "Powder wiped on whiskers. Spectacles riding a snout."
+* Narrator: Two careful steps right, angling past the dresser glass; he finds a clear line through patchwork seams.
+* "You mistake a grandmother’s poor nose for… brutishness," says wolf, feigning hurt. "Come nearer; you’ll see."
+* Narrator: The nightcap droops, can’t hide the long brow; the quilt twitches when the bowstring whispers.
+* "Old women don’t wear muzzles," says huntsman. "And they don’t leave claw marks in damp earth."
+* Narrator: He notes the sewing kit tin by the bedside, basin and towels at the ready; his gaze flicks, counts, returns.
+* "Cruel man," says wolf, voice sugared. "Set that thing down. You’ll wake the child."
+* Narrator: A beat of silence. He measures breath to breath. The house holds its own.
+* "If you were human, I couldn’t do this," says huntsman, low and even. "For beasts of the forest, I am judge, jury, and executioner."
+
+
+## Job to do
+Now, convert each line from the writer to the new actor centric second person format. Notice that you are always allowed to assign a line to the Narrator, but try not to do it unless you cannot see how to make it into a line of dialog. 
+
+=== RESPONSE ===
+Narrator: You see the bed bellow slow, the quilt mounded like a harvest sack; nightcap cocked, spectacles fogged, a powder-white muzzle just peeking.
+
+huntsman: You say, "I have found you, wolf. Your terrible deeds end here," and you let the bow rise with a quiet draw.
+
+wolf: You purr, "Wolf? Grandmama is all aches and coughs. Mind your tone in a sickroom," voice thin as old tea.
+
+Narrator: You hear the clock tick stubborn, ash slumping on the grate, and sour musk riding under flour-dust and thyme.
+
+huntsman: You state, "Tracks run fat and straight to this door," and you note, "None leaving."
+
+Narrator: You keep the bow low until the thought of a shot steadies; then you bring it level and let your eyes sweep rafters, corners, underbed shadow.
+
+wolf: You murmur, "Such accusations," smoothing the quilt with a practiced hand, "would you point arrows at a frail old woman?"
+
+Narrator: You watch the mound lift and settle in a rhythm too strong for age; whiskered lips curve with a lazy satisfaction.
+
+huntsman: You say, "That smell is wolf, and fresh," and you add the specifics—"Powder wiped on whiskers. Spectacles riding a snout."
+
+Narrator: You take two careful steps right, angling past the dresser glass; you find a clear line through patchwork seams.
+
+wolf: You feign hurt and say, "You mistake a grandmother’s poor nose for… brutishness. Come nearer; you’ll see."
+
+Narrator: You notice the nightcap droop; it can’t hide the long brow; the quilt twitches when the bowstring whispers.
+
+huntsman: You tell them, "Old women don’t wear muzzles," and you underline it, "And they don’t leave claw marks in damp earth."
+
+Narrator: You note the sewing kit tin by the bedside, basin and towels at the ready; your gaze flicks, counts, and returns.
+
+wolf: You soften your voice and say, "Cruel man. Set that thing down. You’ll wake the child."
+
+Narrator: You let a beat of silence hang; you measure breath to breath, and the house holds its own.
+
+huntsman: You say, low and even, "If you were human, I couldn’t do this. For beasts of the forest, you are judged—by me, jury and executioner."

@@ -1,0 +1,16 @@
+{
+  "id": "8",
+  "type": "narration",
+  "touchpoint": "A sour musk threads beneath the thyme and tea. The cap on the bedpost is tugged too low; powder dusts the pillow in a careless crescent.\nThe chair by the hearth is nudged askew, as if someone left it in a hurry—or made it look as though they hadn’t. Red begins to act visibly nervous.\nRed edges closer, maybe to give her \"Grandmother\" a kiss, but she begins to hesitate. The figure pats the coverlet invitingly.\n",
+  "active_actors": [
+    "Red",
+    "Wolf"
+  ],
+  "scene": "{'name': 'Bedside Performance', 'description': 'The bed is drawn close to the window where the light is weakest. A figure nestles among quilts—nightcap pulled low, spectacles glinting faintly, whiskers powdered to a genteel gray.\\nThe room narrows to the breath between them; each step Red takes is answered by a rustle under the quilt and a sugar-sweet murmur from the pillows.\\n', 'props': [{'name': \"Grandmother's Nightcap and Spectacles\", 'significance': 'Disguise and distortion', 'description': 'The cap droops over pricked ears; the spectacles sit too wide on a long, shadowed muzzle.\\n'}, {'name': 'Patchwork Quilt', 'significance': 'Concealment of claws and tail', 'description': 'A cheerful scatter of stitched flowers stretched tight over oddly angular shapes.\\n'}, {'name': 'Candle Stub', 'significance': 'Faltering light to invite mistakes', 'description': 'A guttering wick that bends the shadows into kind shapes—and hides the sharp ones.\\n'}, {'name': 'Basket of Goodies', 'significance': 'Bait within the trap', 'description': 'Set at the foot of the bed, its linen napkin puckers where something heavier than bread has jostled it.\\n'}]}",
+  "foreshadowing": [
+    "A huntsman is tracking after wolf."
+  ],
+  "setting_block": "{'factoids': [\"Grandmother's Cottage\", 'Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}",
+  "characters_block": "",
+  "appended_dialog": {}
+}

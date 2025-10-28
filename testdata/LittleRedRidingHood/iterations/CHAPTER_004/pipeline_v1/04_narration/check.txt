@@ -1,0 +1,187 @@
+=== SYSTEM ===
+You are an evaluator extracting actionable suggestions only.
+
+=== USER ===
+You are reviewing the work of an genious writer who sometimes loses track of key ideas in their wordsmithing.
+
+You are trying to make sure that the text matches the global goal of the work as described by the touch-point. You are trying to describe needed edits that are focused and surgical, and you wish to keep the voice and quirks of the writer alive to best interest the reader. A completely predictable and "normal" text would actually be bad, so it is a balance between interesting and clear. I will provide you here with the setting, context, things to watch out for, and the draft provided by the writer.  Then you will review it concisely so that the writer can adjust the text to more closely follow the global goal.
+
+Watch out for pronouns that have unclear references, like starting a paragraph with "They".  Using proper names is preferred in our narration IF there is any ambiguity.
+
+# Setting in general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood', 'Basket'], 'actors': ['Red', 'Grandmother', 'Wolf', 'Huntsman']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    },
+    {
+      "name": "Basket",
+      "description": "Gift and responsibility; symbol of trust. A mcguffin"
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "huntsman",
+      "name": "Huntsman",
+      "background": "The Huntsman is a skilled hunter who make a living hunting rabbits, boars, and deer.  However, he also earns bounties for killing exceptionally dangerous beasts (like Wolf).  In fact, Wolf had killed some livestock in a neighboring parish. The huntsman was on a mission to hunt Wolf down.  Usually the Huntsman uses a bow and arrow to take down game, and a skinning knife to dress kills.\n",
+      "traits": [
+        "patient",
+        "observant",
+        "disciplined",
+        "pragmatic",
+        "protective",
+        "stoic",
+        "law-abiding",
+        "soft-spoken",
+        "decisive"
+      ],
+      "cadence": "low, economical, deliberate; a hunter’s whisper that wastes no breath",
+      "lexicon": "plain woodsman’s speech; concrete nouns, hunting terms, tactile verbs; avoids fancy rhetoric and modern slang",
+      "prefer": [
+        "beast",
+        "wolf",
+        "trail",
+        "tracks",
+        "spoor",
+        "sign",
+        "scent",
+        "wind",
+        "range",
+        "clear shot",
+        "draw",
+        "loose",
+        "bow",
+        "string",
+        "arrow",
+        "knife",
+        "field-dress",
+        "quiet",
+        "quarry",
+        "hearthstones",
+        "clock"
+      ],
+      "avoid": [
+        "target acquired",
+        "epic",
+        "hero",
+        "bro",
+        "dude",
+        "LOL",
+        "monster",
+        "magic bullet",
+        "glorious",
+        "cute"
+      ],
+      "mannerisms": [
+        "Counts heartbeats to steady his release; breathes through the nose, slow and even.",
+        "Keeps his bow low until the shot; eyes sweep corners, rafters, and doorframes.",
+        "Names quarry by kind—wolf, boar, buck—never by pet names; calls them beasts, not monsters.",
+        "Cleans blade methodically and salvages arrows, checking fletching and nock by touch.",
+        "Speaks in short, calm statements; leaves silence to do half the work.",
+        "Notes small domestic details—warm iron, ticking clocks—as signs of timing and disturbance."
+      ],
+      "sample_lines": [
+        "Tracks run fat and straight to this door.",
+        "That smell is wolf, and fresh.",
+        "If you were human, I would stay my hand. For beasts, I am the law.",
+        "Breathe. Count. Loose.",
+        "Hold steady now; I’ll make it quick.",
+        "The belly moves. Easy—knife, then cloths.",
+        "I'm glad I could be of service Maam."
+      ],
+      "forbidden": [
+        "Does not use modern slang, military call-outs, or internet jargon.",
+        "No grandstanding, taunts, or cruel jokes at quarry.",
+        "Avoids florid metaphors and courtly speech.",
+        "Will not threaten innocents or speak lewdly.",
+        "Does not monologue while aiming or tracking.",
+        "No technical jargon beyond simple hunting terms."
+      ],
+      "temperature_hint": 0.25,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# Prior touch points
+The most recent 3 touch-points for context.
+
+
+# Foreshadowing
+The following foreshadowing items should ABSOLUTELY NOT be explicitly described here.  If they are, that is a problem. These should only be vaguely alluded to:
+
+
+# Actors
+The following actors are allowed to speak in the dialog.  If other actors are speaking, that is a problem.  The actors are:
+Huntsman
+
+# Touch-Point
+This is the most important thing that the writer needs to say one way or another, and fits into the global goal of the work:
+He circles once, listens again, and slips inside. The quiet feels manufactured, the air thick with fur-musk and flour dust. His eye takes in the neat room, the undisturbed table, the bed with its extra-round quilt. He readies his bow, alerted to the strangeness.
+
+
+# The Draft
+The polished text that needs to be evaluated for Touch-Point satisfaction, and actor and spoiler safety is as follows:
+A hundred yards out he heard Red's brief, strangled cry, cut then muffled by the pines. He left the ribbon of the trail and came down toward the cottage with his bow low. He followed wide pads and claw marks pressed into the damp, pine-scented earth—wolf spoor, pads and claw marks that ran fat and straight to the sill and did not lead away.
+
+He circled the cottage once. He listened again. He counted the clock’s stubborn ticks and the roof settling slow under the trees. He paused where the door stood ajar and tested the edge with two careful fingers. He kept his bow low and listened at the jamb; only the mantle clock answered. Its steady tick measured a calm that was forced.
+
+The huntsman slipped over the threshold and let the door fall without a sound. Floorboards showed no scuffle. The table sat neat, cups aligned, crumbs undisturbed. The teapot was no longer warm; a ring of cooled steam rimmed the lid. The fire had died to grey. The air inside told him things: sour fur-musk, flour dust, ash by the hearth. Net curtains hung still; dust motes turned only where lamplight pooled by the bed.
+
+The bed’s quilt bulged extra-round, a mound too full for a single elder’s frame. Spectacles glinted on the bolster, powder on the pillow. A nightcap drooped low; the outline beneath it was long-muzzled. The mound lifted and settled in a rhythm that did not match the feeble breathing he expected from age.
+
+His eyes swept rafters, corners, the shadow under the bed. He eased his boot. Set his range. Nocked. Drove the bow up. Steady. The mound moved. The beast smelled him.
+
+Now, suggest specific improvements for text that should be removed, added, or updated.
+
+
+
+---
+Now produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions.
+
+=== RESPONSE ===
+- Introduce the hunter by name once near the start to avoid repeating "He" and to anchor POV: change opening sentence to include "the huntsman" (e.g., "A hundred yards out the huntsman heard Red's brief...").
+
+- Replace ambiguous pronouns with "the huntsman" where clarity helps (first clause of paragraph 2 and start of paragraph 3).
+
+- Tighten or simplify florid phrases that undercut the huntsman's economical voice:
+  - Change "followed wide pads and claw marks pressed into the damp, pine-scented earth—wolf spoor, pads and claw marks that ran fat and straight to the sill and did not lead away." to a leaner line: "He tracked fat wolf pads and claw marks straight to the sill; they did not lead away."
+
+- Fix awkward wording about the teapot/steam: remove redundancy. Example: "The teapot was no longer warm; a ring of cooled steam rimmed the lid." → "The teapot was cold; a ring of condensed steam rimmed the lid."
+
+- Make the sensory detail about the interior match the huntsman's tactile lexicon (concrete nouns, tactile verbs). Example: change "The air inside told him things: sour fur-musk, flour dust, ash by the hearth." → "The air told him—fur-musk, flour dust, hearth ash."
+
+- Clarify whose objects lie on the bed to reduce momentary ambiguity: specify "Grandmother's spectacles glinted on the bolster; powder dented the pillow." (or "her spectacles") rather than just "Spectacles."
+
+- Preserve mysterious tension over the bed while keeping wording precise:
+  - Recast "The bed’s quilt bulged extra-round, a mound too full for a single elder’s frame." to "Grandmother's quilt bulged—an extra-round mound, too full for an old woman's frame."
+  - Keep the long-muzzled hint but avoid labeling it outright: "the outline beneath it was long-muzzled" is fine; consider "the outline under the cap ran long and muzzled" for tighter voice.
+
+- Make the huntsman's action sequence sharper and in his cadence:
+  - Replace "He eased his boot. Set his range. Nocked. Drove the bow up. Steady." with a compact, hunterly rhythm: "He eased his boot. Set his range. Nocked. Drew. Breathe. Count."
+
+- Soften or rephrase the final revelation line to align with the touch-point's alertness without telegraphing an explicit predator ID:
+  - Change "The mound moved. The beast smelled him." to something like "The mound moved. The scent changed—close, warm, animal." (If you prefer clearer naming, use "wolf" only if you want the huntsman to call it by kind: "The mound moved. That scent—wolf—found him.")
+
+- Remove or revise "The huntsman slipped over the threshold and let the door fall without a sound." to avoid mixed metaphors about silence and falling doors; e.g., "The huntsman slipped over the threshold and let the door close soundlessly."
+
+- Ensure final sentence ties back to the touch-point: add one brief line that mirrors "the quiet feels manufactured" if you choose to keep that exact phrase—otherwise keep the existing "Its steady tick measured a calm that was forced." but consider appending: "He readied his bow, alerted to the strangeness." to fully match the required touch-point.

@@ -36,7 +36,7 @@ Touch-Points:
       The Wolf steps out from behind a tree, his voice smooth and almost courteous.
       “Good morning, little traveler,” he says, eyes glinting beneath the canopy. “And where might you be headed with such a fine basket?”
 
-  - implicit: |
+  - mixed: |
       The silence of the forest feels heavier now; even the wind seems to listen.
       The Wolf’s smile is friendly, but his gaze lingers too long on Red’s hands, the basket, the vulnerable path ahead.
       Somewhere unseen, a crow caws once — harsh and short — before taking flight.

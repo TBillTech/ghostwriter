@@ -1,0 +1,25 @@
+- Remove or rework one of the two "basket" images to avoid repetition (either drop "the basket creaking like a promise" or the later "lowering the basket with careful hands"). Keep the stronger image and delete the weaker.
+
+- Replace "Net curtains sifted the afternoon light into greenish pools." with a shorter, more immediate sensory beat that ties to Red's perception (e.g., note the sun freckling the floor or a small motes-of-dust image). Avoid the oddly colored "greenish pools."
+
+- Change "His voice softened into a grandmotherly coo." — this is clumsy and tells rather than shows. Instead, show the voice's wrongness: e.g., "The voice softened, too smooth by half—grandmotherly on the edge." Or: "A voice cooed from the bed—too slick, too practiced." (Keeps mystery that it's the Wolf.)
+
+- Tighten the exchange about where to set the basket:
+  - Make the Wolf's line more in-character: coaxing, flattering and subtly manipulative (use phrasing that echoes Red's words back to her and elongates sibilants). Example rewrite suggestion (not literal text required): "How thoughtful, my little bird. Set it down by the bed—do come closer, won't you?" — then Red replies.
+  - Remove the clunky clause "so I needn't reach" and replace with a short, suggestive phrase from the Wolf that invites Red nearer (see above).
+
+- Adjust Red's reply "All right. Don't strain yourself," — it reads oddly practical and adult. Make it more in-voice: polite, literal, and caring but a little naive. Suggest: "All right. Please don't try to sit up." or "All right. Let me set it close so you won't have to move."
+
+- Add one or two tiny action beats to break the dialogue and ground the scene:
+  - After Red hesitates, show a small, telling physical detail (she tucks a lock of hair back, clutches her hood, sniffs the air, or notices the bed's shape is wrong). Keep it subtle and short—this will heighten tension without losing momentum.
+  - Example beats: a soft hum trailing off; a momentary sniff of something too sweet; Red noticing the bedclothes lie unnaturally smooth.
+
+- Trim the line "Light trimmed the bed's silhouette. Nothing moved." into a single, sharper sentence that combines atmosphere and unease (e.g., "Light cut the bed's silhouette; stillness answered."), then follow immediately with Red's hesitation beat.
+
+- Avoid explicit explanation that the speaker is the Wolf in disguise; instead, let the dialogue carry the wrongness. Remove any narratorial labels that identify the voice as male ("His voice...") or wolf unless you want to reveal. If you must keep a subtle hint, use sensory cues (breath that smells of the wood, a too-low chuckle) rather than naming the speaker.
+
+- Ensure cadence/lexicon match:
+  - Keep Red's lines short, polite, literal, and earnest (add "please"/"thank you" if needed).
+  - Make the Wolf's lines slippier and more flattering—have him mirror Red's words once to build trust.
+
+- Final pass: read the scene aloud to check rhythm; cut any remaining duplicated emotional beats (hesitation + humming + long description) so the scene stays taut and suspenseful.

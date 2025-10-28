@@ -1,0 +1,13 @@
+{
+  "id": "4",
+  "type": "narration",
+  "touchpoint": "He circles once, listens again, and slips inside. The quiet feels manufactured, the air thick with fur-musk and flour dust. His eye takes in the neat room, the undisturbed table, the bed with its extra-round quilt. He readies his bow, alerted to the strangeness.\n",
+  "active_actors": [
+    "Huntsman"
+  ],
+  "scene": "{'name': 'Approach to the Silent Cottage', 'description': \"Evening lays a green hush over the pines as a huntsman follows a ribbon of prints that lope from streambank to door. A child's cry—brief, strangled, then swallowed by the trees—has already sent him off the trail and toward the cottage with his Bow low and his breath held.\\nThe door stands ajar. Inside, no chatter of kettle, no clatter of cups—only the measured ticking of a clock and a smell that is not illness, not age, but wild.\\n\", 'props': [{'name': \"Huntsman's Skinning Knife\", 'significance': 'Separating tissues from bone', 'description': 'A well-kept skinning knife suitable for gutting and releasing victims from the belly of Wolf'}, {'name': \"Huntsman's Bow\", 'significance': 'Instrument of Sudden and Unexpected Punishment from Afar', 'description': 'A well-kept huntsman’s Compound Bow, used for hunting beasts.'}, {'name': 'Wolf Tracks', 'significance': 'Trail of intrusion', 'description': 'Wide pads and claw marks pressed into damp earth, leading straight to the cottage threshold.'}, {'name': 'Teapot', 'significance': 'Interrupted domesticity', 'description': 'A squat iron pot, warm no longer, its lid beaded with cooled steam.'}, {'name': 'Clock', 'significance': 'Tension and timing', 'description': 'A mantle clock that ticks with stubborn steadiness, marking a calm that feels wrong.'}, {'name': 'Hearthstones', 'significance': 'Future means to end the threat', 'description': 'Smooth river stones stacked by the hearth, heavy and clean with ash-dust.'}]}",
+  "foreshadowing": [],
+  "setting_block": "{'factoids': [\"Grandmother's Cottage\", 'Forest Path', 'Basket of Goodies', 'Red Hood', 'Basket'], 'actors': ['Red', 'Grandmother', 'Wolf', 'Huntsman']}",
+  "characters_block": "",
+  "appended_dialog": {}
+}

@@ -1,0 +1,14 @@
+{
+  "id": "7",
+  "type": "mixed",
+  "touchpoint": "I have found you wolf, says the huntsman. Your terrible deeds end here. \nThe wolf protests once that he is an old Grandma, how dare he accuse of such.  The Huntsman points out all the clues, the and to double underline it, wolf muzzles are recognizably not the profile of an old woman.\nThe huntsman declares, \"If you were human, I couldn't do this, but for the beasts of the forest, I am judge, jury, and executioner.\"\n",
+  "active_actors": [
+    "Huntsman",
+    "Wolf"
+  ],
+  "scene": "{'name': 'Inside: The Belly and the Blade', 'description': 'The bed inhales and exhales in heavy bellows. Beneath the nightcap and spectacles, the sleeper’s muzzle peeks powder-white, and the quilt mounds like a harvest sack. The huntsman recognizes the trespass not only in scent and shape but in the cruel satisfaction resting on those whiskered lips.\\nHe does not shout. He Carefully aims the bow.\\n', 'props': [{'name': 'Quilt', 'significance': 'Concealment and cradle', 'description': 'A hand-stitched patchwork pulled high, hiding both predator and prize within.'}, {'name': 'Nightcap and Spectacles', 'significance': 'The predator’s disguise', 'description': 'Borrowed garments perched absurdly on a wolfish brow.'}, {'name': 'Sewing Kit', 'significance': 'Tool for repair and closure', 'description': 'A tin with needles, coarse thread, and small scissors, tucked by the bedside.'}, {'name': 'Basin and Towels', 'significance': 'Practical aid for a quiet operation', 'description': 'A porcelain bowl and clean cloths ready from earlier tea-making and tidying.'}]}",
+  "foreshadowing": [],
+  "setting_block": "{'factoids': [\"Grandmother's Cottage\", 'Forest Path', 'Basket of Goodies', 'Red Hood', 'Basket'], 'actors': ['Red', 'Grandmother', 'Wolf', 'Huntsman']}",
+  "characters_block": "",
+  "appended_dialog": {}
+}

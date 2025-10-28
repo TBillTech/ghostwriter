@@ -1,0 +1,138 @@
+BEGIN_TOUCHPOINT id=1 type=setting
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=2 type=scene
+{'name': 'At the Cottage Gate', 'description': 'Having slipped from the deer track ahead of Red, the Wolf reaches a small cottage tucked in thyme and smoke.\nThe garden is a patchwork of herbs and cabbages, the door sun-bleached and simple; inside, a kettle hums and an old clock ticks.\nThe world here smells of mint and ash and rest, vulnerable in its quiet routine.\n', 'props': [{'name': 'Cottage Door-Latch', 'significance': 'Threshold of trust; a simple defense turned invitation', 'description': 'A thumb-worn iron latch, warm from afternoon light.\nIt answers to a familiar knock and an even more familiar voice.\n'}, {'name': 'Hearth and Kettle', 'significance': 'Homeliness to be imitated; cover for small sounds', 'description': 'A blackened iron kettle keeps time in soft breaths over banked coals,\nits steam sewing the room together with the smell of nettle tea.\n'}, {'name': 'Teacup on Saucer', 'significance': 'Grandmother’s pause interrupted', 'description': 'Porcelain with a hairline crack, rim blushed by tea.\nIt waits beside a chair draped with a shawl.\n'}, {'name': 'Walking Stick', 'significance': 'Measure of frailty the Wolf will exploit', 'description': 'A hazel stick, polished by years of palms, leaning by the door.\n'}]}
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=3 type=actors
+Wolf, Grandmother
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=4 type=narration
+The Wolf stands in the garden’s stillness and listens: no Red yet, only bees and the slow metronome of the clock.
+He smooths his voice in his throat like a blade in a sheath, then pads to the door.
+
+END_TOUCHPOINT
+BEGIN_RESULT
+Wolf paused among the thyme and cabbage, letting the garden hold him in its slow, sunlit breath—bees droning and Grandmother's clock ticking somewhere beyond the door; no footfall, no Red yet. He smoothed his voice in his throat like a blade in a sheath.
+
+He rested a paw in the warm earth, shaking pine needles from his coat. Warm smoke rose from Grandmother's chimney. He measured the sun on the shingles—time enough before Red could reach the cottage. He scanned hedge and path for witnesses: no hound, no hunter. He studied Grandmother's iron latch, which glowed faint with afternoon heat, familiar as a well-used word. "Such a charming hood," he murmured to himself, testing the shape of the lie, and padded to the doorstep, ears tuning to the room's tiny sounds.
+END_RESULT
+
+BEGIN_TOUCHPOINT id=5 type=dialog
+Wolf (mimicking Red, soft and breathy): "Grandmother, it’s me. Mama sent bread and jam. May I come in?"
+Grandmother (from within, muffled with age): "Lift the latch, child. I’ve been waiting."
+
+END_TOUCHPOINT
+BEGIN_RESULT
+The Wolf let a practiced knock fall soft as a coin.
+Wolf mimicked Red, speaking softly, "Grandmother, it’s me. Mama sent bread and jam. May I come in?"
+Grandmother voice came from within, muffled with age, "Lift the latch, child. I’ve been waiting."
+A faint creak answered.
+END_RESULT
+
+BEGIN_TOUCHPOINT id=6 type=mixed
+The latch lifts with an unthreatening click; the kettle sighs.
+The cottage, accustomed to gentle footfalls, does not yet recognize the weight of a predator.
+
+END_TOUCHPOINT
+BEGIN_RESULT
+Wolf paused, paw brushing the doorframe. The latch clicked; the kettle sighed as if nothing were odd, and warm air—mint and ash—spilled from the doorway. The moment held, equal parts invitation and caution.
+
+Wolf's whiskers twitched. "So cosy—your cottage smells of the best things. Shall I shut the door for you?" He let the pause count; no other footfall answered the lane.
+
+Grandmother, shawl tightened, urged, "Mind the latch, dear—there's a little chill today; warm yourself by the fire."
+
+The floorboards creaked under new weight.
+END_RESULT
+
+BEGIN_TOUCHPOINT id=7 type=scene
+{'name': 'Inside, the Disguise', 'description': 'The aftermath of swallowing Grandma: The chair is knocked over, and the teapot is still warm. But Wolf organizes the room halfway through the scene.\n', 'props': [{'name': 'Grandmother’s Nightcap and Spectacles', 'significance': 'Tools of disguise; innocence repurposed', 'description': 'A soft cap with a blue ribbon, and spectacles smudged with use.\nThey pinch the Wolf’s ears and blur his eyes, but lend him a silhouette.\n'}, {'name': 'Feather Quilt and Bed Curtains', 'significance': 'Stage for the masquerade', 'description': 'A puffed quilt stitched with strawberries, curtains that turn a bed into a small theater.\nThey muffle size and shape, smooth the outline of teeth.\n'}, {'name': 'Shutter Hook', 'significance': 'Conspiracy with the dark', 'description': 'A simple hook-and-eye that tames daylight.\nOnce fastened, the room is quiter and dimmer.\n'}, {'name': 'Powder Tin', 'significance': 'A trick to soften a snout', 'description': 'A little tin of rice powder; a dab on the muzzle keeps the fur from gleaming.\n'}]}
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=8 type=actors
+Wolf
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=9 type=narration
+Wolf enters, then swallows Grandma up in one bite. His belly is distended, but Wolf doesn't mind.
+
+END_TOUCHPOINT
+BEGIN_RESULT
+The latch clicked; warm mint and ash breathed from the room. The chair tipped and clattered; the cup rattled in its saucer. The feather quilt shuddered with a rush of air. Curtains stirred and then stilled, and the cottage convulsed in a small, domestic tumble—Grandmother's world set into motion and then arrested.
+
+The Wolf stepped forward in a single, smooth bound and found the middle of the floor. A startled breath escaped Grandmother. He opened wide—jaws snapping closed—and swallowed Grandmother whole in one smooth bite. The teapot gave a small sigh; hush settled.
+
+The Wolf's belly rounded, firm and high; the floorboards groaned under the new heft as the Wolf tested his balance, rolled his shoulders once, puffed a theatrical dusting of powder across his muzzle, perched the nightcap, nudged the spectacles, and folded his ears until his silhouette softened into something grandmotherly—pleasing work, patient as hunger. A slow, satisfied ripple moved along his flank; he tipped his head in a small, contented tilt. "There now," he murmured in a silkier, kinlier lilt, "come in, little one."
+END_RESULT
+
+BEGIN_TOUCHPOINT id=10 type=narration
+He tidies the impression of struggle to nothing, sets the kettle to murmur, and folds the shawl around his shoulders.
+In the mirror’s dim, his mouth learns a smaller smile. He tries on a cough the way one tries on a glove.
+
+END_TOUCHPOINT
+BEGIN_RESULT
+Wolf righted and stilled the toppled chair with a careful lift. He nudged the saucer true, drew the teapot toward the heat, and nudged the embers until a red seam opened and warmed the air; a faint thread of steam resumed its curl. Wolf flattened the feather quilt and smoothed the stitched pattern, then drew the bed curtains a hand’s width tighter so the hem softened the bed’s outline.
+
+Wolf fastened the shutter hook; daylight thinned to a gray hush and the room deepened into a private, dimmed theater. Domestic sounds folded into the dim—the kettle’s murmur and the clink of china. Wolf dabbed powder from the tin to dull any fresh gleam, tugged Grandmother’s nightcap down and smoothed the blue ribbon into a neat square, tilted the spectacles, and folded the shawl about his shoulders.
+
+Before the dim mirror, his mouth learned a smaller smile. He tried on a cough the way one tries on a glove.
+END_RESULT
+
+BEGIN_TOUCHPOINT id=11 type=foreshadowing
+A faint thread of humming drifts through the garden—the tune Red kept on the path—then fades as the wind shifts.
+The Wolf’s ears lift under the nightcap. He smiles with care, and waits.
+
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=12 type=mixed
+Wolf (testing): "Come in, dear heart. Mind the step."
+Wolf (again, higher, kinder): "Oh, what a day you must have had."
+The words fit. He settles deeper into the quilt.
+
+END_TOUCHPOINT
+BEGIN_RESULT
+The shutter hooked; pewter light thinned and a faint tune died on the sill; boards creaked softly as shadows gathered.
+
+Wolf purred, spectacles crooked. "Come in, dear heart—mind the step." He tipped a slippered paw toward the doorway, velvet and deliberate, and tried on a cough like a glove.
+
+"Oh, what a day you must have had." His voice rose, silk and concern.
+
+His fingers smoothed the shawl; a claw adjusted the spectacles to blur his eyes.
+
+"Sit. Rest—Grandmother will be so grateful if you're prompt."
+
+He settled deeper into the quilt, small smile practiced into the fold. A tail twitched beneath the bedskirt; the corner of his mouth sharpened into a taught smile.
+END_RESULT
+
+BEGIN_TOUCHPOINT id=13 type=narration
+Dust shivers in a bar of light that escaped the shutters; the clock’s tick grows loud enough to measure nerves.
+From far off, a rhythm of axe on wood answers the kettle’s breath, iron and sap interlacing on the air.
+
+END_TOUCHPOINT
+BEGIN_RESULT
+Dust trembled in a narrow bar of light that slipped past the hooked shutters. The teapot breathed in soft pulses; its lid quivered against the rim. From far off, axe strokes answered the kettle’s breath in a measured rhythm, iron and sap in the air.
+
+Wolf lay propped beneath the strawberry quilt, the bed curtains drawn to a private, dimmed hush. Wolf dabbed powder along the muzzle to soften the snout's line, smoothed the feather quilt and tucked the edge to blur his outline. Wolf's tail tucked beneath the bedskirt; the mantel clock’s tick grew loud enough to measure nerves, and its fringe lifted once at the tick, then fell.
+END_RESULT
+

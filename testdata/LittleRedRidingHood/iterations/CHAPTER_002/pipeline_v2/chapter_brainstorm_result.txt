@@ -1,0 +1,112 @@
+# Chapter Brainstorm Result
+
+Touch-Points:
+  - setting:
+      factoids:
+        - "Grandmother's Cottage"
+        - "Basket of Goodies"
+        - "Red Hood"
+      actors:
+        - "Little Red Riding Hood"
+        - "The Wolf"
+
+  - scene:
+      name: "The Cottage Threshold"
+      description: |
+        Red reaches her grandmother’s ivy-framed door, where the air is warm with thyme and cabbage and the clock ticks thinly from within. The latch yields to her knock with a tired sigh, and a voice—papery, yet oddly syruped—calls her nearer.
+        Dim curtains sieve the afternoon light into greenish pools; something about the room feels arranged, as if chairs and teapot are holding their pose for an audience of one.
+      props:
+        - name: "Old Latch"
+          significance: "Threshold between safety and deception"
+          description: |
+            Cold iron, polished by generations of hands; it lifts with the slightest coaxing, as if eager to admit family.
+        - name: "Grandmother's Clock"
+          significance: "Timekeeper and tension metronome"
+          description: |
+            A small mantle clock whose timid ticks seem louder in the hush, punctuating each step Red takes.
+        - name: "Teapot on the Hearth"
+          significance: "Domestic comfort masking danger"
+          description: |
+            Steam whispers from its spout, the lid rattling now and then like a nervous breath.
+        - name: "Net Curtains"
+          significance: "Veil between appearance and truth"
+          description: |
+            Pale lace that dims the light and blurs edges, making shapes look softer—and less trustworthy.
+
+  - actors: ["Little Red Riding Hood", "The Wolf"]
+
+  - narration: |
+      Red nudges the door and peers inside. “Grandmother?” she calls, the word softening in the warm air.
+      From the inner room, a cough answers, followed by a coaxing, “Come in, dear heart. Mind the draught.”
+
+  - dialog: |
+      Red: “I brought the bread and jam. Are you resting?”
+      The Wolf (as Grandmother): “So thoughtful, my little bird. Set it down and come kiss your old granny.”
+
+  - implicit: |
+      A sour musk threads beneath the thyme and tea. The cap on the bedpost is tugged too low; powder dusts the pillow in a careless crescent.
+      The chair by the hearth is nudged askew, as if someone left it in a hurry—or made it look as though they hadn’t.
+
+  - foreshadowing: |
+      From far in the woods, a measured thock of an axe carries and fades. A jay’s harsh cry snaps and stills. The clock keeps count.
+
+  - scene:
+      name: "Bedside Performance"
+      description: |
+        The bed is drawn close to the window where the light is weakest. A figure nestles among quilts—nightcap pulled low, spectacles glinting faintly, whiskers powdered to a genteel gray.
+        The room narrows to the breath between them; each step Red takes is answered by a rustle under the quilt and a sugar-sweet murmur from the pillows.
+      props:
+        - name: "Grandmother's Nightcap and Spectacles"
+          significance: "Disguise and distortion"
+          description: |
+            The cap droops over pricked ears; the spectacles sit too wide on a long, shadowed muzzle.
+        - name: "Patchwork Quilt"
+          significance: "Concealment of claws and tail"
+          description: |
+            A cheerful scatter of stitched flowers stretched tight over oddly angular shapes.
+        - name: "Candle Stub"
+          significance: "Faltering light to invite mistakes"
+          description: |
+            A guttering wick that bends the shadows into kind shapes—and hides the sharp ones.
+        - name: "Basket of Goodies"
+          significance: "Bait within the trap"
+          description: |
+            Set at the foot of the bed, its linen napkin puckers where something heavier than bread has jostled it.
+
+  - actors: ["Little Red Riding Hood", "The Wolf"]
+
+  - narration: |
+      Red edges closer, the basket set down with a faint wicker sigh. The figure pats the coverlet invitingly.
+      “Closer, sweetheart,” the voice purls. “These old eyes don’t catch the light so well.”
+
+  - dialog: |
+      Red: “Grandmother, what big eyes you have.”
+      The Wolf: “The better to see you with, my dear.”
+      Red: “And what big ears you have.”
+      The Wolf: “The better to hear you with, my dear.”
+      Red: “And—your hands—how big they are.”
+      The Wolf: “The better to hold you with, my dear.”
+      Red: “Grandmother… what big teeth you have.”
+      The Wolf: “The better to eat you with, my dear!”
+
+  - implicit: |
+      The quilt bunches as muscles bunch beneath it. A paw—no, a hand?—hooks the quilt’s edge.
+      The clock stutters one tick late; the teapot lid chatters once. Red inhales to scream.
+
+  - foreshadowing: |
+      A shape pauses outside the window—a shadow with a green coat and a coil of rope—then moves on, unaware, but nearer than before. A hound’s far bark answers the rising cry.
+
+# Story-So-Far (previous chapter)
+
+Red had promised to bring goodies to her ailing grandmother and walked the forest path humming a nursery tune, the bright hood over her head catching sunbeams as pine needles softened her steps and pale dust lifted behind her while a wicker basket creaked like a small, steady promise; tufted blue flowers bowed at the verge, the jam-sweet scent threaded the air, and the hood shone against tall, shadowed pines as the trail bent around an oak and deepened into hush. The sleek wolf had slid from the bramble to shadow her, honeyed in speech and flattering in suggestion, and when she, though hesitant, took the narrow deer-track he offered, he slipped ahead with a private purpose. He reached the cottage while the forest kept its breath—checked the sun on the shingles, listened for footfalls, and found the lane empty—and with a practiced calm he knocked, mimicked the granddaughter’s voice, and bade the old latch be lifted. Inside, where thyme and cabbage sighed and Grandmother's clock ticked small and thin, he measured time by chimney smoke and the warm heat of the latch, tested the shape of his lies at the door, and let a soft, practiced knock fall like a coin into quiet. The house answered with a creak and a hesitant lift; the kettle sighed, curtains stirred, and in a single, smooth motion he sprang, swallowed the old woman whole, then set himself to tucking the room into the semblance of sleep: he steadied the chair, soothed the quilt, nudged the teapot back to a whisper, powdered his muzzle, tugged on cap and spectacles, practiced a smaller smile and a cough, and arranged the dim room into a private theatre of waiting so that when Red's step and song finally neared, the cottage would answer with warm, measured voice and a doorway softened by the pretense of kin.
+
+# Story-Relative-To (previous chapter)
+
+Red's point of view
+I meant only to be helpful—basket creaking like a promise and my nursery tune keeping my feet steady as the sun cut long stripes through the pines—but the lane ahead felt too quiet and my bright hood seemed to hurry me on. I had chosen the narrow deer-track with a wish to be quicker, humming of jam and bread on my lips, and though the wolf's velvet questions still curl at the edge of my memory, I did not see the cottage answer a different voice: I did not see the door yield to a softer knock, the kettle sigh and the latch lift, the way warm mint and ash breathed out like a secret. I imagined the room full and waiting, not the small convulsion of chair and quilt that followed a single swift movement, nor the hush that settled after a startled breath; I only held to the belief that my coming would be met with the familiar, measured voice I remember, and not yet the dimmed, private theatre the cottage has become.
+
+Wolf's point of view
+Hunger and patience sat easy beneath my coat as I slipped through thyme and cabbage, tasting the jam that rode the air; I watched her bright hood cut the light and timed my words like a blade, checked the shingles and found time enough before Red's footfalls, then tested the latch and let my voice smooth itself into a kinlier thing. I let a practiced knock fall soft as a coin, shaped Red’s breathy plea on my tongue, and when the latch clicked and warm mint and ash spilled out I made my move—a single, clean bound—and closed the small mouth of the house on the one who kept its day. The work afterward was careful and domestic: I righted the chair, nudged the saucer true, coaxed steam back into the teapot, powdered my muzzle, tugged on nightcap and spectacles, learned a smaller smile and a cough, drew the shutters to dim the light and folded the cottage into a private, dimmed theatre of welcome; I lay beneath the strawberry quilt like a borrowed story, tail tucked, clock’s tick loud as a metronome, waiting with silk and practiced concern for the bright hood at the threshold.
+
+Forest Path's point of view
+I cradle the pale dust behind her small feet and hold the sunbeams in narrow bands as she hums beneath my pines, and I watched the wolf uncoil from my bramble and pad through thyme and cabbage toward the cottage, tasting the jam that rides my air; he checked the lane, measured the sun on the shingles, scanned for witnesses, and let a practiced knock fall as soft as a coin. The cottage answered—latch clicking, kettle sighing, warm mint and ash spilling into the lane—and then it shuddered as chair and quilt moved and stillness reformed; the wolf leapt in a single, private motion and the house folded itself around a new occupant. I felt him smooth powder across his muzzle, tug the nightcap down, adjust spectacles, hook the shutters to thin the daylight into gray hush, and watched the room become a dim little theatre, its domestic sounds folded inward while dust trembled in a thin bar of light and the clock’s tick marked the waiting until her bright song would reach the door.

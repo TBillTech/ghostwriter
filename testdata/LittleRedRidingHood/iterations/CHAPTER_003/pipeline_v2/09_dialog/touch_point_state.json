@@ -1,0 +1,16 @@
+{
+  "id": "9",
+  "type": "dialog",
+  "touchpoint": "Wolf: “Closer, sweetheart,” the voice purls. “These old eyes don’t catch the light so well.”\nRed: “Grandmother, what a big nose you have.”\nWolf: “The better to smell you with, my dear.”\nRed: “And what big ears you have.”\nWolf: “The better to hear you with, my dear.”\nRed: “And—your nails—how big they are.”\nWolf: “The better to grasp you with, my dear.”\nRed: “Grandmother… what big teeth you have.”\nWolf: “The better to eat you with, my dear!”\n",
+  "active_actors": [
+    "Red",
+    "Wolf"
+  ],
+  "scene": "{'name': 'Bedside Performance', 'description': 'The bed is drawn close to the window where the light is weakest. A figure nestles among quilts—nightcap pulled low, spectacles glinting faintly, whiskers powdered to a genteel gray.\\nThe room narrows to the breath between them; each step Red takes is answered by a rustle under the quilt and a sugar-sweet murmur from the pillows.\\n', 'props': [{'name': \"Grandmother's Nightcap and Spectacles\", 'significance': 'Disguise and distortion', 'description': 'The cap droops over pricked ears; the spectacles sit too wide on a long, shadowed muzzle.\\n'}, {'name': 'Patchwork Quilt', 'significance': 'Concealment of claws and tail', 'description': 'A cheerful scatter of stitched flowers stretched tight over oddly angular shapes.\\n'}, {'name': 'Candle Stub', 'significance': 'Faltering light to invite mistakes', 'description': 'A guttering wick that bends the shadows into kind shapes—and hides the sharp ones.\\n'}, {'name': 'Basket of Goodies', 'significance': 'Bait within the trap', 'description': 'Set at the foot of the bed, its linen napkin puckers where something heavier than bread has jostled it.\\n'}]}",
+  "foreshadowing": [
+    "A huntsman is tracking after wolf."
+  ],
+  "setting_block": "{'factoids': [\"Grandmother's Cottage\", 'Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}",
+  "characters_block": "",
+  "appended_dialog": {}
+}

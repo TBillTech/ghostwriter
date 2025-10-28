@@ -1,0 +1,110 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. If you see a line that is "escaped", with single quotes in double quotes, un-escape it. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood', 'Basket'], 'actors': ['Red', 'Grandmother', 'Wolf', 'Huntsman']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    },
+    {
+      "name": "Basket",
+      "description": "Gift and responsibility; symbol of trust. A mcguffin"
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised sweets and walked the pine-smelling path with her hood catching the light and the basket creaking like a vow, while the sleek, flattering wolf slipped away along a deer-track to the cottage, reached it first, and with practiced calm swallowed Grandmother whole before setting the room into a careful masquerade; he powdered his muzzle, tugged on cap and spectacles, soothed the quilt and set the teapot whispering so the house would answer Red with the warmth of kin. Her knock and nursery hum were met by a voice too slick, a bed too round, the candle skewed into pooling shadows, and the quilt yawned to reveal whiskers and a paw; a scream was swallowed as warm dark folded around Red and the cottage smoothed back into its domestic hush with only the steady, indifferent tick of the clock. A huntsman coming down the pine track heard a brief strangled sound, followed subtle prints and claw-marks to the sill, and slipped in with a low bow until the dim room answered him with sour fur-musk, powder on the pillow, and the odd rhythm of a breathing that was not age. He set his arrow, spoke the quiet accusation that makes beasts reveal themselves, and let the shaft fly through candle air and patchwork to bury in a single ruined eye; the beast shuddered, the borrowed garments fell askew, and under the rent of hide the true shapes spilled free—Grandmother coughing and blinking, Red slick with blood and flour dust—while the house, slow as sap, remembered how to be itself. The Huntsman tended cloth and pulse, laid towels and steadied hands, turned the clock’s stubborn tick into something gentler, and after a few exchanged courtesies and a warning to latch the door at dusk he shouldered his bow and left warmth pooling by the stove. Left to one another, Grandmother smoothed her shawl and set out bread and jam; I hung my red hood on a chair-back, the crust split with a village cut, buttered rounds and ladled the ruby jam as steam curled toward the rafters, and for a while the cottage held only the small, domestic rhythms of tea, crumbs, and a soft, reclaimed safety.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+He circles once, listens again, and slips inside. The quiet feels manufactured, the air thick with fur-musk and flour dust. His eye takes in the neat room, the undisturbed table, the bed with its extra-round quilt. He readies his bow, alerted to the strangeness.
+
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+A hundred yards out he heard Red's brief, strangled cry, cut then muffled by the pines. He left the ribbon of the trail and came down toward the cottage with his bow low. He followed wide pads and claw marks pressed into the damp, pine-scented earth—wolf spoor, pads and claw marks that ran fat and straight to the sill and did not lead away.
+
+He circled the cottage once. He listened again. He counted the clock’s stubborn ticks and the roof settling slow under the trees. He paused where the door stood ajar and tested the edge with two careful fingers. He kept his bow low and listened at the jamb; only the mantle clock answered. Its steady tick measured a calm that was forced.
+
+The huntsman slipped over the threshold and let the door fall without a sound. Floorboards showed no scuffle. The table sat neat, cups aligned, crumbs undisturbed. The teapot was no longer warm; a ring of cooled steam rimmed the lid. The fire had died to grey. The air inside told him things: sour fur-musk, flour dust, ash by the hearth. Net curtains hung still; dust motes turned only where lamplight pooled by the bed.
+
+The bed’s quilt bulged extra-round, a mound too full for a single elder’s frame. Spectacles glinted on the bolster, powder on the pillow. A nightcap drooped low; the outline beneath it was long-muzzled. The mound lifted and settled in a rhythm that did not match the feeble breathing he expected from age.
+
+His eyes swept rafters, corners, the shadow under the bed. He eased his boot. Set his range. Nocked. Drove the bow up. Steady. The mound moved. The beast smelled him.
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Introduce the hunter by name once near the start to avoid repeating "He" and to anchor POV: change opening sentence to include "the huntsman" (e.g., "A hundred yards out the huntsman heard Red's brief...").
+
+- Replace ambiguous pronouns with "the huntsman" where clarity helps (first clause of paragraph 2 and start of paragraph 3).
+
+- Tighten or simplify florid phrases that undercut the huntsman's economical voice:
+  - Change "followed wide pads and claw marks pressed into the damp, pine-scented earth—wolf spoor, pads and claw marks that ran fat and straight to the sill and did not lead away." to a leaner line: "He tracked fat wolf pads and claw marks straight to the sill; they did not lead away."
+
+- Fix awkward wording about the teapot/steam: remove redundancy. Example: "The teapot was no longer warm; a ring of cooled steam rimmed the lid." → "The teapot was cold; a ring of condensed steam rimmed the lid."
+
+- Make the sensory detail about the interior match the huntsman's tactile lexicon (concrete nouns, tactile verbs). Example: change "The air inside told him things: sour fur-musk, flour dust, ash by the hearth." → "The air told him—fur-musk, flour dust, hearth ash."
+
+- Clarify whose objects lie on the bed to reduce momentary ambiguity: specify "Grandmother's spectacles glinted on the bolster; powder dented the pillow." (or "her spectacles") rather than just "Spectacles."
+
+- Preserve mysterious tension over the bed while keeping wording precise:
+  - Recast "The bed’s quilt bulged extra-round, a mound too full for a single elder’s frame." to "Grandmother's quilt bulged—an extra-round mound, too full for an old woman's frame."
+  - Keep the long-muzzled hint but avoid labeling it outright: "the outline beneath it was long-muzzled" is fine; consider "the outline under the cap ran long and muzzled" for tighter voice.
+
+- Make the huntsman's action sequence sharper and in his cadence:
+  - Replace "He eased his boot. Set his range. Nocked. Drove the bow up. Steady." with a compact, hunterly rhythm: "He eased his boot. Set his range. Nocked. Drew. Breathe. Count."
+
+- Soften or rephrase the final revelation line to align with the touch-point's alertness without telegraphing an explicit predator ID:
+  - Change "The mound moved. The beast smelled him." to something like "The mound moved. The scent changed—close, warm, animal." (If you prefer clearer naming, use "wolf" only if you want the huntsman to call it by kind: "The mound moved. That scent—wolf—found him.")
+
+- Remove or revise "The huntsman slipped over the threshold and let the door fall without a sound." to avoid mixed metaphors about silence and falling doors; e.g., "The huntsman slipped over the threshold and let the door close soundlessly."
+
+- Ensure final sentence ties back to the touch-point: add one brief line that mirrors "the quiet feels manufactured" if you choose to keep that exact phrase—otherwise keep the existing "Its steady tick measured a calm that was forced." but consider appending: "He readied his bow, alerted to the strangeness." to fully match the required touch-point.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+A hundred yards out the huntsman heard Red's brief, strangled cry, cut then muffled by the pines. He left the ribbon of the trail and came down toward the cottage with his bow low. He tracked fat wolf pads and claw marks straight to the sill; they did not lead away.
+
+The huntsman circled the cottage once. He listened again. He counted the clock’s stubborn ticks and the roof settling slow under the trees. He paused where the door stood ajar and tested the edge with two careful fingers. He kept his bow low and listened at the jamb; only the mantle clock answered. Its steady tick measured a calm that was forced.
+
+The huntsman slipped over the threshold and let the door close soundlessly. Floorboards showed no scuffle. The table sat neat, cups aligned, crumbs undisturbed. The teapot was cold; a ring of condensed steam rimmed the lid. The fire had died to grey. The air told him—fur-musk, flour dust, hearth ash. Net curtains hung still; dust motes turned only where lamplight pooled by the bed.
+
+Grandmother's quilt bulged—an extra-round mound, too full for an old woman's frame. Grandmother's spectacles glinted on the bolster; powder dented the pillow. A nightcap drooped low; the outline beneath it was long-muzzled. The mound lifted and settled in a rhythm that did not match the feeble breathing he expected from age.
+
+His eyes swept rafters, corners, the shadow under the bed. He eased his boot. Set his range. Nocked. Drew. Breathe. Count. The mound moved. The scent changed—close, warm, animal. He readied his bow, alerted to the strangeness.

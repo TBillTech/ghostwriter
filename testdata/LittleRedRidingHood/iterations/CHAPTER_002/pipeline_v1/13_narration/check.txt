@@ -1,0 +1,167 @@
+=== SYSTEM ===
+You are an evaluator extracting actionable suggestions only.
+
+=== USER ===
+You are reviewing the work of an genious writer who sometimes loses track of key ideas in their wordsmithing.
+
+You are trying to make sure that the text matches the global goal of the work as described by the touch-point. You are trying to describe needed edits that are focused and surgical, and you wish to keep the voice and quirks of the writer alive to best interest the reader. A completely predictable and "normal" text would actually be bad, so it is a balance between interesting and clear. I will provide you here with the setting, context, things to watch out for, and the draft provided by the writer.  Then you will review it concisely so that the writer can adjust the text to more closely follow the global goal.
+
+Watch out for pronouns that have unclear references, like starting a paragraph with "They".  Using proper names is preferred in our narration IF there is any ambiguity.
+
+# Setting in general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# Prior touch points
+The most recent 3 touch-points for context.
+Wolf righted-and-stilled the toppled chair with a careful lift so the room forgot the lurch. He nudged the saucer true, drew the teapot toward the heat and poked the hearth until a red seam opened and warmed the air; a faint thread of steam resumed its curl. Wolf flattened the feather quilt where it had heaved, smoothing the strawberry stitches until the puff looked mended, and drew the bed curtains a hand’s width tighter so the hem swallowed awkward edges and softened the bed’s shape.
+
+Wolf found the shutter hook and fastened it into its eye; daylight thinned to a gray hush and the room deepened into a private, dimmed theater. Small domestic noises folded into the dim as if rehearsed: the kettle’s murmur, the quiet clink of china, the hush of curtains settling. Wolf dabbed powder from the tin along the muzzle to dull any fresh gleam, tugged Grandmother’s nightcap down to cover the pinched ears, smoothing the blue ribbon square. He tilted the spectacles to blur his eyes behind glass and folded the shawl around his shoulders.
+
+In the mirror’s dim, his mouth learned a smaller smile. He tried on a cough the way one tries on a glove.
+
+---
+
+Pewter light thins as the shutter hook tames the day, and the room settles into a quiet hush. A faint thread of a tune slips past the shutter and dies on the sill. Shadows gather along the bed curtains; the boards creak softly, a patient witness.
+
+Wolf purred, spectacles crooked, "Come in, dear heart. Mind the step."
+He tips a slippered paw toward the doorway. He coughs—a practised, small sound.
+
+"Oh, what a day you must have had," he said, voice higher, kinder.
+His fingers drift to the shawl, smoothing the fold. He straightens his spectacles with the back of a claw.
+
+"Sit. Rest. Grandmother will be so grateful."
+He settles deeper into the quilt. His tail twitches once beneath the bedskirt, and the corner of his mouth tightens around the edge of a smile.
+
+# Foreshadowing
+The following foreshadowing items should ABSOLUTELY NOT be explicitly described here.  If they are, that is a problem. These should only be vaguely alluded to:
+A faint thread of humming drifts through the garden—the tune Red kept on the path—then fades as the wind shifts.
+The Wolf’s ears lift under the nightcap. He smiles with care, and waits.
+
+# Actors
+The following actors are allowed to speak in the dialog.  If other actors are speaking, that is a problem.  The actors are:
+Wolf
+
+# Touch-Point
+This is the most important thing that the writer needs to say one way or another, and fits into the global goal of the work:
+Dust shivers in a bar of light that escaped the shutters; the clock’s tick grows loud enough to measure nerves.
+From far off, a rhythm of axe on wood answers the kettle’s breath, iron and sap interlacing on the air.
+
+
+# The Draft
+The polished text that needs to be evaluated for Touch-Point satisfaction, and actor and spoiler safety is as follows:
+Dust trembled in a narrow bar of light that slipped past the hooked shutters, and the mantel clock’s tick grew loud enough to measure nerves. The teapot breathed in soft pulses; the teapot’s lid quivered, kissing the rim. From far off, axe strokes answered the kettle’s breath in a measured rhythm, sap and iron in the air.
+
+Wolf lay propped beneath the strawberry quilt, the bed curtains drawn to a half-theater hush. He patted a dab from the powder tin across the muzzle to soften the snout’s line. He smoothed the feather quilt and tucked its edge to blur the outline beneath, and his tail hid quiet under the bedskirt; the fringe lifted once with the clock’s tick, then settled.
+
+Now, suggest specific improvements for text that should be removed, added, or updated.
+
+
+
+---
+Now produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions.
+
+=== RESPONSE ===
+- Replace the repeated phrasing "The teapot breathed in soft pulses; the teapot’s lid quivered" with a single, tighter image (e.g., "The teapot breathed in soft pulses; its lid quivered against the rim") to remove redundancy and sharpen rhythm.
+
+- Swap "sap and iron in the air" to "iron and sap in the air" so the olfactory image matches the touch-point's intended coupling and cadence.
+
+- Start the second paragraph with "Wolf" instead of "He" at least once (e.g., "Wolf lay propped beneath the strawberry quilt...") to avoid any momentary pronoun ambiguity and keep narration anchored to the character.
+
+- Change "He patted a dab from the powder tin across the muzzle to soften the snout’s line" to a clearer, more idiomatic action (e.g., "Wolf dabbed powder along the muzzle to soften the snout's line") to tighten voice and remove the awkward "patted a dab."
+
+- Tighten "the bed curtains drawn to a half-theater hush" to something slightly more immediate and consistent with prior touch-points (e.g., "the bed curtains drawn to a private, dimmed hush" or "a half-dimmed hush") to preserve the author's unusual phrasing while avoiding an image that jars.
+
+- Make the clock tactilely present earlier in the paragraph: move or emphasize "the mantel clock’s tick grew loud enough to measure nerves" so it cues the tail-twitch and the room's tempo more directly (for example, place that sentence immediately before "the fringe lifted once with the clock’s tick, then settled").
+
+- Replace "his tail hid quiet under the bedskirt; the fringe lifted once with the clock’s tick, then settled" with a slightly more precise gesture (e.g., "Wolf's tail tucked beneath the bedskirt; its fringe lifted once at the clock's tick, then fell") so the subject remains explicit and the physical reaction reads cleanly.
+
+- Consider swapping "tucked its edge to blur the outline beneath" for a tighter verb (e.g., "tucked the edge to blur his outline") to reduce passivity and keep the sentence rhythm lean.
+
+- Remove any phrasing that could verge on the forbidden foreshadowing items (avoid mentioning humming, the path tune, or ears lifting) — these are not present now, but double-check future sentences to keep that omission consistent.

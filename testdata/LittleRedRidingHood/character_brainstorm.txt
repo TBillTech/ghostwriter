@@ -1,0 +1,260 @@
+=== SYSTEM ===
+You brainstorm and draft a single character YAML entry starting with '- id:'.
+
+=== USER ===
+You are an expert character designer. Brainstorm a single character YAML entry for the character named Huntsman.
+
+Context:
+- Full chapter YAML (for reference):
+
+Touch-Points:
+  - setting:
+      factoids:
+        - "Grandmother's Cottage"
+        - "Forest Path"
+        - "Basket of Goodies"
+        - "Red Hood"
+        - "Basket"
+      actors:
+        - "Red"
+        - "Grandmother"
+        - "Wolf"
+        - "Huntsman"
+
+  - scene:
+      name: "Approach to the Silent Cottage"
+      description: |
+        Evening lays a green hush over the pines as a huntsman follows a ribbon of prints that lope from streambank to door. A child's cry—brief, strangled, then swallowed by the trees—has already sent him off the trail and toward the cottage with his Bow low and his breath held.
+        The door stands ajar. Inside, no chatter of kettle, no clatter of cups—only the measured ticking of a clock and a smell that is not illness, not age, but wild.
+      props:
+        - name: "Huntsman's Skinning Knife"
+          significance: "Separating tissues from bone"
+          description: "A well-kept skinning knife suitable for gutting and releasing victims from the belly of Wolf"
+        - name: "Huntsman's Bow"
+          significance: "Instrument of Sudden and Unexpected Punishment from Afar"
+          description: "A well-kept huntsman’s Compound Bow, used for hunting beasts."
+        - name: "Wolf Tracks"
+          significance: "Trail of intrusion"
+          description: "Wide pads and claw marks pressed into damp earth, leading straight to the cottage threshold."
+        - name: "Teapot"
+          significance: "Interrupted domesticity"
+          description: "A squat iron pot, warm no longer, its lid beaded with cooled steam."
+        - name: "Clock"
+          significance: "Tension and timing"
+          description: "A mantle clock that ticks with stubborn steadiness, marking a calm that feels wrong."
+        - name: "Hearthstones"
+          significance: "Future means to end the threat"
+          description: "Smooth river stones stacked by the hearth, heavy and clean with ash-dust."
+
+  - actors: ["Huntsman"]
+
+  - narration: |
+      He circles once, listens again, and slips inside. The quiet feels manufactured, the air thick with fur-musk and flour dust. His eye takes in the neat room, the undisturbed table, the bed with its extra-round quilt. He readies his bow, alerted to the strangeness.
+
+  - scene:
+      name: "Inside: The Belly and the Blade"
+      description: |
+        The bed inhales and exhales in heavy bellows. Beneath the nightcap and spectacles, the sleeper’s muzzle peeks powder-white, and the quilt mounds like a harvest sack. The huntsman recognizes the trespass not only in scent and shape but in the cruel satisfaction resting on those whiskered lips.
+        He does not shout. He Carefully aims the bow.
+      props:
+        - name: "Quilt"
+          significance: "Concealment and cradle"
+          description: "A hand-stitched patchwork pulled high, hiding both predator and prize within."
+        - name: "Nightcap and Spectacles"
+          significance: "The predator’s disguise"
+          description: "Borrowed garments perched absurdly on a wolfish brow."
+        - name: "Sewing Kit"
+          significance: "Tool for repair and closure"
+          description: "A tin with needles, coarse thread, and small scissors, tucked by the bedside."
+        - name: "Basin and Towels"
+          significance: "Practical aid for a quiet operation"
+          description: "A porcelain bowl and clean cloths ready from earlier tea-making and tidying."
+
+  - actors: ["Huntsman", "Wolf"]
+
+  - mixed: |
+      I have found you wolf, says the huntsman. Your terrible deeds end here. 
+      The wolf protests once that he is an old Grandma, how dare he accuse of such.  The Huntsman points out all the clues, the and to double underline it, wolf muzzles are recognizably not the profile of an old woman.
+      The huntsman declares, "If you were human, I couldn't do this, but for the beasts of the forest, I am judge, jury, and executioner."
+
+  - narration: |
+      The Huntsman fires the arrow, and it flys true. Wolf slumps dead in the bed, with an arrow in the eye. 
+      The huntsman notices the moving belly of Wolf, and partly in shock, party in fascination, cuts wolf's belly open with his skinning kife. 
+      First Grandmother spills out—pale, blinking, shocked with breath and alive. Then Red, slick with Wolf’s remains.
+
+  - actors: ["Red", "Grandmother", "Huntsman"]
+
+  - dialog: |
+      With the wolf dead, Grandmother and Red thank the huntsman. The huntsman says farewell.
+
+  - narration: |
+      Grandmother and Red have tea, bread and jam.  The End.
+
+
+- Dereferenced setting facts and referenced characters (excluding the target and any missing):
+
+
+
+- Example character (provided only when no characters were dereferenced above):
+
+- id: red
+  name: Little Red Riding Hood
+  background: 'A bright, tender-hearted village girl sent to bring food and comfort
+    to her
+
+    ailing grandmother. She’s been warned to keep to the path and not speak to
+
+    strangers, but curiosity and kindness tug at her feet. She loves flowers,
+
+    birdsong, and the way sunlight freckles through the trees. Her iconic red
+
+    hood and basket are more than props—they’re little anchors of bravery when
+
+    the woods press close. She’s polite by upbringing, literal in her
+
+    understanding, and brave in small, practical ways.
+
+    '
+  traits:
+  - curious
+  - kind
+  - naive
+  - brave
+  - easily-distracted
+  - polite
+  cadence: light, earnest
+  lexicon: simple words, fairy-tale tone; polite forms like "please" and "thank you"
+  prefer:
+  - flowers
+  - Grandmother
+  - safe path
+  - helpfulness
+  - honesty
+  avoid:
+  - lying
+  - strangers' tricks
+  - dark thickets
+  - leaving the path
+  mannerisms:
+  - Clutches her basket when nervous; relaxes as soon as she can offer help.
+  - Answers questions plainly; takes idioms literally before catching on.
+  - Soft little gasps of wonder at woodland sights; quiet hums of nursery tunes.
+  - Uses simple, sincere phrases over fancy words; sprinkles in ‘please’ and ‘thank
+    you.’
+  - When scolded, lowers her eyes and apologizes, then tries to fix things at once.
+  sample_lines:
+  - I'm bringing goodies to Grandmother.
+  - I promised to stay on the path—well, mostly.
+  - These flowers will cheer her right up, don’t you think?
+  - Mama says it’s safest if I hurry, but I can help for just a minute.
+  - If you know a shorter way, I suppose that would be kind…
+  common_lines:
+  - Grandmother’s waiting; I mustn’t dawdle.
+  - Oh! I didn’t mean to be rude.
+  - Thank you, but I should be on my way.
+  rare_lines:
+  - I’m frightened, but I won’t run.
+  - I did wrong to wander. I’ll make it right.
+  forbidden:
+  - Does not use modern slang or technical jargon.
+  - Will not be cruel, lewd, or cynical; no scheming language.
+  temperature_hint: 0.25
+  max_tokens_line: 80
+
+
+- User description to seed the brainstorm:
+
+The Huntsman is a skilled hunter who make a living hunting rabbits, boars, and deer.  However, he also earns bounties for killing exceptionally dangerous beatsts (like Wolf).  In fact, Wolf had killed some livestock in a neighboring parish. The huntsman was on a mission to hunt Wolf down.  Usually the Huntsman uses a bow and arrow to take down game, and a skinning knife to dress kills.
+
+Instructions:
+- Use the structure compatible with the project's CHARACTERS.yaml. If an example appears above, follow its style. Fields to include:
+  - id: machine id (lowercase, hyphen/underscore allowed)
+  - name: display name
+  - traits: [list]
+  - cadence: "string"
+  - lexicon: "string"
+  - prefer: [list of favored words]
+  - avoid: [list of words to avoid]
+  - mannerisms: [list]
+  - sample_lines: [list of short exemplars of voice]
+  - forbidden: [list of constraints]
+  - temperature_hint: number (e.g., 0.25)
+  - max_tokens_line: number (e.g., 90)
+- For the character Huntsman, brainstorm an interesting character outline from the prior description.
+- Output format: RETURN EXACTLY ONE top-level YAML item that starts with '- id:'. No surrounding list markers beyond the single item. No additional commentary.
+
+
+=== RESPONSE ===
+- id: huntsman
+  name: Huntsman
+  traits:
+  - patient
+  - observant
+  - disciplined
+  - pragmatic
+  - protective
+  - stoic
+  - law-abiding
+  - soft-spoken
+  - decisive
+  cadence: "low, economical, deliberate; a hunter’s whisper that wastes no breath"
+  lexicon: "plain woodsman’s speech; concrete nouns, hunting terms, tactile verbs; avoids fancy rhetoric and modern slang"
+  prefer:
+  - beast
+  - wolf
+  - trail
+  - tracks
+  - spoor
+  - sign
+  - scent
+  - wind
+  - range
+  - clear shot
+  - draw
+  - loose
+  - bow
+  - string
+  - arrow
+  - knife
+  - field-dress
+  - quiet
+  - quarry
+  - hearthstones
+  - clock
+  avoid:
+  - target acquired
+  - epic
+  - hero
+  - bro
+  - dude
+  - LOL
+  - monster
+  - magic bullet
+  - glorious
+  - cute
+  mannerisms:
+  - Tests wind with a damp finger or a pinch of ash before choosing an angle.
+  - Counts heartbeats to steady his release; breathes through the nose, slow and even.
+  - Keeps his bow low until the shot; eyes sweep corners, rafters, and doorframes.
+  - Names quarry by kind—wolf, boar, buck—never by pet names; calls them beasts, not monsters.
+  - Cleans blade methodically and salvages arrows, checking fletching and nock by touch.
+  - Speaks in short, calm statements; leaves silence to do half the work.
+  - Notes small domestic details—warm iron, ticking clocks—as signs of timing and disturbance.
+  sample_lines:
+  - Tracks run fat and straight to this door.
+  - That smell is wolf, and fresh.
+  - If you were human, I would stay my hand. For beasts, I am the law.
+  - Breathe. Count. Loose.
+  - Hold steady now; I’ll make it quick.
+  - The belly moves. Easy—knife, then cloths.
+  - I take no joy in this, but I leave no threat behind.
+  - Thank me by keeping to the path and minding your warnings.
+  forbidden:
+  - Does not use modern slang, military call-outs, or internet jargon.
+  - No grandstanding, taunts, or cruel jokes at quarry.
+  - Avoids florid metaphors and courtly speech.
+  - Will not threaten innocents or speak lewdly.
+  - Does not monologue while aiming or tracking.
+  - No technical jargon beyond simple hunting terms.
+  temperature_hint: 0.25
+  max_tokens_line: 80

@@ -1,0 +1,19 @@
+- Make POV explicitly Red: replace opening "behind me" with "behind Red" or "behind me — Red" (or start "I step inside" and add a brief internal tag like "I — Red — hang my hood...") so reader knows narrator is Little Red Riding Hood.
+
+- Tone the prose to match Red's light, earnest cadence: simplify a few sentences (e.g., "the cloth catches a bit of the late light..." → "the hood catches the late light and warms the chair") to keep language plain and sincere.
+
+- Lower or normalize object capitalization: change "Basket of Goodies" → "basket" (or "basket of goodies") unless you intend it as a repeatedly significant proper item; keep "Red Hood" if you want it iconic but consider "Red's hood" for intimacy.
+
+- Add one short line of spoken dialog between Red and Grandmother (allowed actors) to animate the scene and honor their warmth — e.g., Red: "I brought bread and jam, Grandmother." Grandmother: "Come in, dear." Keep lines simple, polite, and in-character.
+
+- Show Red's habitual mannerism once (clutching the basket when nervous, curtsying, or thanking) to reinforce character: insert a small action like "I clutch the basket and curtsy" or "I tuck the basket under my arm and curtsy."
+
+- Make the Huntsman's mention a clear remembered line rather than vague: replace "remembering the Huntsman's caution" with a brief, specific memory in Red's voice — e.g., "I remember the Huntsman's warning: 'Latch the door at dusk.'" (short quoted line fits character and prior touch-point).
+
+- Trim one overly ornate phrase to keep the fairy-tale plainness — e.g., replace "the jam spreads thick, leaving a glossy path and a small ridge" with "the jam spreads thick and glossy" to avoid purple patches.
+
+- End with a tiny closing dialog or tag from Grandmother or Red (one sentence) to make "The End" feel part of the world not a narration sign-off — e.g., Grandmother: "Stay a while, dear," or Red: "We'll be safe here." Then either remove the literal "The End." or keep it but ensure it's tonal (if you keep it, make it a gentle Red line: "The End." is optional).
+
+- Check pronoun clarity across the paragraph — replace any lone "we" or "us" that might confuse with explicit "Grandmother and I" when needed (e.g., "We eat bread and jam" → "Grandmother and I eat bread and jam").
+
+- Ensure final sentence underlines the touch-point simply: explicitly state they have tea, bread, and jam together (if not already explicit) in one plain line: "Grandmother and I have tea, bread, and jam."

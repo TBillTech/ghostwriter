@@ -1,0 +1,14 @@
+{
+  "id": "3",
+  "type": "actors",
+  "touchpoint": "Red, Wolf",
+  "active_actors": [
+    "Red",
+    "Wolf"
+  ],
+  "scene": "{'name': 'The Cottage Threshold', 'description': 'Red reaches her grandmother’s ivy-framed door, where the air is warm with thyme and cabbage and the clock ticks thinly from within. The latch yields to her knock with a tired sigh, and a voice—papery, yet oddly syruped—calls her nearer.\\nDim curtains sieve the afternoon light into greenish pools; something about the room feels arranged, as if chairs and teapot are holding their pose for an audience of one.\\n', 'props': [{'name': 'Old Latch', 'significance': 'Threshold between safety and deception', 'description': 'Cold iron, polished by generations of hands; it lifts with the slightest coaxing, as if eager to admit family.\\n'}, {'name': \"Grandmother's Clock\", 'significance': 'Timekeeper and tension metronome', 'description': 'A small mantle clock whose timid ticks seem louder in the hush, punctuating each step Red takes.\\n'}, {'name': 'Teapot on the Hearth', 'significance': 'Domestic comfort masking danger', 'description': 'Steam whispers from its spout, the lid rattling now and then like a nervous breath.\\n'}, {'name': 'Net Curtains', 'significance': 'Veil between appearance and truth', 'description': 'Pale lace that dims the light and blurs edges, making shapes look softer—and less trustworthy.\\n'}]}",
+  "foreshadowing": [],
+  "setting_block": "{'factoids': [\"Grandmother's Cottage\", 'Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}",
+  "characters_block": "",
+  "appended_dialog": {}
+}

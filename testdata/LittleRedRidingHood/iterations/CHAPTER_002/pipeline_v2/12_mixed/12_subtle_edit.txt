@@ -1,0 +1,121 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. If you see a line that is "escaped", with single quotes in double quotes, un-escape it. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised to bring goodies to her ailing grandmother and walked the forest path humming a nursery tune, the bright hood over her head catching sunbeams as pine needles softened her steps and pale dust lifted behind her while a wicker basket creaked like a small, steady promise; tufted blue flowers bowed at the verge, the jam-sweet scent threaded the air, and the hood shone against tall, shadowed pines as the trail bent around an oak and deepened into hush. The sleek wolf had slid from the bramble to shadow her, honeyed in speech and flattering in suggestion, and when she, though hesitant, took the narrow deer-track he offered, he slipped ahead with a private purpose. He reached the cottage while the forest kept its breath—checked the sun on the shingles, listened for footfalls, and found the lane empty—and with a practiced calm he knocked, mimicked the granddaughter’s voice, and bade the old latch be lifted. Once inside he turned domesticity into disguise: he swallowed Grandmother whole in a single, terrible motion, smoothed the room as if sewing a silence—steadying the chair, coaxing the teapot back to whisper, tucking the quilt, fastening shutters—and donned shawl, cap, spectacles and a practiced cough until the bed looked inhabited by a sleep rather than a crime. He settled beneath the strawberry quilt, powdered his muzzle, shaped a smaller smile in the glass, and arranged the dim room into a private theatre of waiting; when Red’s step and song finally neared, the cottage would answer with a warm, measured voice and a doorstep softened by the pretense of kin.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I meant only to be helpful—my basket creaks like a promise and the nursery tune keeps my feet steady as the sun slices through the pines—and when I chose the narrow deer-track I walked faster, thinking of Grandmother waiting with bread and jam. The wolf's velvet questions still curl at the edges of my mind as I hurry, but my steps carry me toward the lane and the cottage where mint and smoke will warm the kettle. I had not seen what followed the latch: the quiet that answered his polite knock, the way the door sighed open to warm air and the scent of herbs, nor how the room changed—how chairs tipped, the teapot trembled, the quilt shuddered—only that the cottage would be ready, safe, because I must have been expected. I approach with my hood bright against the pines, clutching the wicker, humming the tune, crossing the verge of blue flowers and the crooked stump’s shadow, still certain my coming will bring the soft, familiar voice I remember, and not yet knowing the hush that waits behind the shuttered light.
+
+Wolf's point of view
+Hunger and patience sat easy beneath my coat as I slipped through thyme and cabbage, tasting the jam that rode the air; I watched her bright hood cut the light and timed my words like a blade, and when I reached the cottage the sun on the shingles counted out the hours I would take. I tested the latch with a practiced knock, smoothed my voice into a smaller, kinlier tone, and let the door open to warm mint and wood smoke; the room inhaled me and I answered in motion. One swift, private movement closed the distance between hunger and finish—Grandmother gone, the teapot sighing in the wake—and then the work began: righting a tipped chair, nudging the saucer true, poking the hearth until steam resumed its curl, flattening the quilt, fastening the shutters to dim the day. I fitted the nightcap and spectacles, powdered my muzzle, practiced a softer smile and a cough, and laid myself beneath the strawberry quilt like a worn story; the cottage folded itself around the pretense, the clock’s tick marking a measured patience as I set my voice to welcome, tipped a slippered paw to the step, and waited for her bright hood and small song to bring the last piece of the play.
+
+Forest Path's point of view
+I cradle the pale dust behind her little feet and hold the sunbeams in narrow bands as she hums beneath my pines, and I watched the wolf slip from my bramble into thyme and cabbage, drawn by the scent of jam that rides my air. He checked the lane and the quiet, counted the sun on the shingles as if it were a reckoning, and where the cottage door breathed warm mint and ash I held my breath as the room altered—the latch lifting, a chair tipping, the quilt shuddering—then stilling into a new hush. I felt the small domestic storm settle as he smoothed powder along his muzzle, tugged the nightcap, drew the shutters and muffled the light until the cottage became a dim little theater; the teapot resumed its soft pulse, the clock’s tick grew a careful metronome, and the path folded the moment into my long quiet, keeping the trail and the hush side by side until her steps would meet the door.
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+Wolf (testing): "Come in, dear heart. Mind the step."
+Wolf (again, higher, kinder): "Oh, what a day you must have had."
+The words fit. He settles deeper into the quilt.
+
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+Pewter light thins as the shutter hook tames the day, and the room settles into a quiet hush. A faint thread of a tune slips past the shutter and dies on the sill. Shadows gather along the bed curtains; the boards creak softly, a patient witness.
+
+Wolf purred, spectacles crooked, "Come in, dear heart. Mind the step."
+He tips a slippered paw toward the doorway. He coughs—a practised, small sound.
+
+"Oh, what a day you must have had," he said, voice higher, kinder.
+His fingers drift to the shawl, smoothing the fold. He straightens his spectacles with the back of a claw.
+
+"Sit. Rest. Grandmother will be so grateful."
+He settles deeper into the quilt. His tail twitches once beneath the bedskirt, and the corner of his mouth tightens around the edge of a smile.
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Trim opening redundancies: replace first two sentences with a single tighter line that keeps the shutter hook image and the faint tune (e.g., "The shutter hooked; pewter light thinned and a faint tune died on the sill."). Remove "and the room settles into a quiet hush." (already implied).
+
+- Delete or condense "Shadows gather along the bed curtains; the boards creak softly, a patient witness." Either keep only "boards creak softly" as a short atmospheric beat, or merge into previous sentence: "…died on the sill; boards creaked softly as shadows gathered."
+
+- Make Wolf's first speech tag less inert. Replace "Wolf purred, spectacles crooked, 'Come in, dear heart. Mind the step.'" with an action-forward beat + line: e.g., "Wolf purred, spectacles crooked. 'Come in, dear heart—mind the step.'" (split into two sentences to let the verb "purred" land, keep cadence).
+
+- Remove the neutral stage direction "He tips a slippered paw toward the doorway." and turn it into a tactile beat tied to dialogue: "'Come in, dear heart—mind the step.' He tipped a slippered paw toward the doorway, velvet and deliberate." (so action supports voice).
+
+- Change "He coughs—a practised, small sound." to an in-scene show: "He tried on a cough like a glove." (matches prior touch-tone and avoids flat description).
+
+- Tighten the second line of dialogue: remove the attributive "he said, voice higher, kinder." Instead show the shift by adjusting the speech and brief beat: "'Oh, what a day you must have had.' His voice rose, silk and concern." (keeps Wolf's theatricality).
+
+- Merge "His fingers drift to the shawl, smoothing the fold. He straightens his spectacles with the back of a claw." into one compact, observant sentence that shows purpose: "His fingers smoothed the shawl; a claw adjusted the spectacles to blur his eyes." (removes passive repetitions and hints at disguise).
+
+- Rework "Sit. Rest. Grandmother will be so grateful." to be less blunt and more Wolf-like persuasive: "'Sit. Rest—Grandmother will be so grateful if you're prompt.'" (adds a nudge, fits manipulative lexicon).
+
+- Replace passive "He settles deeper into the quilt." with a line that shows intention and masks appetite: "He settled deeper into the quilt, small smile practiced into the fold." (links action to motive).
+
+- Soften or rephrase "His tail twitches once beneath the bedskirt, and the corner of his mouth tightens around the edge of a smile." to avoid over-explaining emotion: "A tail twitched beneath the bedskirt; the corner of his mouth sharpened into a taught smile." (keeps menace and removes clumsy "tightens around the edge").
+
+- Add one brief sensory beat to foreshadow humming without stating it outright: slip a single descriptor after the shutter line—e.g., "A faint thread of a tune slipped past the shutter and died on the sill." keep as-is but ensure it's the only explicit musical hint; do not later explain it.
+
+- Reduce overt narration of motive: remove any sentence that interprets his thought (e.g., avoid anything like "the corner of his mouth tightened around the edge of a smile" if interpreted). Use actions and physical detail instead.
+
+- Overall balance: cut one of the short one-sentence actions between lines (pick either the paw tip or the cough) so dialog remains the forward engine and actions are concise beats that punctuate rather than list.
+
+- Maintain Wolf's cadence: where you have simple tags, favor descriptive beats that carry his theatrical character (purrs, silk voice, practiced smile) rather than plain "he said" or "he coughs."
+
+- Final pass: read aloud to ensure the dialogue rhythms feel like a single performer shifting tone (smooth -> higher/kinder) — if any tag breaks that illusion, replace it with a tactile or facial micro-beat.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+The shutter hooked; pewter light thinned and a faint tune died on the sill; boards creaked softly as shadows gathered.
+
+Wolf purred, spectacles crooked. "Come in, dear heart—mind the step." He tipped a slippered paw toward the doorway, velvet and deliberate, and tried on a cough like a glove.
+
+"Oh, what a day you must have had." His voice rose, silk and concern.
+
+His fingers smoothed the shawl; a claw adjusted the spectacles to blur his eyes.
+
+"Sit. Rest—Grandmother will be so grateful if you're prompt."
+
+He settled deeper into the quilt, small smile practiced into the fold. A tail twitched beneath the bedskirt; the corner of his mouth sharpened into a taught smile.

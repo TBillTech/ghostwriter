@@ -1,0 +1,90 @@
+Touch-Points:
+  - setting:
+      factoids:
+        - "Grandmother's Cottage"
+        - "Basket of Goodies"
+        - "Red Hood"
+      actors:
+        - "Red"
+        - "Wolf"
+
+  - scene:
+      name: "The Cottage Threshold"
+      description: |
+        Red reaches her grandmother’s ivy-framed door, where the air is warm with thyme and cabbage and the clock ticks thinly from within. The latch yields to her knock with a tired sigh, and a voice—papery, yet oddly syruped—calls her nearer.
+        Dim curtains sieve the afternoon light into greenish pools; something about the room feels arranged, as if chairs and teapot are holding their pose for an audience of one.
+      props:
+        - name: "Old Latch"
+          significance: "Threshold between safety and deception"
+          description: |
+            Cold iron, polished by generations of hands; it lifts with the slightest coaxing, as if eager to admit family.
+        - name: "Grandmother's Clock"
+          significance: "Timekeeper and tension metronome"
+          description: |
+            A small mantle clock whose timid ticks seem louder in the hush, punctuating each step Red takes.
+        - name: "Teapot on the Hearth"
+          significance: "Domestic comfort masking danger"
+          description: |
+            Steam whispers from its spout, the lid rattling now and then like a nervous breath.
+        - name: "Net Curtains"
+          significance: "Veil between appearance and truth"
+          description: |
+            Pale lace that dims the light and blurs edges, making shapes look softer—and less trustworthy.
+
+  - actors: ["Red", "Wolf"]
+
+  - mixed: |
+      Red nudges the door and peers inside. “Grandmother?” she calls, the word softening in the warm air.
+      From the inner room, a cough answers, followed by a coaxing, “Come in, dear heart. Mind the draught.”
+      Red: “I brought the bread and jam. Are you resting?”
+      Wolf (as Grandmother): “So thoughtful, my little bird. Set it down and come kiss your old granny.”
+
+  - foreshadowing: |
+      A huntsman is tracking after wolf.
+
+  - scene:
+      name: "Bedside Performance"
+      description: |
+        The bed is drawn close to the window where the light is weakest. A figure nestles among quilts—nightcap pulled low, spectacles glinting faintly, whiskers powdered to a genteel gray.
+        The room narrows to the breath between them; each step Red takes is answered by a rustle under the quilt and a sugar-sweet murmur from the pillows.
+      props:
+        - name: "Grandmother's Nightcap and Spectacles"
+          significance: "Disguise and distortion"
+          description: |
+            The cap droops over pricked ears; the spectacles sit too wide on a long, shadowed muzzle.
+        - name: "Patchwork Quilt"
+          significance: "Concealment of claws and tail"
+          description: |
+            A cheerful scatter of stitched flowers stretched tight over oddly angular shapes.
+        - name: "Candle Stub"
+          significance: "Faltering light to invite mistakes"
+          description: |
+            A guttering wick that bends the shadows into kind shapes—and hides the sharp ones.
+        - name: "Basket of Goodies"
+          significance: "Bait within the trap"
+          description: |
+            Set at the foot of the bed, its linen napkin puckers where something heavier than bread has jostled it.
+
+  - actors: ["Red", "Wolf"]
+
+  - narration: |
+      A sour musk threads beneath the thyme and tea. The cap on the bedpost is tugged too low; powder dusts the pillow in a careless crescent.
+      The chair by the hearth is nudged askew, as if someone left it in a hurry—or made it look as though they hadn’t. Red begins to act visibly nervous.
+      Red edges closer, maybe to give her "Grandmother" a kiss, but she begins to hesitate. The figure pats the coverlet invitingly.
+
+  - dialog: |
+      Wolf: “Closer, sweetheart,” the voice purls. “These old eyes don’t catch the light so well.”
+      Red: “Grandmother, what a big nose you have.”
+      Wolf: “The better to smell you with, my dear.”
+      Red: “And what big ears you have.”
+      Wolf: “The better to hear you with, my dear.”
+      Red: “And—your nails—how big they are.”
+      Wolf: “The better to grasp you with, my dear.”
+      Red: “Grandmother… what big teeth you have.”
+      Wolf: “The better to eat you with, my dear!”
+
+  - narration: |
+      The final phrase "the better to eat you with!" is the classic jump scare!
+      The quilt bunches as muscles bunch beneath it. A hand—no, a paw?—hooks the quilt’s edge.
+      The clock stutters one tick late; the teapot lid chatters once. 
+      Red screams, and is sent to join her Grandmother in the belly of the beast.

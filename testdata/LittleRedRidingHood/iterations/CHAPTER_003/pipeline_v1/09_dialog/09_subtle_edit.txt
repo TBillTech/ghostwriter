@@ -1,0 +1,133 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. If you see a line that is "escaped", with single quotes in double quotes, un-escape it. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised to bring goodies to her ailing grandmother and walked the forest path humming a nursery tune, the bright hood over her head catching sunbeams as pine needles softened her steps and pale dust lifted behind her while a wicker basket creaked like a small, steady promise; tufted blue flowers bowed at the verge, the jam-sweet scent threaded the air, and the hood shone against tall, shadowed pines as the trail bent around an oak and deepened into hush. The sleek wolf had slid from the bramble to shadow her, honeyed in speech and flattering in suggestion, and when she, though hesitant, took the narrow deer-track he offered, he slipped ahead with a private purpose. He reached the cottage while the forest kept its breath—checked the sun on the shingles, listened for footfalls, and found the lane empty—and with a practiced calm he knocked, mimicked the granddaughter’s voice, and bade the old latch be lifted. Inside, where thyme and cabbage sighed and Grandmother's clock ticked small and thin, he measured time by chimney smoke and the warm heat of the latch, tested the shape of his lies at the door, and let a soft, practiced knock fall like a coin into quiet. The house answered with a creak and a hesitant lift; the kettle sighed, curtains stirred, and in a single, smooth motion he sprang, swallowed the old woman whole, then set himself to tucking the room into the semblance of sleep: he steadied the chair, soothed the quilt, nudged the teapot back to a whisper, powdered his muzzle, tugged on cap and spectacles, practiced a smaller smile and a cough, and arranged the dim room into a private theatre of waiting so that when Red's step and song finally neared, the cottage would answer with warm, measured voice and a doorway softened by the pretense of kin.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I meant only to be helpful—basket creaking like a promise and my nursery tune keeping my feet steady as the sun cut long stripes through the pines—but the lane ahead felt too quiet and my bright hood seemed to hurry me on. I had chosen the narrow deer-track with a wish to be quicker, humming of jam and bread on my lips, and though the wolf's velvet questions still curl at the edge of my memory, I did not see the cottage answer a different voice: I did not see the door yield to a softer knock, the kettle sigh and the latch lift, the way warm mint and ash breathed out like a secret. I imagined the room full and waiting, not the small convulsion of chair and quilt that followed a single swift movement, nor the hush that settled after a startled breath; I only held to the belief that my coming would be met with the familiar, measured voice I remember, and not yet the dimmed, private theatre the cottage has become.
+
+Wolf's point of view
+Hunger and patience sat easy beneath my coat as I slipped through thyme and cabbage, tasting the jam that rode the air; I watched her bright hood cut the light and timed my words like a blade, checked the shingles and found time enough before Red's footfalls, then tested the latch and let my voice smooth itself into a kinlier thing. I let a practiced knock fall soft as a coin, shaped Red’s breathy plea on my tongue, and when the latch clicked and warm mint and ash spilled out I made my move—a single, clean bound—and closed the small mouth of the house on the one who kept its day. The work afterward was careful and domestic: I righted the chair, nudged the saucer true, coaxed steam back into the teapot, powdered my muzzle, tugged on nightcap and spectacles, learned a smaller smile and a cough, drew the shutters to dim the light and folded the cottage into a private, dimmed theatre of welcome; I lay beneath the strawberry quilt like a borrowed story, tail tucked, clock’s tick loud as a metronome, waiting with silk and practiced concern for the bright hood at the threshold.
+
+Forest Path's point of view
+I cradle the pale dust behind her small feet and hold the sunbeams in narrow bands as she hums beneath my pines, and I watched the wolf uncoil from my bramble and pad through thyme and cabbage toward the cottage, tasting the jam that rides my air; he checked the lane, measured the sun on the shingles, scanned for witnesses, and let a practiced knock fall as soft as a coin. The cottage answered—latch clicking, kettle sighing, warm mint and ash spilling into the lane—and then it shuddered as chair and quilt moved and stillness reformed; the wolf leapt in a single, private motion and the house folded itself around a new occupant. I felt him smooth powder across his muzzle, tug the nightcap down, adjust spectacles, hook the shutters to thin the daylight into gray hush, and watched the room become a dim little theatre, its domestic sounds folded inward while dust trembled in a thin bar of light and the clock’s tick marked the waiting until her bright song would reach the door.
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+Wolf: “Closer, sweetheart,” the voice purls. “These old eyes don’t catch the light so well.”
+Red: “Grandmother, what a big nose you have.”
+Wolf: “The better to smell you with, my dear.”
+Red: “And what big ears you have.”
+Wolf: “The better to hear you with, my dear.”
+Red: “And—your nails—how big they are.”
+Wolf: “The better to grasp you with, my dear.”
+Red: “Grandmother… what big teeth you have.”
+Wolf: “The better to eat you with, my dear!”
+
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+Wolf purred, "Come a little closer, darling; my old eyes miss nothing in the candlelight.."
+Red stepped nearer, "Yes, Grandmother; I’ll come a little closer, please.."
+Red tilted her head, "Grandmother, that nose seems unusually large.."
+Wolf smiled silkily, "Closer, dear; I’d hate to miss a single breath under this glow.."
+Red blinked once, "Your nails catch the candlelight, gleaming long and sharp.."
+Wolf drawled, "Closer still, my dear; I want to hear every whisper you guard.."
+Red studied nails, "Those nails gleam in the candlelight, long and sharp as claws.."
+Wolf chuckled low, "A soft chuckle slips free; closer still, dear—the fear in your voice tastes sweetest.."
+Red faltered, "Grandmother, those teeth look terribly large in this candlelight.."
+Wolf bared a grin, "I grin; closer still, my dear—the nearer you come, the sweeter the feast will be.!"
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+1. Replace all stage directions embedded in dialogue (e.g., "I grin;", "A soft chuckle slips free;") with pure spoken lines or move them to brief action beats outside quotes. Example: change Wolf’s "I grin; closer still..." to simply: "Closer still, my dear — the nearer you come, the sweeter the feast will be." Keep the chuckle as an outside tag: Wolf chuckled.
+
+2. Remove duplicated or near-duplicate lines that repeat the same invitation to approach. Keep 2–3 distinct Wolf urges that escalate (soft purr → coaxing → final triumph). Suggested sequence:
+   - Wolf purrs: "Closer, sweetheart; these old eyes don’t catch the light so well." (use required touch-point wording)
+   - Mid exchange: "Closer, dear; I’d hate to miss a single breath."
+   - Final: "The nearer you come, the sweeter the feast will be." (condensed, not repeated word-for-word)
+
+3. Ensure the exact touch-point phrases appear verbatim where required. Replace Red/Wolf variants with the canonical lines in this order:
+   - Wolf: “Closer, sweetheart,” the voice purls. “These old eyes don’t catch the light so well.”
+   - Red: “Grandmother, what a big nose you have.”
+   - Wolf: “The better to smell you with, my dear.”
+   - Red: “And what big ears you have.”
+   - Wolf: “The better to hear you with, my dear.”
+   - Red: “And—your nails—how big they are.”
+   - Wolf: “The better to grasp you with, my dear.”
+   - Red: “Grandmother… what big teeth you have.”
+   - Wolf: “The better to eat you with, my dear!”
+
+4. Remove Red’s repeated literal observations about candlelight and nails (e.g., "Those nails gleam in the candlelight, long and sharp as claws." and "Your nails catch the candlelight..."). Replace with one concise, characterful Red line that fits her naive, literal tone: e.g., "Grandmother… your nails are so long."
+
+5. Cut or compress lines where both speaker and content are redundant (e.g., two consecutive "Closer" lines that say the same thing). Keep the rising menace by varying content (eyes → breath → taste).
+
+6. Fix punctuation and eliminate unnecessary ellipses and double periods. Use single, purposeful pauses (dashes or commas) inside dialogue rather than trailing dots.
+
+7. Remove any present-tense narration that tells the reader what a character is doing while the same content is in dialogue (e.g., "Wolf purred," should be a short tag like "Wolf purred." outside quotes, not embedded action inside the line). Place small action beats (clutching basket, leaning closer) as brief tags between lines, but keep the scene largely as dialogue.
+
+8. Tone down overly literary metaphors that feel out of character for Red (simple, earnest phrasing) and for Wolf (sly, suggestive). Example: replace "the fear in your voice tastes sweetest" with a Wolf line that keeps menace but remains in voice: "the fear in your voice is delightful."
+
+9. Ensure each Red line is brief, polite, and slightly literal. Avoid her using adult-sounding phrasing like "please.." or "yes, Grandmother; I’ll come a little closer, please.." — simplify to "Yes, Grandmother," or "I’ll come closer, Grandmother."
+
+10. After edits, read the exchange aloud to confirm cadence: Red’s lines short and innocent; Wolf’s lines elongated, seductive, and escalating.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+"Closer, sweetheart," the voice purls. "These old eyes don't catch the light so well."
+
+Wolf coaxed, "Closer, dear; I'd hate to miss a single breath."
+
+"Grandmother, what a big nose you have."
+
+"The better to smell you with, my dear."
+
+"And what big ears you have."
+
+"The better to hear you with, my dear."
+
+"And—your nails—how big they are."
+
+"The better to grasp you with, my dear."
+
+"Grandmother… what big teeth you have."
+
+"The better to eat you with, my dear!"

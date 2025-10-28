@@ -1,0 +1,9 @@
+- Replace opening sentence with a tighter action that fits the Wolf’s calibrated charm. Remove: "The Wolf let a practiced knock fall soft as a coin." Add/replace with: He tapped—three polite, practiced knocks—each measured to sound like a child at the door.
+
+- Smooth the Wolf’s mimicry to show sly theater and breathy tone while avoiding a stagey simile. Replace: Wolf mimicked Red, speaking softly, "Grandmother, it’s me. Mama sent bread and jam. May I come in?" With: The Wolf softened, breathing the lines like a lullaby. "Grandmother—it's me. Mama sent bread and jam. May I come in?"
+
+- Fix Grandmother tag wording and make muffled quality part of the tag. Replace: Grandmother voice came from within, muffled with age, "Lift the latch, child. I’ve been waiting." With: A muffled voice from within—Grandmother's, thin as old cloth—said, "Lift the latch, child. I've been waiting."
+
+- Remove the redundant/flat final line. Delete: "A faint creak answered." Replace with a single, specific sound tied to the latch so the moment is clear but lean: The latch clicked.
+
+- Optional micro-add after the latch clicks (one short beat) to keep Wolf’s mannerism alive: add a single brief reaction from the Wolf (no long narration). Suggested line: The Wolf let a low, pleased chuckle ride the sound.

@@ -1,0 +1,23 @@
+- Trim duplicate claims about tracks: combine "Tracks run fat and straight to this door. They don't leave." into one crisp line (e.g., "Tracks run fat and straight to this door—no leaving.").
+
+- Tighten the huntsman’s speech to match his cadence. Shorten "I have found you, wolf. Your terrible deeds end here." to something leaner but forceful (e.g., "I've found you, wolf. Your deeds end here.") or split into two clipped beats with a pause for effect.
+
+- Tone down or rework metaphor-heavy narration that blunts immediacy: replace "The bed exhaled; the patchwork hid a predator's line" with a direct physical beat (e.g., "The patchwork shifted; something long and warm moved beneath.").
+
+- Reduce repetition around spectacles/long snout: choose one clean reveal rather than several echoes. For example, have the spectacles slide down as the single clear reveal, then let the huntsman react to that one image.
+
+- Make the huntsman’s evidence-listing more tactile and economical: pull the flour/whisker/flour-dust senses into a single measured observation line (e.g., "Flour on the seams, whiskers against my hand, that sour fur-musk—Grandmother's spectacles on a snout.").
+
+- Shift some of the wolf’s lines toward his established cadence: add sibilant elongations and softer flattery. Change "Such accusations. Grandmother is all aches and coughs; mind your tone in a sickroom." to something more sly and theatrical (e.g., "Accusations? Poor Grandmother—aches and coughs. Mind your tone in a sickroom, hunter...").
+
+- Cut or rework cliché countdown phrasing: remove "The clock ticked, counting down to the draw." Replace with a brief sensory beat that keeps tension (e.g., "The mantle clock kept its slow, indifferent tick. He stepped closer.").
+
+- Add a small physical action to ground the huntsman before his verdict: a short beat such as "He lifted the spectacles between forefinger and thumb, held them to the light." This underscores his proof and gives space before the final line.
+
+- Soften overt explanation about muzzles vs. human profile—show, don't tell: instead of stating "wolf muzzles are recognizably not the profile of an old woman," have the huntsman gesture to the long snout or say a concise, character-consistent line (e.g., "That's no elder's profile—it's a muzzle.").
+
+- Preserve the final moral line but increase its weight with a pause or physical detail beforehand. Insert a spare stage direction (one short sentence) before "If you were human..." so the huntsman’s authority lands (e.g., "He set the spectacles down slowly. 'If you were human...'").
+
+- Remove any moments where characters narrate their own visible actions in dialogue (e.g., avoid lines like "Come closer—see how feeble she is" that ask the reader to look; instead have the wolf invite and the narration describe the action).
+
+- Consider one small action beat after the huntsman's final line to close the scene (a released breath, the bow drawn, or the wolf's purr tightening). Keep it minimal to preserve momentum.

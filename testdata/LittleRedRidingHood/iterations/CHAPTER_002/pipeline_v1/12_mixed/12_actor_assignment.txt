@@ -1,0 +1,160 @@
+=== SYSTEM ===
+Assign lines to actors as 'id: line' entries (Narrator allowed for brief prose beats).
+
+=== USER ===
+You are a Director working from structured YAML notes.  
+The overall goal is to produce polished prose to go into a novel.
+Your job is to tell the actors what to say.  The actors know what their characters are like, but they need to be prompted as if they forgot their lines.
+The writer has already given you each line that needs to be said, but didn't tell us which actors should say what, and the voice should be cast to second person.  Each line (bullet point) which needs to be spoken by an actor starts with a '*' character.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters in this chapter
+{
+  "Selected-Characters": [
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# Specifics in the Chapter
+Here is central theme of the dialog lines being "filmed"/"recorded":
+Wolf (testing): "Come in, dear heart. Mind the step."
+Wolf (again, higher, kinder): "Oh, what a day you must have had."
+The words fit. He settles deeper into the quilt.
+
+
+# Rules for generation:
+1. **Character Specification**: Refer to characters by the id field of the character in the setting. Each line must start with the id of the best character to speak it. 
+2. **Narrator**: Some lines cannot easily be conveyed to a reader as dialog.  You should use "Narrator:" to assign lines that would be strange for any of the characters to say.
+3. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
+4. **Character Dialog**: When you tell the actor what to say, be sure to transform the words into second person, using the "you" pronoun. This helps the character role play and not get distracted by other points of view. 
+5. **Multi-way Dialog**: Prefer switching which character says what on each successive line, if possible.  Sometimes, a character has to have two lines in a row, but this can get confusing for the reader. If you are tempted to have the same character say two consecutive dialogs, consider if one line should be Narrator.
+6. **Avoid**: DO NOT put - or * at the beginning of the line. DO NOT add any other text or markdown other than the name, colon, and line. 
+
+## Examples of actor prompt lines
+
+Below is an example showing the format desired for three bullets, showing both the identity narration bits, followed by the specific actor id and line direction:
+
+Henry: You say there is a hole in the bucket.  You use Liza's name several times for emphasis.  But you are careful to be polite.
+
+Liza: You shortly tell Henry to just fix the dang thing!  Already!  Politely of course.
+
+Narrator: Liza points her finger directly at the bucket hole.
+
+Henry: You ask how on earth to fix a bucket? Maybe it is not rocket science, but you don't think you have a way to do it.
+
+# Lines from the Writer:
+These are the lines the writer is giving you. Note that there should always be one actor line output per bullet:
+* Narrator: The shutter hook holds; daylight thins to a pewter wash that smooths edges and fattens shadows.
+* wolf: "Come in, dear heart. Mind the step."
+* Narrator: He pauses, listening for how the boards carry the words, testing whether the sibilants snag.
+* wolf: "Come in, dear heart. Mind the step," softer, smile pressed small behind the spectacles.
+* wolf: "Oh, what a day you must have had."
+* Narrator: The line floats and falls; he nudges it higher, letting a thin tremble lace the edges like ribbon.
+* wolf: "Oh, what a day you must have had," higher, kinder, a breathy chuckle stitched to the end.
+* Narrator: Powder prickles his nose; he swallows the urge to sneeze and smooths the nightcap over pinched ears.
+* Narrator: He settles deeper into the quilt, weight sinking until the puff holds him, the hem swallowing his breadth.
+
+
+## Job to do
+Now, convert each line from the writer to the new actor centric second person format. Notice that you are always allowed to assign a line to the Narrator, but try not to do it unless you cannot see how to make it into a line of dialog. 
+
+=== RESPONSE ===
+Narrator: You watch the shutter hook hold as daylight thins to a pewter wash that smooths edges and fattens shadows.
+
+wolf: You step over the threshold; you are told to mind the step.
+
+Narrator: You pause with him as he listens for how the boards carry the words, testing whether the sibilants snag.
+
+wolf: You are welcomed again, softer now, the smile pressed small behind a pair of spectacles and you are reminded to mind the step.
+
+wolf: You are observed as he says you must have had quite a day.
+
+Narrator: You feel the line float and fall; he nudges it higher, letting a thin tremble lace the edges like ribbon.
+
+wolf: You hear the words higher, kinder, the tone lifting with a breathy chuckle stitched to the end as if to soothe you.
+
+Narrator: You notice powder prickling his nose; he swallows the urge to sneeze and smooths the nightcap over pinched ears so you do not see.
+
+Narrator: You see him settle deeper into the quilt, weight sinking until the puff holds him and the hem swallows his breadth.

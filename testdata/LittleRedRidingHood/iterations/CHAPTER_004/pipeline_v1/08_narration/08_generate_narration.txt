@@ -1,0 +1,115 @@
+=== SYSTEM ===
+You write narrative prose from ordered bullets, keeping voice consistent.
+
+=== USER ===
+You are to write narrative prose that realizes the ordered outline below.
+
+Context
+=======
+- Setting and chapter:
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood', 'Basket'], 'actors': ['Red', 'Grandmother', 'Wolf', 'Huntsman']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    },
+    {
+      "name": "Basket",
+      "description": "Gift and responsibility; symbol of trust. A mcguffin"
+    }
+  ]
+}
+
+- Story so far:
+Red had promised sweets and walked the pine-smelling path with her hood catching the light and the basket creaking like a vow, while the sleek, flattering wolf slipped away along a deer-track to the cottage, reached it first, and with practiced calm swallowed Grandmother whole before setting the room into a careful masquerade; he powdered his muzzle, tugged on cap and spectacles, soothed the quilt and set the teapot whispering so the house would answer Red with the warmth of kin. She stepped inside to net curtains that sifted the afternoon into green pools and called softly, basket in hand, and a coaxing, grandmotherly coo—too slick, too practiced—bade her nearer; thyme and tea rose but a sour, wrong musk threaded the bed's shadow, the candle bent light into pooling dark, spectacles glinted on an oddly shaped silhouette and the nightcap drooped over a curious ear-tip. Red, humming a nursery tune, hesitated as angles read wrong and the cover shifted with a weight not belonging to age; the voice purred, urging her closer, patting the quilt in a deliberate, inviting rhythm, and when she asked the small questions—about eyes, ears, nose, nails—the answers came honeyed and false until whiskers powdered like flour in the gloom and the quilt yawned: a paw hooked the edge, spectacles fogged and were wiped with a slow, contented sigh, the basket toppled, a scream was swallowed as warm dark folded around Red, Grandmother folded within the wolf's belly, and the cottage smoothed back into its domestic hush with only the steady, indifferent tick of the clock.
+
+- Story relative to:
+Red's point of view
+I had meant only to be helpful—basket creaking like a promise, my hood catching the light as I stepped into the cottage that seemed to lean toward me—and the room answered with a wrongness that tugged at the edges of my certainty. Sun freckled the floor; net curtains sliced the afternoon into green pools and thyme and tea rose from the kettle, but a sour musk threaded beneath those homely smells and the curtain’s hem still swayed though the window was latched. The voice that answered was too slick, too practiced; it cooed and patted and urged me closer until small things read wrong: a chair nudged askew as if staged, spectacles glinting on a long shadow, a nightcap pulled too low over a pricked ear-tip, powder scored the pillow like a careless hand. I set the basket down at the foot of the bed because I trusted the voice, because the coaxing sounded like Grandmother, and when I stepped forward to kiss the pillow the breath beneath it answered too deep. Each question I asked—the eyes, the ears, the nose, the nails—was met with honeyed falsehoods that flattened the room around me, and the clock stuttered one late tick as the quilt rustled wrong. Whiskers powdered the gloom, a paw hooked the cover, the patchwork yawned like a mouth, and my scream was swallowed as warm dark folded over me and the cottage smoothed back into its domestic hush with only the steady tick remaining.
+
+Wolf's point of view
+Hunger and patient craft kept me light on the shingles and warm in the thyme; I slipped in before her, checked the latch, let the house breathe out mint and ash and the teapot hiss to keep up appearances, and set the stage with little disarrangements—a chair nudged, the nightcap tugged low, spectacles tilted, powder scored the pillow—so everything would look like age and forgetting. When Red stepped across the threshold, hood bright against the dim, I pooled my voice into a kinder thing and let it purr through the room, coaxing her to set the basket by the bed and come closer. Sun freckled the floor, the curtain hem moved though the window was latched, a sour musk threaded beneath the thyme to distract her, and I answered every soft question with a sweeter lie until muscles gathered under the quilt. I timed the stutter of the clock and the teapot’s chatter, watched her fingers tighten on the napkin, felt the basket tilt as her heel skidded—then the patchwork opened. Whiskers powdered the gloom, I wiped the spectacles with a slow contented sigh, hooked the cover with a paw, and the bed swallowed them both; I smoothed my sleeve, the candle thinned to a bead, and the cottage resumed its ordinary pose with a new warmth at the hip and the steady tick marking my patient satisfaction.
+
+Forest Path's point of view
+I kept the pale dust and sunbeams for her small feet and felt the wolf uncoil through my thyme long before either of them reached the cottage; I watched him time his knock to the tilt of the light and saw the house lean in as Red hummed her way along, hood bright, basket creaking like a promise. Sun freckled the floor when she nudged the door and called, and I took in the little betrayals inside—the curtained green pools, the kettle’s steam, the chair nudged as if left in a hurry, the candle bending light into dark pools—signs the wolf had been working his stagecraft. The voice that came back was slick and coaxing, and I felt the room hold its breath when Red stepped closer, fingers tightening at the napkin, the basket set at the bed's foot. The clock stuttered, the teapot chattered, the quilt rustled with breaths too long for age; whiskers powdered the gloom, spectacles fogged and were wiped, a paw hooked the edge, and the patchwork yawned. I kept the thin bar of light where her footsteps had passed as the bed closed over a new fullness, the cottage smoothed, and the mantle's tick resumed, carrying the echo of her vanished song along my lane.
+
+Touch-Point
+===========
+Text: The Huntsman fires the arrow, and it flys true. Wolf slumps dead in the bed, with an arrow in the eye. 
+The huntsman notices the moving belly of Wolf, and partly in shock, party in fascination, cuts wolf's belly open with his skinning knife. 
+First Grandmother spills out—pale, blinking, shocked with breath and alive. Then Red, slick with Wolf’s remains.
+
+
+State
+=====
+- Scene: {'name': 'Inside: The Belly and the Blade', 'description': 'The bed inhales and exhales in heavy bellows. Beneath the nightcap and spectacles, the sleeper’s muzzle peeks powder-white, and the quilt mounds like a harvest sack. The huntsman recognizes the trespass not only in scent and shape but in the cruel satisfaction resting on those whiskered lips.\nHe does not shout. He Carefully aims the bow.\n', 'props': [{'name': 'Quilt', 'significance': 'Concealment and cradle', 'description': 'A hand-stitched patchwork pulled high, hiding both predator and prize within.'}, {'name': 'Nightcap and Spectacles', 'significance': 'The predator’s disguise', 'description': 'Borrowed garments perched absurdly on a wolfish brow.'}, {'name': 'Sewing Kit', 'significance': 'Tool for repair and closure', 'description': 'A tin with needles, coarse thread, and small scissors, tucked by the bedside.'}, {'name': 'Basin and Towels', 'significance': 'Practical aid for a quiet operation', 'description': 'A porcelain bowl and clean cloths ready from earlier tea-making and tidying.'}]}
+- Actors: Huntsman, Wolf
+- Foreshadowing: 
+- Prior paragraph (if any): Night pooled in the corner; the quilt swelled with something alive. A white muzzle glinted from beneath the cover.
+
+The huntsman lowered the bow an inch. "I have found you, wolf. Your terrible deeds end here."
+
+Whiskers twitching, the wolf purred, "Such accusations. Grandmother is all aches and coughs; mind your tone in a sickroom."
+
+The bed exhaled; the patchwork hid a predator's line. The clock ticked, counting down to the draw.
+
+The huntsman stepped closer, eyes narrowed. "Tracks run fat and straight to this door. They don't leave." He pinched the seam between thumb and forefinger; a puff of flour rose and the whiskers brushed his skin. He drew a breath; a sour fur-musk threaded with flour dust rose to his nostrils. "Tracks, the sour musk, spectacles perched on a snout."
+
+The wolf's voice went honeyed. "You mistake frailty for brutality, hunter. Come closer—see how feeble she is."
+
+The nightcap drooped; a long brow showed through the patchwork. The quilt twitched and the seam gave—a pair of spectacles slid down the long snout.
+
+Silence.
+
+The huntsman's jaw set. "If you were human, I could not do this. For beasts, I am judge, jury, and executioner."
+
+Ordered bullets
+===============
+* The room holds its breath as huntsman draws, counts, and looses.
+* The arrow hums through candle air and bedsheets and strikes wolf clean in the eye.
+* Spectacles leap; the nightcap flips; powder lifts like ash and settles on the quilt.
+* The bed heaves once; wolf shudders and sinks, jaw slack beneath the patchwork, arrow lifting to the ceiling.
+* The arrow’s feathering trembles in the ruined eye; disguise garments lie askew on the pillow.
+* The belly still moves beneath the quilt, round and slow, as if something trapped remembers air.
+* Warm breath and herb-sour steam rise; the quilt drinks the damp and the candle gutters once.
+* He turns back the quilt to the chin of wolf and the ruin of the eye, confirming the kill.
+* Huntsman lowers the bow, sets it by the hearthstones, and lays a steady palm on the mound to feel life within.
+* He rolls the body a hand’s width to free space on the mattress and reaches for his skinning knife.
+* The porcelain basin is drawn near; clean towels are unrolled across the bedside stool.
+* With blade point he finds the soft seam of belly and draws a measured line, careful and sure.
+* The mound slackens and shifts; a small form works forward through the rent.
+* Grandmother spills first, pale and blinking, coughing tea air and powder, alive.
+* The belly sags flat; the quilt puddles around the ribs; the room’s shapes right themselves.
+* Red slides free, slick with wolf’s remains and flour dust; a towel is set over her hair and face.
+* Huntsman guides her to the chair, wraps a towel around her shoulders, and steadies her feet.
+* Huntsman wipes the knife on a clean cloth, checks breath and pulse of the rescued.
+
+Instructions
+============
+- Convert the ordered bullets into a continuous narrative paragraph or two.
+- Keep it vivid, concise, and in the established voice.
+- Do not include bullet markers or headings in your output.
+- Return only the prose.
+- DO NOT say "a symbol of", be sure to transform this into "seemed like" or just "like" or some other simile.
+- Be sure to reformat spaces so that it looks natural.
+- Strongly prefer using proper names over pronouns like "they", "him", "it".
+
+
+=== RESPONSE ===
+The room held its breath as the Huntsman drew, counted, and loosed. The arrow hummed through candle air and bedsheets and struck the wolf clean in the eye. Spectacles leapt; the nightcap flipped; powder rose like ash and settled on the quilt. The bed heaved once; the wolf shuddered and sank, jaw slack beneath the patchwork, the arrow tilting up toward the ceiling. The feathering trembled in the ruined eye; the borrowed garments lay askew on the pillow. Beneath the patchwork the belly still moved, round and slow, as if something trapped remembered air. Warm breath and herb-sour steam pushed through the cloth; the quilt drank the damp and the candle guttered once. Huntsman turned back the quilt to the chin of the wolf and the ruin of the eye, confirming the kill, then lowered the bow and set it against the hearthstones. He laid a steady palm on the mound to feel life within, rolled the body a hand’s width to free the mattress, and reached for his skinning knife.
+
+He drew the porcelain basin near and unrolled clean towels across the bedside stool. With the blade point he found the soft seam of belly and drew a measured line, careful and sure. The mound slackened and shifted; something small worked forward through the rent. Grandmother spilled out first—pale, blinking, coughing the tea air and powder, alive and startled. The belly sagged flat; the quilt puddled around the ribs; the room’s shapes righted themselves. I slid free next, slick with the wolf’s remains and flour dust; Huntsman set a towel over my hair and face, guided me to the chair, wrapped another towel about my shoulders, and steadied my feet. Huntsman wiped the knife on a clean cloth, checked Grandmother’s breath and pulse, checked mine, and the cottage began, very slowly, to remember how to be a house again.

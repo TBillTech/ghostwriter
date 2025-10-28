@@ -1,0 +1,17 @@
+- Replace ambiguous pronouns with names in key moments (e.g., change “He opened wide…” and “He tested his balance…” to “The Wolf opened wide…” and “The Wolf tested his balance…”) to avoid momentary confusion about actors.
+
+- Tighten redundant sound-detail sequence: simplify “The teapot sighed on, the kettle's small hiss marking the thin seam of sound, and a hush filled the gaps between noises” to a single, sharper image that maintains the hush (e.g., keep one vessel’s sound and the hush).
+
+- Trim or rephrase “The floorboards groaned under the new heft. Wolf did not falter.” — these two lines are slightly repetitive. Either merge (showing balance under weight) or drop “did not falter” and show steadiness through action (balance, roll of shoulders).
+
+- Soften or clarify “Grandmother vanished in one bite” if you want to preserve the writer’s sly tone while avoiding bluntness: consider “Grandmother was swallowed in a single, deft motion” or “The Wolf swallowed Grandmother whole in one smooth bite” — keep the swallow explicit but make cadence match the Wolf’s theatrical charm.
+
+- Rework “dabbed powder along his muzzle” which reads slightly domestic and clumsy against the Wolf’s slick menace: choose a verb that keeps theatricality but reads cleaner (e.g., “smoothed powder,” “patted powder,” or “touched powder to his muzzle”).
+
+- Shorten the closing clause “and arranged the nightcap and spectacles until the outline softened just so—pleasing work, patient as hunger.” Consider tightening cadence: “He arranged the nightcap and spectacles until the outline softened—pleasing work, patient as hunger.” This preserves voice but removes a double adverbial rhythm.
+
+- Consider adding one brief micro-reaction from Grandmother (a startled breath, a muffled sound) before she is gone to sharpen the moment’s emotional impact — keep it extremely small so the Wolf’s swift triumph remains the focus.
+
+- Watch for present-tense shifts: ensure all verbs consistently maintain the chosen tense (mostly past). For example, “The teapot sighed on” feels slightly off; consider “The teapot continued to sigh” or “The teapot sighed” for consistency.
+
+- Keep the room-as-character language, but vary sentence length more deliberately: break one of the longer opening sentences into two to improve rhythm and give the swallowing moment more punch.

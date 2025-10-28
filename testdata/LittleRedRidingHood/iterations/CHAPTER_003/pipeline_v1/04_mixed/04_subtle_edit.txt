@@ -1,0 +1,141 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. If you see a line that is "escaped", with single quotes in double quotes, un-escape it. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised to bring goodies to her ailing grandmother and walked the forest path humming a nursery tune, the bright hood over her head catching sunbeams as pine needles softened her steps and pale dust lifted behind her while a wicker basket creaked like a small, steady promise; tufted blue flowers bowed at the verge, the jam-sweet scent threaded the air, and the hood shone against tall, shadowed pines as the trail bent around an oak and deepened into hush. The sleek wolf had slid from the bramble to shadow her, honeyed in speech and flattering in suggestion, and when she, though hesitant, took the narrow deer-track he offered, he slipped ahead with a private purpose. He reached the cottage while the forest kept its breath—checked the sun on the shingles, listened for footfalls, and found the lane empty—and with a practiced calm he knocked, mimicked the granddaughter’s voice, and bade the old latch be lifted. Inside, where thyme and cabbage sighed and Grandmother's clock ticked small and thin, he measured time by chimney smoke and the warm heat of the latch, tested the shape of his lies at the door, and let a soft, practiced knock fall like a coin into quiet. The house answered with a creak and a hesitant lift; the kettle sighed, curtains stirred, and in a single, smooth motion he sprang, swallowed the old woman whole, then set himself to tucking the room into the semblance of sleep: he steadied the chair, soothed the quilt, nudged the teapot back to a whisper, powdered his muzzle, tugged on cap and spectacles, practiced a smaller smile and a cough, and arranged the dim room into a private theatre of waiting so that when Red's step and song finally neared, the cottage would answer with warm, measured voice and a doorway softened by the pretense of kin.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I meant only to be helpful—basket creaking like a promise and my nursery tune keeping my feet steady as the sun cut long stripes through the pines—but the lane ahead felt too quiet and my bright hood seemed to hurry me on. I had chosen the narrow deer-track with a wish to be quicker, humming of jam and bread on my lips, and though the wolf's velvet questions still curl at the edge of my memory, I did not see the cottage answer a different voice: I did not see the door yield to a softer knock, the kettle sigh and the latch lift, the way warm mint and ash breathed out like a secret. I imagined the room full and waiting, not the small convulsion of chair and quilt that followed a single swift movement, nor the hush that settled after a startled breath; I only held to the belief that my coming would be met with the familiar, measured voice I remember, and not yet the dimmed, private theatre the cottage has become.
+
+Wolf's point of view
+Hunger and patience sat easy beneath my coat as I slipped through thyme and cabbage, tasting the jam that rode the air; I watched her bright hood cut the light and timed my words like a blade, checked the shingles and found time enough before Red's footfalls, then tested the latch and let my voice smooth itself into a kinlier thing. I let a practiced knock fall soft as a coin, shaped Red’s breathy plea on my tongue, and when the latch clicked and warm mint and ash spilled out I made my move—a single, clean bound—and closed the small mouth of the house on the one who kept its day. The work afterward was careful and domestic: I righted the chair, nudged the saucer true, coaxed steam back into the teapot, powdered my muzzle, tugged on nightcap and spectacles, learned a smaller smile and a cough, drew the shutters to dim the light and folded the cottage into a private, dimmed theatre of welcome; I lay beneath the strawberry quilt like a borrowed story, tail tucked, clock’s tick loud as a metronome, waiting with silk and practiced concern for the bright hood at the threshold.
+
+Forest Path's point of view
+I cradle the pale dust behind her small feet and hold the sunbeams in narrow bands as she hums beneath my pines, and I watched the wolf uncoil from my bramble and pad through thyme and cabbage toward the cottage, tasting the jam that rides my air; he checked the lane, measured the sun on the shingles, scanned for witnesses, and let a practiced knock fall as soft as a coin. The cottage answered—latch clicking, kettle sighing, warm mint and ash spilling into the lane—and then it shuddered as chair and quilt moved and stillness reformed; the wolf leapt in a single, private motion and the house folded itself around a new occupant. I felt him smooth powder across his muzzle, tug the nightcap down, adjust spectacles, hook the shutters to thin the daylight into gray hush, and watched the room become a dim little theatre, its domestic sounds folded inward while dust trembled in a thin bar of light and the clock’s tick marked the waiting until her bright song would reach the door.
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+Red nudges the door and peers inside. “Grandmother?” she calls, the word softening in the warm air.
+From the inner room, a cough answers, followed by a coaxing, “Come in, dear heart. Mind the draught.”
+Red: “I brought the bread and jam. Are you resting?”
+Wolf (as Grandmother): “So thoughtful, my little bird. Set it down and come kiss your old granny.”
+
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+The latch sighs open and the cottage seems to lean in as Red steps inside, basket creaking with the weight of promises.
+Red called softly, "Grandmother, it is Red. I brought bread and jam to comfort you and to help you stay warm.?"
+Net curtains sift the afternoon light into greenish pools as the room seems to hold its breath, awaiting the elder's response.
+Wolf cleared his throat, "Come in, dear heart; the draught is only the house breathing, and a moment by the fire will warm your hands and your questions.."
+The clock's timid tick grows bolder, and the teapot's lid rattles as if a nervous breath accompanies Red's cautious pace.
+Red chirped, "I bring the bread and jam.!"
+The door sighs wider and the chill slips in as Red steadies the basket, watching the bed's silhouette for any sign of life.
+Wolf purred, "Such a dutiful girl; please close the door, sweetling.."
+Red's breath catches as the air thickens behind the net curtains, and the room waits with a quiet, measured patience.
+Red asked, "You sound a little different, are you chilly??"
+Wolf murmured, "A touch of chill, dear; these rooms remember every step and echo them back.."
+Net curtains swallow the edges as the clock ticks, and Red's gaze drifts to the bed's faint outline, listening for any tremor of life.
+Red offered, "Shall I open the shutters for more light??"
+Wolf protested softly, "Oh, no, child. The light pricks these old eyes.."
+The stubborn light holds its edge as the bed's shape remains still, and the room listens for a whisper beyond the veil.
+Red asked, "May I put the basket on the table??"
+Wolf instructed, "Set it by the bed, please, so I needn’t reach.."
+The basket slides toward the bed, and the room holds its breath as the exchange tilts toward a closer moment.
+Red reassured, "All right. Please don’t strain.."
+Wolf replied, "Your kindness warms me more than fire.."
+I'll set the basket down right here— is that okay?
+Wolf cooed, "So thoughtful, my little bird; now come kiss your old granny.!"
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Remove duplicate mentions of bread and jam. Keep one clear, simple line from Red about the basket early ("I brought bread and jam for Grandmother.") and delete other repeats.
+
+- Cut repetitive sensory lines about the net curtains/clock/teapot. Keep one evocative image (e.g., "Net curtains sifting afternoon light") and delete the other two to tighten pacing.
+
+- Delete the stray first-person line "I'll set the basket down right here— is that okay?" (breaks narrator perspective and the scene's rhythm).
+
+- Normalize punctuation and remove extra question/exclamation marks and doubled periods in dialog. Use single terminal punctuation per line.
+
+- Trim or merge these overlapping lines:
+  - Remove either "Red called softly, 'Grandmother, it is Red...'" or "Red chirped, 'I bring the bread and jam.'" — keep the first and shorten it to, for example: "Grandmother? It's Red. I brought bread and jam."
+
+- Reduce repeated "the room holds its breath" / "the room waits" constructions to one strong moment. Replace other instances with brief physical beats (Red clutching the basket, stepping closer, hesitation).
+
+- Clarify attributions so it's always clear who speaks as Grandmother. Add brief parenthetical or beat to note Wolf is imitating Grandmother only once, then let the slippage be implied by tone. Example: after the first Wolf line, add a tiny action: "His voice softened into a grandmotherly coo," and remove later explanatory tags.
+
+- Adjust Wolf's lines to match his sly, theatrical cadence and avoid overt admission. Replace flat lines like "A touch of chill, dear; these rooms remember every step and echo them back." with something more elliptical and slippery: "A little chill, dear — these old rooms keep their memories."
+
+- Make Red's language simpler and more literal. Where she asks questions, keep them plain and polite ("Are you resting?" / "May I put the basket on the table?") Remove rhetorical flourishes ("You sound a little different, are you chilly??") — change to "You sound different. Are you cold?"
+
+- Add a brief action beat between questions to ground dialog: e.g., after Red asks about shutters, show her reaching for the latch and pausing, or clutching the basket tighter.
+
+- Replace awkward/overwrought lines:
+  - "The latch sighs open and the cottage seems to lean in..." — keep but pare: "The latch sighed. The cottage seemed to lean in as Red stepped inside."
+  - Delete vague lines like "The stubborn light holds its edge as the bed's shape remains still, and the room listens for a whisper beyond the veil." Replace with a concise image: "Light trimmed the bed's silhouette. Nothing moved."
+
+- Soften the final command from Wolf only slightly to preserve menace but avoid melodrama. Change "now come kiss your old granny.!" to "Come, give your old granny a kiss." with an unsettling softness.
+
+- Insert one small, character-defining gesture for Red before she leans in to kiss: she hesitates, lowers her eyes politely, or hums a nursery tune under her breath to show innocence and nervousness.
+
+- Remove redundant "dear heart" / "dear" duplications from Wolf if too frequent; keep one or two sly endearments to avoid sounding repetitive.
+
+- Tighten overall length by cutting three nonessential sentences (suggested cuts: one of the repeated net-curtain lines, one of the extra clock/teapot descriptions, the stray first-person line), which will preserve momentum and keep dialog-driven focus.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+The latch sighed. The cottage seemed to lean in as Red stepped inside, the basket creaking like a promise.
+
+Net curtains sifted the afternoon light into greenish pools.
+
+Red nudged the door and peered in. "Grandmother? It's Red. I brought bread and jam."
+
+A cough answered from the inner room. "Come in, dear heart. Mind the draught."
+
+His voice softened into a grandmotherly coo.
+
+"Are you resting?" Red asked, clutching the basket.
+
+"How thoughtful, my little bird. Set it down by the bed, and come—give your old granny a kiss."
+
+Light trimmed the bed's silhouette. Nothing moved. Red hesitated, eyes dropping for a moment as she hummed the nursery tune under her breath, then stepped closer and reached toward the table. "May I put the basket on the table?" she asked.
+
+"Set it by the bed, please, so I needn't reach," the voice purred.
+
+"All right. Don't strain yourself," Red said, lowering the basket with careful hands.

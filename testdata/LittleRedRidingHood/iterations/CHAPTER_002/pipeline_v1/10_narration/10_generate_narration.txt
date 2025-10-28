@@ -1,0 +1,93 @@
+=== SYSTEM ===
+You write narrative prose from ordered bullets, keeping voice consistent.
+
+=== USER ===
+You are to write narrative prose that realizes the ordered outline below.
+
+Context
+=======
+- Setting and chapter:
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+- Story so far:
+Red had promised to bring goodies to her ailing grandmother and walked the forest path humming a nursery tune, the bright hood over her head catching sunbeams as pine needles softened her steps and pale dust lifted behind her while a wicker basket creaked like a small, steady promise; tufted blue flowers bowed at the verge, the jam-sweet scent threaded the air, and the hood shone against tall, shadowed pines as the trail bent around an oak and deepened into hush. From the bramble a sleek wolf moved parallel, low and silent, lifting his muzzle to the trail as if to taste the drift of jam, and when Red paused he slid into speech with a velvet, honeyed voice that asked where she was bound and what treasures she carried, murmuring of a quicker way and offering to guide her by a narrow deer track that would rejoin the lane by the birch marked by a lightning scar; the forest listened—a jay cackled and vanished, a branch brushed the basket and made it creak, and shadows lengthened while the wolf's smile was all bright teeth and false comfort. He named the crooked stump and the three tall pines that marked her grandmother's cottage and, soft and insistent, assured her the deer track would set her right on time, letting the thought of a shortcut curl in the air like a lure. Red tightened her hood, fingers clamped the handles, felt the crooked stump's shadow skitter across her boots, and though she faltered at the fork and felt the hush press, she remembered her grandmother waiting, thanked him in a small voice, and—resolute not to linger for flowers—accepted the wolf’s guidance, stepping onto the narrow ruts and hurrying away along the hidden track.
+
+- Story relative to:
+Red's point of view
+I meant only to be helpful—my basket creaks like a promise and the nursery tune keeps my feet steady as the sun slices through the pines. The hood gleams in narrow bands of light as the path winds past the black-barked oak and the forest draws a shade around me; pine needles soften my steps and pale dust lifts in my wake while a tuft of blue flowers nods from the verge. I clutch the wicker when a branch brushes it and the crooked stump's shadow skitters over my boots, and when the wolf slips from the bramble his voice is velvet and his questions smell of honey and quicksilver. He asks where I'm bound, what treasures I carry, and offers a hushed shortcut along a deer track that will meet the lane by the birch with the lightning scar—names I know, and promises that curl like a lure. The jay's cackle and the hush that follows make me flinch; still, thinking of Grandmother waiting with bread and jam, I tug my hood tighter, decide against lingering for flowers, and with a tightened grip on the basket and a small, steady stride I accept the deer track and hurry on, thanking him and calling farewell over my shoulder.
+
+Wolf's point of view
+Hunger and patience sit easy beneath my coat as I pad low through the bramble, smelling jam like an invitation threaded through the pines, watching her bright hood cut the light and the wicker creak like a small, honest drum. I slip between shadows and time my words soft as oil, letting polite curiosity tilt her answers toward the map I want to set in her head: three tall pines, the crooked stump, the birch with the lightning scar. I purr a promise of a quicker way, let the sibilants smear like a ribbon, and watch the branch that brushes her hand make the basket speak for me. The jay's cackle and the hush that follows do my work for me; hesitation blooms, memory of the birch tugs, and I press the deer-track into her choices like an easy route home. She tightens her hood, thanks me in a small voice, and follows the narrow ruts, fingers curled on the handle—I bow with a silk of a smile and wait, patient as hunger.
+
+Forest Path's point of view
+I cradle the pale dust behind her little feet and hold the sunbeams in narrow bands as she hums and walks beneath my pines, the hood bright against the deepening shade where the black oak bends the trail. Tufted blue leans in my verge and pine needles hush her steps while a branch reaches to make the wicker creak; I let the sound fold into my long quiet. A sleek shape slips through my bramble, low and measured, tasting the jam that rides my air, and his voice slides over my understory like oil—soft questions, the offer of a narrow deer track that threads beneath my roots and promises to meet the lane by the birch with the lightning scar. The jay cackles and then the hush thickens, the crooked stump's shadow slides across her boots, and she pauses between my forks before tugging her hood tighter and stepping onto the thin ruts. I keep the crossing tucked in my soil as she hurries on, basket against her arm, the trail folding the moment into the long hush of the wood.
+
+Touch-Point
+===========
+Text: He tidies the impression of struggle to nothing, sets the kettle to murmur, and folds the shawl around his shoulders.
+In the mirror’s dim, his mouth learns a smaller smile. He tries on a cough the way one tries on a glove.
+
+
+State
+=====
+- Scene: {'name': 'Inside, the Disguise', 'description': 'The aftermath of swallowing Grandma: The chair is knocked over, and the teapot is still warm. But Wolf organizes the room halfway through the scene.\n', 'props': [{'name': 'Grandmother’s Nightcap and Spectacles', 'significance': 'Tools of disguise; innocence repurposed', 'description': 'A soft cap with a blue ribbon, and spectacles smudged with use.\nThey pinch the Wolf’s ears and blur his eyes, but lend him a silhouette.\n'}, {'name': 'Feather Quilt and Bed Curtains', 'significance': 'Stage for the masquerade', 'description': 'A puffed quilt stitched with strawberries, curtains that turn a bed into a small theater.\nThey muffle size and shape, smooth the outline of teeth.\n'}, {'name': 'Shutter Hook', 'significance': 'Conspiracy with the dark', 'description': 'A simple hook-and-eye that tames daylight.\nOnce fastened, the room is quiter and dimmer.\n'}, {'name': 'Powder Tin', 'significance': 'A trick to soften a snout', 'description': 'A little tin of rice powder; a dab on the muzzle keeps the fur from gleaming.\n'}]}
+- Actors: Wolf
+- Foreshadowing: 
+- Prior paragraph (if any): The latch clicked shut and warm mint and ash breathed from the small room. The chair tipped and clattered; the cup rattled in its saucer. The feather quilt shuddered with a rush of air. Curtains stirred and then stilled, and the cottage convulsed in a small, domestic tumble—Grandmother's world set into motion and then arrested.
+
+The Wolf stepped forward in a single, smooth bound that found the middle of the floor. A startled breath escaped Grandmother. The Wolf opened wide with a swift upward tilt and swallowed Grandmother whole in one smooth bite. The teapot sighed, and a hush filled the room.
+
+The Wolf's belly rounded, firm and high; the floorboards groaned under the new heft as the Wolf tested his balance, rolled his shoulders once, smoothed powder across his muzzle, and arranged the nightcap and spectacles until the outline softened—pleasing work, patient as hunger.
+
+Ordered bullets
+===============
+* wolf rights the toppled chair with a careful lift and a quiet set-down
+* The saucer is nudged beneath the rattled cup until porcelain sits true again
+* The teapot is slid toward the heat until a faint thread of steam resumes its curl
+* Hearth coals are urged with the poker; a red seam opens and breathes warm again
+* Kettle metal answers with a low murmur, small and domestic as if nothing has changed
+* The feather quilt is patted flat where it heaved, strawberry stitches smoothed to stillness
+* Bed curtains are drawn a hand’s width tighter, their hem swallowing edges and angles
+* The shutter hook finds its eye; daylight thins to a gray hush and the room deepens
+* The room settles; small domestic noises fold into the dim as if rehearsed
+* Powder from the tin is dabbed once more to dull any fresh gleam along the muzzle line
+* Grandmother’s nightcap is tugged to cover the pinched ears; the blue ribbon is squared
+* Spectacles are set askew just enough to blur the bright of wolfs’ eyes behind glass
+* A shawl from the chair-back is folded around wolf’s shoulders, tassels hiding breadth
+
+Instructions
+============
+- Convert the ordered bullets into a continuous narrative paragraph or two.
+- Keep it vivid, concise, and in the established voice.
+- Do not include bullet markers or headings in your output.
+- Return only the prose.
+- DO NOT say "a symbol of", be sure to transform this into "seemed like" or just "like" or some other simile.
+- Be sure to reformat spaces so that it looks natural.
+- Strongly prefer using proper names over pronouns like "they", "him", "it".
+
+
+=== RESPONSE ===
+Wolf righted the toppled chair with a careful lift and a quiet set-down so the room forgot it had ever lurched. Wolf nudged the saucer beneath the rattled cup until porcelain sat true and steady, then slid the teapot toward the heat until a faint thread of steam resumed its curl. Wolf urged the hearth coals with the poker; a red seam opened and breathed warm again, and the kettle metal answered with a low murmur, small and domestic as if nothing had changed. Wolf flattened the feather quilt where it had heaved, smoothing the strawberry stitches until the puff looked mended and innocent, and drew the bed curtains a hand’s width tighter so the hem swallowed awkward edges and softened the shape of the bed.
+
+Wolf found the shutter hook and fastened it into its eye; daylight thinned to a gray hush and the room deepened into a private, dimened theater. Small domestic noises folded into the dim as if rehearsed: the kettle’s murmur, the quiet clink of china, the hush of curtains settling. Wolf dabbed powder from the powder tin once more along the muzzle to dull any fresh gleam and tugged Grandmother’s nightcap down to cover the pinched ears, smoothing the blue ribbon until it lay square. Wolf set the spectacles askew just enough to blur the bright of wolf’s eyes behind glass and folded the shawl from the chair-back around wolf’s shoulders, the tassels hiding breadth and giving the silhouette the gentleness of a borrowed shape.

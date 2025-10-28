@@ -1,0 +1,95 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. If you see a line that is "escaped", with single quotes in double quotes, un-escape it. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised to bring goodies to her ailing grandmother and walked the forest path humming a nursery tune, the bright hood over her head catching sunbeams as pine needles softened her steps and pale dust lifted behind her while a wicker basket creaked like a small, steady promise; tufted blue flowers bowed at the verge, the jam-sweet scent threaded the air, and the hood shone against tall, shadowed pines as the trail bent around an oak and deepened into hush. The sleek wolf had slid from the bramble to shadow her, honeyed in speech and flattering in suggestion, and when she, though hesitant, took the narrow deer-track he offered, he slipped ahead with a private purpose. He reached the cottage while the forest kept its breath—checked the sun on the shingles, listened for footfalls, and found the lane empty—and with a practiced calm he knocked, mimicked the granddaughter’s voice, and bade the old latch be lifted. Once inside he turned domesticity into disguise: he swallowed Grandmother whole in a single, terrible motion, smoothed the room as if sewing a silence—steadying the chair, coaxing the teapot back to whisper, tucking the quilt, fastening shutters—and donned shawl, cap, spectacles and a practiced cough until the bed looked inhabited by a sleep rather than a crime. He settled beneath the strawberry quilt, powdered his muzzle, shaped a smaller smile in the glass, and arranged the dim room into a private theatre of waiting; when Red’s step and song finally neared, the cottage would answer with a warm, measured voice and a doorstep softened by the pretense of kin.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I meant only to be helpful—my basket creaks like a promise and the nursery tune keeps my feet steady as the sun slices through the pines—and when I chose the narrow deer-track I walked faster, thinking of Grandmother waiting with bread and jam. The wolf's velvet questions still curl at the edges of my mind as I hurry, but my steps carry me toward the lane and the cottage where mint and smoke will warm the kettle. I had not seen what followed the latch: the quiet that answered his polite knock, the way the door sighed open to warm air and the scent of herbs, nor how the room changed—how chairs tipped, the teapot trembled, the quilt shuddered—only that the cottage would be ready, safe, because I must have been expected. I approach with my hood bright against the pines, clutching the wicker, humming the tune, crossing the verge of blue flowers and the crooked stump’s shadow, still certain my coming will bring the soft, familiar voice I remember, and not yet knowing the hush that waits behind the shuttered light.
+
+Wolf's point of view
+Hunger and patience sat easy beneath my coat as I slipped through thyme and cabbage, tasting the jam that rode the air; I watched her bright hood cut the light and timed my words like a blade, and when I reached the cottage the sun on the shingles counted out the hours I would take. I tested the latch with a practiced knock, smoothed my voice into a smaller, kinlier tone, and let the door open to warm mint and wood smoke; the room inhaled me and I answered in motion. One swift, private movement closed the distance between hunger and finish—Grandmother gone, the teapot sighing in the wake—and then the work began: righting a tipped chair, nudging the saucer true, poking the hearth until steam resumed its curl, flattening the quilt, fastening the shutters to dim the day. I fitted the nightcap and spectacles, powdered my muzzle, practiced a softer smile and a cough, and laid myself beneath the strawberry quilt like a worn story; the cottage folded itself around the pretense, the clock’s tick marking a measured patience as I set my voice to welcome, tipped a slippered paw to the step, and waited for her bright hood and small song to bring the last piece of the play.
+
+Forest Path's point of view
+I cradle the pale dust behind her little feet and hold the sunbeams in narrow bands as she hums beneath my pines, and I watched the wolf slip from my bramble into thyme and cabbage, drawn by the scent of jam that rides my air. He checked the lane and the quiet, counted the sun on the shingles as if it were a reckoning, and where the cottage door breathed warm mint and ash I held my breath as the room altered—the latch lifting, a chair tipping, the quilt shuddering—then stilling into a new hush. I felt the small domestic storm settle as he smoothed powder along his muzzle, tugged the nightcap, drew the shutters and muffled the light until the cottage became a dim little theater; the teapot resumed its soft pulse, the clock’s tick grew a careful metronome, and the path folded the moment into my long quiet, keeping the trail and the hush side by side until her steps would meet the door.
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+The Wolf stands in the garden’s stillness and listens: no Red yet, only bees and the slow metronome of the clock.
+He smooths his voice in his throat like a blade in a sheath, then pads to the door.
+
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+Wolf paused among the thyme and cabbage, letting the garden hold him in its slow, sunlit breath—bees droning, warm smoke rising from Grandmother's chimney. He pressed one paw to the warm dirt and shook pine needles from his coat. Nettle and wood smoke rose from Grandmother's kettle. Wolf listened toward the lane: no footfall, no Red yet, only the slow metronome of Grandmother's clock ticking somewhere beyond the door.
+
+Wolf measured the sun on the shingles and counted the light like small reckonings—there would be time before Red could reach the Cottage. Wolf checked the hedge and the path for witnesses: no hound, no hunter, no neighbor. He smoothed his voice in his throat like a blade in a sheath. He padded to the doorstep, ears tuning to the room’s tiny sounds, and studied the thumb-worn latch; the iron glowed faint with afternoon heat, familiar as a well-used word. Behind closed teeth he rehearsed the cadence he would wear.
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Remove one of the duplicated smoke/household images to avoid clutter (either "warm smoke rising from Grandmother's chimney" or "Nettle and wood smoke rose from Grandmother's kettle" — keep the stronger single image).
+
+- Delete or tighten the near-duplicate statements about sound: combine "bees droning, warm smoke rising..." with "no footfall, no Red yet, only the slow metronome of Grandmother's clock ticking somewhere beyond the door" into one tighter listening sentence that foregrounds the touch-point (the garden's stillness and the clock).
+
+- Move "He smoothed his voice in his throat like a blade in a sheath" earlier so the sequence clearly follows the touch-point: first listen/confirm no Red, then smooth his voice, then pad to the door. (Suggested placement: immediately after the sentence that ends with "no Red yet, only the slow metronome...".)
+
+- Replace "pressed one paw to the warm dirt and shook pine needles from his coat" with a single, sharper image (e.g., "rested a paw in the warm earth, shaking pine needles from his coat") to reduce wordiness and keep cadence nimble.
+
+- Change "Wolf measured the sun on the shingles and counted the light like small reckonings—there would be time before Red could reach the Cottage." to something more active and concise that reinforces the Wolf's patient calculation (e.g., "He measured the sun on the shingles—time enough before Red could reach the cottage.").
+
+- Shorten the hedge/witness list to remove redundancy: replace "no hound, no hunter, no neighbor" with "no hound, no hunter" (neighbors feel unnecessary here).
+
+- Clarify antecedent where needed: in "the iron glowed faint with afternoon heat, familiar as a well-used word" make explicit that the latch is Grandmother's latch to avoid possible ambiguity (e.g., "Grandmother's iron latch glowed faint...").
+
+- Soften or specify "Behind closed teeth he rehearsed the cadence he would wear." Consider replacing with a brief wolf-voice sample or a hint of his theatrical manner (one short line in his voice) to keep the writer's quirks alive and show rather than tell (e.g., add: ' "Such a charming hood," he murmured to himself, testing the shape of the lie.').
+
+- Remove passive or redundant modifiers that slow rhythm ("would be time" → "time"; "checked the hedge and the path for witnesses" → "scanned hedge and path for witnesses") to preserve the Wolf's sleekness.
+
+- Ensure the final sentence leads directly into the doorway action: end the paragraph with the Wolf padding to the doorstep and listening to the room's tiny sounds—keep that as the closing image so the touch-point is the dominant takeaway.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+Wolf paused among the thyme and cabbage, letting the garden hold him in its slow, sunlit breath—bees droning and Grandmother's clock ticking somewhere beyond the door; no footfall, no Red yet. He smoothed his voice in his throat like a blade in a sheath.
+
+He rested a paw in the warm earth, shaking pine needles from his coat. Warm smoke rose from Grandmother's chimney. He measured the sun on the shingles—time enough before Red could reach the cottage. He scanned hedge and path for witnesses: no hound, no hunter. He studied Grandmother's iron latch, which glowed faint with afternoon heat, familiar as a well-used word. "Such a charming hood," he murmured to himself, testing the shape of the lie, and padded to the doorstep, ears tuning to the room's tiny sounds.

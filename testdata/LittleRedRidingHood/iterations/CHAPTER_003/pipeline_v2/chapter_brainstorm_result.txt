@@ -1,0 +1,123 @@
+# Chapter Brainstorm Result
+
+Touch-Points:
+  - setting:
+      factoids:
+        - "Grandmother's Cottage"
+        - "Forest Path"
+        - "Basket of Goodies"
+        - "Red Hood"
+        - "Basket"
+      actors:
+        - "Little Red Riding Hood"
+        - "Grandmother"
+        - "The Wolf"
+        - "Huntsman"
+
+  - scene:
+      name: "Approach to the Silent Cottage"
+      description: |
+        Evening lays a green hush over the pines as a huntsman follows a ribbon of prints that lope from streambank to door. A child's cry—brief, strangled, then swallowed by the trees—has already sent him off the trail and toward the cottage with his axe low and his breath held.
+        The door stands ajar. Inside, no chatter of kettle, no clatter of cups—only the measured ticking of a clock and a smell that is not illness, not age, but wild.
+      props:
+        - name: "Huntsman's Axe"
+          significance: "Instrument of rescue and judgment"
+          description: "A well-kept woodsman’s axe with a keen edge and a handle polished by years of use."
+        - name: "Wolf Tracks"
+          significance: "Trail of intrusion"
+          description: "Wide pads and claw marks pressed into damp earth, leading straight to the cottage threshold."
+        - name: "Teapot"
+          significance: "Interrupted domesticity"
+          description: "A squat iron pot, warm no longer, its lid beaded with cooled steam."
+        - name: "Clock"
+          significance: "Tension and timing"
+          description: "A mantle clock that ticks with stubborn steadiness, marking a calm that feels wrong."
+        - name: "Hearthstones"
+          significance: "Future means to end the threat"
+          description: "Smooth river stones stacked by the hearth, heavy and clean with ash-dust."
+
+  - actors: ["Huntsman"]
+
+  - narration: |
+      He circles once, listens again, and slips inside. The quiet feels manufactured, the air thick with fur-musk and flour dust. His eye takes in the neat room, the undisturbed table, the bed with its extra-round quilt.
+
+  - foreshadowing: |
+      By the hearth, a row of river stones waits in a wooden bin, each the size of a fist. He notes their weight in passing, the way a craftsman catalogs what the room can offer.
+
+  - scene:
+      name: "Inside: The Belly and the Blade"
+      description: |
+        The bed inhales and exhales in heavy bellows. Beneath the nightcap and spectacles, the sleeper’s muzzle peeks powder-white, and the quilt mounds like a harvest sack. The huntsman recognizes the trespass not only in scent and shape but in the cruel satisfaction resting on those whiskered lips.
+        He does not shout. He lays a palm to the quilt, feels the wrong warmth and the faint, frantic flutter beneath, and chooses steel over noise.
+      props:
+        - name: "Quilt"
+          significance: "Concealment and cradle"
+          description: "A hand-stitched patchwork pulled high, hiding both predator and prize within."
+        - name: "Nightcap and Spectacles"
+          significance: "The predator’s disguise"
+          description: "Borrowed garments perched absurdly on a wolfish brow."
+        - name: "Sewing Kit"
+          significance: "Tool for repair and closure"
+          description: "A tin with needles, coarse thread, and small scissors, tucked by the bedside."
+        - name: "Basin and Towels"
+          significance: "Practical aid for a quiet operation"
+          description: "A porcelain bowl and clean cloths ready from earlier tea-making and tidying."
+
+  - actors: ["Huntsman", "The Wolf"]
+
+  - mixed: |
+      He eases the quilt aside and, with a practiced woodsman’s calm, slides steel through fur and hide just enough, just once. A warm gust and a wet hush answer his cut.
+
+  - narration: |
+      First Grandmother spills out—pale, blinking, shocked with breath and alive. Then Red, slick with the wolf’s last lies, coughing tea and dark. He helps them to the towels, shushing gently, eyes never leaving the sleeper.
+
+  - actors: ["Little Red Riding Hood", "Grandmother", "Huntsman"]
+
+  - dialog: |
+      Grandmother whispers, “Bless you,” clutching his sleeve. Red gasps, “I—I should have kept to the path.”
+      “Then keep to it,” the huntsman murmurs. “But first, make sure the path stays safe. Bring me stones from the hearth.”
+
+  - mixed: |
+      Red’s hands tremble but obey; the stones are cool, absolute. Grandmother threads a needle with stiff, stubborn fingers. One by one the river’s weight drops into the emptied belly until the quilted mound is all gravity and no hunger. The huntsman sews with swift, ugly stitches—function over grace.
+
+  - actors: ["Little Red Riding Hood", "Grandmother", "Huntsman", "The Wolf"]
+
+  - narration: |
+      The wolf wakes to a world gone heavy. He snarls, staggers off the bed, and lurches for the door. The stones drag him broadside; he collapses in a thunder of crockery. The huntsman ends it with one clean stroke. The ticking clock keeps time, indifferent.
+
+  - scene:
+      name: "Aftermath: Tea and a Vow"
+      description: |
+        Steam returns to the teapot; cups are set out with shaking care. The room smells of thyme again, and ash, and a sharpness of iron fading. Outside, the forest breathes as birdsong stitches back the silence.
+        Red draws her hood close and meets the huntsman’s eye, then her grandmother’s. The lesson is not whispered but laid like a stone.
+      props:
+        - name: "Teacups"
+          significance: "Return to ordinary life"
+          description: "Thin porcelain cups that rattle a little against their saucers in relieved hands."
+        - name: "Red Hood"
+          significance: "A pledge remembered"
+          description: "The bright cloth pulled snug, its color no longer just a flourish but a warning to herself."
+        - name: "Basket of Goodies"
+          significance: "Duty resumed, innocence tempered"
+          description: "Uprighted and repacked, its contents fewer but its meaning heavier."
+
+  - actors: ["Little Red Riding Hood", "Grandmother", "Huntsman"]
+
+  - dialog: |
+      “I’ll keep to the path,” Red says, voice steady now. “And if a wolf smiles, I’ll remember: the only safe wolf is a dead one.”
+      “Then you’ll live long,” Grandmother replies, pouring tea. The huntsman nods once, already listening to the forest again.
+
+# Story-So-Far (previous chapter)
+
+Red had promised sweets and walked the pine-smelling path with her hood catching the light and the basket creaking like a vow, while the sleek, flattering wolf slipped away along a deer-track to the cottage, reached it first, and with practiced calm swallowed Grandmother whole before setting the room into a careful masquerade; he powdered his muzzle, tugged on cap and spectacles, soothed the quilt and set the teapot whispering so the house would answer Red with the warmth of kin. She stepped inside to net curtains that sifted the afternoon into green pools and called softly, basket in hand, and a coaxing, grandmotherly coo—too slick, too practiced—bade her nearer; thyme and tea rose but a sour, wrong musk threaded the bed's shadow, the candle bent light into pooling dark, spectacles glinted on an oddly shaped silhouette and the nightcap drooped over a curious ear-tip. Red, humming a nursery tune, hesitated as angles read wrong and the cover shifted with a weight not belonging to age; the voice purred, urging her closer, patting the quilt in a deliberate, inviting rhythm, and when she asked the small questions—about eyes, ears, nose, nails—the answers came honeyed and false until whiskers powdered like flour in the gloom and the quilt yawned: a paw hooked the edge, spectacles fogged and were wiped with a slow, contented sigh, the basket toppled, a scream was swallowed as warm dark folded around Red, Grandmother folded within the wolf's belly, and the cottage smoothed back into its domestic hush with only the steady, indifferent tick of the clock.
+
+# Story-Relative-To (previous chapter)
+
+Red's point of view
+I had meant only to be helpful—basket creaking like a promise, my hood catching the light as I stepped into the cottage that seemed to lean toward me—and the room answered with a wrongness that tugged at the edges of my certainty. Sun freckled the floor; net curtains sliced the afternoon into green pools and thyme and tea rose from the kettle, but a sour musk threaded beneath those homely smells and the curtain’s hem still swayed though the window was latched. The voice that answered was too slick, too practiced; it cooed and patted and urged me closer until small things read wrong: a chair nudged askew as if staged, spectacles glinting on a long shadow, a nightcap pulled too low over a pricked ear-tip, powder scored the pillow like a careless hand. I set the basket down at the foot of the bed because I trusted the voice, because the coaxing sounded like Grandmother, and when I stepped forward to kiss the pillow the breath beneath it answered too deep. Each question I asked—the eyes, the ears, the nose, the nails—was met with honeyed falsehoods that flattened the room around me, and the clock stuttered one late tick as the quilt rustled wrong. Whiskers powdered the gloom, a paw hooked the cover, the patchwork yawned like a mouth, and my scream was swallowed as warm dark folded over me and the cottage smoothed back into its domestic hush with only the steady tick remaining.
+
+Wolf's point of view
+Hunger and patient craft kept me light on the shingles and warm in the thyme; I slipped in before her, checked the latch, let the house breathe out mint and ash and the teapot hiss to keep up appearances, and set the stage with little disarrangements—a chair nudged, the nightcap tugged low, spectacles tilted, powder scored the pillow—so everything would look like age and forgetting. When Red stepped across the threshold, hood bright against the dim, I pooled my voice into a kinder thing and let it purr through the room, coaxing her to set the basket by the bed and come closer. Sun freckled the floor, the curtain hem moved though the window was latched, a sour musk threaded beneath the thyme to distract her, and I answered every soft question with a sweeter lie until muscles gathered under the quilt. I timed the stutter of the clock and the teapot’s chatter, watched her fingers tighten on the napkin, felt the basket tilt as her heel skidded—then the patchwork opened. Whiskers powdered the gloom, I wiped the spectacles with a slow contented sigh, hooked the cover with a paw, and the bed swallowed them both; I smoothed my sleeve, the candle thinned to a bead, and the cottage resumed its ordinary pose with a new warmth at the hip and the steady tick marking my patient satisfaction.
+
+Forest Path's point of view
+I kept the pale dust and sunbeams for her small feet and felt the wolf uncoil through my thyme long before either of them reached the cottage; I watched him time his knock to the tilt of the light and saw the house lean in as Red hummed her way along, hood bright, basket creaking like a promise. Sun freckled the floor when she nudged the door and called, and I took in the little betrayals inside—the curtained green pools, the kettle’s steam, the chair nudged as if left in a hurry, the candle bending light into dark pools—signs the wolf had been working his stagecraft. The voice that came back was slick and coaxing, and I felt the room hold its breath when Red stepped closer, fingers tightening at the napkin, the basket set at the bed's foot. The clock stuttered, the teapot chattered, the quilt rustled with breaths too long for age; whiskers powdered the gloom, spectacles fogged and were wiped, a paw hooked the edge, and the patchwork yawned. I kept the thin bar of light where her footsteps had passed as the bed closed over a new fullness, the cottage smoothed, and the mantle's tick resumed, carrying the echo of her vanished song along my lane.

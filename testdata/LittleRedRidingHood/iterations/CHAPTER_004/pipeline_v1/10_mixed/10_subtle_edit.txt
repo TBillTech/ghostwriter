@@ -1,0 +1,140 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. If you see a line that is "escaped", with single quotes in double quotes, un-escape it. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood', 'Basket'], 'actors': ['Red', 'Grandmother', 'Wolf', 'Huntsman']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    },
+    {
+      "name": "Basket",
+      "description": "Gift and responsibility; symbol of trust. A mcguffin"
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised sweets and walked the pine-smelling path with her hood catching the light and the basket creaking like a vow, while the sleek, flattering wolf slipped away along a deer-track to the cottage, reached it first, and with practiced calm swallowed Grandmother whole before setting the room into a careful masquerade; he powdered his muzzle, tugged on cap and spectacles, soothed the quilt and set the teapot whispering so the house would answer Red with the warmth of kin. She stepped inside to net curtains that sifted the afternoon into green pools and called softly, basket in hand, and a coaxing, grandmotherly coo—too slick, too practiced—bade her nearer; thyme and tea rose but a sour, wrong musk threaded the bed's shadow, the candle bent light into pooling dark, spectacles glinted on an oddly shaped silhouette and the nightcap drooped over a curious ear-tip. Red, humming a nursery tune, hesitated as angles read wrong and the cover shifted with a weight not belonging to age; the voice purred, urging her closer, patting the quilt in a deliberate, inviting rhythm, and when she asked the small questions—about eyes, ears, nose, nails—the answers came honeyed and false until whiskers powdered like flour in the gloom and the quilt yawned: a paw hooked the edge, spectacles fogged and were wiped with a slow, contented sigh, the basket toppled, a scream was swallowed as warm dark folded around Red, Grandmother folded within the wolf's belly, and the cottage smoothed back into its domestic hush with only the steady, indifferent tick of the clock.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I had meant only to be helpful—basket creaking like a promise, my hood catching the light as I stepped into the cottage that seemed to lean toward me—and the room answered with a wrongness that tugged at the edges of my certainty. Sun freckled the floor; net curtains sliced the afternoon into green pools and thyme and tea rose from the kettle, but a sour musk threaded beneath those homely smells and the curtain’s hem still swayed though the window was latched. The voice that answered was too slick, too practiced; it cooed and patted and urged me closer until small things read wrong: a chair nudged askew as if staged, spectacles glinting on a long shadow, a nightcap pulled too low over a pricked ear-tip, powder scored the pillow like a careless hand. I set the basket down at the foot of the bed because I trusted the voice, because the coaxing sounded like Grandmother, and when I stepped forward to kiss the pillow the breath beneath it answered too deep. Each question I asked—the eyes, the ears, the nose, the nails—was met with honeyed falsehoods that flattened the room around me, and the clock stuttered one late tick as the quilt rustled wrong. Whiskers powdered the gloom, a paw hooked the cover, the patchwork yawned like a mouth, and my scream was swallowed as warm dark folded over me and the cottage smoothed back into its domestic hush with only the steady tick remaining.
+
+Wolf's point of view
+Hunger and patient craft kept me light on the shingles and warm in the thyme; I slipped in before her, checked the latch, let the house breathe out mint and ash and the teapot hiss to keep up appearances, and set the stage with little disarrangements—a chair nudged, the nightcap tugged low, spectacles tilted, powder scored the pillow—so everything would look like age and forgetting. When Red stepped across the threshold, hood bright against the dim, I pooled my voice into a kinder thing and let it purr through the room, coaxing her to set the basket by the bed and come closer. Sun freckled the floor, the curtain hem moved though the window was latched, a sour musk threaded beneath the thyme to distract her, and I answered every soft question with a sweeter lie until muscles gathered under the quilt. I timed the stutter of the clock and the teapot’s chatter, watched her fingers tighten on the napkin, felt the basket tilt as her heel skidded—then the patchwork opened. Whiskers powdered the gloom, I wiped the spectacles with a slow contented sigh, hooked the cover with a paw, and the bed swallowed them both; I smoothed my sleeve, the candle thinned to a bead, and the cottage resumed its ordinary pose with a new warmth at the hip and the steady tick marking my patient satisfaction.
+
+Forest Path's point of view
+I kept the pale dust and sunbeams for her small feet and felt the wolf uncoil through my thyme long before either of them reached the cottage; I watched him time his knock to the tilt of the light and saw the house lean in as Red hummed her way along, hood bright, basket creaking like a promise. Sun freckled the floor when she nudged the door and called, and I took in the little betrayals inside—the curtained green pools, the kettle’s steam, the chair nudged as if left in a hurry, the candle bending light into dark pools—signs the wolf had been working his stagecraft. The voice that came back was slick and coaxing, and I felt the room hold its breath when Red stepped closer, fingers tightening at the napkin, the basket set at the bed's foot. The clock stuttered, the teapot chattered, the quilt rustled with breaths too long for age; whiskers powdered the gloom, spectacles fogged and were wiped, a paw hooked the edge, and the patchwork yawned. I kept the thin bar of light where her footsteps had passed as the bed closed over a new fullness, the cottage smoothed, and the mantle's tick resumed, carrying the echo of her vanished song along my lane.
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+With the wolf dead, Grandmother and Red thank the huntsman. The huntsman says farewell.
+
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+Grandmother croaked, "Thank you, dear, for your help; mind your boots, you’ll track the forest into my rug; I’ll see to the stove and rest a moment.,"
+Huntsman murmured, "I'm glad I could be of service, ma'am.."
+Red offered, "Please take bread for your road.."
+Huntsman accepted, "Thank you kindly, but I'll leave the rest for you poor souls.."
+Grandmother fussed, "Mind your boots; you'll track the forest into my rug, dear, and I am grateful for your help.,"
+Huntsman wrapped, "No cause to look on it again.."
+The room settles into a softer rhythm as the wolf is carried away and the cottage breathes a gentler warmth, the clock counting a quieter pace.
+Huntsman warned, "Latch at dusk; these woods should be safer for a while.,"
+Red curtsied, "Thank you, sir; I offer a wobbly curtsey.,"
+Grandmother murmured, "You're a comfort to us, truly; the huntsman tips his cap in quiet thanks.,"
+The cottage breathes a soft hush as evening settles, and warmth lingers where fear once pressed.
+Huntsman announced, "I'll take the carcass away for the bounty and to spare you the mess.."
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Remove duplicate lines about boots/tracking the rug (delete the second Grandmother line that repeats the boot warning).
+
+- Clean up punctuation and tag formatting throughout (remove stray extra periods/commas inside quotes; use single, simple tag punctuation). Example fixes:
+  - Grandmother: "Thank you, dear, for your help. Mind your boots—you'll track the forest into my rug. I'll see to the stove and rest a moment."
+  - Huntsman: "I'm glad I could be of service, ma'am."
+  - Red: "Please take a bit of bread for your road."
+  - Huntsman (accepting): "Thank you kindly. I'll leave the rest for you."
+
+- Recast the Huntsman's awkward line "I'll leave the rest for you poor souls.." to match his terse, plain voice and remove pity:
+  - Replace with: "I'll leave the rest for you. Keep it." or "Keep the basket. You need it."
+
+- Tighten Grandmother's gratitude to feel warm and homely rather than repetitive or clumsy. Suggested replace:
+  - "You're a comfort to us, truly." (keep)
+
+- Replace the Huntman's vague "No cause to look on it again.." with a concise, hunterly farewell/action beat:
+  - "No need. I'll take care of the beast." then a short physical beat: he inclines his head, shoulders the bow, moves to the door.
+
+- Remove the redundant narration lines that repeat the cottage breathing/warmth image twice. Keep one compact sentence describing the room settling:
+  - Keep: "The room settled; the clock counted a quieter pace as the wolf was carried away."
+
+- Rework the "Huntsman warned, 'Latch at dusk...'" line to be a simple, practical admonition in his voice:
+  - "Latch the door at dusk. The woods will be quieter for now, but mind the night."
+
+- Make Red's curtsey an action beat rather than an adjective "wobbly"—show it subtly so her naivety shows without authorial label:
+  - Replace: Red curtsied; she tucked the basket under her arm and said, "Thank you, sir."
+
+- Move one small physical beat into Grandmother's line to ground the thanks (fussing with a shawl, setting a cup down) to balance dialogue and action:
+  - e.g., Grandmother smooths her shawl. "Bless you, dear. You always brighten my room."
+
+- End with a clear, brief Huntsman farewell line consistent with the touch-point (he does not linger or sermonize):
+  - Add/replace final Huntsman line: "Take care of one another." He tipped his cap and stepped back onto the path.
+
+- Remove explicit or redundant statements that summarize emotion (e.g., "The cottage breathes a soft hush..." and "warmth lingers where fear once pressed."). Instead, imply with a single, concrete image:
+  - Keep one: "Warmth pooled by the stove as if the house remembered how to be itself."
+
+- Ensure allowed speakers only (Red, Grandmother, Huntsman) speak; remove any line that attributes voice to the cottage (keep cottage descriptions as narration only).
+
+- Overall balance: shorten prose paragraphs into quick action beats interspersed with dialogue. After each short line of speech, add a 3–6 word physical beat (gesture, look, small domestic action) to maintain pace and show rather than tell gratitude and farewell.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+Grandmother smoothed her shawl and set a cup down. "Thank you, dear, for your help. Mind your boots—you'll track the forest into my rug. I'll see to the stove and rest a moment." Her fingers trembled slightly.
+
+"I'm glad I could be of service, ma'am," the huntsman said, shifting his weight.
+
+Red tucked the basket under her arm and curtsied. "Please take a bit of bread for your road." She looked at him with hopeful eyes.
+
+"Keep the basket. You need it," the huntsman said, and he nodded once.
+
+"No need. I'll take care of the beast." He inclines his head, shoulders the bow, moves to the door.
+
+"Latch the door at dusk," he added as he stepped toward the path. "The woods will be quieter for now, but mind the night." He checked the way with a quick look.
+
+"You're a comfort to us, truly," Grandmother murmured, smiling. She breathed out, steadier now.
+
+The room settled; the clock counted a quieter pace as the wolf was carried away. Warmth pooled by the stove as if the house remembered how to be itself.
+
+"Take care of one another." The huntsman tipped his cap and stepped back onto the path.

@@ -1,0 +1,151 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. If you see a line that is "escaped", with single quotes in double quotes, un-escape it. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood', 'Basket'], 'actors': ['Red', 'Grandmother', 'Wolf', 'Huntsman']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    },
+    {
+      "name": "Basket",
+      "description": "Gift and responsibility; symbol of trust. A mcguffin"
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised sweets and walked the pine-smelling path with her hood catching the light and the basket creaking like a vow, while the sleek, flattering wolf slipped away along a deer-track to the cottage, reached it first, and with practiced calm swallowed Grandmother whole before setting the room into a careful masquerade; he powdered his muzzle, tugged on cap and spectacles, soothed the quilt and set the teapot whispering so the house would answer Red with the warmth of kin. She stepped inside to net curtains that sifted the afternoon into green pools and called softly, basket in hand, and a coaxing, grandmotherly coo—too slick, too practiced—bade her nearer; thyme and tea rose but a sour, wrong musk threaded the bed's shadow, the candle bent light into pooling dark, spectacles glinted on an oddly shaped silhouette and the nightcap drooped over a curious ear-tip. Red, humming a nursery tune, hesitated as angles read wrong and the cover shifted with a weight not belonging to age; the voice purred, urging her closer, patting the quilt in a deliberate, inviting rhythm, and when she asked the small questions—about eyes, ears, nose, nails—the answers came honeyed and false until whiskers powdered like flour in the gloom and the quilt yawned: a paw hooked the edge, spectacles fogged and were wiped with a slow, contented sigh, the basket toppled, a scream was swallowed as warm dark folded around Red, Grandmother folded within the wolf's belly, and the cottage smoothed back into its domestic hush with only the steady, indifferent tick of the clock.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I had meant only to be helpful—basket creaking like a promise, my hood catching the light as I stepped into the cottage that seemed to lean toward me—and the room answered with a wrongness that tugged at the edges of my certainty. Sun freckled the floor; net curtains sliced the afternoon into green pools and thyme and tea rose from the kettle, but a sour musk threaded beneath those homely smells and the curtain’s hem still swayed though the window was latched. The voice that answered was too slick, too practiced; it cooed and patted and urged me closer until small things read wrong: a chair nudged askew as if staged, spectacles glinting on a long shadow, a nightcap pulled too low over a pricked ear-tip, powder scored the pillow like a careless hand. I set the basket down at the foot of the bed because I trusted the voice, because the coaxing sounded like Grandmother, and when I stepped forward to kiss the pillow the breath beneath it answered too deep. Each question I asked—the eyes, the ears, the nose, the nails—was met with honeyed falsehoods that flattened the room around me, and the clock stuttered one late tick as the quilt rustled wrong. Whiskers powdered the gloom, a paw hooked the cover, the patchwork yawned like a mouth, and my scream was swallowed as warm dark folded over me and the cottage smoothed back into its domestic hush with only the steady tick remaining.
+
+Wolf's point of view
+Hunger and patient craft kept me light on the shingles and warm in the thyme; I slipped in before her, checked the latch, let the house breathe out mint and ash and the teapot hiss to keep up appearances, and set the stage with little disarrangements—a chair nudged, the nightcap tugged low, spectacles tilted, powder scored the pillow—so everything would look like age and forgetting. When Red stepped across the threshold, hood bright against the dim, I pooled my voice into a kinder thing and let it purr through the room, coaxing her to set the basket by the bed and come closer. Sun freckled the floor, the curtain hem moved though the window was latched, a sour musk threaded beneath the thyme to distract her, and I answered every soft question with a sweeter lie until muscles gathered under the quilt. I timed the stutter of the clock and the teapot’s chatter, watched her fingers tighten on the napkin, felt the basket tilt as her heel skidded—then the patchwork opened. Whiskers powdered the gloom, I wiped the spectacles with a slow contented sigh, hooked the cover with a paw, and the bed swallowed them both; I smoothed my sleeve, the candle thinned to a bead, and the cottage resumed its ordinary pose with a new warmth at the hip and the steady tick marking my patient satisfaction.
+
+Forest Path's point of view
+I kept the pale dust and sunbeams for her small feet and felt the wolf uncoil through my thyme long before either of them reached the cottage; I watched him time his knock to the tilt of the light and saw the house lean in as Red hummed her way along, hood bright, basket creaking like a promise. Sun freckled the floor when she nudged the door and called, and I took in the little betrayals inside—the curtained green pools, the kettle’s steam, the chair nudged as if left in a hurry, the candle bending light into dark pools—signs the wolf had been working his stagecraft. The voice that came back was slick and coaxing, and I felt the room hold its breath when Red stepped closer, fingers tightening at the napkin, the basket set at the bed's foot. The clock stuttered, the teapot chattered, the quilt rustled with breaths too long for age; whiskers powdered the gloom, spectacles fogged and were wiped, a paw hooked the edge, and the patchwork yawned. I kept the thin bar of light where her footsteps had passed as the bed closed over a new fullness, the cottage smoothed, and the mantle's tick resumed, carrying the echo of her vanished song along my lane.
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+I have found you wolf, says the huntsman. Your terrible deeds end here. 
+The wolf protests once that he is an old Grandma, how dare he accuse of such.  The Huntsman points out all the clues, the and to double underline it, wolf muzzles are recognizably not the profile of an old woman.
+The huntsman declares, "If you were human, I couldn't do this, but for the beasts of the forest, I am judge, jury, and executioner."
+
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+Night breathes into the room, heavy as fate, while the quilt swells with a hidden shape; a powder-white muzzle glints from beneath the cover, and the moment thickens with the hunter's coming decision.
+Huntsman, bow lifted, enunciated "I have found you, wolf. Your terrible deeds end here.."
+Wolf, whiskers twitching, purred "Such accusations. Grandmother is all aches and coughs; mind your tone in a sickroom.."
+Night presses in as the bed exhales; the patchwork hides a predator's line, and the clock's stubborn tick counts down to the moment of the draw.
+Huntsman, eyes narrowed, stated "Tracks run fat and straight to this door. None leaving.."
+Bow low, the hunter studies the room, counting seams and shadows for a shift in truth; the clock on the sagging mantel ticks with stubborn patience as the line through patchwork hardens into the shape of an answer.
+Wolf, hand smoothing quilt, murmured "You overstep, hunter. Grandmother is all aches and coughs; mind your tone in a sickroom.?"
+Clock ticks stubbornly; ash settles, and a sour musk threads flour-dust as the room braces for the next line.
+Huntsman, nostrils flared, stated "That smell is wolf, and fresh. Powder wiped on whiskers. Spectacles riding a snout.."
+Two careful steps right tighten the room into a single line along the patchwork seam; the hunter's gaze crosses the shadowed edge. The house holds its breath as truth edges toward speech.
+Wolf, voice honeyed, feigned "You mistake a grandmother’s poor nose for brutishness. Come nearer; you’ll see.."
+Nightcap droops and the long brow shows through; the quilt twitches as truth threads its way through the patchwork.
+Huntsman, jaw set, declared "If you were human, I could not do this. For beasts of the forest, you are judged—by me, jury and executioner.."
+Patchwork seams listen; in the hush the room waits for the word that names what the seams have already told.
+Wolf, voice softened, pleaded "Cruel man. Set that thing down; you'll wake the child.."
+Silence stretches, and the room holds its breath as the moment of choice nears the blade.
+Huntsman, voice low, intoned "If you were human, I could not do this. For beasts of the forest, you are judged—by me, jury and executioner.."
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Remove duplicated lines and repeated declarations:
+  - Delete the second full repeat of the Huntsman’s “If you were human…” speech at the end. Keep it once and make it the closing line.
+  - Remove the repeated “Grandmother is all aches and coughs; mind your tone in a sickroom” line from the Wolf — it appears twice and loses force. Keep a single, sly version.
+
+- Tighten stage directions and let narration carry actions:
+  - Replace “Huntsman, bow lifted, enunciated ‘I have found you, wolf. Your terrible deeds end here..’” with a brief beat + dialogue tag: e.g., “The huntsman lowered the bow an inch. ‘I have found you, wolf. Your terrible deeds end here.’”
+  - Replace “Wolf, whiskers twitching, purred …” and similar clunky labels with short narrative beats before or after the line: e.g., “Whiskers twitching, the wolf purred, ‘Such accusations…’”
+
+- Fix punctuation and voice consistency:
+  - Remove doubled periods and stray question marks after quoted lines (“..”, “.?”). Use single punctuation within/after quotes.
+  - Make Huntsman dialogue spare and measured (shorter lines, hard nouns). For example change “Tracks run fat and straight to this door. None leaving..” to “Tracks run fat and straight to this door. They don’t leave.”
+
+- Cut purple prose and redundant metaphors:
+  - Trim phrases like “Night breathes into the room, heavy as fate,” and “the moment thickens with the hunter's coming decision.” Keep one evocative image instead of two. Suggest: “Night pooled in the corner; the quilt swelled with something alive.”
+  - Remove repeated variations of “the room holds its breath” / “the house holds its breath” — pick one placement for that image.
+
+- Restore character cadences:
+  - Make the Wolf’s lines more sly and theatrical, with leading questions and backhanded flattery. E.g., replace “You mistake a grandmother’s poor nose for brutishness. Come nearer; you’ll see..” with “You mistake frailty for brutality, hunter. Come closer—see how feeble she is.”
+  - Make the Huntsman more concrete and tactile: add a short, hunterly inventory to one line (“Tracks, smell, spectacles on a snout” → “Tracks, the sour musk, spectacles perched on a snout.”)
+
+- Add small, clarifying physical beats to balance dialogue:
+  - Insert a single tactile gesture when he accuses—e.g., he pins the quilt’s seam with a thumb or slides a fingertip along the patchwork to reveal whiskers—so the revelation is shown, not told.
+  - When the Huntsman smells the wolf, show a sensory detail: “He paused, breath in the cold; the sour fur-musk rose, threaded with flour dust.” That anchors his line about smell.
+
+- Reduce abstract sentence fragments that interrupt rhythm:
+  - Combine or shorten sentences like “Bow low, the hunter studies the room, counting seams and shadows for a shift in truth; the clock on the sagging mantel ticks with stubborn patience as the line through patchwork hardens into the shape of an answer.” Make it two clear beats: hunter action, then clock.
+
+- Clarify the decisive moment visually and aurally:
+  - Right before the Huntsman’s final line, show the seam parting or spectacles sliding on the wolf’s snout to make the evidence undeniable. This will let the final statement land without repeating clues.
+  - Consider a single short sentence of silence (e.g., “Silence. Then—”) before the Huntsman’s verdict to heighten the blow.
+
+- Remove explicit moralizing phrasing:
+  - Drop “For beasts of the forest, you are judged—by me, jury and executioner..” as courtly echo twice; keep one version but tighten language to match Huntsman’s plain tone: “If you were human, I would not. For beasts, I am judge, jury, and executioner.”
+
+- Preserve voice quirks but avoid theatrical redundancy:
+  - Keep the Wolf’s honeyed, manipulative cadence and small theatrical gestures (purrs, mock offense), but cut any line that simply reiterates earlier insults or defenses. Let one or two lines encompass his feigned indignation and coaxing.
+
+- Final micro-edits to apply:
+  - Remove extra adjectives where unnecessary (e.g., “powder-white muzzle” → “white muzzle” if rhythm demands).
+  - Ensure each paragraph is one clear beat or exchange: action + line, line + reaction. Where prose swells, cut 1–2 modifiers to restore punch.
+
+Apply these edits to sharpen pacing, ensure clues are shown not spelled out, preserve the Wolf’s sly theatricality, and keep the Huntsman terse and inexorable.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+Night pooled in the corner; the quilt swelled with something alive. A white muzzle glinted from beneath the cover.
+
+The huntsman lowered the bow an inch. "I have found you, wolf. Your terrible deeds end here."
+
+Whiskers twitching, the wolf purred, "Such accusations. Grandmother is all aches and coughs; mind your tone in a sickroom."
+
+The bed exhaled; the patchwork hid a predator's line. The clock ticked, counting down to the draw.
+
+The huntsman stepped closer, eyes narrowed. "Tracks run fat and straight to this door. They don't leave." He pinched the seam between thumb and forefinger; a puff of flour rose and the whiskers brushed his skin. He drew a breath; a sour fur-musk threaded with flour dust rose to his nostrils. "Tracks, the sour musk, spectacles perched on a snout."
+
+The wolf's voice went honeyed. "You mistake frailty for brutality, hunter. Come closer—see how feeble she is."
+
+The nightcap drooped; a long brow showed through the patchwork. The quilt twitched and the seam gave—a pair of spectacles slid down the long snout.
+
+Silence.
+
+The huntsman's jaw set. "If you were human, I could not do this. For beasts, I am judge, jury, and executioner."

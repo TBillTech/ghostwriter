@@ -1,0 +1,32 @@
+- Remove duplicate mentions of bread and jam. Keep one clear, simple line from Red about the basket early ("I brought bread and jam for Grandmother.") and delete other repeats.
+
+- Cut repetitive sensory lines about the net curtains/clock/teapot. Keep one evocative image (e.g., "Net curtains sifting afternoon light") and delete the other two to tighten pacing.
+
+- Delete the stray first-person line "I'll set the basket down right here— is that okay?" (breaks narrator perspective and the scene's rhythm).
+
+- Normalize punctuation and remove extra question/exclamation marks and doubled periods in dialog. Use single terminal punctuation per line.
+
+- Trim or merge these overlapping lines:
+  - Remove either "Red called softly, 'Grandmother, it is Red...'" or "Red chirped, 'I bring the bread and jam.'" — keep the first and shorten it to, for example: "Grandmother? It's Red. I brought bread and jam."
+
+- Reduce repeated "the room holds its breath" / "the room waits" constructions to one strong moment. Replace other instances with brief physical beats (Red clutching the basket, stepping closer, hesitation).
+
+- Clarify attributions so it's always clear who speaks as Grandmother. Add brief parenthetical or beat to note Wolf is imitating Grandmother only once, then let the slippage be implied by tone. Example: after the first Wolf line, add a tiny action: "His voice softened into a grandmotherly coo," and remove later explanatory tags.
+
+- Adjust Wolf's lines to match his sly, theatrical cadence and avoid overt admission. Replace flat lines like "A touch of chill, dear; these rooms remember every step and echo them back." with something more elliptical and slippery: "A little chill, dear — these old rooms keep their memories."
+
+- Make Red's language simpler and more literal. Where she asks questions, keep them plain and polite ("Are you resting?" / "May I put the basket on the table?") Remove rhetorical flourishes ("You sound a little different, are you chilly??") — change to "You sound different. Are you cold?"
+
+- Add a brief action beat between questions to ground dialog: e.g., after Red asks about shutters, show her reaching for the latch and pausing, or clutching the basket tighter.
+
+- Replace awkward/overwrought lines:
+  - "The latch sighs open and the cottage seems to lean in..." — keep but pare: "The latch sighed. The cottage seemed to lean in as Red stepped inside."
+  - Delete vague lines like "The stubborn light holds its edge as the bed's shape remains still, and the room listens for a whisper beyond the veil." Replace with a concise image: "Light trimmed the bed's silhouette. Nothing moved."
+
+- Soften the final command from Wolf only slightly to preserve menace but avoid melodrama. Change "now come kiss your old granny.!" to "Come, give your old granny a kiss." with an unsettling softness.
+
+- Insert one small, character-defining gesture for Red before she leans in to kiss: she hesitates, lowers her eyes politely, or hums a nursery tune under her breath to show innocence and nervousness.
+
+- Remove redundant "dear heart" / "dear" duplications from Wolf if too frequent; keep one or two sly endearments to avoid sounding repetitive.
+
+- Tighten overall length by cutting three nonessential sentences (suggested cuts: one of the repeated net-curtain lines, one of the extra clock/teapot descriptions, the stray first-person line), which will preserve momentum and keep dialog-driven focus.

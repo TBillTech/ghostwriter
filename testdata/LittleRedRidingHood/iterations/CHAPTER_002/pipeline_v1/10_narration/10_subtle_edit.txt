@@ -1,0 +1,103 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. If you see a line that is "escaped", with single quotes in double quotes, un-escape it. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised to bring goodies to her ailing grandmother and walked the forest path humming a nursery tune, the bright hood over her head catching sunbeams as pine needles softened her steps and pale dust lifted behind her while a wicker basket creaked like a small, steady promise; tufted blue flowers bowed at the verge, the jam-sweet scent threaded the air, and the hood shone against tall, shadowed pines as the trail bent around an oak and deepened into hush. From the bramble a sleek wolf moved parallel, low and silent, lifting his muzzle to the trail as if to taste the drift of jam, and when Red paused he slid into speech with a velvet, honeyed voice that asked where she was bound and what treasures she carried, murmuring of a quicker way and offering to guide her by a narrow deer track that would rejoin the lane by the birch marked by a lightning scar; the forest listened—a jay cackled and vanished, a branch brushed the basket and made it creak, and shadows lengthened while the wolf's smile was all bright teeth and false comfort. He named the crooked stump and the three tall pines that marked her grandmother's cottage and, soft and insistent, assured her the deer track would set her right on time, letting the thought of a shortcut curl in the air like a lure. Red tightened her hood, fingers clamped the handles, felt the crooked stump's shadow skitter across her boots, and though she faltered at the fork and felt the hush press, she remembered her grandmother waiting, thanked him in a small voice, and—resolute not to linger for flowers—accepted the wolf’s guidance, stepping onto the narrow ruts and hurrying away along the hidden track.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I meant only to be helpful—my basket creaks like a promise and the nursery tune keeps my feet steady as the sun slices through the pines. The hood gleams in narrow bands of light as the path winds past the black-barked oak and the forest draws a shade around me; pine needles soften my steps and pale dust lifts in my wake while a tuft of blue flowers nods from the verge. I clutch the wicker when a branch brushes it and the crooked stump's shadow skitters over my boots, and when the wolf slips from the bramble his voice is velvet and his questions smell of honey and quicksilver. He asks where I'm bound, what treasures I carry, and offers a hushed shortcut along a deer track that will meet the lane by the birch with the lightning scar—names I know, and promises that curl like a lure. The jay's cackle and the hush that follows make me flinch; still, thinking of Grandmother waiting with bread and jam, I tug my hood tighter, decide against lingering for flowers, and with a tightened grip on the basket and a small, steady stride I accept the deer track and hurry on, thanking him and calling farewell over my shoulder.
+
+Wolf's point of view
+Hunger and patience sit easy beneath my coat as I pad low through the bramble, smelling jam like an invitation threaded through the pines, watching her bright hood cut the light and the wicker creak like a small, honest drum. I slip between shadows and time my words soft as oil, letting polite curiosity tilt her answers toward the map I want to set in her head: three tall pines, the crooked stump, the birch with the lightning scar. I purr a promise of a quicker way, let the sibilants smear like a ribbon, and watch the branch that brushes her hand make the basket speak for me. The jay's cackle and the hush that follows do my work for me; hesitation blooms, memory of the birch tugs, and I press the deer-track into her choices like an easy route home. She tightens her hood, thanks me in a small voice, and follows the narrow ruts, fingers curled on the handle—I bow with a silk of a smile and wait, patient as hunger.
+
+Forest Path's point of view
+I cradle the pale dust behind her little feet and hold the sunbeams in narrow bands as she hums and walks beneath my pines, the hood bright against the deepening shade where the black oak bends the trail. Tufted blue leans in my verge and pine needles hush her steps while a branch reaches to make the wicker creak; I let the sound fold into my long quiet. A sleek shape slips through my bramble, low and measured, tasting the jam that rides my air, and his voice slides over my understory like oil—soft questions, the offer of a narrow deer track that threads beneath my roots and promises to meet the lane by the birch with the lightning scar. The jay cackles and then the hush thickens, the crooked stump's shadow slides across her boots, and she pauses between my forks before tugging her hood tighter and stepping onto the thin ruts. I keep the crossing tucked in my soil as she hurries on, basket against her arm, the trail folding the moment into the long hush of the wood.
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+He tidies the impression of struggle to nothing, sets the kettle to murmur, and folds the shawl around his shoulders.
+In the mirror’s dim, his mouth learns a smaller smile. He tries on a cough the way one tries on a glove.
+
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+Wolf righted the toppled chair with a careful lift and a quiet set-down so the room forgot it had ever lurched. Wolf nudged the saucer beneath the rattled cup until porcelain sat true and steady, then slid the teapot toward the heat until a faint thread of steam resumed its curl. Wolf urged the hearth coals with the poker; a red seam opened and breathed warm again, and the kettle metal answered with a low murmur, small and domestic as if nothing had changed. Wolf flattened the feather quilt where it had heaved, smoothing the strawberry stitches until the puff looked mended and innocent, and drew the bed curtains a hand’s width tighter so the hem swallowed awkward edges and softened the shape of the bed.
+
+Wolf found the shutter hook and fastened it into its eye; daylight thinned to a gray hush and the room deepened into a private, dimened theater. Small domestic noises folded into the dim as if rehearsed: the kettle’s murmur, the quiet clink of china, the hush of curtains settling. Wolf dabbed powder from the powder tin once more along the muzzle to dull any fresh gleam and tugged Grandmother’s nightcap down to cover the pinched ears, smoothing the blue ribbon until it lay square. Wolf set the spectacles askew just enough to blur the bright of wolf’s eyes behind glass and folded the shawl from the chair-back around wolf’s shoulders, the tassels hiding breadth and giving the silhouette the gentleness of a borrowed shape.
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Replace repeated “Wolf”/“wolf” inconsistency with a single chosen form (prefer capitalized "Wolf") throughout.
+
+- Fix typo: change "dimened" to "dimmed."
+
+- Strengthen the opening sentence to more directly “tidy the impression of struggle to nothing” — tighten to show deliberate smoothing (e.g., compress two actions into one crisp verb: righted-and-stilled) so the erasure of struggle reads intentional, not incidental.
+
+- Remove redundancy around domestic sounds: cut one of the two similar sentences describing the kettle, china, and curtains settling. Keep the most vivid line and delete the other to tighten rhythm.
+
+- Combine or trim repetitive actions (nudged the saucer / slid the teapot / urged the hearth coals) — condense into fewer, cleaner beats so each gesture feels purposeful and ceremonial rather than catalog-like.
+
+- Make the shawl action match the touch-point phrasing more literally: change “folded the shawl from the chair-back around wolf’s shoulders” to “folded the shawl around his shoulders” (or “around Wolf’s shoulders”) to echo the required line.
+
+- Add the mirror moment and internal micro-performance: insert a brief line after the shawl is placed — mirror’s dim, his mouth learns a smaller smile — keeping the Wolf’s theatrical cadence. Keep it short and in voice.
+
+- Add the subtle performative cough image immediately after the smaller smile: “He tries on a cough the way one tries on a glove.” Keep it in Wolf’s voice and avoid making it clumsy or melodramatic.
+
+- Clarify ambiguous references: replace “it” in “so the room forgot it had ever lurched” with “the room” or rephrase to avoid any unclear antecedent.
+
+- Soften or remove the line “smoothing the blue ribbon until it lay square” if it slows the paragraph; otherwise make it tighter (e.g., “smoothing the blue ribbon square”) to preserve momentum.
+
+- Make the spectacle placement more purposeful: change “set the spectacles askew just enough to blur the bright of wolf’s eyes behind glass” to “tilted the spectacles to blur his eyes behind glass” — shorter and clearer.
+
+- Maintain the Wolf’s sly theatricality in any new or tightened lines: prefer words implying performance (tries, learns, arranges, rehearses) and keep any flatter, modern diction out.
+
+- Run a single pass to vary sentence length—alternate short, punchy sentences (for decisive acts) with longer, soft sentences (for the domestic hush) to preserve voice and pacing.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+Wolf righted-and-stilled the toppled chair with a careful lift so the room forgot the lurch. He nudged the saucer true, drew the teapot toward the heat and poked the hearth until a red seam opened and warmed the air; a faint thread of steam resumed its curl. Wolf flattened the feather quilt where it had heaved, smoothing the strawberry stitches until the puff looked mended, and drew the bed curtains a hand’s width tighter so the hem swallowed awkward edges and softened the bed’s shape.
+
+Wolf found the shutter hook and fastened it into its eye; daylight thinned to a gray hush and the room deepened into a private, dimmed theater. Small domestic noises folded into the dim as if rehearsed: the kettle’s murmur, the quiet clink of china, the hush of curtains settling. Wolf dabbed powder from the tin along the muzzle to dull any fresh gleam, tugged Grandmother’s nightcap down to cover the pinched ears, smoothing the blue ribbon square. He tilted the spectacles to blur his eyes behind glass and folded the shawl around his shoulders.
+
+In the mirror’s dim, his mouth learned a smaller smile. He tried on a cough the way one tries on a glove.

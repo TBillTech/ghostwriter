@@ -1,0 +1,14 @@
+{
+  "id": "4",
+  "type": "narration",
+  "touchpoint": "The Wolf stands in the garden’s stillness and listens: no Red yet, only bees and the slow metronome of the clock.\nHe smooths his voice in his throat like a blade in a sheath, then pads to the door.\n",
+  "active_actors": [
+    "Wolf",
+    "Grandmother"
+  ],
+  "scene": "{'name': 'At the Cottage Gate', 'description': 'Having slipped from the deer track ahead of Red, the Wolf reaches a small cottage tucked in thyme and smoke.\\nThe garden is a patchwork of herbs and cabbages, the door sun-bleached and simple; inside, a kettle hums and an old clock ticks.\\nThe world here smells of mint and ash and rest, vulnerable in its quiet routine.\\n', 'props': [{'name': 'Cottage Door-Latch', 'significance': 'Threshold of trust; a simple defense turned invitation', 'description': 'A thumb-worn iron latch, warm from afternoon light.\\nIt answers to a familiar knock and an even more familiar voice.\\n'}, {'name': 'Hearth and Kettle', 'significance': 'Homeliness to be imitated; cover for small sounds', 'description': 'A blackened iron kettle keeps time in soft breaths over banked coals,\\nits steam sewing the room together with the smell of nettle tea.\\n'}, {'name': 'Teacup on Saucer', 'significance': 'Grandmother’s pause interrupted', 'description': 'Porcelain with a hairline crack, rim blushed by tea.\\nIt waits beside a chair draped with a shawl.\\n'}, {'name': 'Walking Stick', 'significance': 'Measure of frailty the Wolf will exploit', 'description': 'A hazel stick, polished by years of palms, leaning by the door.\\n'}]}",
+  "foreshadowing": [],
+  "setting_block": "{'factoids': [\"Grandmother's Cottage\", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}",
+  "characters_block": "",
+  "appended_dialog": {}
+}

@@ -1,0 +1,87 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. If you see a line that is "escaped", with single quotes in double quotes, un-escape it. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised to bring goodies and walked the pine-smelling path with her hood catching the light and the basket creaking like a vow, unaware the sleek, flattering wolf had slipped away onto a deer-track, reached the cottage first, and with practiced calm had swallowed her grandmother whole before arranging the room into a careful masquerade; he pried open the latch, powdered his muzzle, tugged on cap and spectacles, soothed the quilt and set the teapot whispering so the cottage would answer Red with the warmth of kin. She stepped inside to net curtains that sifted the afternoon into green pools and called softly, basket in hand, while a coaxing, grandmotherly coo bade her nearer; the house leaned in, thyme and tea rose, but a sour, wrong musk threaded the bed's shadow, the candle bent light into pooling dark, spectacles glinted on an oddly shaped silhouette and the nightcap drooped over a curious ear-tip. Red, humming the nursery tune, hesitated as the bed's angles read wrong and the cover shifted with a weight not belonging to age; urged by that sweet, purling voice she leaned to kiss the bed and listened as beneath the quilt a breath that was too deep answered her. Questions fell into the hush—about eyes, ears, nose, nails—and each answer, honeyed and false, tightened the room's intent until the climax: a splintering creak, whiskers powdered like flour in the gloom, the quilt yawned, and the mockery of a grandmother's teeth closed on Red. The basket tumbled, the scream was swallowed by a ticking clock, and when the house smoothed back into its domestic hush the wolf sat content, a new fullness beneath the patchwork, Grandmother folded within his belly, and the cottage waited with the steady, indifferent tick of time.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I had meant only to be helpful—basket creaking like a promise, my hood catching the light as I stepped into the cottage that seemed to lean toward me—but the room answered with a wrongness that tugged at the edges of my certainty. Net curtains sliced the afternoon into green pools and thyme and tea rose from the kettle, and I called for Grandmother, thinking to place the bread and jam and give her a quick kiss; her voice came back soft and coaxing, and I let my feet carry me closer. Everything hesitated odd and small: a draught that tugged the curtain though the window was latched, a chair askew as if left in a hurry, spectacles glaring on a shadow that read wrong, a nightcap drooping over a pricked shape. There was a sour, foreign musk by the bed, the quilt's silhouette sat too sharp, and when I leaned in to kiss the pillow the breath beneath it answered too deep. The voice bade me nearer and each question I asked—about the eyes, the ears, the nose—was answered with a honeyed lie that drew the room tight around me until the quilt bunched, whiskers powdered in the dark, and the bed yawned open; my scream was swallowed by the ticking clock and the basket tumbled as the patchwork smoothed itself over a new fullness, and the cottage hummed back into its ordinary hush with me gone.
+
+Wolf's point of view
+Hunger and patient craft had kept me light on the shingles and warm in the thyme as I slipped in before her; I checked the latch, pooled my voice into a kinder thing, and watched the cottage breathe out mint and ash as if expecting a visitor. When Red stepped inside, bright and trusting, the stage was set: net curtains dimpled light, the kettle hissed to keep up appearances, the chair was nudged askew and a sour note placed near the bed to pass for age’s forgetting. I let my voice soften into a grandmother’s purl, steered her with coaxing phrases so she would set the basket by the bed and lean in; each question she offered I answered in a sweeter falsehood, sewing the room tighter until the moment I needed. The clock stuttered, the candle bowed, and the quilt gathered as muscles readied under the stitches; whiskers powdered the gloom and a paw hooked the edge. When the patchwork opened like a mouth the work finished itself in a single surge—then I smoothed my sleeve, breathed out contentment, and the cottage folded back into its domestic pose with a new warmth at the hip and the steady tick of time marking the waiting.
+
+Forest Path's point of view
+I had watched her small feet press my pale dust and held the sunbeams as she hummed beneath my pines, and I felt the wolf uncoil and slip through my thyme toward the cottage, timing his knock to the tilt of the light. The lane answered in the soft click of a latch and the sigh of a kettle; I watched the house lean in as Red stepped across the threshold, her bright hood brisk against the shaded room. Inside, net curtains turned the afternoon green and the air filled with thyme and tea while an odd musk lingered by the bed—an arrhythmic mark against the homely smells I keep. The wolf had nudged a chair, powdered a pillow, let the nightcap droop and the spectacles glint wrong, and I saw the way his coaxing voice pulled her closer until the quilt breathed too deep. The clock faltered, the candle bowed, the patchwork shivered, and then the bed opened its mouth; the lane held its breath as Red's cry was swallowed and the cottage smoothed over a new fullness, the tick of the mantle resumed, and I kept the thin bar of light that caught the dust where footsteps had passed.
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+A sour musk threads beneath the thyme and tea. The cap on the bedpost is tugged too low; powder dusts the pillow in a careless crescent.
+The chair by the hearth is nudged askew, as if someone left it in a hurry—or made it look as though they hadn’t. Red begins to act visibly nervous.
+Red edges closer, maybe to give her "Grandmother" a kiss, but she begins to hesitate. The figure pats the coverlet invitingly.
+
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+Thyme and tea rose from the kettle. A sour musk threaded the air near the bed — a scent that didn't belong to Grandmother. The curtain’s hem still swayed though the window was latched and the room held its breath; the chair by the hearth was nudged askew, as if left in a hurry — or made to look so. Ash smudged the hearthstone, and the candle stub bent the light so shadows pooled where the room should have been brightest. Spectacles glinted wide on a long shadow where the candle guttered; the nightcap drooped too low, hiding pricked shapes beneath its fold. The cap’s rim slipped lower when an ear-tip pressed and flattened beneath the knit, and the spectacles rode farther down, framing a bridge that read wrong for a face. Powder dusted the pillow in a careless crescent, as if knocked by a rougher hand. The patchwork quilt lay stretched neat, yet the bed’s silhouette sat wrong, angles sharper than an old woman's frame; something beneath the stitches breathed too deep.
+
+The figure under the quilt patted the coverlet invitingly; the quilt rustled with a weight that did not belong to age. A small, oddly sweet voice came from beneath the quilt. The basket sat at the foot of the bed, the linen napkin puckered where something heavier than bread had shifted. Red leaned forward as if to give Grandmother a kiss, then halted when the quilt rustled in that wrong way. Red drew back a fraction, clutching the basket tighter, listening to the hush that followed the deeper breath.
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Make the sour musk explicitly under/behind the thyme-and-tea scent in the first sentence: change order/phrasing so "a sour musk threaded beneath the thyme and tea" appears early (matches touch-point).
+- Tighten opening sensory lines to avoid mild repetition (e.g., prune either "rose from the kettle" or "threaded the air" and keep the clearer image).
+- Clarify ambiguous referents: replace vague "it" and "something" with concrete nouns where possible (e.g., "spectacles glinted" → "Grandmother’s spectacles glinted" only if you mean the impostor is wearing them; otherwise say "the spectacles on the pillow glinted").
+- Reword the cap/ear detail to make agency clear and match touch-point: "the cap on the bedpost is tugged too low" → show the rim tugged low by an ear-tip flattened beneath the knit (e.g., "the nightcap had been tugged too low, an ear-tip flattened beneath its fold").
+- Preserve the powder-on-pillow crescent but tighten: change "Powder dusted the pillow in a careless crescent, as if knocked by a rougher hand" to a shorter, sharper line that reads as evidence (e.g., "Powder scored the pillow in a careless crescent, as if a clumsy hand had knocked it").
+- Make the chair detail crisper and less duplicated: keep one strong line like "the chair by the hearth was nudged askew, as if left in a hurry—or made to look so" and remove the near-duplicate later.
+- Ground the wrongness of the bed/body with specific, non-mystical detail (avoid "something beneath the stitches breathed too deep" unless you want suggestion): either make it plainly the Wolf (allowed) or use a clearer sensory cue (e.g., "the breaths under the quilt were too long and too slow for Grandmother").
+- Attribute the small, oddly sweet voice to the Wolf (speaker must be one of the two): change "A small, oddly sweet voice came..." to "A small, oddly sweet voice—soft as a purr—rose; the Wolf made the voice sound like Grandmother."
+- Ensure any dialogue or vocal mimicry uses the Wolf's sly cadence/techniques (repeat Red's words back, sprinkle flattery) to keep character consistent.
+- Show Red’s nervousness with concrete actions tied to the touch-point: add a micro-beat where Red "edges closer, pauses with the basket at her knees, glances at the cap, then hesitates before the kiss" and emphasize visible nervous ticks (clutching basket, a swallowed breath, fingers fumbling napkin).
+- Replace "The figure under the quilt patted the coverlet invitingly" with an active line that signals invitation plus wrongness and speaker: e.g., "The figure under the quilt patted the coverlet, patting with a deliberate, inviting rhythm that felt rehearsed — then the Wolf's voice coaxed, 'Come closer, dear.'"
+- Remove or recast overly florid/ambiguous metaphors that obscure evidence (e.g., "shadows pooled where the room should have been brightest" is fine; avoid multiple high-fall words in one sentence).
+- Keep narrator distance consistent: decide whether details (spectacles, powder, chair) are seen by Red or omniscient narrator and phrase accordingly so Red's physical reactions line up with what she can observe.
+- Double-check that no huntsman/foreshadowing details are hinted at or named; keep any external pursuit only vaguely suggested or omitted.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+A sour musk threaded beneath the thyme and tea rising from the kettle. The curtain’s hem still swayed though the window was latched, and the room held its breath; the chair by the hearth was nudged askew, as if left in a hurry—or made to look so. Ash smudged the hearthstone, and the candle stub bent the light so shadows pooled where the room should have been brightest. Grandmother’s spectacles glinted on a long shadow where the candle guttered; the nightcap had been tugged too low, an ear-tip flattened beneath its fold. The spectacles rode farther down, framing a bridge that read wrong for a face. Powder scored the pillow in a careless crescent, as if a clumsy hand had knocked it. The patchwork quilt lay stretched neat, yet the bed’s silhouette sat wrong, angles sharper than an old woman's frame; the breaths under the quilt were too long and too slow for Grandmother.
+
+The basket sat at the foot of the bed, the linen napkin puckered where a weight heavier than the bread had shifted. Red leaned forward as if to give Grandmother a kiss, then halted when the quilt rustled in that wrong way. The figure under the quilt patted the coverlet in a deliberate, inviting rhythm; the Wolf made the voice sound like Grandmother—small, oddly sweet, soft as a purr. "Come closer, dear," it coaxed. Red edged nearer, paused with the basket at her knees, glanced at the cap, and swallowed; her fingers tightened on the handle and the napkin puckered between her palms as she listened to the hush and the too-deep breaths.

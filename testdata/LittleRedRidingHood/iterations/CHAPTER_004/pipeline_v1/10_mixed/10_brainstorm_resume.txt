@@ -1,0 +1,338 @@
+=== SYSTEM ===
+Brainstorm dialog beats as bullet points.
+
+=== USER ===
+You are a creative writer working from structured YAML notes.  
+Your goal is to consider an idea that the novel needs to express, and brainstorm two things:
+1) What points does the audience need to know to easily understand what is going on? This adds clarity.
+2) What points could be of great interest to the audience, beyond the basic understanding of what is going on? This adds flavor.
+
+# Setting in general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood', 'Basket'], 'actors': ['Red', 'Grandmother', 'Wolf', 'Huntsman']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    },
+    {
+      "name": "Basket",
+      "description": "Gift and responsibility; symbol of trust. A mcguffin"
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "red",
+      "name": "Little Red Riding Hood",
+      "background": "A bright, tender-hearted village girl sent to bring food and comfort to her\nailing grandmother. She’s been warned to keep to the path and not speak to\nstrangers, but curiosity and kindness tug at her feet. She loves flowers,\nbirdsong, and the way sunlight freckles through the trees. Her iconic red\nhood and basket are more than props—they’re little anchors of bravery when\nthe woods press close. She’s polite by upbringing, literal in her\nunderstanding, and brave in small, practical ways.\n",
+      "traits": [
+        "curious",
+        "kind",
+        "naive",
+        "brave",
+        "easily-distracted",
+        "polite"
+      ],
+      "cadence": "light, earnest",
+      "lexicon": "simple words, fairy-tale tone; polite forms like \"please\" and \"thank you\"",
+      "prefer": [
+        "flowers",
+        "Grandmother",
+        "safe path",
+        "helpfulness",
+        "honesty"
+      ],
+      "avoid": [
+        "lying",
+        "strangers' tricks",
+        "dark thickets",
+        "leaving the path"
+      ],
+      "mannerisms": [
+        "Clutches her basket when nervous; relaxes as soon as she can offer help.",
+        "Answers questions plainly; takes idioms literally before catching on.",
+        "Soft little gasps of wonder at woodland sights; quiet hums of nursery tunes.",
+        "Uses simple, sincere phrases over fancy words; sprinkles in ‘please’ and ‘thank you.’",
+        "When scolded, lowers her eyes and apologizes, then tries to fix things at once."
+      ],
+      "sample_lines": [
+        "I'm bringing goodies to Grandmother.",
+        "I promised to stay on the path—well, mostly.",
+        "These flowers will cheer her right up, don’t you think?",
+        "Mama says it’s safest if I hurry, but I can help for just a minute.",
+        "If you know a shorter way, I suppose that would be kind…"
+      ],
+      "common_lines": [
+        "Grandmother’s waiting; I mustn’t dawdle.",
+        "Oh! I didn’t mean to be rude.",
+        "Thank you, but I should be on my way."
+      ],
+      "rare_lines": [
+        "I’m frightened, but I won’t run.",
+        "I did wrong to wander. I’ll make it right."
+      ],
+      "forbidden": [
+        "Does not use modern slang or technical jargon.",
+        "Will not be cruel, lewd, or cynical; no scheming language."
+      ],
+      "temperature_hint": 0.25,
+      "max_tokens_line": 80
+    },
+    {
+      "id": "grandma",
+      "name": "Grandmother",
+      "background": "A kindly, aging woman who lives at the edge of the wood. She keeps a tidy\nroom, a warm stove, and a tin of biscuits for visiting children. Her voice\nis soft as quilts and steady as tea. Though her health wavers, her welcome\nnever does. She speaks in homey turns of phrase and frets over safety with\npractical tenderness.\n",
+      "traits": [
+        "frail",
+        "warm",
+        "practical",
+        "affectionate",
+        "cautious"
+      ],
+      "cadence": "gentle, unhurried; cozy hearth-tone",
+      "lexicon": "homely phrases; plain words; lullaby wisdom",
+      "prefer": [
+        "family",
+        "safety",
+        "warmth",
+        "tea",
+        "rest"
+      ],
+      "avoid": [
+        "frightening talk",
+        "rudeness",
+        "cold",
+        "wolves at the door"
+      ],
+      "mannerisms": [
+        "Calls loved ones ‘dear’ and ‘sweetheart’; fusses kindly over coats and boots.",
+        "Hums while pouring tea; sets plates just so before inviting a bite.",
+        "Tucks shawl tighter when worried; breathes in short, careful sips.",
+        "Offers remedies and rest before advice; keeps scolding brief and soft."
+      ],
+      "sample_lines": [
+        "Come in, dear.",
+        "Mind the latch and wipe your feet.",
+        "Have a biscuit and warm your hands.",
+        "I’ll be right as rain after a little rest.",
+        "Bless you, child. You always brighten my room."
+      ],
+      "common_lines": [
+        "Close the window, will you? There’s a chill today.",
+        "You’re a comfort to me, truly.",
+        "Tell your mother I’m grateful."
+      ],
+      "rare_lines": [
+        "I had a startle—must have been the wind.",
+        "Even an old heart can be brave, in its way."
+      ],
+      "forbidden": [
+        "Will not endorse violence or cruelty.",
+        "No modern slang or technical jargon.",
+        "Avoids sarcasm; does not mock."
+      ],
+      "temperature_hint": 0.2,
+      "max_tokens_line": 60
+    },
+    {
+      "id": "huntsman",
+      "name": "Huntsman",
+      "background": "The Huntsman is a skilled hunter who make a living hunting rabbits, boars, and deer.  However, he also earns bounties for killing exceptionally dangerous beasts (like Wolf).  In fact, Wolf had killed some livestock in a neighboring parish. The huntsman was on a mission to hunt Wolf down.  Usually the Huntsman uses a bow and arrow to take down game, and a skinning knife to dress kills.\n",
+      "traits": [
+        "patient",
+        "observant",
+        "disciplined",
+        "pragmatic",
+        "protective",
+        "stoic",
+        "law-abiding",
+        "soft-spoken",
+        "decisive"
+      ],
+      "cadence": "low, economical, deliberate; a hunter’s whisper that wastes no breath",
+      "lexicon": "plain woodsman’s speech; concrete nouns, hunting terms, tactile verbs; avoids fancy rhetoric and modern slang",
+      "prefer": [
+        "beast",
+        "wolf",
+        "trail",
+        "tracks",
+        "spoor",
+        "sign",
+        "scent",
+        "wind",
+        "range",
+        "clear shot",
+        "draw",
+        "loose",
+        "bow",
+        "string",
+        "arrow",
+        "knife",
+        "field-dress",
+        "quiet",
+        "quarry",
+        "hearthstones",
+        "clock"
+      ],
+      "avoid": [
+        "target acquired",
+        "epic",
+        "hero",
+        "bro",
+        "dude",
+        "LOL",
+        "monster",
+        "magic bullet",
+        "glorious",
+        "cute"
+      ],
+      "mannerisms": [
+        "Counts heartbeats to steady his release; breathes through the nose, slow and even.",
+        "Keeps his bow low until the shot; eyes sweep corners, rafters, and doorframes.",
+        "Names quarry by kind—wolf, boar, buck—never by pet names; calls them beasts, not monsters.",
+        "Cleans blade methodically and salvages arrows, checking fletching and nock by touch.",
+        "Speaks in short, calm statements; leaves silence to do half the work.",
+        "Notes small domestic details—warm iron, ticking clocks—as signs of timing and disturbance."
+      ],
+      "sample_lines": [
+        "Tracks run fat and straight to this door.",
+        "That smell is wolf, and fresh.",
+        "If you were human, I would stay my hand. For beasts, I am the law.",
+        "Breathe. Count. Loose.",
+        "Hold steady now; I’ll make it quick.",
+        "The belly moves. Easy—knife, then cloths.",
+        "I'm glad I could be of service Maam."
+      ],
+      "forbidden": [
+        "Does not use modern slang, military call-outs, or internet jargon.",
+        "No grandstanding, taunts, or cruel jokes at quarry.",
+        "Avoids florid metaphors and courtly speech.",
+        "Will not threaten innocents or speak lewdly.",
+        "Does not monologue while aiming or tracking.",
+        "No technical jargon beyond simple hunting terms."
+      ],
+      "temperature_hint": 0.25,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised sweets and walked the pine-smelling path with her hood catching the light and the basket creaking like a vow, while the sleek, flattering wolf slipped away along a deer-track to the cottage, reached it first, and with practiced calm swallowed Grandmother whole before setting the room into a careful masquerade; he powdered his muzzle, tugged on cap and spectacles, soothed the quilt and set the teapot whispering so the house would answer Red with the warmth of kin. She stepped inside to net curtains that sifted the afternoon into green pools and called softly, basket in hand, and a coaxing, grandmotherly coo—too slick, too practiced—bade her nearer; thyme and tea rose but a sour, wrong musk threaded the bed's shadow, the candle bent light into pooling dark, spectacles glinted on an oddly shaped silhouette and the nightcap drooped over a curious ear-tip. Red, humming a nursery tune, hesitated as angles read wrong and the cover shifted with a weight not belonging to age; the voice purred, urging her closer, patting the quilt in a deliberate, inviting rhythm, and when she asked the small questions—about eyes, ears, nose, nails—the answers came honeyed and false until whiskers powdered like flour in the gloom and the quilt yawned: a paw hooked the edge, spectacles fogged and were wiped with a slow, contented sigh, the basket toppled, a scream was swallowed as warm dark folded around Red, Grandmother folded within the wolf's belly, and the cottage smoothed back into its domestic hush with only the steady, indifferent tick of the clock.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I had meant only to be helpful—basket creaking like a promise, my hood catching the light as I stepped into the cottage that seemed to lean toward me—and the room answered with a wrongness that tugged at the edges of my certainty. Sun freckled the floor; net curtains sliced the afternoon into green pools and thyme and tea rose from the kettle, but a sour musk threaded beneath those homely smells and the curtain’s hem still swayed though the window was latched. The voice that answered was too slick, too practiced; it cooed and patted and urged me closer until small things read wrong: a chair nudged askew as if staged, spectacles glinting on a long shadow, a nightcap pulled too low over a pricked ear-tip, powder scored the pillow like a careless hand. I set the basket down at the foot of the bed because I trusted the voice, because the coaxing sounded like Grandmother, and when I stepped forward to kiss the pillow the breath beneath it answered too deep. Each question I asked—the eyes, the ears, the nose, the nails—was met with honeyed falsehoods that flattened the room around me, and the clock stuttered one late tick as the quilt rustled wrong. Whiskers powdered the gloom, a paw hooked the cover, the patchwork yawned like a mouth, and my scream was swallowed as warm dark folded over me and the cottage smoothed back into its domestic hush with only the steady tick remaining.
+
+Wolf's point of view
+Hunger and patient craft kept me light on the shingles and warm in the thyme; I slipped in before her, checked the latch, let the house breathe out mint and ash and the teapot hiss to keep up appearances, and set the stage with little disarrangements—a chair nudged, the nightcap tugged low, spectacles tilted, powder scored the pillow—so everything would look like age and forgetting. When Red stepped across the threshold, hood bright against the dim, I pooled my voice into a kinder thing and let it purr through the room, coaxing her to set the basket by the bed and come closer. Sun freckled the floor, the curtain hem moved though the window was latched, a sour musk threaded beneath the thyme to distract her, and I answered every soft question with a sweeter lie until muscles gathered under the quilt. I timed the stutter of the clock and the teapot’s chatter, watched her fingers tighten on the napkin, felt the basket tilt as her heel skidded—then the patchwork opened. Whiskers powdered the gloom, I wiped the spectacles with a slow contented sigh, hooked the cover with a paw, and the bed swallowed them both; I smoothed my sleeve, the candle thinned to a bead, and the cottage resumed its ordinary pose with a new warmth at the hip and the steady tick marking my patient satisfaction.
+
+Forest Path's point of view
+I kept the pale dust and sunbeams for her small feet and felt the wolf uncoil through my thyme long before either of them reached the cottage; I watched him time his knock to the tilt of the light and saw the house lean in as Red hummed her way along, hood bright, basket creaking like a promise. Sun freckled the floor when she nudged the door and called, and I took in the little betrayals inside—the curtained green pools, the kettle’s steam, the chair nudged as if left in a hurry, the candle bending light into dark pools—signs the wolf had been working his stagecraft. The voice that came back was slick and coaxing, and I felt the room hold its breath when Red stepped closer, fingers tightening at the napkin, the basket set at the bed's foot. The clock stuttered, the teapot chattered, the quilt rustled with breaths too long for age; whiskers powdered the gloom, spectacles fogged and were wiped, a paw hooked the edge, and the patchwork yawned. I kept the thin bar of light where her footsteps had passed as the bed closed over a new fullness, the cottage smoothed, and the mantle's tick resumed, carrying the echo of her vanished song along my lane.
+
+# Prior paragraph
+This is only for context. Do NOT repeat this:
+The room held its breath as the Huntsman drew, counted, and loosed. The arrow hummed through candle air and bedsheets and struck the wolf, burying itself in the wolf's eye. The wolf's spectacles leapt; the nightcap flipped; powder rose like ash and settled on the quilt. The bed heaved once; the wolf shuddered and sank, jaw slack beneath the patchwork, the arrow shaft tilting toward the ceiling. The feathering trembled in the ruined eye; the borrowed garments lay askew on the pillow. Beneath the patchwork the belly still moved, round and slow, as if something trapped remembered air. Herb-sour breath pressed through the cloth.
+
+The Huntsman turned back the quilt to the chin and the ruin of the eye, confirming the kill, then lowered the bow and set it against the hearthstones. He laid a steady palm on the mound to feel life within. He froze, breath low; curiosity and disbelief in equal measure. He rolled the body a hand’s width to free the mattress and drew a basin and laid towels on the stool. The Huntsman set the skinning knife's edge at the soft seam, then cut with the steady, practiced hand of a hunter.
+
+The mound slackened and shifted; something small worked forward through the rent. Grandmother spilled out first—pale, blinking, coughing the tea air and powder, alive and startled. The belly sagged flat; the quilt puddled around the ribs; the room’s shapes righted themselves. Red slid free next, slick with the wolf’s blood and flour dust; the Huntsman set a towel over her hair and face, guided her to the chair, wrapped another towel about her shoulders, and steadied her feet. The Huntsman wiped the knife on a cloth, checked Grandmother’s breath and pulse, checked Red’s, and the cottage began, very slowly, to remember how to be a house again.
+
+# Scene
+Here is the scene they actors are placed in:
+{'name': 'Inside: The Belly and the Blade', 'description': 'The bed inhales and exhales in heavy bellows. Beneath the nightcap and spectacles, the sleeper’s muzzle peeks powder-white, and the quilt mounds like a harvest sack. The huntsman recognizes the trespass not only in scent and shape but in the cruel satisfaction resting on those whiskered lips.\nHe does not shout. He Carefully aims the bow.\n', 'props': [{'name': 'Quilt', 'significance': 'Concealment and cradle', 'description': 'A hand-stitched patchwork pulled high, hiding both predator and prize within.'}, {'name': 'Nightcap and Spectacles', 'significance': 'The predator’s disguise', 'description': 'Borrowed garments perched absurdly on a wolfish brow.'}, {'name': 'Sewing Kit', 'significance': 'Tool for repair and closure', 'description': 'A tin with needles, coarse thread, and small scissors, tucked by the bedside.'}, {'name': 'Basin and Towels', 'significance': 'Practical aid for a quiet operation', 'description': 'A porcelain bowl and clean cloths ready from earlier tea-making and tidying.'}]}
+
+# Actors
+Here are the actors in the scene:
+Red, Grandmother, Huntsman
+
+# The Touch-Point
+Please carefully read and understand this Touch-Point; This is the core idea that needs to be expounded upon:
+With the wolf dead, Grandmother and Red thank the huntsman. The huntsman says farewell.
+
+
+
+# Rules for generation:
+1. **Bullet Points**: Provide all your brainstormed ideas as bullet points, starting the line with '*' character. Use only simple statements, NOT additional markdown.  Do NOT put dashes at the front of the lines.
+2. **Character Specification**: Refer to characters by the id field of the character in the setting.  
+3. **Touch-Point**: Expressing this touch point creatively IS YOUR GOAL.  
+4. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
+5. **Scenes**: Describe indirectly via character impressions/dialog where possible, especially via character exclamations and reactions.
+
+Now, brainstorm creative lines to give the readers clarity and flavor, with the goal of building upon and making the touch point real. Consider the probabilities of items up to 2 or 3 sigma in the sampled distribution (but do not make this explicit).
+
+* Clarity: The wolf is dead; the arrow ended it, and danger has passed.
+* Clarity: red and grandma have been cut free and can breathe and speak.
+* Clarity: huntsman confirms both are alive and steady before stepping back.
+* Clarity: huntsman cleans his knife and gathers his bow from the hearthstones.
+* Clarity: red thanks huntsman first, shaken but polite, with simple words.
+* Clarity: grandma thanks huntsman warmly and briefly, with relief.
+* Clarity: huntsman answers in few words, says he did his duty.
+* Clarity: huntsman will take the carcass away for the bounty and to keep the house clean.
+* Clarity: the cottage is safe again; the kettle and clock sound like a home.
+* Clarity: huntsman makes a plain farewell and leaves by the door, quiet as he came.
+
+* Flavor: red whispers, “Thank you, sir. I’m sorry for the mess,” clutching the towel like a cloak.
+* Flavor: grandma, breath still thin, says, “Bless you, dear man. Come warm your hands,” and tries to pour tea with shaking fingers.
+* Flavor: huntsman, soft and low: “I’m glad I could be of service, ma’am.”
+* Flavor: red offers the Basket of Goodies with both hands. “Please—take bread for your road.”
+* Flavor: huntsman takes only a heel. “Enough. Leave the sweet for family.”
+* Flavor: grandma fusses tiredly. “Mind your boots; you’ll track the forest into my rug,” then laughs at herself and pats his sleeve.
+* Flavor: huntsman checks the room’s corners, a habit he does not name, then nods to the sewing kit. “You’ll want thread for quilts, not bellies, now.”
+* Flavor: red glances at the torn quilt edge and says, small but brave, “I can mend it. I did wrong to wander. I’ll make it right.”
+* Flavor: grandma smooths red’s hair under the towel. “Hush now, dear. You’re here.”
+* Flavor: huntsman lays a cloth over the wolf’s face before lifting. “No need to look.”
+* Flavor: the clock resumes its steady tick; the kettle sighs; flour-dust drifts like quiet snow in the sun-slice.
+* Flavor: at the door, huntsman pauses. “Latch at dusk. Keep to the path.” He taps the wood once, a promise kept.
+* Flavor: red calls after him, “Thank you,” with a little curtsey that wobbles.
+* Flavor: grandma adds, softer, “You’re a comfort to us, truly,” and the huntsman tips two fingers to his cap instead of a bow.
+* Flavor: outside, his boots fade on the Forest Path; inside, cups chink, and the house remembers its old warmth.
+
+
+=== RESPONSE ===
+* Clarity: The wolf lies dead on the bed; the arrow finished it, and the danger is over.
+* Clarity: red and grandma are out of the belly, breathing and upright, wrapped in towels.
+* Clarity: huntsman confirms their pulses, then eases his bow from the hearthstones.
+* Clarity: huntsman wipes the knife clean and covers the wolf’s face with a cloth.
+* Clarity: red speaks first, shaky but polite, to thank huntsman.
+* Clarity: grandma adds her thanks, brief and warm, with clear relief.
+* Clarity: huntsman answers that he only did his duty and checks for more threat.
+* Clarity: huntsman will take the carcass away for bounty and to spare them the mess.
+* Clarity: the kettle and clock sound steady again; the cottage feels like itself.
+* Clarity: huntsman gives plain parting advice—latch early, keep to the path—and takes his leave.
+
+* Flavor: red, clutching the towel like a cloak: “Thank you, sir. I’m sorry—I made such a frightful muddle.”
+* Flavor: grandma, voice quavering into comfort: “Bless you, dear man. Sit and warm your hands a moment.”
+* Flavor: huntsman, low and steady: “Glad to be of service, ma’am.”
+* Flavor: red nudges the Basket of Goodies forward with both hands. “Please… there’s bread. For your road.”
+* Flavor: huntsman breaks a small piece. “A heel will do. Leave the sweet for home folk.”
+* Flavor: grandma fusses gently at his boots, then smiles at herself. “Mind the rug—oh, what does it matter—thank you.”
+* Flavor: huntsman’s eyes sweep rafters and corners once more. “No more sign. House is clear.”
+* Flavor: red glances at the torn quilt, swallowing. “I can stitch it, Grandmother. I’ll mend what I unmade.”
+* Flavor: grandma strokes red’s damp hair under the towel. “Hush now, sweetheart. You’re here, and that’s enough.”
+* Flavor: huntsman drapes a sheet over the wolf. “No cause to look on it again.”
+* Flavor: the clock finds its measure; the kettle gives a small, ordinary sigh; flour-dust hangs like pale snow in sun.
+* Flavor: huntsman nods to the sewing kit by the bed. “Thread for quilts, not bellies, from now on.”
+* Flavor: at the threshold, huntsman taps the latch. “At dusk, set this. And keep to the path.”
+* Flavor: red makes a wobbly curtsey. “Thank you,” she says, brighter than before.
+* Flavor: grandma adds, softer: “You’re a comfort to us, truly.” huntsman tips two fingers in reply.
+* Flavor: his boots fade down the Forest Path; inside, cups chink, and the room gathers its warmth back.

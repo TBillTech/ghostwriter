@@ -1,0 +1,209 @@
+=== SYSTEM ===
+You are an evaluator extracting actionable suggestions only.
+
+=== USER ===
+You are reviewing the work of an genious writer who sometimes loses track of key ideas in their wordsmithing.
+
+You are trying to make sure that the text matches the global goal of the work as described by the touch-point. You are trying to describe needed edits that are focused and surgical, and you wish to keep the voice and quirks of the writer alive to best interest the reader. A completely predictable and "normal" text would actually be bad, so it is a balance between interesting and clear. I will provide you here with the setting, context, things to watch out for, and the draft provided by the writer.  Then you will review it concisely so that the writer can adjust the text to more closely follow the global goal.
+
+Watch out for pronouns that have unclear references, like starting a paragraph with "They".  Using proper names is preferred in our narration IF there is any ambiguity.
+
+# Setting in general 
+{'factoids': ["Grandmother's Cottage", 'Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "red",
+      "name": "Little Red Riding Hood",
+      "background": "A bright, tender-hearted village girl sent to bring food and comfort to her\nailing grandmother. She’s been warned to keep to the path and not speak to\nstrangers, but curiosity and kindness tug at her feet. She loves flowers,\nbirdsong, and the way sunlight freckles through the trees. Her iconic red\nhood and basket are more than props—they’re little anchors of bravery when\nthe woods press close. She’s polite by upbringing, literal in her\nunderstanding, and brave in small, practical ways.\n",
+      "traits": [
+        "curious",
+        "kind",
+        "naive",
+        "brave",
+        "easily-distracted",
+        "polite"
+      ],
+      "cadence": "light, earnest",
+      "lexicon": "simple words, fairy-tale tone; polite forms like \"please\" and \"thank you\"",
+      "prefer": [
+        "flowers",
+        "Grandmother",
+        "safe path",
+        "helpfulness",
+        "honesty"
+      ],
+      "avoid": [
+        "lying",
+        "strangers' tricks",
+        "dark thickets",
+        "leaving the path"
+      ],
+      "mannerisms": [
+        "Clutches her basket when nervous; relaxes as soon as she can offer help.",
+        "Answers questions plainly; takes idioms literally before catching on.",
+        "Soft little gasps of wonder at woodland sights; quiet hums of nursery tunes.",
+        "Uses simple, sincere phrases over fancy words; sprinkles in ‘please’ and ‘thank you.’",
+        "When scolded, lowers her eyes and apologizes, then tries to fix things at once."
+      ],
+      "sample_lines": [
+        "I'm bringing goodies to Grandmother.",
+        "I promised to stay on the path—well, mostly.",
+        "These flowers will cheer her right up, don’t you think?",
+        "Mama says it’s safest if I hurry, but I can help for just a minute.",
+        "If you know a shorter way, I suppose that would be kind…"
+      ],
+      "common_lines": [
+        "Grandmother’s waiting; I mustn’t dawdle.",
+        "Oh! I didn’t mean to be rude.",
+        "Thank you, but I should be on my way."
+      ],
+      "rare_lines": [
+        "I’m frightened, but I won’t run.",
+        "I did wrong to wander. I’ll make it right."
+      ],
+      "forbidden": [
+        "Does not use modern slang or technical jargon.",
+        "Will not be cruel, lewd, or cynical; no scheming language."
+      ],
+      "temperature_hint": 0.25,
+      "max_tokens_line": 80
+    },
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# Prior touch points
+The most recent 3 touch-points for context.
+
+
+# Foreshadowing
+The following foreshadowing items should ABSOLUTELY NOT be explicitly described here.  If they are, that is a problem. These should only be vaguely alluded to:
+A huntsman is tracking after wolf.
+
+# Actors
+The following actors are allowed to speak in the dialog.  If other actors are speaking, that is a problem.  The actors are:
+Red, Wolf
+
+# Touch-Point
+This is the most important thing that the writer needs to say one way or another, and fits into the global goal of the work:
+A sour musk threads beneath the thyme and tea. The cap on the bedpost is tugged too low; powder dusts the pillow in a careless crescent.
+The chair by the hearth is nudged askew, as if someone left it in a hurry—or made it look as though they hadn’t. Red begins to act visibly nervous.
+Red edges closer, maybe to give her "Grandmother" a kiss, but she begins to hesitate. The figure pats the coverlet invitingly.
+
+
+# The Draft
+The polished text that needs to be evaluated for Touch-Point satisfaction, and actor and spoiler safety is as follows:
+A sour musk threaded beneath the thyme and tea rising from the kettle. The curtain’s hem still swayed though the window was latched, and the room held its breath; the chair by the hearth was nudged askew, as if left in a hurry—or made to look so. Ash smudged the hearthstone, and the candle stub bent the light so shadows pooled where the room should have been brightest. Grandmother’s spectacles glinted on a long shadow where the candle guttered; the nightcap had been tugged too low, an ear-tip flattened beneath its fold. The spectacles rode farther down, framing a bridge that read wrong for a face. Powder scored the pillow in a careless crescent, as if a clumsy hand had knocked it. The patchwork quilt lay stretched neat, yet the bed’s silhouette sat wrong, angles sharper than an old woman's frame; the breaths under the quilt were too long and too slow for Grandmother.
+
+The basket sat at the foot of the bed, the linen napkin puckered where a weight heavier than the bread had shifted. Red leaned forward as if to give Grandmother a kiss, then halted when the quilt rustled in that wrong way. The figure under the quilt patted the coverlet in a deliberate, inviting rhythm; the Wolf made the voice sound like Grandmother—small, oddly sweet, soft as a purr. "Come closer, dear," it coaxed. Red edged nearer, paused with the basket at her knees, glanced at the cap, and swallowed; her fingers tightened on the handle and the napkin puckered between her palms as she listened to the hush and the too-deep breaths.
+
+Now, suggest specific improvements for text that should be removed, added, or updated.
+
+
+
+---
+Now produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions.
+
+=== RESPONSE ===
+- Fix opening sentence grammar for immediacy: tighten to "A sour musk threaded beneath the thyme and tea rising from the kettle." (remove extra words that slow cadence).
+
+- Replace the ambiguous "the nightcap had been tugged too low" with the touch-point detail: mention the cap on the bedpost tugged too low. (e.g., "the cap on the bedpost was tugged too low; an ear‑tip flattened beneath its fold.") — keep the cozy image but match the required prop.
+
+- Clarify the spectacles image: reword "the spectacles glinted on a long shadow where the candle guttered" to something more concrete and less tangled (e.g., "Grandmother’s spectacles glinted in the guttering candlelight; their shadow fell long across the rumpled pillow").
+
+- Make the description of the face clearer: "the spectacles rode farther down, framing a bridge that read wrong for a face" is vague—specify what reads wrong while preserving unease (e.g., "the spectacles rode farther down a nose that seemed too angular, too wrong for Grandmother's soft features").
+
+- Soften or correct "the breaths under the quilt were too long and too slow for Grandmother": choose one adjective that evokes mismatch (e.g., "the breaths under the quilt were too deep, too slow for Grandmother") to avoid mixed metaphor.
+
+- Resolve pronoun ambiguity and ensure allowed actors speak: change the sentence "The figure under the quilt patted the coverlet..." so the actor is explicit when the voice is produced. Either keep suspense by writing "Something under the quilt patted the coverlet..." then immediately identify: "—the Wolf made the voice sound like Grandmother" or simply name the Wolf at the line of speech. (Example: "Something under the quilt patted the coverlet, then the Wolf, disguising his tone, made the voice sound like Grandmother—small, oddly sweet, soft as a purr." )
+
+- Remove the awkward "made the voice sound like Grandmother—small, oddly sweet, soft as a purr." Recast to show rather than tell: put the line of dialogue first in Grandmother's voice and tag it as Wolf speech with a sly cadence (allowed actor). Example: "'Come closer, dear,' the Wolf purred in a small, oddly sweet voice." This keeps the actor list clean and preserves theatrical menace.
+
+- Tighten Red's reaction phrases for clarity and cadence: compress "Red leaned forward as if to give Grandmother a kiss, then halted when the quilt rustled in that wrong way" to something more immediate (e.g., "Red leaned as if to kiss Grandmother, then froze at the quilt's wrong rustle").
+
+- Make the basket detail sharper and consistent: change "the linen napkin puckered where a weight heavier than the bread had shifted" to specify what that suggests about the bed (e.g., "the linen napkin at the basket's lip puckered, as if something heavier than bread had shifted").
+
+- Small rhythm edits: remove a couple of adverbs and needless qualifiers that diffuse tension ("deliberate, inviting rhythm" → pick one, e.g., "a deliberate, inviting pat" ; "paused with the basket at her knees" → "paused, basket at her knees").
+
+- Check final sentence clarity: "glanced at the cap, and swallowed; her fingers tightened on the handle and the napkin puckered between her palms as she listened to the hush and the too-deep breaths." Break into two sentences for impact and move "the cap" reference to the bedpost cap if not already changed. (e.g., "She glanced up at the cap on the bedpost and swallowed. Her fingers tightened on the handle; the napkin puckered between her palms as the room fell to a hush and the too‑deep breaths continued.")
+
+- Overall tone/voice: preserve the poetically odd phrasing but remove mixed metaphors and tighten imagery so each strange detail accumulates tension rather than competing for attention.

@@ -1,0 +1,19 @@
+- Fix perspective shift: change first-person "I slid free" / "my" to "Red slid free" / "her" (or fully convert whole scene to first person). Do not switch mid-paragraph.
+
+- Make subject references explicit where ambiguous: replace "Spectacles leapt" with "the wolf's spectacles leapt" and "He drew the porcelain basin" with "The Huntsman drew the porcelain basin" (or simply "The Huntsman drew a basin") so it's always clear who acts.
+
+- Strengthen the arrow-in-eye image and its aftermath: explicitly state the arrow lodged in the wolf’s eye as part of the kill (e.g., "the arrow buried in the wolf's eye") to match the touch-point’s certainty.
+
+- Emphasize Huntsman’s shock/fascination before the cut: after he feels the moving belly, add a brief, tightly-worded beat of astonishment—short, Huntsman-appropriate cadence (e.g., "He froze, breath low; curiosity and disbelief in equal measure.")—so his mental state is clear before he reaches for the knife.
+
+- Make the cutting action clearly executed with his skinning knife and deliberate technique: replace "with the blade point he found the soft seam of belly and drew a measured line" with a more tactile, huntsman-true phrasing that names the knife (e.g., "He set the skinning knife's edge at the soft seam, then cut with the steady, practiced hand of a hunter.").
+
+- Preserve sequence clarity: ensure the order reads—arrow hits eye; wolf slumps dead; Huntsman notices belly moving; Huntsman cuts; Grandmother emerges first; Red emerges second, slick with remains. Remove any lines that could imply a different order.
+
+- Reduce incidental props that distract from tone: consider removing or simplifying "porcelain basin" and "unrolled clean towels across the bedside stool" to a single practical action (e.g., "He drew a basin and laid towels") so the scene stays tight and visceral.
+
+- Keep sensory details but trim where redundant: tighten lines like "Warm breath and herb-sour steam pushed through the cloth; the quilt drank the damp and the candle guttered once." to one strong image (pick the most striking sensory cue) to maintain momentum.
+
+- Correct small consistency/grammar: use "the Huntsman" or "Huntsman" consistently (don't switch forms mid-scene); ensure verb tense remains past simple throughout.
+
+- Make Red’s condition explicit when she emerges: change "slick with the wolf’s remains and flour dust" to "slick with the wolf’s blood and flour dust" (or keep "remains" if you prefer the writer's quirks) but ensure the image is visceral and unambiguous.

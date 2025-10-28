@@ -1,0 +1,29 @@
+- Remove or rewrite the three long, self-describing Wolf lines that use first-person stage directions ("Stepping over the threshold, I mind the step...", "Softening, I return the welcome...", "Let the note rise..."). They make the Wolf narrate his own performance instead of acting. Replace with shorter, character-consistent lines that show persuasion and feigned concern (examples below).
+
+- Cut the repeated "Mind the step" / variant lines so it appears once as a charming refrain rather than three times. Keep one well-placed instance early in dialog and perhaps echo it subtly in action (the Wolf gestures, tips a slippered paw).
+
+- Remove the explicit metaphor "hides the knife inside the kindness" (too literal). Replace with subtler imagery: e.g., "a smile that smooths the room like a hand across a wrinkle" or let an action imply duplicity (Wolf fingers the nightcap's ribbon, then smiles).
+
+- Trim opening sentence redundancy: "Pewter light thins to a hush..." and "the shutter hook tames daylight..." overlap. Collapse into one crisp line: keep the stronger image (taming light or hush) and drop the duplicate theatrical phrasing.
+
+- Delete or tighten lines that restate the same hush/room-as-stage idea repeatedly ("the space accepts the arrangement...", "the room holds its breath...", "the room pretends to be Grandmother's cottage..."). Keep one or two evocative beats and cut the rest to regain pace.
+
+- Replace verbose narrative sentences that double as exposition ("Words lift and fall with a measured rhythm...") with concrete action beats: Wolf smoothing the quilt, straightening spectacles, tugging the nightcap down — short actions that show him "testing" tone.
+
+- Reduce adverb/adjective stacking in narration ("patient, theatrical calm", "patient as a witness awaiting the next carefully measured word"). Pick one modifier (patient OR theatrical) to avoid purple prose.
+
+- Fix punctuation: remove double periods and extraneous ellipses; use a single clean period or an em-dash for trailing cadence when needed.
+
+- Add brief beats between lines of dialog to ground tone and show testing: e.g., after a line, "He coughs, a practiced, small sound"; after another, "His fingers drift to the shawl, smoothing the fold." These should be short and physical — not explanatory.
+
+- Make Wolf's voice match provided cadence: slip in a few of his characteristic touches — elongated sibilants, a soft chuckle, echoed phrases of the interlocutor — but keep lines concise. Suggested sample replacements:
+  - "Come in, dear heart. Mind the step." (direct, testing)
+  - "Oh, what a day you must have had." (higher, kinder)
+  - "There's a quicker way, if you're in a hurry — only a suggestion." (casual, sly)
+  - End with a softer take: "Sit. Rest. Grandmother will be so grateful." (comforting surface, tidy intent)
+
+- Soften explicit wrap-up line "keeping hunger close at hand." Instead, hint via a small, telling action: "His tail twitches once beneath the bedskirt" or "his mouth tightens around the edge of a smile" — show appetite without naming it.
+
+- Preserve one clear foreshadowing detail but make it subtle (do not state humming explicitly). For example: "A faint thread of a tune slips past the shutter and dies on the sill." Place it once, not as an overt explanation.
+
+- Overall balance: aim for 3–4 short Wolf lines interleaved with 4–6 tight action beats (one- or two-clause sentences). Cut lingering atmospheric sentences that don't advance the immediate testing/enticing beat.

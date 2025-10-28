@@ -1,0 +1,29 @@
+- Trim opening redundancies: replace first two sentences with a single tighter line that keeps the shutter hook image and the faint tune (e.g., "The shutter hooked; pewter light thinned and a faint tune died on the sill."). Remove "and the room settles into a quiet hush." (already implied).
+
+- Delete or condense "Shadows gather along the bed curtains; the boards creak softly, a patient witness." Either keep only "boards creak softly" as a short atmospheric beat, or merge into previous sentence: "…died on the sill; boards creaked softly as shadows gathered."
+
+- Make Wolf's first speech tag less inert. Replace "Wolf purred, spectacles crooked, 'Come in, dear heart. Mind the step.'" with an action-forward beat + line: e.g., "Wolf purred, spectacles crooked. 'Come in, dear heart—mind the step.'" (split into two sentences to let the verb "purred" land, keep cadence).
+
+- Remove the neutral stage direction "He tips a slippered paw toward the doorway." and turn it into a tactile beat tied to dialogue: "'Come in, dear heart—mind the step.' He tipped a slippered paw toward the doorway, velvet and deliberate." (so action supports voice).
+
+- Change "He coughs—a practised, small sound." to an in-scene show: "He tried on a cough like a glove." (matches prior touch-tone and avoids flat description).
+
+- Tighten the second line of dialogue: remove the attributive "he said, voice higher, kinder." Instead show the shift by adjusting the speech and brief beat: "'Oh, what a day you must have had.' His voice rose, silk and concern." (keeps Wolf's theatricality).
+
+- Merge "His fingers drift to the shawl, smoothing the fold. He straightens his spectacles with the back of a claw." into one compact, observant sentence that shows purpose: "His fingers smoothed the shawl; a claw adjusted the spectacles to blur his eyes." (removes passive repetitions and hints at disguise).
+
+- Rework "Sit. Rest. Grandmother will be so grateful." to be less blunt and more Wolf-like persuasive: "'Sit. Rest—Grandmother will be so grateful if you're prompt.'" (adds a nudge, fits manipulative lexicon).
+
+- Replace passive "He settles deeper into the quilt." with a line that shows intention and masks appetite: "He settled deeper into the quilt, small smile practiced into the fold." (links action to motive).
+
+- Soften or rephrase "His tail twitches once beneath the bedskirt, and the corner of his mouth tightens around the edge of a smile." to avoid over-explaining emotion: "A tail twitched beneath the bedskirt; the corner of his mouth sharpened into a taught smile." (keeps menace and removes clumsy "tightens around the edge").
+
+- Add one brief sensory beat to foreshadow humming without stating it outright: slip a single descriptor after the shutter line—e.g., "A faint thread of a tune slipped past the shutter and died on the sill." keep as-is but ensure it's the only explicit musical hint; do not later explain it.
+
+- Reduce overt narration of motive: remove any sentence that interprets his thought (e.g., avoid anything like "the corner of his mouth tightened around the edge of a smile" if interpreted). Use actions and physical detail instead.
+
+- Overall balance: cut one of the short one-sentence actions between lines (pick either the paw tip or the cough) so dialog remains the forward engine and actions are concise beats that punctuate rather than list.
+
+- Maintain Wolf's cadence: where you have simple tags, favor descriptive beats that carry his theatrical character (purrs, silk voice, practiced smile) rather than plain "he said" or "he coughs."
+
+- Final pass: read aloud to ensure the dialogue rhythms feel like a single performer shifting tone (smooth -> higher/kinder) — if any tag breaks that illusion, replace it with a tactile or facial micro-beat.

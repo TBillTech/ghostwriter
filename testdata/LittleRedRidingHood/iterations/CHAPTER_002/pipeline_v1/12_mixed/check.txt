@@ -1,0 +1,185 @@
+=== SYSTEM ===
+You are an evaluator extracting actionable suggestions only.
+
+=== USER ===
+You are reviewing the work of an genious writer who sometimes loses track of key ideas in their wordsmithing.
+
+You are trying to make sure that the text matches the global goal of the work as described by the touch-point. You are trying to describe needed edits that are focused and surgical, and you wish to keep the voice and quirks of the writer alive to best interest the reader. A completely predictable and "normal" text would actually be bad, so it is a balance between interesting and clear. I will provide you here with the setting, context, things to watch out for, and the draft provided by the writer.  Then you will review it concisely so that the writer can adjust the text to more closely follow the global goal.
+
+Your job is to verify the passage aligns with the touch-point, character personalities, and setting, while keeping a healthy balance: crisp dialog lines, and brief narrative/action sentences where needed to paint the picture or advance motion.
+
+Watch for the following:
+* Redundancy and repetition—call out lines that repeat the same idea and should be trimmed.
+* Wrong balance—if there are long prose sections crowding out dialog, recommend shortening; if dialog lacks needed action context, recommend inserting brief narrative beats.
+* Weird constructions—e.g., characters describing their own actions in first person instead of letting narration carry it; overly literal symbols (“symbolizing …”). Prefer subtlety and implication.
+
+# Setting in general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# Prior touch points
+The most recent 3 touch-points for context.
+The latch clicked shut and warm mint and ash breathed from the small room. The chair tipped and clattered; the cup rattled in its saucer. The feather quilt shuddered with a rush of air. Curtains stirred and then stilled, and the cottage convulsed in a small, domestic tumble—Grandmother's world set into motion and then arrested.
+
+The Wolf stepped forward in a single, smooth bound that found the middle of the floor. A startled breath escaped Grandmother. The Wolf opened wide with a swift upward tilt and swallowed Grandmother whole in one smooth bite. The teapot sighed, and a hush filled the room.
+
+The Wolf's belly rounded, firm and high; the floorboards groaned under the new heft as the Wolf tested his balance, rolled his shoulders once, smoothed powder across his muzzle, and arranged the nightcap and spectacles until the outline softened—pleasing work, patient as hunger.
+
+---
+
+Wolf righted-and-stilled the toppled chair with a careful lift so the room forgot the lurch. He nudged the saucer true, drew the teapot toward the heat and poked the hearth until a red seam opened and warmed the air; a faint thread of steam resumed its curl. Wolf flattened the feather quilt where it had heaved, smoothing the strawberry stitches until the puff looked mended, and drew the bed curtains a hand’s width tighter so the hem swallowed awkward edges and softened the bed’s shape.
+
+Wolf found the shutter hook and fastened it into its eye; daylight thinned to a gray hush and the room deepened into a private, dimmed theater. Small domestic noises folded into the dim as if rehearsed: the kettle’s murmur, the quiet clink of china, the hush of curtains settling. Wolf dabbed powder from the tin along the muzzle to dull any fresh gleam, tugged Grandmother’s nightcap down to cover the pinched ears, smoothing the blue ribbon square. He tilted the spectacles to blur his eyes behind glass and folded the shawl around his shoulders.
+
+In the mirror’s dim, his mouth learned a smaller smile. He tried on a cough the way one tries on a glove.
+
+# Foreshadowing
+The following foreshadowing items should generally not be stated outright; prefer subtle hints. If they are explicit, flag it:
+A faint thread of humming drifts through the garden—the tune Red kept on the path—then fades as the wind shifts.
+The Wolf’s ears lift under the nightcap. He smiles with care, and waits.
+
+# Actors
+The following actors are allowed to speak in the dialog portions:
+Wolf
+
+# Touch-Point
+This is the core idea to realize through a mix of dialog and narrative action. Avoid hammering it directly; let it emerge:
+Wolf (testing): "Come in, dear heart. Mind the step."
+Wolf (again, higher, kinder): "Oh, what a day you must have had."
+The words fit. He settles deeper into the quilt.
+
+
+# The Draft
+The mixed draft (dialog + brief narration) to be evaluated is as follows:
+Pewter light thins as the shutter hook tames the day, and the room settles into a quiet hush. A faint thread of a tune slips past the shutter and dies on the sill. Shadows gather along the bed curtains; the boards creak softly, a patient witness.
+
+Wolf purred, spectacles crooked, "Come in, dear heart. Mind the step."
+He tips a slippered paw toward the doorway. He coughs—a practised, small sound.
+
+"Oh, what a day you must have had," he said, voice higher, kinder.
+His fingers drift to the shawl, smoothing the fold. He straightens his spectacles with the back of a claw.
+
+"Sit. Rest. Grandmother will be so grateful."
+He settles deeper into the quilt. His tail twitches once beneath the bedskirt, and the corner of his mouth tightens around the edge of a smile.
+
+Now, suggest specific improvements: lines to remove, add, or update; places to tighten or expand, and how to improve the dialog/action balance without losing momentum.
+
+---
+Now produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions.
+
+=== RESPONSE ===
+- Trim opening redundancies: replace first two sentences with a single tighter line that keeps the shutter hook image and the faint tune (e.g., "The shutter hooked; pewter light thinned and a faint tune died on the sill."). Remove "and the room settles into a quiet hush." (already implied).
+
+- Delete or condense "Shadows gather along the bed curtains; the boards creak softly, a patient witness." Either keep only "boards creak softly" as a short atmospheric beat, or merge into previous sentence: "…died on the sill; boards creaked softly as shadows gathered."
+
+- Make Wolf's first speech tag less inert. Replace "Wolf purred, spectacles crooked, 'Come in, dear heart. Mind the step.'" with an action-forward beat + line: e.g., "Wolf purred, spectacles crooked. 'Come in, dear heart—mind the step.'" (split into two sentences to let the verb "purred" land, keep cadence).
+
+- Remove the neutral stage direction "He tips a slippered paw toward the doorway." and turn it into a tactile beat tied to dialogue: "'Come in, dear heart—mind the step.' He tipped a slippered paw toward the doorway, velvet and deliberate." (so action supports voice).
+
+- Change "He coughs—a practised, small sound." to an in-scene show: "He tried on a cough like a glove." (matches prior touch-tone and avoids flat description).
+
+- Tighten the second line of dialogue: remove the attributive "he said, voice higher, kinder." Instead show the shift by adjusting the speech and brief beat: "'Oh, what a day you must have had.' His voice rose, silk and concern." (keeps Wolf's theatricality).
+
+- Merge "His fingers drift to the shawl, smoothing the fold. He straightens his spectacles with the back of a claw." into one compact, observant sentence that shows purpose: "His fingers smoothed the shawl; a claw adjusted the spectacles to blur his eyes." (removes passive repetitions and hints at disguise).
+
+- Rework "Sit. Rest. Grandmother will be so grateful." to be less blunt and more Wolf-like persuasive: "'Sit. Rest—Grandmother will be so grateful if you're prompt.'" (adds a nudge, fits manipulative lexicon).
+
+- Replace passive "He settles deeper into the quilt." with a line that shows intention and masks appetite: "He settled deeper into the quilt, small smile practiced into the fold." (links action to motive).
+
+- Soften or rephrase "His tail twitches once beneath the bedskirt, and the corner of his mouth tightens around the edge of a smile." to avoid over-explaining emotion: "A tail twitched beneath the bedskirt; the corner of his mouth sharpened into a taught smile." (keeps menace and removes clumsy "tightens around the edge").
+
+- Add one brief sensory beat to foreshadow humming without stating it outright: slip a single descriptor after the shutter line—e.g., "A faint thread of a tune slipped past the shutter and died on the sill." keep as-is but ensure it's the only explicit musical hint; do not later explain it.
+
+- Reduce overt narration of motive: remove any sentence that interprets his thought (e.g., avoid anything like "the corner of his mouth tightened around the edge of a smile" if interpreted). Use actions and physical detail instead.
+
+- Overall balance: cut one of the short one-sentence actions between lines (pick either the paw tip or the cough) so dialog remains the forward engine and actions are concise beats that punctuate rather than list.
+
+- Maintain Wolf's cadence: where you have simple tags, favor descriptive beats that carry his theatrical character (purrs, silk voice, practiced smile) rather than plain "he said" or "he coughs."
+
+- Final pass: read aloud to ensure the dialogue rhythms feel like a single performer shifting tone (smooth -> higher/kinder) — if any tag breaks that illusion, replace it with a tactile or facial micro-beat.

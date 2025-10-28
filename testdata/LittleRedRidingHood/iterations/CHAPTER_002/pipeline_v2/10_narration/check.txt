@@ -1,0 +1,153 @@
+=== SYSTEM ===
+You are an evaluator extracting actionable suggestions only.
+
+=== USER ===
+You are reviewing the work of an genious writer who sometimes loses track of key ideas in their wordsmithing.
+
+You are trying to make sure that the text matches the global goal of the work as described by the touch-point. You are trying to describe needed edits that are focused and surgical, and you wish to keep the voice and quirks of the writer alive to best interest the reader. A completely predictable and "normal" text would actually be bad, so it is a balance between interesting and clear. I will provide you here with the setting, context, things to watch out for, and the draft provided by the writer.  Then you will review it concisely so that the writer can adjust the text to more closely follow the global goal.
+
+Watch out for pronouns that have unclear references, like starting a paragraph with "They".  Using proper names is preferred in our narration IF there is any ambiguity.
+
+# Setting in general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# Prior touch points
+The most recent 3 touch-points for context.
+The latch clicked; warm mint and ash breathed from the room. The chair tipped and clattered; the cup rattled in its saucer. The feather quilt shuddered with a rush of air. Curtains stirred and then stilled, and the cottage convulsed in a small, domestic tumble—Grandmother's world set into motion and then arrested.
+
+The Wolf stepped forward in a single, smooth bound and found the middle of the floor. A startled breath escaped Grandmother. He opened wide—jaws snapping closed—and swallowed Grandmother whole in one smooth bite. The teapot gave a small sigh; hush settled.
+
+The Wolf's belly rounded, firm and high; the floorboards groaned under the new heft as the Wolf tested his balance, rolled his shoulders once, puffed a theatrical dusting of powder across his muzzle, perched the nightcap, nudged the spectacles, and folded his ears until his silhouette softened into something grandmotherly—pleasing work, patient as hunger. A slow, satisfied ripple moved along his flank; he tipped his head in a small, contented tilt. "There now," he murmured in a silkier, kinlier lilt, "come in, little one."
+
+# Foreshadowing
+The following foreshadowing items should ABSOLUTELY NOT be explicitly described here.  If they are, that is a problem. These should only be vaguely alluded to:
+
+
+# Actors
+The following actors are allowed to speak in the dialog.  If other actors are speaking, that is a problem.  The actors are:
+Wolf
+
+# Touch-Point
+This is the most important thing that the writer needs to say one way or another, and fits into the global goal of the work:
+He tidies the impression of struggle to nothing, sets the kettle to murmur, and folds the shawl around his shoulders.
+In the mirror’s dim, his mouth learns a smaller smile. He tries on a cough the way one tries on a glove.
+
+
+# The Draft
+The polished text that needs to be evaluated for Touch-Point satisfaction, and actor and spoiler safety is as follows:
+Wolf righted and stilled the toppled chair with a careful lift. He nudged the saucer true, drew the teapot toward the heat, and nudged the embers until a red seam opened and warmed the air; a faint thread of steam resumed its curl. Wolf flattened the feather quilt and smoothed the stitched pattern, then drew the bed curtains a hand’s width tighter so the hem softened the bed’s outline.
+
+Wolf fastened the shutter hook; daylight thinned to a gray hush and the room deepened into a private, dimmed theater. Domestic sounds folded into the dim—the kettle’s murmur and the clink of china. Wolf dabbed powder from the tin to dull any fresh gleam, tugged Grandmother’s nightcap down and smoothed the blue ribbon into a neat square, tilted the spectacles, and folded the shawl about his shoulders.
+
+Before the dim mirror, his mouth learned a smaller smile. He tried on a cough the way one tries on a glove.
+
+Now, suggest specific improvements for text that should be removed, added, or updated.
+
+
+
+---
+Now produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions.
+
+=== RESPONSE ===
+- Add a short, precise sentence early that explicitly erases signs of struggle (without melodrama): e.g. "He smoothed the scuff from the floorboard and righted the crooked picture—traces of commotion made tidy." Place it before the kettle action so the "tidies the impression of struggle to nothing" touch-point is satisfied.
+
+- Replace "drew the teapot toward the heat, and nudged the embers until a red seam opened and warmed the air; a faint thread of steam resumed its curl" with a tighter line that satisfies the touch-point tone: "He set the kettle to murmur, coaxed the embers until a red seam opened, and watched steam ease into a thin curl." (keeps imagery, states the kettle action clearly)
+
+- Vary repeated verbs and improve clarity: change one of the near-duplicate "nudged" constructions—e.g. "nudged the saucer true" → "set the saucer straight" and keep a single "nudged" later if needed.
+
+- Strengthen the shawl action to match the touch-point: make "folded the shawl about his shoulders" slightly more deliberate: "he folded the shawl around his shoulders, tucking the edge as if to settle a habit." (keeps voice, emphasizes the gesture)
+
+- Remove ambiguity in the mirror sentence by using the name: change "Before the dim mirror, his mouth learned a smaller smile." → "Before the dim mirror, Wolf's mouth learned a smaller smile." (follows instruction to prefer names over pronouns)
+
+- Keep "He tried on a cough the way one tries on a glove." as the closing sentence but consider making it the final line of the paragraph for stronger cadence (it currently is — ensure punctuation and placement emphasize it).
+
+- Trim a redundant smoothing verb: pick either "flattened the feather quilt" or "smoothed the stitched pattern" — combine for economy if desired: "he smoothed the feather quilt, evening the stitched pattern" to avoid feeling list-like.
+
+- Maintain Wolf's theatrical, controlled manner—if you add any small sensory detail (powder, ribbon, spectacles), keep them as quick, purposeful gestures rather than lingering description so the overall tidying/staging tone remains dominant.

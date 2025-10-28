@@ -1,0 +1,13 @@
+{
+  "id": "8",
+  "type": "actors",
+  "touchpoint": "Wolf",
+  "active_actors": [
+    "Wolf"
+  ],
+  "scene": "{'name': 'Inside, the Disguise', 'description': 'The aftermath of swallowing Grandma: The chair is knocked over, and the teapot is still warm. But Wolf organizes the room halfway through the scene.\\n', 'props': [{'name': 'Grandmother’s Nightcap and Spectacles', 'significance': 'Tools of disguise; innocence repurposed', 'description': 'A soft cap with a blue ribbon, and spectacles smudged with use.\\nThey pinch the Wolf’s ears and blur his eyes, but lend him a silhouette.\\n'}, {'name': 'Feather Quilt and Bed Curtains', 'significance': 'Stage for the masquerade', 'description': 'A puffed quilt stitched with strawberries, curtains that turn a bed into a small theater.\\nThey muffle size and shape, smooth the outline of teeth.\\n'}, {'name': 'Shutter Hook', 'significance': 'Conspiracy with the dark', 'description': 'A simple hook-and-eye that tames daylight.\\nOnce fastened, the room is quiter and dimmer.\\n'}, {'name': 'Powder Tin', 'significance': 'A trick to soften a snout', 'description': 'A little tin of rice powder; a dab on the muzzle keeps the fur from gleaming.\\n'}]}",
+  "foreshadowing": [],
+  "setting_block": "{'factoids': [\"Grandmother's Cottage\", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}",
+  "characters_block": "",
+  "appended_dialog": {}
+}

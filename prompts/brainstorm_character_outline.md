@@ -31,5 +31,6 @@ Instructions:
   - forbidden: [list of constraints]
   - temperature_hint: number (e.g., 0.25)
   - max_tokens_line: number (e.g., 90)
+- For the traits, prefer, avoid, please use the condensed yaml list with "[" and "]" characters on a single line.
 - For the character [TARGET_NAME], brainstorm an interesting character outline from the prior description.
 - Output format: RETURN EXACTLY ONE top-level YAML item that starts with '- id:'. No surrounding list markers beyond the single item. No additional commentary.

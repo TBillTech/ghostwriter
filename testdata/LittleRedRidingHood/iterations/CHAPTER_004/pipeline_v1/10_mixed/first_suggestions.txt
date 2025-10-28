@@ -1,0 +1,38 @@
+- Remove duplicate lines about boots/tracking the rug (delete the second Grandmother line that repeats the boot warning).
+
+- Clean up punctuation and tag formatting throughout (remove stray extra periods/commas inside quotes; use single, simple tag punctuation). Example fixes:
+  - Grandmother: "Thank you, dear, for your help. Mind your boots—you'll track the forest into my rug. I'll see to the stove and rest a moment."
+  - Huntsman: "I'm glad I could be of service, ma'am."
+  - Red: "Please take a bit of bread for your road."
+  - Huntsman (accepting): "Thank you kindly. I'll leave the rest for you."
+
+- Recast the Huntsman's awkward line "I'll leave the rest for you poor souls.." to match his terse, plain voice and remove pity:
+  - Replace with: "I'll leave the rest for you. Keep it." or "Keep the basket. You need it."
+
+- Tighten Grandmother's gratitude to feel warm and homely rather than repetitive or clumsy. Suggested replace:
+  - "You're a comfort to us, truly." (keep)
+
+- Replace the Huntman's vague "No cause to look on it again.." with a concise, hunterly farewell/action beat:
+  - "No need. I'll take care of the beast." then a short physical beat: he inclines his head, shoulders the bow, moves to the door.
+
+- Remove the redundant narration lines that repeat the cottage breathing/warmth image twice. Keep one compact sentence describing the room settling:
+  - Keep: "The room settled; the clock counted a quieter pace as the wolf was carried away."
+
+- Rework the "Huntsman warned, 'Latch at dusk...'" line to be a simple, practical admonition in his voice:
+  - "Latch the door at dusk. The woods will be quieter for now, but mind the night."
+
+- Make Red's curtsey an action beat rather than an adjective "wobbly"—show it subtly so her naivety shows without authorial label:
+  - Replace: Red curtsied; she tucked the basket under her arm and said, "Thank you, sir."
+
+- Move one small physical beat into Grandmother's line to ground the thanks (fussing with a shawl, setting a cup down) to balance dialogue and action:
+  - e.g., Grandmother smooths her shawl. "Bless you, dear. You always brighten my room."
+
+- End with a clear, brief Huntsman farewell line consistent with the touch-point (he does not linger or sermonize):
+  - Add/replace final Huntsman line: "Take care of one another." He tipped his cap and stepped back onto the path.
+
+- Remove explicit or redundant statements that summarize emotion (e.g., "The cottage breathes a soft hush..." and "warmth lingers where fear once pressed."). Instead, imply with a single, concrete image:
+  - Keep one: "Warmth pooled by the stove as if the house remembered how to be itself."
+
+- Ensure allowed speakers only (Red, Grandmother, Huntsman) speak; remove any line that attributes voice to the cottage (keep cottage descriptions as narration only).
+
+- Overall balance: shorten prose paragraphs into quick action beats interspersed with dialogue. After each short line of speech, add a 3–6 word physical beat (gesture, look, small domestic action) to maintain pace and show rather than tell gratitude and farewell.

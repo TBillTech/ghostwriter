@@ -1,0 +1,19 @@
+- Replace vague subjects with names in key beats: change any opening sentences that begin with "The clock..." or "The candle..." to lead with "Red" or "Wolf" when their perceptions/actions matter (e.g., "Red heard the clock stutter..." / "Wolf's breath fogged the spectacles...") to remove ambiguity and keep focalization tight.
+
+- Tighten the jump-scare cadence: shorten the few sentences before the final swallow so the rhythm accelerates—make the clock stutter, teapot chatter, quilt bunch, paw hook, Red's scream, then the swallow—each as sharp, single images. Remove or condense intermediary lines that slow momentum (e.g., "The candle’s flame bowed and the bedframe gave a short, splintering creak").
+
+- Clarify agency on the spectacles: make it explicit that Wolf fogged then wiped them ("Wolf's breath fogged the spectacles; he wiped them clear with a slow, contented sigh") so the actions read as the Wolf's theatrical mannerism rather than anonymous happenings.
+
+- Rework the awkward "the patchwork gave a sharper, hollow tug": replace with a clearer, stronger image tied to the Wolf or the quilt ("the patchwork tugged sharp and hollow as Wolf surged") to avoid passive or confusing phrasing.
+
+- Preserve the child’s point-of-view immediacy in the swallowing line: keep Red-centered verbs (e.g., "Red screamed; the quilt yawned like a mouth — then closed over her") rather than letting the narrator drop too far away before the swallow.
+
+- Remove or rephrase the overly serene aftermath lines that undercut horror and agency: cut or stiffen "Wolf smoothed his sleeve and exhaled, a small, satisfied sound; the candle steadied..." to something more in keeping with the Wolf's theatrical menace (e.g., "Wolf smoothed his sleeve with a small, satisfied sound; the candle steadied to a thin bead.") — avoid peaceful phrasing like "fell quiet and waited."
+
+- Make the "inside the belly" beat more visceral but not explicit about other actors: change "Inside Wolf’s belly, Red found Grandmother folded there" to a tighter sensory image from Red's (or an omniscient) angle that implies being joined without overexplaining (e.g., "Warm dark folded around her—Grandmother's shawl pressed against Red's cheek"), so it satisfies the touch-point without drifting into flat exposition.
+
+- Delete or trim the line "The clock resumed its ticking." If you keep it, place it as a closing punctuation that echoes the jump-scare (one short sentence) and avoid giving the scene a lull; otherwise the image feels tonal-softening.
+
+- Watch mixed metaphors and tonal shifts: remove lines that flip between whimsical simile and clinical statement in the same sentence (e.g., "The patchwork flowers rippled like water as something moved under the stitches") — pick a single, strong image and lean into it.
+
+- Preserve voice quirks: keep at least one Wolf mannerism (elongated sibilant or "purls") in the immediate pre- or post-swallower line to maintain theatrical menace, and retain Red's physical reactions (clutching basket, heel skidded) but compress them into fewer, sharper beats.

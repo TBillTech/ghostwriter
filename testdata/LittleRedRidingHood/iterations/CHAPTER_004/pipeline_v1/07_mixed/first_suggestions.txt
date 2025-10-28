@@ -1,0 +1,42 @@
+- Remove duplicated lines and repeated declarations:
+  - Delete the second full repeat of the Huntsman’s “If you were human…” speech at the end. Keep it once and make it the closing line.
+  - Remove the repeated “Grandmother is all aches and coughs; mind your tone in a sickroom” line from the Wolf — it appears twice and loses force. Keep a single, sly version.
+
+- Tighten stage directions and let narration carry actions:
+  - Replace “Huntsman, bow lifted, enunciated ‘I have found you, wolf. Your terrible deeds end here..’” with a brief beat + dialogue tag: e.g., “The huntsman lowered the bow an inch. ‘I have found you, wolf. Your terrible deeds end here.’”
+  - Replace “Wolf, whiskers twitching, purred …” and similar clunky labels with short narrative beats before or after the line: e.g., “Whiskers twitching, the wolf purred, ‘Such accusations…’”
+
+- Fix punctuation and voice consistency:
+  - Remove doubled periods and stray question marks after quoted lines (“..”, “.?”). Use single punctuation within/after quotes.
+  - Make Huntsman dialogue spare and measured (shorter lines, hard nouns). For example change “Tracks run fat and straight to this door. None leaving..” to “Tracks run fat and straight to this door. They don’t leave.”
+
+- Cut purple prose and redundant metaphors:
+  - Trim phrases like “Night breathes into the room, heavy as fate,” and “the moment thickens with the hunter's coming decision.” Keep one evocative image instead of two. Suggest: “Night pooled in the corner; the quilt swelled with something alive.”
+  - Remove repeated variations of “the room holds its breath” / “the house holds its breath” — pick one placement for that image.
+
+- Restore character cadences:
+  - Make the Wolf’s lines more sly and theatrical, with leading questions and backhanded flattery. E.g., replace “You mistake a grandmother’s poor nose for brutishness. Come nearer; you’ll see..” with “You mistake frailty for brutality, hunter. Come closer—see how feeble she is.”
+  - Make the Huntsman more concrete and tactile: add a short, hunterly inventory to one line (“Tracks, smell, spectacles on a snout” → “Tracks, the sour musk, spectacles perched on a snout.”)
+
+- Add small, clarifying physical beats to balance dialogue:
+  - Insert a single tactile gesture when he accuses—e.g., he pins the quilt’s seam with a thumb or slides a fingertip along the patchwork to reveal whiskers—so the revelation is shown, not told.
+  - When the Huntsman smells the wolf, show a sensory detail: “He paused, breath in the cold; the sour fur-musk rose, threaded with flour dust.” That anchors his line about smell.
+
+- Reduce abstract sentence fragments that interrupt rhythm:
+  - Combine or shorten sentences like “Bow low, the hunter studies the room, counting seams and shadows for a shift in truth; the clock on the sagging mantel ticks with stubborn patience as the line through patchwork hardens into the shape of an answer.” Make it two clear beats: hunter action, then clock.
+
+- Clarify the decisive moment visually and aurally:
+  - Right before the Huntsman’s final line, show the seam parting or spectacles sliding on the wolf’s snout to make the evidence undeniable. This will let the final statement land without repeating clues.
+  - Consider a single short sentence of silence (e.g., “Silence. Then—”) before the Huntsman’s verdict to heighten the blow.
+
+- Remove explicit moralizing phrasing:
+  - Drop “For beasts of the forest, you are judged—by me, jury and executioner..” as courtly echo twice; keep one version but tighten language to match Huntsman’s plain tone: “If you were human, I would not. For beasts, I am judge, jury, and executioner.”
+
+- Preserve voice quirks but avoid theatrical redundancy:
+  - Keep the Wolf’s honeyed, manipulative cadence and small theatrical gestures (purrs, mock offense), but cut any line that simply reiterates earlier insults or defenses. Let one or two lines encompass his feigned indignation and coaxing.
+
+- Final micro-edits to apply:
+  - Remove extra adjectives where unnecessary (e.g., “powder-white muzzle” → “white muzzle” if rhythm demands).
+  - Ensure each paragraph is one clear beat or exchange: action + line, line + reaction. Where prose swells, cut 1–2 modifiers to restore punch.
+
+Apply these edits to sharpen pacing, ensure clues are shown not spelled out, preserve the Wolf’s sly theatricality, and keep the Huntsman terse and inexorable.

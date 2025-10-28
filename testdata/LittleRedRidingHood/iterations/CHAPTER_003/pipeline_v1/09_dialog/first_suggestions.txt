@@ -1,0 +1,31 @@
+1. Replace all stage directions embedded in dialogue (e.g., "I grin;", "A soft chuckle slips free;") with pure spoken lines or move them to brief action beats outside quotes. Example: change Wolf’s "I grin; closer still..." to simply: "Closer still, my dear — the nearer you come, the sweeter the feast will be." Keep the chuckle as an outside tag: Wolf chuckled.
+
+2. Remove duplicated or near-duplicate lines that repeat the same invitation to approach. Keep 2–3 distinct Wolf urges that escalate (soft purr → coaxing → final triumph). Suggested sequence:
+   - Wolf purrs: "Closer, sweetheart; these old eyes don’t catch the light so well." (use required touch-point wording)
+   - Mid exchange: "Closer, dear; I’d hate to miss a single breath."
+   - Final: "The nearer you come, the sweeter the feast will be." (condensed, not repeated word-for-word)
+
+3. Ensure the exact touch-point phrases appear verbatim where required. Replace Red/Wolf variants with the canonical lines in this order:
+   - Wolf: “Closer, sweetheart,” the voice purls. “These old eyes don’t catch the light so well.”
+   - Red: “Grandmother, what a big nose you have.”
+   - Wolf: “The better to smell you with, my dear.”
+   - Red: “And what big ears you have.”
+   - Wolf: “The better to hear you with, my dear.”
+   - Red: “And—your nails—how big they are.”
+   - Wolf: “The better to grasp you with, my dear.”
+   - Red: “Grandmother… what big teeth you have.”
+   - Wolf: “The better to eat you with, my dear!”
+
+4. Remove Red’s repeated literal observations about candlelight and nails (e.g., "Those nails gleam in the candlelight, long and sharp as claws." and "Your nails catch the candlelight..."). Replace with one concise, characterful Red line that fits her naive, literal tone: e.g., "Grandmother… your nails are so long."
+
+5. Cut or compress lines where both speaker and content are redundant (e.g., two consecutive "Closer" lines that say the same thing). Keep the rising menace by varying content (eyes → breath → taste).
+
+6. Fix punctuation and eliminate unnecessary ellipses and double periods. Use single, purposeful pauses (dashes or commas) inside dialogue rather than trailing dots.
+
+7. Remove any present-tense narration that tells the reader what a character is doing while the same content is in dialogue (e.g., "Wolf purred," should be a short tag like "Wolf purred." outside quotes, not embedded action inside the line). Place small action beats (clutching basket, leaning closer) as brief tags between lines, but keep the scene largely as dialogue.
+
+8. Tone down overly literary metaphors that feel out of character for Red (simple, earnest phrasing) and for Wolf (sly, suggestive). Example: replace "the fear in your voice tastes sweetest" with a Wolf line that keeps menace but remains in voice: "the fear in your voice is delightful."
+
+9. Ensure each Red line is brief, polite, and slightly literal. Avoid her using adult-sounding phrasing like "please.." or "yes, Grandmother; I’ll come a little closer, please.." — simplify to "Yes, Grandmother," or "I’ll come closer, Grandmother."
+
+10. After edits, read the exchange aloud to confirm cadence: Red’s lines short and innocent; Wolf’s lines elongated, seductive, and escalating.

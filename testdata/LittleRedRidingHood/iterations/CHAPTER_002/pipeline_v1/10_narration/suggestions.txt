@@ -1,0 +1,27 @@
+- Remove the hyphenation in the opening phrase; change "Wolf righted-and-stilled" to "Wolf righted and stilled" for smoother cadence.
+
+- Trim redundancy in the first sentence: delete "so the room forgot the lurch." Instead let the precise actions carry the effect (e.g., end sentence after "stilled").
+
+- Replace "poked the hearth until a red seam opened" with a firmer verb that suits the Wolf's practiced domesticity—suggest "stoked" or "nudged the embers until a red seam opened"—to avoid a clumsy image.
+
+- Shorten the list of small repairs into two tight clauses to keep momentum. Example: collapse "flattened the feather quilt... smoothing the strawberry stitches until the puff looked mended, and drew the bed curtains..." into "flattened the feather quilt and smoothed the stitches, then drew the curtains a hand’s width tighter" (keeps voice but reduces stacking).
+
+- Remove "so the hem swallowed awkward edges and softened the bed’s shape" (wordy metaphor). If you want the softening image, compress: "so the hem softened the bed’s outline."
+
+- Change "Wolf found the shutter hook and fastened it into its eye" to "Wolf fastened the shutter hook" — cut the anthropomorphic "its eye" which slightly confuses focus and slows the sentence.
+
+- Reduce repetition around domestic sounds: pick either "the kettle’s murmur" or "the kettle murmured." Keep one vivid auditory image; delete the extra phrasing "Small domestic noises folded into the dim as if rehearsed: the kettle’s murmur, the quiet clink of china, the hush of curtains settling." For example: "Domestic sounds folded into the dim—the kettle’s murmur, the clink of china."
+
+- Tighten the grooming sequence for clarity and menace: reorder to foreground the deliberate concealment (powder, nightcap, spectacles, shawl). Make each action a short verb phrase: "He dabbed powder, tugged the nightcap down, tilted the spectacles, and folded the shawl about his shoulders." This emphasizes intentional performance.
+
+- Replace "to dull any fresh gleam" with "to dull any fresh gleam of blood" only if you intend to allude overtly; otherwise keep it ambiguous: "to dull any fresh gleam" is fine but consider "to dull any fresh shine" if you want less literalness.
+
+- Remove the passive "the blue ribbon square" — make it active and specific: "smoothing the blue ribbon into a neat square."
+
+- Make the final two sentences stand even more stark and theatrical by placing them flush and slightly varied in rhythm. Consider adding a brief sensory anchor before the mirror line (a single-word image like "mirror" or "glass"): e.g., "Before the dim mirror, his mouth learned a smaller smile. He tried on a cough the way one tries on a glove." (Keep exactly the touch-point phrasing but ensure it follows the tightened grooming sentence.)
+
+- Check pronoun clarity: where you use "he" in successive sentences, consider repeating "Wolf" once or twice in the paragraph to avoid any momentary ambiguity and to preserve the persona.
+
+- Tone consistency: preserve the Wolf's theatrical, patient cadence—avoid pastoral or overly cozy diction ("strawberry stitches," "puff looked mended") that leans too domestic; replace with slightly tauter images to match the Wolf's sinister composure (e.g., "stitched pattern" instead of "strawberry stitches").
+
+- Final pass: read aloud to maintain the Wolf's smooth, persuasive cadence—shorten or split any sentence that trips on too many domestic details so the closing mirror/cough lines land with the intended quiet menace.

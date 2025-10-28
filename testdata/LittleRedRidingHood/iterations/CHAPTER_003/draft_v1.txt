@@ -1,0 +1,116 @@
+BEGIN_TOUCHPOINT id=1 type=setting
+
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=2 type=scene
+
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=3 type=actors
+
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=4 type=mixed
+
+END_TOUCHPOINT
+BEGIN_RESULT
+The latch sighed. The cottage seemed to lean in as Red stepped inside, the basket creaking like a promise.
+
+Net curtains sifted the afternoon light into greenish pools.
+
+Red nudged the door and peered in. "Grandmother? It's Red. I brought bread and jam."
+
+A cough answered from the inner room. "Come in, dear heart. Mind the draught."
+
+His voice softened into a grandmotherly coo.
+
+"Are you resting?" Red asked, clutching the basket.
+
+"How thoughtful, my little bird. Set it down by the bed, and come—give your old granny a kiss."
+
+Light trimmed the bed's silhouette. Nothing moved. Red hesitated, eyes dropping for a moment as she hummed the nursery tune under her breath, then stepped closer and reached toward the table. "May I put the basket on the table?" she asked.
+
+"Set it by the bed, please, so I needn't reach," the voice purred.
+
+"All right. Don't strain yourself," Red said, lowering the basket with careful hands.
+END_RESULT
+
+BEGIN_TOUCHPOINT id=5 type=foreshadowing
+
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=6 type=scene
+
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=7 type=actors
+
+END_TOUCHPOINT
+BEGIN_RESULT
+
+END_RESULT
+
+BEGIN_TOUCHPOINT id=8 type=narration
+
+END_TOUCHPOINT
+BEGIN_RESULT
+Thyme and tea rose from the kettle. A sour musk threaded the air near the bed — a scent that didn't belong to Grandmother. The curtain’s hem still swayed though the window was latched and the room held its breath; the chair by the hearth was nudged askew, as if left in a hurry — or made to look so. Ash smudged the hearthstone, and the candle stub bent the light so shadows pooled where the room should have been brightest. Spectacles glinted wide on a long shadow where the candle guttered; the nightcap drooped too low, hiding pricked shapes beneath its fold. The cap’s rim slipped lower when an ear-tip pressed and flattened beneath the knit, and the spectacles rode farther down, framing a bridge that read wrong for a face. Powder dusted the pillow in a careless crescent, as if knocked by a rougher hand. The patchwork quilt lay stretched neat, yet the bed’s silhouette sat wrong, angles sharper than an old woman's frame; something beneath the stitches breathed too deep.
+
+The figure under the quilt patted the coverlet invitingly; the quilt rustled with a weight that did not belong to age. A small, oddly sweet voice came from beneath the quilt. The basket sat at the foot of the bed, the linen napkin puckered where something heavier than bread had shifted. Red leaned forward as if to give Grandmother a kiss, then halted when the quilt rustled in that wrong way. Red drew back a fraction, clutching the basket tighter, listening to the hush that followed the deeper breath.
+END_RESULT
+
+BEGIN_TOUCHPOINT id=9 type=dialog
+
+END_TOUCHPOINT
+BEGIN_RESULT
+"Closer, sweetheart," the voice purls. "These old eyes don't catch the light so well."
+
+Wolf coaxed, "Closer, dear; I'd hate to miss a single breath."
+
+"Grandmother, what a big nose you have."
+
+"The better to smell you with, my dear."
+
+"And what big ears you have."
+
+"The better to hear you with, my dear."
+
+"And—your nails—how big they are."
+
+"The better to grasp you with, my dear."
+
+"Grandmother… what big teeth you have."
+
+"The better to eat you with, my dear!"
+END_RESULT
+
+BEGIN_TOUCHPOINT id=10 type=narration
+The final phrase "the better to eat you with!" is the classic jump scare!
+The quilt bunches as muscles bunch beneath it. A hand—no, a paw?—hooks the quilt’s edge.
+The clock stutters one tick late; the teapot lid chatters once. 
+Red screams, and is sent to join her Grandmother in the belly of the beast.
+
+END_TOUCHPOINT
+BEGIN_RESULT
+"The better to eat you with, my dear!"
+
+The clock on the mantle ticked, then stuttered one tick late; the teapot lid chattered once on a thin puff of steam. The candle’s flame bowed and the bedframe gave a short, splintering creak. The quilt bunched as muscles gathered beneath it; a paw hooked the edge. Powdered whiskers plumed in a dusty puff against the paneled gloom. The patchwork flowers rippled like water as something moved under the stitches. Wolf surged from the quilts; the patchwork gave a sharper, hollow tug. His breath fogged the spectacles, then wiped them clear with a slow, contented sigh. Red jolted back; her heel skidded and the basket tilted against the floorboard. Her scream cut the room; the clock swallowed the next tick. The quilt yawned like a mouth; then it swallowed her.
+
+Wolf smoothed his sleeve and exhaled, a small, satisfied sound; the candle steadied to a thin bead of fire. The patchwork quilt lay smooth again, fuller at the hip; a new roundness shifted beneath the stitches. Inside Wolf’s belly, Red found Grandmother folded there, and the house fell quiet and waited. The clock resumed its ticking.
+END_RESULT
+

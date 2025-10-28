@@ -1,0 +1,19 @@
+- Tighten the opening to echo the touch-point’s mood: replace "ticked hard enough to mark each second against the boards" with something that measures nerves (e.g., "the mantel clock’s tick grew loud enough to measure nerves") so the scene directly fulfills the touch-point.
+
+- Remove or rephrase "legs splayed like a small confession." The simile is evocative but vague and distracts from the room’s tension. Suggest: "A chair lay overturned near the bedside, its legs splayed, as if obedience had failed."
+
+- Clarify ambiguous pronouns: change "its lid quivered, kissing the rim" to "the teapot’s lid quivered, kissing the rim" so the object is explicit.
+
+- Reduce repetitive subject naming while keeping clarity: alternate some instances of "Wolf" with "he" where no ambiguity exists (e.g., "Wolf lay propped..." then "He patted a dab..." and later "He tucked the quilt..."). This preserves cadence without cluttering the paragraph.
+
+- Remove small redundant details that blur focus (e.g., "spectacles smudged the glass" + "patted a dab from the powder tin across the muzzle to soften the snout’s line"). Keep one strong domestic gesture instead of both. Suggest keeping the powder motion and drop "spectacles smudged the glass," or keep the spectacles detail and drop the powder.
+
+- Make the tail image crisper: replace "the fringe lifting a breath and settling" with a sharper physical beat tied to the clock (e.g., "the fringe lifted once with the clock’s tick, then settled") to link micro-motion to the touch-point.
+
+- Avoid anthropomorphic ambiguity in domestic actions: change "the feather quilt puffed smooth as Wolf tucked its edge to blunt the outline beneath" to "he smoothed the feather quilt and tucked its edge to blur the outline beneath" to keep subject and action direct.
+
+- Strengthen the axe imagery by tying it to the room’s soundscape: change "From far off, axe strokes thudded in measured rhythm, sap-scent riding with a faint tang of iron." to a version that pairs with the kettle (e.g., "From far off, axe strokes answered the kettle’s breath in a measured rhythm, sap and iron in the air.") to satisfy the touch-point’s specified pairing.
+
+- Remove any language that hints at the forbidden foreshadowing items (humming, the Wolf’s ears lifting in a way that anticipates later reveals). Current draft skirts them, so explicitly avoid adding any such lines.
+
+- Consider trimming one sentence to increase tension and spareness (suggest removing one of the two small domestic motion sentences, e.g., either the teapot lid detail or the chair detail) so the paragraph ends taut and focused on the clock/axe heartbeat.

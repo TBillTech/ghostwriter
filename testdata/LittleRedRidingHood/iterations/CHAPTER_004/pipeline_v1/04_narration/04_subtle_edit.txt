@@ -1,0 +1,95 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. If you see a line that is "escaped", with single quotes in double quotes, un-escape it. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood', 'Basket'], 'actors': ['Red', 'Grandmother', 'Wolf', 'Huntsman']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    },
+    {
+      "name": "Basket",
+      "description": "Gift and responsibility; symbol of trust. A mcguffin"
+    }
+  ]
+}
+
+# Characters in this chapter
+
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red had promised sweets and walked the pine-smelling path with her hood catching the light and the basket creaking like a vow, while the sleek, flattering wolf slipped away along a deer-track to the cottage, reached it first, and with practiced calm swallowed Grandmother whole before setting the room into a careful masquerade; he powdered his muzzle, tugged on cap and spectacles, soothed the quilt and set the teapot whispering so the house would answer Red with the warmth of kin. She stepped inside to net curtains that sifted the afternoon into green pools and called softly, basket in hand, and a coaxing, grandmotherly coo—too slick, too practiced—bade her nearer; thyme and tea rose but a sour, wrong musk threaded the bed's shadow, the candle bent light into pooling dark, spectacles glinted on an oddly shaped silhouette and the nightcap drooped over a curious ear-tip. Red, humming a nursery tune, hesitated as angles read wrong and the cover shifted with a weight not belonging to age; the voice purred, urging her closer, patting the quilt in a deliberate, inviting rhythm, and when she asked the small questions—about eyes, ears, nose, nails—the answers came honeyed and false until whiskers powdered like flour in the gloom and the quilt yawned: a paw hooked the edge, spectacles fogged and were wiped with a slow, contented sigh, the basket toppled, a scream was swallowed as warm dark folded around Red, Grandmother folded within the wolf's belly, and the cottage smoothed back into its domestic hush with only the steady, indifferent tick of the clock.
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+Red's point of view
+I had meant only to be helpful—basket creaking like a promise, my hood catching the light as I stepped into the cottage that seemed to lean toward me—and the room answered with a wrongness that tugged at the edges of my certainty. Sun freckled the floor; net curtains sliced the afternoon into green pools and thyme and tea rose from the kettle, but a sour musk threaded beneath those homely smells and the curtain’s hem still swayed though the window was latched. The voice that answered was too slick, too practiced; it cooed and patted and urged me closer until small things read wrong: a chair nudged askew as if staged, spectacles glinting on a long shadow, a nightcap pulled too low over a pricked ear-tip, powder scored the pillow like a careless hand. I set the basket down at the foot of the bed because I trusted the voice, because the coaxing sounded like Grandmother, and when I stepped forward to kiss the pillow the breath beneath it answered too deep. Each question I asked—the eyes, the ears, the nose, the nails—was met with honeyed falsehoods that flattened the room around me, and the clock stuttered one late tick as the quilt rustled wrong. Whiskers powdered the gloom, a paw hooked the cover, the patchwork yawned like a mouth, and my scream was swallowed as warm dark folded over me and the cottage smoothed back into its domestic hush with only the steady tick remaining.
+
+Wolf's point of view
+Hunger and patient craft kept me light on the shingles and warm in the thyme; I slipped in before her, checked the latch, let the house breathe out mint and ash and the teapot hiss to keep up appearances, and set the stage with little disarrangements—a chair nudged, the nightcap tugged low, spectacles tilted, powder scored the pillow—so everything would look like age and forgetting. When Red stepped across the threshold, hood bright against the dim, I pooled my voice into a kinder thing and let it purr through the room, coaxing her to set the basket by the bed and come closer. Sun freckled the floor, the curtain hem moved though the window was latched, a sour musk threaded beneath the thyme to distract her, and I answered every soft question with a sweeter lie until muscles gathered under the quilt. I timed the stutter of the clock and the teapot’s chatter, watched her fingers tighten on the napkin, felt the basket tilt as her heel skidded—then the patchwork opened. Whiskers powdered the gloom, I wiped the spectacles with a slow contented sigh, hooked the cover with a paw, and the bed swallowed them both; I smoothed my sleeve, the candle thinned to a bead, and the cottage resumed its ordinary pose with a new warmth at the hip and the steady tick marking my patient satisfaction.
+
+Forest Path's point of view
+I kept the pale dust and sunbeams for her small feet and felt the wolf uncoil through my thyme long before either of them reached the cottage; I watched him time his knock to the tilt of the light and saw the house lean in as Red hummed her way along, hood bright, basket creaking like a promise. Sun freckled the floor when she nudged the door and called, and I took in the little betrayals inside—the curtained green pools, the kettle’s steam, the chair nudged as if left in a hurry, the candle bending light into dark pools—signs the wolf had been working his stagecraft. The voice that came back was slick and coaxing, and I felt the room hold its breath when Red stepped closer, fingers tightening at the napkin, the basket set at the bed's foot. The clock stuttered, the teapot chattered, the quilt rustled with breaths too long for age; whiskers powdered the gloom, spectacles fogged and were wiped, a paw hooked the edge, and the patchwork yawned. I kept the thin bar of light where her footsteps had passed as the bed closed over a new fullness, the cottage smoothed, and the mantle's tick resumed, carrying the echo of her vanished song along my lane.
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+He circles once, listens again, and slips inside. The quiet feels manufactured, the air thick with fur-musk and flour dust. His eye takes in the neat room, the undisturbed table, the bed with its extra-round quilt. He readies his bow, alerted to the strangeness.
+
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+A hundred yards out, hearing Red's brief, strangled cry cut and then muffled by the pines, the huntsman left the ribbon of the trail and came down toward the cottage with his bow low. He followed wide pads and claw marks pressed into the damp, pine-scented earth—Wolf Tracks that ran fat and straight to the sill and did not lead away. The huntsman circled the cottage once, counting the clock’s stubborn ticks and the slow settling of roof under the trees, then paused where the door stood ajar and tested the edge with two careful fingers. He kept his bow low and listened at the jamb; only the mantle clock answered, its steady tick measuring a calm that felt contrived.
+
+The huntsman slipped over the threshold and let the door fall without a sound. Floorboards showed no scuffle; the table sat neat, cups aligned, crumbs undisturbed. The teapot was warm no longer, beads of cooled steam pearling the lid. Hearthstones were stacked clean; the fire had died to grey and silence. The air inside carried a sour fur-musk braided under flour dust and the ash that belonged by the hearth. Net curtains hung still; dust motes turned only where lamplight pooled by the bed. The bed’s quilt bulged extra-round, a mound too full for a single elder’s frame. Spectacles glinted on the bolster and powder flecked the pillow like sifted flour. A nightcap drooped low; the outline beneath it ran long in the muzzle. The mound lifted and settled in a slow rhythm that did not match the feeble breathing the huntsman expected from age. His eyes swept rafters, corners, and the shadow under the bed. He eased a boot onto a plank that did not creak, set his range, nocked an arrow, and raised his bow smooth and steady—then, in the hush between one tick and the next, Wolf noticed that the huntsman had come.
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Make the huntsman’s actions crisper and more deliberate to match his cadence: break long sentences into shorter beats (e.g., split the opening sentence; use tactile verbs like “picked up,” “checked,” “set”).
+- Add an explicit second listening-beat after he circles the cottage (“he listens again”) before slipping inside so the touch-point is clearly present.
+- When describing the quiet as manufactured, use plainer diction that feels observant not poetic (replace “felt contrived” with something like “made” or “forced” quiet).
+- Replace the capitalized “Wolf Tracks” with lower-case “wolf tracks” and use concrete hunting language (e.g., “wolf spoor,” “pads and claw marks”) to fit the Huntsman lexicon.
+- Clarify the ambiguous pronoun: change “the outline beneath it ran long in the muzzle” to an unambiguous phrase (suggestion: “the outline beneath it was long-muzzled” or “the face beneath it ran long and muzzled”).
+- Trim or simplify florid images that clash with the Huntsman’s plain voice (e.g., “beads of cooled steam pearling the lid” → “a ring of cooled steam on the lid”; “powder flecked the pillow like sifted flour” → “powder on the pillow”).
+- Preserve important sensory details (fur-musk, flour dust, undisturbed table, extra-round quilt) but make their sequence more forensic—have the Huntsman note them as signs: short clauses separated by commas or bullets in the sentence.
+- When he prepares his shot, use hunting-specific phrasing and short commands: “He eased his boot. Set his range. Nocked. Drove the bow up. Steady.” Replace the long clause “raised his bow smooth and steady” with this rhythm.
+- Reconsider “then, in the hush between one tick and the next, Wolf noticed that the huntsman had come.” Either shift to passive tense to keep the focus on the Huntsman (“…then, in the hush, the shape beneath the quilt moved”) or rephrase so the observation stays in the huntsman’s register (e.g., “The mound moved. A beast smelled him.”).
+- Remove any extra adjectives that soften threat/clarity (e.g., “slow settling of roof under the trees” → “the roof settling slow”) to keep prose taut and watchful.
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+A hundred yards out he heard Red's brief, strangled cry, cut then muffled by the pines. He left the ribbon of the trail and came down toward the cottage with his bow low. He followed wide pads and claw marks pressed into the damp, pine-scented earth—wolf spoor, pads and claw marks that ran fat and straight to the sill and did not lead away.
+
+He circled the cottage once. He listened again. He counted the clock’s stubborn ticks and the roof settling slow under the trees. He paused where the door stood ajar and tested the edge with two careful fingers. He kept his bow low and listened at the jamb; only the mantle clock answered. Its steady tick measured a calm that was forced.
+
+The huntsman slipped over the threshold and let the door fall without a sound. Floorboards showed no scuffle. The table sat neat, cups aligned, crumbs undisturbed. The teapot was no longer warm; a ring of cooled steam rimmed the lid. The fire had died to grey. The air inside told him things: sour fur-musk, flour dust, ash by the hearth. Net curtains hung still; dust motes turned only where lamplight pooled by the bed.
+
+The bed’s quilt bulged extra-round, a mound too full for a single elder’s frame. Spectacles glinted on the bolster, powder on the pillow. A nightcap drooped low; the outline beneath it was long-muzzled. The mound lifted and settled in a rhythm that did not match the feeble breathing he expected from age.
+
+His eyes swept rafters, corners, the shadow under the bed. He eased his boot. Set his range. Nocked. Drove the bow up. Steady. The mound moved. The beast smelled him.

@@ -1,0 +1,158 @@
+=== SYSTEM ===
+You are an evaluator extracting actionable suggestions only.
+
+=== USER ===
+You are reviewing the work of an genious writer who sometimes loses track of key ideas in their wordsmithing.
+
+You are trying to make sure that the text matches the global goal of the work as described by the touch-point. You are trying to describe needed edits that are focused and surgical, and you wish to keep the voice and quirks of the writer alive to best interest the reader. A completely predictable and "normal" text would actually be bad, so it is a balance between interesting and clear. I will provide you here with the setting, context, things to watch out for, and the draft provided by the writer.  Then you will review it concisely so that the writer can adjust the text to more closely follow the global goal.
+
+Watch out for pronouns that have unclear references, like starting a paragraph with "They".  Using proper names is preferred in our narration IF there is any ambiguity.
+
+# Setting in general 
+{'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood'], 'actors': ['Wolf', 'Grandmother']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    },
+    {
+      "name": "Forest Path",
+      "description": "A winding trail beneath tall, shadowed pines."
+    },
+    {
+      "name": "Grandmother's Cottage",
+      "description": "A small cottage with a warm hearth and creaking floorboards."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# Prior touch points
+The most recent 3 touch-points for context.
+Wolf paused, paw brushing the doorframe. The latch clicked; the kettle sighed as if nothing were odd, and warm air—mint and ash—spilled from the doorway. The moment held, equal parts invitation and caution.
+
+Wolf's whiskers twitched. "So cosy—your cottage smells of the best things. Shall I shut the door for you?" He let the pause count; no other footfall answered the lane.
+
+Grandmother, shawl tightened, urged, "Mind the latch, dear—there's a little chill today; warm yourself by the fire."
+
+The floorboards creaked under new weight.
+
+# Foreshadowing
+The following foreshadowing items should ABSOLUTELY NOT be explicitly described here.  If they are, that is a problem. These should only be vaguely alluded to:
+
+
+# Actors
+The following actors are allowed to speak in the dialog.  If other actors are speaking, that is a problem.  The actors are:
+Wolf
+
+# Touch-Point
+This is the most important thing that the writer needs to say one way or another, and fits into the global goal of the work:
+Wolf enters, then swallows Grandma up in one bite. His belly is distended, but Wolf doesn't mind.
+
+
+# The Draft
+The polished text that needs to be evaluated for Touch-Point satisfaction, and actor and spoiler safety is as follows:
+The latch clicked; warm mint and ash breathed from the room. The chair tipped and clattered; the cup rattled in its saucer. The feather quilt shuddered with a rush of air. Curtains stirred and then stilled, and the cottage convulsed in a small, domestic tumble—Grandmother's world set into motion and then arrested.
+
+The Wolf stepped forward in a single, smooth bound and found the middle of the floor. A startled breath escaped Grandmother. He opened wide—jaws snapping closed—and swallowed Grandmother whole in one smooth bite. The teapot gave a small sigh; hush settled.
+
+The Wolf's belly rounded, firm and high; the floorboards groaned under the new heft as the Wolf tested his balance, rolled his shoulders once, puffed a theatrical dusting of powder across his muzzle, perched the nightcap, nudged the spectacles, and folded his ears until his silhouette softened into something grandmotherly—pleasing work, patient as hunger. A slow, satisfied ripple moved along his flank; he tipped his head in a small, contented tilt. "There now," he murmured in a silkier, kinlier lilt, "come in, little one."
+
+Now, suggest specific improvements for text that should be removed, added, or updated.
+
+
+
+---
+Now produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions.
+
+=== RESPONSE ===
+1. Replace ambiguous pronouns with names where clarity matters (e.g., “He opened wide…” → “The Wolf opened wide…”; “he tested his balance…” → “The Wolf tested his balance…”).
+
+2. Tighten the opening sentence cluster to reduce repetition of sound imagery (choose two strongest sensory beats — latch/mint or chair/clatter — and cut the least necessary).
+
+3. Make Grandmother’s physical presence clearer before the bite (briefly note her position—sitting in the chair or by the hearth) so her startled breath reads as coming from a known place.
+
+4. Recast “jawssnapping closed” to a more rhythmic, persona-fitting phrase that preserves menace but stays measured (e.g., “The Wolf snapped his jaws and swallowed Grandmother whole in a single, smooth bite”).
+
+5. Change “folded his ears” (unclear action) to a clearer, more animal-but-disguised motion (e.g., “tucked his ears beneath the nightcap” or “pinned his ears under the nightcap”).
+
+6. Trim or revise the “puffed a theatrical dusting of powder across his muzzle” line if it reads anachronistic or too comic — consider a subtler grooming gesture that fits his theatrical cunning (a soft paw-press, a powdered pat).
+
+7. Replace “pleasing work, patient as hunger” with a sharper, wolf-voiced image that keeps the writer’s flair but tightens meaning (e.g., “delightful as a well-set snare, patient as hunger”).
+
+8. Make the Wolf’s spoken line match his established cadence—drop any adverbs describing the voice and let the line carry tone; consider adjusting to “There now — come in, little one” with a sly pause for theatricality.
+
+9. Remove or soften the small domestic after-sounds that suggest scene-reset (e.g., “The teapot gave a small sigh; hush settled”) if they undercut the finality of the swallowing; keep one sound cue at most to preserve tone.
+
+10. Consider varying sentence length in the paragraph describing the Wolf’s transformation (one or two short sentences amid longer ones) to mirror his controlled, theatrical movements and keep reader engagement.

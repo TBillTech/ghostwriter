@@ -1,0 +1,23 @@
+* Narrator: Ivy brushes the bright hood as the old latch yields, iron cold against her palm; the basket creaks like a small promise.
+* red: "Grandmother?"
+* Narrator: The word softens into thyme-warm air; net curtains sieve the light into greenish pools; the clock’s timid tick grows bold.
+* wolf: "A-hem—come in, dear heart. Mind the draught."
+* Narrator: The voice is papery yet syrup-smooth; the quilted mound lies still as if holding its breath.
+* red: "I bring bread and jam!"
+* Narrator: She nudges the door wider with her hip, clutching the wicker; a faint chill curls past her ankles.
+* wolf: "Such a dutiful girl. Do shut the door, sweetling."
+* Narrator: The latch sighs as it settles; a floorboard answers with a shy creak under her first step.
+* red: "You sound a little different… are you chilly?"
+* wolf: "A touch, a touch—these rooms make echoes behind the lace."
+* Narrator: The net curtains blur the bed’s outline; spectacles glint dull in the dim.
+* red: "Shall I open the shutters for more light?"
+* wolf: "Oh, no—no, child. The light pricks these old eyes."
+* Narrator: The teapot whispers and rattles its lid like a nervous breath; the clock ticks between her small steps.
+* red: "May I put the basket on the table?"
+* wolf: "Set it by the bed, pet, so I needn’t reach."
+* Narrator: She hesitates; the hood feels warm against her neck; her mother’s words tug at her, then loosen.
+* red: "All right. Please don’t strain."
+* wolf: "Your kindness warms me more than fire."
+* Red: “I'll set the basket down right here is that OK?”
+* Wolf: “So thoughtful, my little bird. Now come kiss your old granny!”
+DONE

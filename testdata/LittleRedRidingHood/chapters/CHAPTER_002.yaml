@@ -91,12 +91,12 @@ Touch-Points:
       A faint thread of humming drifts through the garden—the tune Red kept on the path—then fades as the wind shifts.
       The Wolf’s ears lift under the nightcap. He smiles with care, and waits.
 
-  - dialog: |
+  - mixed: |
       Wolf (testing): "Come in, dear heart. Mind the step."
       Wolf (again, higher, kinder): "Oh, what a day you must have had."
       The words fit. He settles deeper into the quilt.
 
-  - mixed: |
+  - narration: |
       Dust shivers in a bar of light that escaped the shutters; the clock’s tick grows loud enough to measure nerves.
       From far off, a rhythm of axe on wood answers the kettle’s breath, iron and sap interlacing on the air.
 
