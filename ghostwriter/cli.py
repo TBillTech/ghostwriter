@@ -224,10 +224,38 @@ def main(argv: list[str] | None = None) -> int:
                                 break
                     except Exception:
                         continue
-                # 2) missing actor referenced in chapter setting
+                # 2) missing actor referenced in the chapter (top-level setting, a 'setting' touch-point, or 'actors' touch-points)
                 if target_name is None:
+                    actor_list: list[str] = []
+                    # a) Top-level chapter setting
                     chs = ctx.chapter.get("setting") if isinstance(ctx.chapter, dict) else None
-                    actor_list = chs.get("actors") if isinstance(chs, dict) and isinstance(chs.get("actors"), list) else []
+                    if isinstance(chs, dict) and isinstance(chs.get("actors"), list):
+                        actor_list.extend([str(a) for a in chs.get("actors")])
+                    # b) Touch-Points: collect actors from any 'setting' or 'actors' entries
+                    try:
+                        tps = []
+                        if isinstance(ctx.chapter, dict):
+                            tps = ctx.chapter.get("Touch-Points") or ctx.chapter.get("TouchPoints") or []
+                        if isinstance(tps, list):
+                            for it in tps:
+                                # setting touch-point with actors list
+                                if isinstance(it, dict) and isinstance(it.get("setting"), dict):
+                                    st = it.get("setting")
+                                    if isinstance(st.get("actors"), list):
+                                        actor_list.extend([str(a) for a in st.get("actors")])
+                                # explicit actors touch-point: actors: [..]
+                                if isinstance(it, dict) and isinstance(it.get("actors"), list):
+                                    actor_list.extend([str(a) for a in it.get("actors")])
+                    except Exception:
+                        pass
+                    # Deduplicate while preserving order
+                    seen: set[str] = set()
+                    dedup_actors: list[str] = []
+                    for a in actor_list:
+                        tok = _norm_token(a)
+                        if tok and tok not in seen:
+                            seen.add(tok)
+                            dedup_actors.append(a)
                     # Build lookup set of known ids/names
                     known: set[str] = set()
                     for c in (ctx.characters or []):
@@ -238,7 +266,7 @@ def main(argv: list[str] | None = None) -> int:
                                 known.add(_norm_token(c.get("name")))
                         except Exception:
                             continue
-                    for a in actor_list:
+                    for a in dedup_actors:
                         if _norm_token(a) and _norm_token(a) not in known:
                             target_name = str(a)
                             break
