@@ -46,4 +46,7 @@ Please carefully read and understand this Touch-Point; this is the core idea tha
 7. **Style**: Keep sentences concise and vivid. Each bullet should contribute one clear beat of story progression or imagery.
 8. **Format**: Output only bullet points beginning with '*', with no headings or commentary.
 
-Now, brainstorm creative ideas to give the readers a picture of the environment and what is objectively happening, with the goal of building upon and making the Touch-Point real. Leave feelings and opinions for later. Consider the probabilities of items up to 2 or 3 sigma in the sampled distribution (but do not make this explicit).
+Now, brainstorm creative ideas to give the readers a picture of the environment and what is objectively happening, with the goal of building upon and making the Touch-Point real. Leave feelings and opinions for later. Now, provide groups of bullet points creatively. Please generate a set of five possible responses, several times, following the format given. Each round of responses, try to generate responses not in the prior reported distribution.
+Responses should each include a numeric <probability>.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.
+

@@ -40,4 +40,6 @@ Please carefully read and understand this Touch-Point; This is the core idea to 
 4. Continuity: Respect Story-So-Far and Story-Relative-To.
 5. Scene Awareness: Use the scene and actors to ground both dialog and action.
 
-Now, brainstorm creative ideas that, when realized, may be either dialog or narrative depending on what is most natural. The touch-point itself needs to be vivid and clear in the readers mind. Consider probabilities up to 2–3 sigma in the sampled distribution (but do not make this explicit).
+Now, brainstorm creative ideas that, when realized, may be either dialog or narrative depending on what is most natural. The touch-point itself needs to be vivid and clear in the readers mind. Provide groups of bullet points creatively. Please generate a set of five possible responses, several times, following the format given. Each round of responses, try to generate responses not in the prior reported distribution.
+Responses should each include a numeric <probability>.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.

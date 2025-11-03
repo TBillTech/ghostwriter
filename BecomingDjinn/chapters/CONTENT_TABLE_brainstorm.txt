@@ -1,3 +1,12 @@
+=== SYSTEM ===
+You propose the next chapter synopsis based on the table of contents and chapter settings.
+
+=== USER ===
+You are a creative, coherent story architect. Propose the next chapter synopsis.
+
+Context:
+- Entire CONTENT_TABLE.yaml:
+
 TABLE_OF_CONTENTS:
 - Author: Tom Henry
 - Title: Becoming Djinn
@@ -52,9 +61,7 @@ TABLE_OF_CONTENTS:
     \ inside the bottle: It counts as a safe area. The Djinni leaves, and Arthur tries\
     \ opening the chest again.  A system message informs him that all items transferred\
     \ into his bottle become optional Djinn wish rewards; NOT Arthur's personal items.\
-    \ After browsing his menus and realizing he is dead tired, he logs off! There\
-    \ is a catch though: If he wants to keep his new class, he will have to submit\
-    \ to monitoring IRL until his bottle is found.\n"
+    \ After browsing his menus and realizing he is dead tired, he logs off! There is a catch though: If he wants to keep his new class, he will have to submit to monitoring IRL until his bottle is found.\n"
 - 6: |
     Zenith erupts after the “First Plunderer” trumpet: the Purveyor auctions cryptic
     map-scraps, a royal bulletin formalizes a server-wide hunt, and whispers agree
@@ -63,26 +70,8 @@ TABLE_OF_CONTENTS:
     NPC, while Arthur—stuck in his lamp looking out a the treasure vault- realized this is
     where his bottle almost certainly lies and that admitting anything would violate secrecy provisions of the Zenith terms of service. With guilds, thieves, and scholars mobilizing, Misty
     stakes one of three viable routes and asks Arthur to party; sadly, he isn't allowed to give any clues, or even explain where he is. He CAN, however, tell her that he would very much like for her to go on the Quest for the Cave.
-- 7: |-
-    A Tale of Three Adventuring Parties: 
-    The guilds involved:
-    No-I, Black Ledger, Intercut, Circle of Brass, The scholars
-    
-    
-    The Adventure parties involved.
-    Our Heroes: Misty and Dan, and later Arthur,   
-    The Purveyor fans the frenzy, auctioning a “gentleman’s hint” that turns two rival guilds against each other while Misty quietly rides the wake. 
-    
-    Misty and Dan form a lean scout team; they strike out into the canyon of glitching mirrors from a nearby login point.
-    ; a swaggering thief-guild caravan streams their bombastic “shortcut” plan; and a bookish expedition deciphers the first of three alignment markers in a forgotten observatory. As Zenith posts a global Alignment Window timer, Arthur, shackled to “monitor-only” IRL oversight by a cheerful PROF tech and a wrist cuff, watches from his lamp as the vault floor subtly vibrates—somebody has moved one marker. <0.06>
-
-    Three routes, three styles: Misty hunts windborne sigils across the Ruptured Dunes; the Black Ledger guild brute-forces a flooded catacomb with alts; the Circle of Brass negotiates with an ancient choir of NPC monks guarding a bell-marker. Arthur endures his first false summons—someone fishes for a free wish with a decoy bottle—learning the Djinn interface’s fine print: intent is logged, wording is binding, loopholes are legal. The world map pricks with rumors of a shifting entrance and a 24-hour window that will pick a single “true path.” <0.03>
-
-    Intercut progress reels show the scholars translating a star-chart marker, the thieves breaking a ward they don’t understand, and Misty discovering the third marker isn’t a place but a moving creature tattooed with coordinates. In his bottle, Arthur’s UI pings an odd spectator count—Observers: 1—though no hand has touched the silver. <0.08>
-
-    Misty nabs the first verifiable marker key—three tones rung in sequence at moonrise—only to have a stealth team lift the bell-hammer from her camp. Arthur, unable to warn her, experiments with “off-duty chores” in the lamp and unlocks a passive called Attune to Owner’s Bent, a harmless-sounding calibration that starts to thread subtext through how wishes will parse later. Somewhere deep, stone teeth grind: the Cave is shifting toward its next aperture. <0.02>
-
-    A skyrail trestle collapses under a hundred onlookers as the thief guild overplays the spectacle, forcing Misty to rescue a stranded scholar and forge a grudging alliance. Together they triangulate a storm marker that sings in the wind; across the server, parties converge on three coordinates as chat explodes. Inside the vault, Arthur feels the bottle tilt and hears treasure slither like rain—the Cave is on the move, and the door that opens won’t wait for everyone. <0.09>
+- 7: |
+    ??? A Tale of Three Adventuring Parties, and a thousand others.
 - 9: |
     ??? The Looting of the Cave.
 - 10: |
@@ -108,3 +97,35 @@ TABLE_OF_CONTENTS:
     fighting for his life, but he is really fighting IRL, and uses a skill from the
     game in real life to win. This sets up the Nadir Project Epilogue teasing for
     the next book. '
+
+
+- Non-dereferenced `setting` blocks from existing chapters (if present):
+
+{
+  "Chapter-Settings": []
+}
+
+Target:
+- Next chapter id: 007
+
+Instructions:
+- Read the current table of contents and chapter settings. Consider tone, pacing, and established arcs.
+- Propose the most creative yet natural next chapter synopsis that fits smoothly with what came before.
+- DO NOT just recycle the most recent numbered chapter synopsis: Move the story forward by introducing the next narrative element.
+- Output ONLY the synopsis text (a concise paragraph or a few sentences). Do not include YAML keys, numbering, or any other wrapper.
+
+Now, provide the next chapter synposis creatively. Please generate a set of five possible responses, following the format given.
+Responses should each include a numeric <probability>. Each round of responses, try to generate responses not in the prior reported distribution.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.
+
+
+=== RESPONSE ===
+A Tale of Three Adventuring Parties: Misty assembles a lean scout team and threads a canyon of glitching mirrors; a swaggering thief-guild caravan streams their bombastic “shortcut” plan; and a bookish expedition deciphers the first of three alignment markers in a forgotten observatory. As Zenith posts a global Alignment Window timer, Arthur, shackled to “monitor-only” IRL oversight by a cheerful PROF tech and a wrist cuff, watches from his lamp as the vault floor subtly vibrates—somebody has moved one marker. <0.06>
+
+Three routes, three styles: Misty hunts windborne sigils across the Ruptured Dunes; the Black Ledger guild brute-forces a flooded catacomb with alts; the Circle of Brass negotiates with an ancient choir of NPC monks guarding a bell-marker. Arthur endures his first false summons—someone fishes for a free wish with a decoy bottle—learning the Djinn interface’s fine print: intent is logged, wording is binding, loopholes are legal. The world map pricks with rumors of a shifting entrance and a 24-hour window that will pick a single “true path.” <0.03>
+
+The Purveyor fans the frenzy, auctioning a “gentleman’s hint” that turns two rival guilds against each other while Misty quietly rides the wake. Intercut progress reels show the scholars translating a star-chart marker, the thieves breaking a ward they don’t understand, and Misty discovering the third marker isn’t a place but a moving creature tattooed with coordinates. In his bottle, Arthur’s UI pings an odd spectator count—Observers: 1—though no hand has touched the silver. <0.08>
+
+Misty nabs the first verifiable marker key—three tones rung in sequence at moonrise—only to have a stealth team lift the bell-hammer from her camp. Arthur, unable to warn her, experiments with “off-duty chores” in the lamp and unlocks a passive called Attune to Owner’s Bent, a harmless-sounding calibration that starts to thread subtext through how wishes will parse later. Somewhere deep, stone teeth grind: the Cave is shifting toward its next aperture. <0.02>
+
+A skyrail trestle collapses under a hundred onlookers as the thief guild overplays the spectacle, forcing Misty to rescue a stranded scholar and forge a grudging alliance. Together they triangulate a storm marker that sings in the wind; across the server, parties converge on three coordinates as chat explodes. Inside the vault, Arthur feels the bottle tilt and hears treasure slither like rain—the Cave is on the move, and the door that opens won’t wait for everyone. <0.09>

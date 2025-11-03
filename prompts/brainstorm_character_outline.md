@@ -34,3 +34,8 @@ Instructions:
 - For the traits, prefer, avoid, please use the condensed yaml list with "[" and "]" characters on a single line.
 - For the character [TARGET_NAME], brainstorm an interesting character outline from the prior description.
 - Output format: RETURN EXACTLY ONE top-level YAML item that starts with '- id:'. No surrounding list markers beyond the single item. No additional commentary.
+
+Now, provide the character structure creatively. Please generate a set of five possible responses, following the format given.
+Responses should each include a numeric <probability>. Each round of responses, try to generate responses not in the prior reported distribution.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.
+

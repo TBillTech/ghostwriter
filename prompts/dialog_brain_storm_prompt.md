@@ -41,4 +41,6 @@ Please carefully read and understand this Touch-Point; This is the core idea tha
 4. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
 5. **Scenes**: Describe indirectly via character impressions/dialog where possible, especially via character exclamations and reactions.
 
-Now, brainstorm creative lines to give the readers clarity and flavor, with the goal of building upon and making the touch point real. Consider the probabilities of items up to 2 or 3 sigma in the sampled distribution (but do not make this explicit).
+Now, provide groups of bullet points creatively. Please generate a set of five possible responses, several times, following the format given. Each round of responses, try to generate responses not in the prior reported distribution.
+Responses should each include a numeric <probability>.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.

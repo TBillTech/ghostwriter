@@ -43,6 +43,7 @@ Instructions:
 If the current chapter is absent, here is a formatting hint.
 [FORMAT_HINT]
 
-Now, provide touch points creatively for this chapter outline from 2 or 3 sigma in the sampled distribution:
-
+Now, provide touch points creatively. Please generate a set of five possible responses, following the format given.
+Responses should each include a numeric <probability>. Each round of responses, try to generate responses not in the prior reported distribution.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.
 
