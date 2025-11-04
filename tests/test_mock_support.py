@@ -24,8 +24,8 @@ from ghostwriter.mock_support import (
 def test_prompt_hash_write_and_match(lr_book_dir: Path):
     h = compute_prompts_hash("prompts")
     assert isinstance(h, str) and len(h) >= 32
-    # Initially no prompt_hash in copied book
-    assert read_prompt_hash(lr_book_dir) is None
+    # Read any existing prompt_hash (may already exist if source testdata has it)
+    existing = read_prompt_hash(lr_book_dir)
     # Write and verify
     write_prompt_hash(lr_book_dir, h)
     assert read_prompt_hash(lr_book_dir) == h
@@ -58,11 +58,12 @@ def test_regenerate_prompt_for_log_returns_text(use_lr_book_env, lr_book_dir: Pa
 def test_update_golden_prompts_dry_run_does_not_modify(use_lr_book_env, lr_book_dir: Path):
     target = lr_book_dir / "iterations/CHAPTER_001/pipeline_v1/06_dialog/06_agenda.txt"
     before = parse_prompt_response_file(target)["USER"]
+    hash_before = read_prompt_hash(lr_book_dir)
     results = update_golden_prompts(lr_book_dir, dry_run=True)
     after = parse_prompt_response_file(target)["USER"]
     assert after == before
-    # dry_run should not create prompt_hash
-    assert read_prompt_hash(lr_book_dir) is None
+    # dry_run should not create or change prompt_hash
+    assert read_prompt_hash(lr_book_dir) == hash_before
     assert isinstance(results, list)
 
 
@@ -80,6 +81,22 @@ def test_update_golden_prompts_updates_modified_file_and_writes_hash(use_lr_book
     assert read_prompt_hash(lr_book_dir) == h_now
     assert prompts_hash_matches("prompts", lr_book_dir) is True
     assert isinstance(results, list)
+
+
+def test_golden_update_summary_and_idempotency(use_lr_book_env, lr_book_dir: Path):
+    # First run should update some files and write prompt_hash
+    results1 = update_golden_prompts(lr_book_dir, dry_run=False)
+    assert isinstance(results1, list) and len(results1) > 0
+    assert read_prompt_hash(lr_book_dir) is not None
+    # Expect at least one item without a template mapping (e.g., check.txt files)
+    assert any(r.get("reason") == "no-template" for r in results1)
+
+    # Second run should be idempotent: anything with a template mapping should now be unchanged
+    results2 = update_golden_prompts(lr_book_dir, dry_run=False)
+    updated_again = [r for r in results2 if r.get("updated") == "yes"]
+    assert not updated_again, f"Expected idempotent update, but found updates: {updated_again[:3]}"
+    # And the hash should still match
+    assert prompts_hash_matches("prompts", lr_book_dir) is True
 
 
 def test_copy_partial_book_and_prepare_user_gate(tmp_path: Path, lr_book_dir: Path):

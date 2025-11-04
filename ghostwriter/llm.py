@@ -87,6 +87,19 @@ def complete(
 ) -> str:
     """Chat-completion with graceful mock fallback if no API key/client.
     """
+    # Deterministic MockLLM path when enabled (checked dynamically to allow test monkeypatching)
+    if os.getenv("GW_USE_MOCK_LLM", "0") == "1":
+        # When explicitly using MockLLM, let its errors propagate to surface mismatches in tests.
+        from .mock_llm import complete as _mock_complete  # type: ignore
+        return _mock_complete(
+            prompt,
+            system=system,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            model=model,
+            reasoning_effort=reasoning_effort,
+        )
+
     client = get_client()
     if client is None:
         head = (prompt[:220] + "...") if len(prompt) > 220 else prompt
