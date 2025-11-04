@@ -41,3 +41,6 @@ def use_lr_book_env(monkeypatch: pytest.MonkeyPatch, lr_book_dir: Path):
         except Exception:
             pass
     yield
+
+
+# Note: YAML pure mode and C extension blocking are handled via tests/sitecustomize.py

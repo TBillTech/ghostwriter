@@ -25,6 +25,11 @@ from .env import get_chapters_dir
 from .logging import breadcrumb as _breadcrumb
 from .logging import init_run_logs as _init_run_logs, log_run as _log_run
 from .templates import iter_dir_for, get_latest_version
+from .mock_support import (
+    update_golden_prompts as _update_golden_prompts,
+    compute_prompts_hash as _compute_prompts_hash,
+    write_prompt_hash as _write_prompt_hash,
+)
 
 
 def _parse_args(argv: list[str]) -> argparse.Namespace:
@@ -36,6 +41,14 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     p_run.add_argument("version", nargs="?", help="vN or 'auto' (default: auto)")
     p_run.add_argument("--log-llm", action="store_true", dest="log_llm", help="Log LLM prompts/responses")
     p_run.add_argument("--book-base", dest="book_base", help="Override GW_BOOK_BASE_DIR for this run")
+
+    # Task 8 helpers: golden update and prompt hash utilities
+    p_golden = sub.add_parser("golden-update", help="Update golden prompt logs to match current templates")
+    p_golden.add_argument("--book-base", dest="book_base", help="Book base directory (defaults to GW_BOOK_BASE_DIR)")
+    p_golden.add_argument("--dry-run", action="store_true", dest="dry_run", help="Scan and report without writing changes")
+
+    p_phash = sub.add_parser("prompt-hash", help="Compute current prompts hash; optionally write to book base")
+    p_phash.add_argument("--book-base", dest="book_base", help="If provided, write prompt_hash file to this directory")
 
     return parser.parse_args(argv)
 
@@ -297,6 +310,34 @@ def main(argv: list[str] | None = None) -> int:
                 print(msg)
                 return 0
             raise
+
+    if ns.cmd == "golden-update":
+        # Determine base dir
+        import os
+        base = ns.book_base or os.getenv("GW_BOOK_BASE_DIR")
+        if not base:
+            print("Error: --book-base not provided and GW_BOOK_BASE_DIR is not set.")
+            return 2
+        # Run updater
+        results = _update_golden_prompts(base, dry_run=bool(getattr(ns, "dry_run", False)))
+        # Summarize to stdout
+        total = len(results)
+        updated = sum(1 for r in results if r.get("updated") == "yes")
+        no_tpl = sum(1 for r in results if r.get("reason") == "no-template")
+        unchanged = sum(1 for r in results if r.get("reason") == "unchanged")
+        print(f"Processed {total} files: {updated} updated, {unchanged} unchanged, {no_tpl} without template mapping")
+        return 0
+
+    if ns.cmd == "prompt-hash":
+        import os
+        hv = _compute_prompts_hash("prompts")
+        base = ns.book_base or os.getenv("GW_BOOK_BASE_DIR")
+        if base:
+            _write_prompt_hash(base, hv)
+            print(f"prompt_hash updated at {base}: {hv}")
+        else:
+            print(hv)
+        return 0
 
     print("No command executed.")
     return 1

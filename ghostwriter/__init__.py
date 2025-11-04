@@ -14,4 +14,5 @@ __all__ = [
     "artifacts",
     "resume",
     "characters",
+    "mock_support",
 ]

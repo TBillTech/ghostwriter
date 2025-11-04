@@ -70,33 +70,31 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - [X] If story_relative_to.txt or story_so_far.txt are absent, then regenerate them.
     - [X] Once there are no differences, then stop gracefully.
 
-7. **Scaffolding for MockLLM**
-    The plan is to use the LRRH book as a database for the MockLLM, and to make it deterministic. In addition, since the LRRH book under testdata has been built originally using a real LLM response, it should help with good code coverage. Now, in order for this to work, we need some scaffolding and helper functions so that the MockLLM can operate effectively and be coded somewhat generically. 
+7. **Support for MockLLM**
+    The plan is to use the LRRH book as a database for the MockLLM, and to make it deterministic. In addition, since the LRRH book under testdata has been built originally using a real LLM response, it should help with good code coverage. Now, in order for this to work, we need some support and helper functions so that the MockLLM can operate effectively and be coded somewhat generically. 
     By far the thorniest issue to come up in this design is that the prompts may be updated in the future, while the previously generated LRRH book would then mismatch the prompt templates.  To fix this we will have to create an update process for the LRRH book to update the prompting (however, the reponses from the LLM, and pure artifacts like brainstorm.txt and touch_point_draft.txt can remain the same).  Pure artifacts are outputs and files that do not have the prompt prior to the RESPONSE in them.
     
     We have the following engineering requirements:
-    - [ ] Functions which can track prompt changes using a hash
-        - [ ] Compute a hash of the prompts any time the program runs
-        - [ ] Write the prompt hash to the prompts directory in a prompt_hash file
-        - [ ] Test if the prompt_hash from the prompts directory matches the prompt_hash in the LRRH directory
-    - [ ] A function which can update the LRRH book for the new prompt templates:
-        - [ ] Run this function if and only if the prompt_hash from the prompts directory mismatches with the prompt_hash in the LRRH directory
-        - [ ] A function that will iterate through each touch-point and pipeline step and update any files with LLM prompts for the new prompt templates, using the following functions:
-        - [ ] A function which can take an LLM prompt + reponse file, and pull out just the LLM prompt part
-        - [ ] A function which can regenerate the prompt for the same touch-point pipeline step
-        - [ ] Then take the regenerated prompt + original response, and overwrite the original file.
-        - [ ] After all touch-point pipeline steps have been updated, write the new prompt_hash in the LRRH directory.
-        - [ ] Obviously, give a summary log for each touch-point pipeline step which is either updated or left the same.
-    - [ ] A function which can copy a partial version of the LRRH book as if it had been generated up to a given touch-point and pipeline step specifier. This will be used to set up a test of a pipeline step. This has sub requirements:
-        - [ ] Honor destination path to copy, and clear any prior version at that path.
-        - [ ] It must not include any files that come from later in the pipeline.
-        - [ ] It must include all files that came before
-        - [ ] Depending on the test to be done, it may need to strip the DONE off of a LRRH file.
-    - [ ] A function which can modify a partial version of the LRRH book so that a user-in-the-loop step can be tested.
-        - [ ] For touch-point brainstorm.txt, it must be able to remove the "DONE"
-        - [ ] for first_suggestions.txt and touch_point_first_draft.txt, it must not copy the touch_point_draft.txt or suggestions.txt.
-    - [ ] A function which can be given a path to a partial copy of LRRH, and return the response for the current touch-point pipeline step. Expect this to be "independent" of the prompt, since the LRRH is taken to be the golden output.
-    - [ ] A function which can be given a path to a partial copy of LRRH, and return the prompt for the current touch-point pipeline step. Expect this to be "equal" to the prompt, since the LRRH is taken to be the golden output.
+    - [X] Functions which can track prompt changes using a hash
+        - [x] Write the prompt hash to the prompts directory in a prompt_hash file (ghostwriter.mock_support.write_prompt_hash)
+        - [x] Test if the prompt_hash from the prompts directory matches the prompt_hash in the LRRH directory (ghostwriter.mock_support.prompts_hash_matches)
+    - [X] A function which can update the LRRH book for the new prompt templates:
+        - [x] A function that will iterate through each touch-point and pipeline step and update any files with LLM prompts for the new prompt templates, using the following functions:
+        - [x] A function which can take an LLM prompt + reponse file, and pull out just the LLM prompt part (ghostwriter.mock_support.parse_prompt_response_file)
+        - [x] A function which can regenerate the prompt for the same touch-point pipeline step (ghostwriter.mock_support.regenerate_prompt_for_log)
+        - [x] Then take the regenerated prompt + original response, and overwrite the original file. (ghostwriter.mock_support.update_golden_prompts)
+        - [x] After all touch-point pipeline steps have been updated, write the new prompt_hash in the LRRH directory. (update_golden_prompts writes prompt_hash)
+        - [x] Obviously, give a summary log for each touch-point pipeline step which is either updated or left the same. (update_golden_prompts returns a summary list)
+    - [x] A function which can copy a partial version of the LRRH book as if it had been generated up to a given touch-point and pipeline step specifier. This will be used to set up a test of a pipeline step. This has sub requirements:
+        - [x] Honor destination path to copy, and clear any prior version at that path.
+        - [x] It must not include any files that come from later in the pipeline.
+        - [x] It must include all files that came before
+        - [x] Depending on the test to be done, it may need to strip the DONE off of a LRRH file.
+    - [x] A function which can modify a partial version of the LRRH book so that a user-in-the-loop step can be tested.
+        - [x] For touch-point brainstorm.txt, it must be able to remove the "DONE"
+        - [x] for first_suggestions.txt and touch_point_first_draft.txt, it must not copy the touch_point_draft.txt or suggestions.txt.
+    - [x] A function which can be given a path to a partial copy of LRRH, and return the response for the current touch-point pipeline step. Expect this to be "independent" of the prompt, since the LRRH is taken to be the golden output.
+    - [x] A function which can be given a path to a partial copy of LRRH, and return the prompt for the current touch-point pipeline step. Expect this to be "equal" to the prompt, since the LRRH is taken to be the golden output.
 
 8. **Exhaustive Unit tests for MockLLM Scaffolding Functions**
     - [ ] Create hash function unit tests

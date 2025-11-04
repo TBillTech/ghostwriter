@@ -8,7 +8,7 @@ Follow instructions
 
 ## Next steps
 
-Start working on Task 3, pre_touch_point_draft user-in-the-loop feature.
+Continue with Task 8: unit tests for MockLLM scaffolding functions implemented in Task 7.
 
 Relevant `TODO.md` is in the project root
 Relevant `README.md` is in the project root
@@ -55,6 +55,6 @@ Relevant `README.md` is in the project root
 - If you made any code changes, update the TODO.md and check all completed tasks.
 - Update the session conversation summary at the end of TODO.md.
 - Update the README.md with any findings that appeared during the session which are worth remarking on.  Be sure to preserve any solutions to command line issues, so we don't have to repeat broken command lines in the future.
-- Update these `INSTRUCTIONS.md` by setting "Focus" to the next actionable tasks in `TODO.md` (e.g., move from Environment Setup to Core Functionality Implementation).
-	- Current: Task 1 and 2 implemented (Chapter + Character brainstorming pipelines). Focus moved to Task 12 (Create Unit Tests) and integration work.
+- Update these `INSTRUCTIONS.md` by setting "Focus" to the next actionable tasks in `TODO.md`.
+	- Current: Task 7 scaffolding implemented (MockLLM support utilities). Focus moved to Task 8 (Create unit tests for MockLLM scaffolding) and then Task 9 (MockLLM class).
 - Finally, commit all file changes.
