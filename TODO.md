@@ -102,12 +102,12 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - [ ] Create unit tests for each of the functions in section 7.
 
 9. **Add Mock LLM for Testing**
-    - [ ] Rely on the fact that for testing, we will use the Little Red Riding Hood book
-    - [ ] Use the LRRH text as the return values for the MockLLM.  This way, the outputs can be tested in detail.
-    - [ ] Create MockLLM class that returns predictable responses
+    - [x] Rely on the fact that for testing, we will use the Little Red Riding Hood book
+    - [x] Use the LRRH text as the return values for the MockLLM.  This way, the outputs can be tested in detail.
+    - [x] Create MockLLM class that returns predictable responses
     - [ ] Implement different response scenarios (successful, missing touch-points, API errors)
-    - [ ] Have the MockLLM not only provide the response from the correct touch-point pipeline step, but also check the prompt for that step against the LRRH prompt up to whitespace. This should be possible because of applying the update functio to the LRRH book when prompts change.
-    - [ ] Use for unit testing without requiring actual API calls
+    - [x] Have the MockLLM not only provide the response from the correct touch-point pipeline step, but also check the prompt for that step against the LRRH prompt up to whitespace. This should be possible because of applying the update functio to the LRRH book when prompts change.
+    - [x] Use for unit testing without requiring actual API calls
 
 ## Testing and Quality Assurance
 
