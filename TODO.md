@@ -122,13 +122,14 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - [x] Update README.md to document the new path variables, and add `.env.example` pointing to LittleRedRidingHood
 
 12. **Create Unit Tests**
-    - Test YAML loading and validation functions
-    - Test prompt template building with mock data
-    - Test file I/O operations with temporary directories
-    - Test error handling for missing files and invalid YAML
-    - Test version numbering and iteration logic
-    - Test CHARACTER parsing and substitution logic (happy path and malformed blocks)
-    - Test polish step integration: given substituted text, ensure polish prompt is built and called correctly
+    - [x] Test YAML loading and validation functions
+    - [x] Test prompt template building with mock data
+    - [x] Test file I/O operations with temporary directories
+    - [x] Test error handling for missing files and invalid YAML
+    - [x] Test version numbering and iteration logic
+    - [x] Test CHARACTER parsing and substitution logic (happy path)
+    - [ ] Test CHARACTER parsing and substitution logic (malformed blocks)
+    - [x] Test polish step integration: given substituted text, ensure polish prompt is built and called correctly
 
 13. **Create Integration Tests**
     - Test complete workflow from YAML to draft generation (with mocked LLM)
