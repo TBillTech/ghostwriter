@@ -8,7 +8,8 @@ Follow instructions
 
 ## Next steps
 
-Continue with Task 8: unit tests for MockLLM scaffolding functions implemented in Task 7.
+Continue with Task 12: More unit tests.
+Focus: Add concise unit tests for YAML loading/RunContext, character prompt building and substitution, and polish prompt generation. Ensure tests run via the venv and remain independent of external LLMs by using fixtures or monkeypatching where needed.
 
 Relevant `TODO.md` is in the project root
 Relevant `README.md` is in the project root
@@ -56,5 +57,5 @@ Relevant `README.md` is in the project root
 - Update the session conversation summary at the end of TODO.md.
 - Update the README.md with any findings that appeared during the session which are worth remarking on.  Be sure to preserve any solutions to command line issues, so we don't have to repeat broken command lines in the future.
 - Update these `INSTRUCTIONS.md` by setting "Focus" to the next actionable tasks in `TODO.md`.
-	- Current: Task 7 scaffolding implemented (MockLLM support utilities). Focus moved to Task 8 (Create unit tests for MockLLM scaffolding) and then Task 9 (MockLLM class).
+	- Current: Task 12 underway (additional unit tests). Prior Task 8 completed; Task 9 MockLLM is implemented for tests. Focus remains on expanding core unit tests.
 - Finally, commit all file changes.
