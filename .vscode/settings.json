@@ -4,14 +4,16 @@
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
+    // Load environment variables for Testing/Run (VS Code Python extension)
+    "python.envFile": "${workspaceFolder}/.env",
 
     // Disable Pylance MCP sidecar in this workspace to avoid localhost:5724 errors
     "pylance.mcp.enabled": false,
     "python.analysis.useMcp": false,
 
     // Ensure Pylance is the active language server
-        "python.languageServer": "Pylance",
+    "python.languageServer": "Pylance",
 
-        // Make type checking feedback visible while testing Pylance
-        "python.analysis.typeCheckingMode": "basic"
+    // Make type checking feedback visible while testing Pylance
+    "python.analysis.typeCheckingMode": "basic"
 }
