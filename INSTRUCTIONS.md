@@ -8,8 +8,8 @@ Follow instructions
 
 ## Next steps
 
-Continue with Task 12: More unit tests.
-Focus: Add concise unit tests for YAML loading/RunContext, character prompt building and substitution, and polish prompt generation. Ensure tests run via the venv and remain independent of external LLMs by using fixtures or monkeypatching where needed.
+Work on Task 32: system tests.
+Ensure tests run via the venv and remain independent of external LLMs by using fixtures or monkeypatching where needed.
 
 Relevant `TODO.md` is in the project root
 Relevant `README.md` is in the project root
