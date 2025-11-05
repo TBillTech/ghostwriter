@@ -97,15 +97,14 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - [x] A function which can be given a path to a partial copy of LRRH, and return the prompt for the current touch-point pipeline step. Expect this to be "equal" to the prompt, since the LRRH is taken to be the golden output.
 
 8. **Exhaustive Unit tests for MockLLM Scaffolding Functions**
-    - [ ] Create hash function unit tests
-    - [ ] Create unit tests for updating a prompt in the "prompt + response" format. This is the same format used in the pipeline touch-point output.files.
-    - [ ] Create unit tests for each of the functions in section 7.
+    - [x] Create hash function unit tests
+    - [x] Create unit tests for updating a prompt in the "prompt + response" format. This is the same format used in the pipeline touch-point output.files.
+    - [x] Create unit tests for each of the functions in section 7.
 
 9. **Add Mock LLM for Testing**
     - [x] Rely on the fact that for testing, we will use the Little Red Riding Hood book
     - [x] Use the LRRH text as the return values for the MockLLM.  This way, the outputs can be tested in detail.
     - [x] Create MockLLM class that returns predictable responses
-    - [ ] Implement different response scenarios (successful, missing touch-points, API errors)
     - [x] Have the MockLLM not only provide the response from the correct touch-point pipeline step, but also check the prompt for that step against the LRRH prompt up to whitespace. This should be possible because of applying the update functio to the LRRH book when prompts change.
     - [x] Use for unit testing without requiring actual API calls
 
@@ -137,12 +136,6 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - Test story-so-far and story-relative-to generation
     - Test multi-chapter workflow
     - Test the two-phase pre-draft → substitution → polish pipeline end-to-end with a Mock LLM
-
-15. **Create Test Data**
-    - Create test SETTING.yaml and CHAPTER files in tests/ directory
-    - Create expected output files for verification
-    - Set up pytest fixtures for consistent test data
-
 
 ## Completion Criteria
 
