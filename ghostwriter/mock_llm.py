@@ -88,4 +88,55 @@ def complete(prompt: str, *, system: Optional[str] = None, temperature: float = 
     if os.getenv("GW_MOCKLLM_FALLBACK", "0") == "1":
         head = (prompt[:220] + "...") if len(prompt) > 220 else prompt
         return f"[MOCK LLM RESPONSE]\nSystem: {system or 'n/a'}\nTemp: {temperature}\n---\n{head}"
+    # Optional debug dump to help diagnose mismatches in CI/tests
+    if os.getenv("GW_MOCKLLM_DEBUG", "0") == "1":
+        try:
+            base_path = Path(base)
+            # Determine optional external debug dir for easier inspection in tests/CI
+            dbg_dir_env = os.getenv("GW_MOCKLLM_DEBUG_DIR")
+            dbg_path = Path(dbg_dir_env).resolve() if dbg_dir_env else None
+            # Prepare payloads
+            sample = "\n".join(list(idx.keys())[:20])
+            # Always try to write into the book base (tmp sandbox)
+            (base_path / ".mockllm_last_prompt_user.txt").write_text(prompt, encoding="utf-8")
+            (base_path / ".mockllm_last_prompt_norm.txt").write_text(key, encoding="utf-8")
+            (base_path / ".mockllm_index_keys.txt").write_text(sample, encoding="utf-8")
+            # Optionally mirror into a fixed debug dir inside the repo/workspace for visibility
+            if dbg_path:
+                try:
+                    dbg_path.mkdir(parents=True, exist_ok=True)
+                    (dbg_path / "last_prompt_user.txt").write_text(prompt, encoding="utf-8")
+                    (dbg_path / "last_prompt_norm.txt").write_text(key, encoding="utf-8")
+                    (dbg_path / "index_keys_sample.txt").write_text(sample, encoding="utf-8")
+                    # Include a tiny meta file with index length and prompts hash
+                    from .mock_support import compute_prompts_hash as _cph, read_prompt_hash as _rph
+                    ph = _rph(base) or _cph("prompts")
+                    (dbg_path / "meta.txt").write_text(f"index_len={len(idx)}\nprompts_hash={ph}\nbase={str(base_path)}\n", encoding="utf-8")
+                except Exception:
+                    pass
+        except Exception:
+            pass
+        # Also emit a compact stderr hint with sizes and a fuzzy nearest head to aid debugging in CI logs
+        try:
+            import sys, hashlib, difflib
+            key_sha = hashlib.sha1(key.encode("utf-8")).hexdigest() if key else ""
+            idx_len = len(idx)
+            # Find a fuzzy closest key (by difflib) among a small sample to avoid O(n)
+            candidates = list(idx.keys())
+            head = key[:160].replace("\n", " ")
+            closest = ""
+            ratio = 0.0
+            # Sample up to first 200 keys deterministically
+            for cand in candidates[:200]:
+                r = difflib.SequenceMatcher(a=key, b=cand).ratio()
+                if r > ratio:
+                    ratio = r
+                    closest = cand
+            clo_sha = hashlib.sha1(closest.encode("utf-8")).hexdigest() if closest else ""
+            clo_head = closest[:160].replace("\n", " ") if closest else ""
+            sys.stderr.write(
+                f"[mockllm] miss: idx_keys={idx_len} key_sha={key_sha} key_head={head!r} closest_ratio={ratio:.4f} closest_sha={clo_sha} closest_head={clo_head!r}\n"
+            )
+        except Exception:
+            pass
     raise ValueError("MockLLM: prompt not found in golden index. Consider running golden-update on the book base, or disable strict mode via GW_MOCKLLM_FALLBACK=1.")

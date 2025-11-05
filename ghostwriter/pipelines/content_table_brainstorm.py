@@ -13,6 +13,8 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Dict, Any, List, Optional, Tuple
+import os as _gw_os
+_gw_os.environ.setdefault("YAML_CEXT_DISABLED", "1")
 import yaml
 
 from ..env import get_chapters_dir

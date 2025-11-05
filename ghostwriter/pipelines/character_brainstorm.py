@@ -25,6 +25,8 @@ from ..utils import to_text as _to_text, read_text as _read_text, save_text as _
 from ..llm import complete as llm_complete
 from ..factoids import factoids_block_from_setting
 from ..context import load_yaml
+import os as _gw_os
+_gw_os.environ.setdefault("YAML_CEXT_DISABLED", "1")
 import yaml
 
 
@@ -82,10 +84,20 @@ def run_character_brainstorm(*, ctx: RunContext, target_name: str, version_num: 
     fact_block = ""
     chars_block = ""
     if isinstance(chs, dict):
-        fact_list = chs.get("factoids") if isinstance(chs.get("factoids"), list) else []
-        actor_list = chs.get("actors") if isinstance(chs.get("actors"), list) else []
+        fact_list: List[str] = []
+        _raw_facts = chs.get("factoids")
+        if isinstance(_raw_facts, list):
+            # Coerce all entries to string for deterministic matching
+            fact_list = [str(f) for f in _raw_facts if f is not None]
+
+        actor_list: List[str] = []
+        _raw_actors = chs.get("actors")
+        if isinstance(_raw_actors, list):
+            # Coerce all entries to string and filter out Nones
+            actor_list = [str(a) for a in _raw_actors if a is not None]
         fact_block = factoids_block_from_setting(setting, selected_names=fact_list)
-        chars_block = _selected_characters_block(characters, actor_list, exclude=[target_name])
+        # Ensure characters is a concrete list for typing and iteration safety
+        chars_block = _selected_characters_block(list(characters or []), actor_list, exclude=[target_name])
 
     # Chapter YAML full text
     ch_yaml_text = _chapter_yaml_text(ctx)
@@ -113,11 +125,13 @@ def run_character_brainstorm(*, ctx: RunContext, target_name: str, version_num: 
             lrrh_chars = repo_root / "testdata" / "LittleRedRidingHood" / "CHARACTERS.yaml"
             if lrrh_chars.exists():
                 y = load_yaml(str(lrrh_chars))
-                items = []
+                items: List[dict] = []
                 if isinstance(y, list):
-                    items = y
-                elif isinstance(y, dict) and isinstance(y.get("Characters"), list):
-                    items = y.get("Characters")
+                    items = [it for it in y if isinstance(it, dict)]
+                elif isinstance(y, dict):
+                    _raw_items = y.get("Characters")
+                    if isinstance(_raw_items, list):
+                        items = [it for it in _raw_items if isinstance(it, dict)]
                 red = None
                 for it in items:
                     try:

@@ -10,8 +10,8 @@ from ..llm import complete as llm_complete
 from .common import env_for_prompt, build_pipeline_replacements, llm_call_with_validation, reasoning_for_prompt
 
 
-def run_subtle_edit_pipeline(tp, state, *, setting: dict, chapter: dict, chapter_id: str, version: int, tp_index: int, prior_polished: str, prior_suggestions: str, prior_paragraph: str = "", log_dir: Optional[Path] = None) -> str:
-    reps = build_pipeline_replacements(setting, chapter, chapter_id, version, tp, state, prior_paragraph=prior_paragraph)
+def run_subtle_edit_pipeline(tp, state, *, setting: dict, chapter: dict, chapter_id: str, version: int, tp_index: int, prior_polished: str, prior_suggestions: str, prior_paragraph: str = "", log_dir: Optional[Path] = None, ctx=None) -> str:
+    reps = build_pipeline_replacements(setting, chapter, chapter_id, version, tp, state, prior_paragraph=prior_paragraph, ctx=ctx)
     # Provide both legacy/uppercase and template lowercase placeholders
     reps["[PRIOR_POLISHED]"] = prior_polished
     reps["[SUGGESTIONS]"] = prior_suggestions

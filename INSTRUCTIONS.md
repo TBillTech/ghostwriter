@@ -8,7 +8,7 @@ Follow instructions
 
 ## Next steps
 
-Work on Task 32: system tests.
+Work on Task 13: integration tests.
 Ensure tests run via the venv and remain independent of external LLMs by using fixtures or monkeypatching where needed.
 
 Relevant `TODO.md` is in the project root

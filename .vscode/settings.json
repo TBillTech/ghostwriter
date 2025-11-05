@@ -3,5 +3,15 @@
         "tests"
     ],
     "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
+    "python.testing.pytestEnabled": true,
+
+    // Disable Pylance MCP sidecar in this workspace to avoid localhost:5724 errors
+    "pylance.mcp.enabled": false,
+    "python.analysis.useMcp": false,
+
+    // Ensure Pylance is the active language server
+        "python.languageServer": "Pylance",
+
+        // Make type checking feedback visible while testing Pylance
+        "python.analysis.typeCheckingMode": "basic"
 }

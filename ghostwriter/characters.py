@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Any
 import os
 import re
 
@@ -98,17 +98,20 @@ CHAR_CALL_RE = re.compile(
 )
 
 
-def parse_character_blocks(pre_draft_text: str) -> Tuple[Dict[str, str], List[Dict[str, str]]]:
+def parse_character_blocks(pre_draft_text: str) -> Tuple[Dict[str, str], List[Dict[str, Any]]]:
     templates: Dict[str, str] = {}
     for m in CHAR_TEMPLATE_RE.finditer(pre_draft_text):
         templates[m.group("id").strip()] = m.group("body").strip()
-    calls: List[Dict[str, str]] = []
+    calls: List[Dict[str, Any]] = []
     for m in CHAR_CALL_RE.finditer(pre_draft_text):
+        gd = m.groupdict()
+        dlg = gd.get("dialogn")
+        ag = gd.get("agenda")
         calls.append({
             "id": m.group("id").strip(),
             "prompt": m.group("prompt").strip(),
-            "agenda": (m.group("agenda") or "").strip() if "agenda" in m.groupdict() else "",
-            "dialogn": int(m.group("dialogn")) if m.groupdict().get("dialogn") and m.group("dialogn") else None,
+            "agenda": (ag or "").strip(),
+            "dialogn": (int(dlg) if dlg else None),
             "full_match": m.group(0),
         })
     return templates, calls
@@ -365,6 +368,9 @@ def substitute_character_calls(
             safe_id = re.sub(r"[^A-Za-z0-9_.-]", "_", cid) or "character"
             log_file = log_dir / f"{call_index:02d}_{safe_id}.txt"
 
+        gd2 = m.groupdict()
+        dlg2 = gd2.get("dialogn")
+        dlg_override: Optional[int] = int(dlg2) if isinstance(dlg2, str) and dlg2.strip() else None
         replacement = render_character_call(
             cid,
             call_prompt,
@@ -372,9 +378,9 @@ def substitute_character_calls(
             temperature=temp,
             max_tokens_line=max_tokens_line,
             log_file=log_file,
-            agenda=(m.group("agenda") or "") if "agenda" in m.re.groupindex else "",
+            agenda=(gd2.get("agenda") or ""),
             character_yaml=char_yaml_by_id.get(cid.lower()),
-            dialog_n_override=(int(m.group("dialogn")) if ("dialogn" in m.re.groupindex and m.group("dialogn")) else None),
+            dialog_n_override=dlg_override,
         )
 
         result = result[:start] + replacement + result[end:]

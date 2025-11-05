@@ -132,11 +132,11 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - [x] Test polish step integration: given substituted text, ensure polish prompt is built and called correctly
 
 13. **Create Integration Tests**
-    - Test complete workflow from YAML to draft generation (with mocked LLM)
-    - Test iteration loop with simulated verification results
-    - Test story-so-far and story-relative-to generation
-    - Test multi-chapter workflow
-    - Test the two-phase pre-draft → substitution → polish pipeline end-to-end with a Mock LLM
+    - [x] Test complete workflow from YAML to draft generation (with mocked LLM)
+    - [ ] Test iteration loop with simulated verification results
+    - [ ] Test story-so-far and story-relative-to generation
+    - [ ] Test multi-chapter workflow
+    - [x] Test the two-phase pre-draft → substitution → edit pipeline end-to-end with a Mock LLM
 
 ## Completion Criteria
 

@@ -24,7 +24,6 @@ from typing import Dict, Iterable, List, Optional, Tuple
 # Local imports kept light to avoid cycles
 from .templates import apply_template
 from .context import RunContext
-from .env import get_chapters_dir
 
 # ---------------------------
 # Prompt hash utilities
@@ -177,13 +176,46 @@ def _load_tp_state(step_dir: Path) -> Tuple[_TPState, str]:
 
 
 def _build_replacements_for_step(step_dir: Path, chapter_id: str, version: int) -> Dict[str, str]:
-    # Build replacements using the same common logic as pipelines
-    from .touch_point import _build_pipeline_replacements as _build
-    ctx = RunContext.from_paths(chapter_path=str(get_chapters_dir() / f"{chapter_id}.yaml"), version=version, allow_missing_chapter=False)
+    # Build replacements using the same common logic as runtime pipelines
+    # Avoid relying on env by deriving base dir and chapter path from the step_dir
+    from .pipelines.common import build_pipeline_replacements as _build
+    from .touch_point import _strip_trailing_done as _tp_strip_done
+    try:
+        base_dir = step_dir.parents[3]  # <base>/iterations/CHAPTER_xxx/pipeline_vN/<NN_type>
+        chapter_path = base_dir / "chapters" / f"{chapter_id}.yaml"
+    except Exception:
+        # Fallback to env-based resolution if structure is unexpected
+        from .env import get_chapters_dir as _get_chapters_dir
+        chapter_path = _get_chapters_dir() / f"{chapter_id}.yaml"
+    ctx = RunContext.from_paths(chapter_path=str(chapter_path), version=version, allow_missing_chapter=False)
     state, _ = _load_tp_state(step_dir)
     # Determine touch-point dict for content/type labels
     tp_dict = {"type": step_dir.name.split("_", 1)[-1], "content": _read_touchpoint_text(step_dir)}
     reps = _build(ctx.setting, ctx.chapter, chapter_id, version, tp_dict, state, prior_paragraph="", ctx=ctx)
+    # Provide [bullets] from brainstorm.txt when present so regenerated prompts match goldens
+    try:
+        bs_path = step_dir / "brainstorm.txt"
+        if bs_path.exists():
+            raw = bs_path.read_text(encoding="utf-8")
+            reps["[bullets]"] = _tp_strip_done(raw).strip()
+    except Exception:
+        # Leave placeholder if anything goes wrong
+        pass
+
+    # Provide subtle-edit placeholders when present so regenerated prompts match runtime
+    # Use the user-gate first-draft and first suggestions, which subtle_edit consumes on resume
+    try:
+        first_draft = step_dir / "touch_point_first_draft.txt"
+        if first_draft.exists():
+            reps["[draft_text]"] = first_draft.read_text(encoding="utf-8")
+    except Exception:
+        pass
+    try:
+        first_sugg = step_dir / "first_suggestions.txt"
+        if first_sugg.exists():
+            reps["[suggestions]"] = first_sugg.read_text(encoding="utf-8")
+    except Exception:
+        pass
     return reps
 
 

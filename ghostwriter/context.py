@@ -13,8 +13,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import List, Any, Optional, Dict
 
+# Force PyYAML to use the pure-Python implementation to avoid rare C-extension segfaults
+# during complex block-scalar scanning seen in tests. This must be set before importing yaml.
+import os
+os.environ.setdefault("YAML_CEXT_DISABLED", "1")
+
 import yaml
-from yaml.loader import SafeLoader as _PySafeLoader
 from .env import get_setting_path, get_characters_path, resolve_chapter_path, get_book_base_dir, get_chapters_dir
 from .logging import breadcrumb as _breadcrumb
 
@@ -38,7 +42,9 @@ class UserActionRequired(GWError):
 
 
 def _yaml_load_py(content: str):
-    return yaml.load(content, Loader=_PySafeLoader)
+    # Use SafeLoader explicitly; with YAML_CEXT_DISABLED set before import,
+    # this will be the pure-Python loader even if libyaml is installed.
+    return yaml.load(content, Loader=yaml.SafeLoader)
 
 
 def load_yaml(path: str):
@@ -134,12 +140,19 @@ class RunContext:
             raise MissingFileError(f"Missing required CHARACTERS.yaml: {characters_path}")
         chars_yaml = load_yaml(str(characters_path))
         characters_list: List[dict] = []
+        # Normalize character sources while satisfying type checkers
+        src_list: Optional[List[Any]] = None
         if isinstance(chars_yaml, list):
-            characters_list = [c for c in chars_yaml if isinstance(c, dict)]
-        elif isinstance(chars_yaml, dict) and isinstance(chars_yaml.get("Characters"), list):
-            characters_list = [c for c in chars_yaml.get("Characters") if isinstance(c, dict)]
-        elif isinstance(setting, dict) and isinstance(setting.get("Characters"), list):
-            characters_list = [c for c in setting.get("Characters") if isinstance(c, dict)]
+            src_list = chars_yaml
+        elif isinstance(chars_yaml, dict):
+            maybe_chars = chars_yaml.get("Characters")
+            if isinstance(maybe_chars, list):
+                src_list = maybe_chars
+        if src_list is None and isinstance(setting, dict):
+            maybe_chars2 = setting.get("Characters")
+            if isinstance(maybe_chars2, list):
+                src_list = maybe_chars2
+        characters_list = [c for c in (src_list or []) if isinstance(c, dict)]
         cid = chapter_id_from_path(str(resolved_chapter))
         # Optional content table and chapter settings index
         ch_dir = get_chapters_dir()
