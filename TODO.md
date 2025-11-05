@@ -128,7 +128,7 @@ This document outlines the tasks necessary to get the driver.py working correctl
     - [x] Test error handling for missing files and invalid YAML
     - [x] Test version numbering and iteration logic
     - [x] Test CHARACTER parsing and substitution logic (happy path)
-    - [ ] Test CHARACTER parsing and substitution logic (malformed blocks)
+    - [x] Test CHARACTER parsing and substitution logic (malformed blocks)
     - [x] Test polish step integration: given substituted text, ensure polish prompt is built and called correctly
 
 13. **Create Integration Tests**

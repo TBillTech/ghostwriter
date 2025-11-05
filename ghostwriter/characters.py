@@ -301,6 +301,19 @@ def substitute_character_calls(
     result = pre_draft_text
     templates, _ = parse_character_blocks(result)
     stats = {"templates": len(templates), "calls": 0, "missing_templates": 0}
+    # Heuristic warnings for malformed/mismatched CHARACTER markup
+    try:
+        import re as _re
+        open_call_tags = len(_re.findall(r"<CHARACTER\b", result, flags=_re.IGNORECASE))
+        matched_calls = len(list(CHAR_CALL_RE.finditer(result)))
+        if open_call_tags > matched_calls:
+            _log_warning("CHARACTER: Malformed CHARACTER block(s) detected; some tags may be unclosed or malformed.", log_dir)
+        open_tpl_tags = len(_re.findall(r"<CHARACTER TEMPLATE>", result, flags=_re.IGNORECASE))
+        # Count matched templates from parse_character_blocks (templates dict)
+        if open_tpl_tags > len(templates):
+            _log_warning("CHARACTER: Malformed CHARACTER TEMPLATE block(s) detected; some templates may be unclosed or malformed.", log_dir)
+    except Exception:
+        pass
     call_index = 0
 
     # Preload character YAML and hints once
