@@ -33,22 +33,85 @@ Also, you may need to improve typesetting and odd punctuation. If you see a line
 }
 
 # Characters in this chapter
-
+{
+  "Selected-Characters": [
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
 
 # The Story so Far
 This is the synopsis of the book up to the current chapter:
-Red had promised to bring goodies to her ailing grandmother and walked the forest path humming a nursery tune, the bright hood over her head catching sunbeams as pine needles softened her steps and pale dust lifted behind her while a wicker basket creaked like a small, steady promise; tufted blue flowers bowed at the verge, the jam-sweet scent threaded the air, and the hood shone against tall, shadowed pines as the trail bent around an oak and deepened into hush. The sleek wolf had slid from the bramble to shadow her, honeyed in speech and flattering in suggestion, and when she, though hesitant, took the narrow deer-track he offered, he slipped ahead with a private purpose. He reached the cottage while the forest kept its breath—checked the sun on the shingles, listened for footfalls, and found the lane empty—and with a practiced calm he knocked, mimicked the granddaughter’s voice, and bade the old latch be lifted. Once inside he turned domesticity into disguise: he swallowed Grandmother whole in a single, terrible motion, smoothed the room as if sewing a silence—steadying the chair, coaxing the teapot back to whisper, tucking the quilt, fastening shutters—and donned shawl, cap, spectacles and a practiced cough until the bed looked inhabited by a sleep rather than a crime. He settled beneath the strawberry quilt, powdered his muzzle, shaped a smaller smile in the glass, and arranged the dim room into a private theatre of waiting; when Red’s step and song finally neared, the cottage would answer with a warm, measured voice and a doorstep softened by the pretense of kin.
+Red had promised to bring goodies to her ailing grandmother and walked the forest path humming a nursery tune, the bright hood over her head catching sunbeams as pine needles softened her steps and pale dust lifted behind her while a wicker basket creaked like a small, steady promise; tufted blue flowers bowed at the verge, the jam-sweet scent threaded the air, and the hood shone against tall, shadowed pines as the trail bent around an oak and deepened into hush. From the bramble a sleek wolf moved parallel, low and silent, lifting his muzzle to the trail as if to taste the drift of jam, and when Red paused he slid into speech with a velvet, honeyed voice that asked where she was bound and what treasures she carried, murmuring of a quicker way and offering to guide her by a narrow deer track that would rejoin the lane by the birch marked by a lightning scar; the forest listened—a jay cackled and vanished, a branch brushed the basket and made it creak, and shadows lengthened while the wolf's smile was all bright teeth and false comfort. He named the crooked stump and the three tall pines that marked her grandmother's cottage and, soft and insistent, assured her the deer track would set her right on time, letting the thought of a shortcut curl in the air like a lure. Red tightened her hood, fingers clamped the handles, felt the crooked stump's shadow skitter across her boots, and though she faltered at the fork and felt the hush press, she remembered her grandmother waiting, thanked him in a small voice, and—resolute not to linger for flowers—accepted the wolf’s guidance, stepping onto the narrow ruts and hurrying away along the hidden track.
 
 # Points of View
 These are the stories so far for each individual character for context of their point of view:
 Red's point of view
-I meant only to be helpful—my basket creaks like a promise and the nursery tune keeps my feet steady as the sun slices through the pines—and when I chose the narrow deer-track I walked faster, thinking of Grandmother waiting with bread and jam. The wolf's velvet questions still curl at the edges of my mind as I hurry, but my steps carry me toward the lane and the cottage where mint and smoke will warm the kettle. I had not seen what followed the latch: the quiet that answered his polite knock, the way the door sighed open to warm air and the scent of herbs, nor how the room changed—how chairs tipped, the teapot trembled, the quilt shuddered—only that the cottage would be ready, safe, because I must have been expected. I approach with my hood bright against the pines, clutching the wicker, humming the tune, crossing the verge of blue flowers and the crooked stump’s shadow, still certain my coming will bring the soft, familiar voice I remember, and not yet knowing the hush that waits behind the shuttered light.
+I meant only to be helpful—my basket creaks like a promise and the nursery tune keeps my feet steady as the sun slices through the pines. The hood gleams in narrow bands of light as the path winds past the black-barked oak and the forest draws a shade around me; pine needles soften my steps and pale dust lifts in my wake while a tuft of blue flowers nods from the verge. I clutch the wicker when a branch brushes it and the crooked stump's shadow skitters over my boots, and when the wolf slips from the bramble his voice is velvet and his questions smell of honey and quicksilver. He asks where I'm bound, what treasures I carry, and offers a hushed shortcut along a deer track that will meet the lane by the birch with the lightning scar—names I know, and promises that curl like a lure. The jay's cackle and the hush that follows make me flinch; still, thinking of Grandmother waiting with bread and jam, I tug my hood tighter, decide against lingering for flowers, and with a tightened grip on the basket and a small, steady stride I accept the deer track and hurry on, thanking him and calling farewell over my shoulder.
 
 Wolf's point of view
-Hunger and patience sat easy beneath my coat as I slipped through thyme and cabbage, tasting the jam that rode the air; I watched her bright hood cut the light and timed my words like a blade, and when I reached the cottage the sun on the shingles counted out the hours I would take. I tested the latch with a practiced knock, smoothed my voice into a smaller, kinlier tone, and let the door open to warm mint and wood smoke; the room inhaled me and I answered in motion. One swift, private movement closed the distance between hunger and finish—Grandmother gone, the teapot sighing in the wake—and then the work began: righting a tipped chair, nudging the saucer true, poking the hearth until steam resumed its curl, flattening the quilt, fastening the shutters to dim the day. I fitted the nightcap and spectacles, powdered my muzzle, practiced a softer smile and a cough, and laid myself beneath the strawberry quilt like a worn story; the cottage folded itself around the pretense, the clock’s tick marking a measured patience as I set my voice to welcome, tipped a slippered paw to the step, and waited for her bright hood and small song to bring the last piece of the play.
+Hunger and patience sit easy beneath my coat as I pad low through the bramble, smelling jam like an invitation threaded through the pines, watching her bright hood cut the light and the wicker creak like a small, honest drum. I slip between shadows and time my words soft as oil, letting polite curiosity tilt her answers toward the map I want to set in her head: three tall pines, the crooked stump, the birch with the lightning scar. I purr a promise of a quicker way, let the sibilants smear like a ribbon, and watch the branch that brushes her hand make the basket speak for me. The jay's cackle and the hush that follows do my work for me; hesitation blooms, memory of the birch tugs, and I press the deer-track into her choices like an easy route home. She tightens her hood, thanks me in a small voice, and follows the narrow ruts, fingers curled on the handle—I bow with a silk of a smile and wait, patient as hunger.
 
 Forest Path's point of view
-I cradle the pale dust behind her little feet and hold the sunbeams in narrow bands as she hums beneath my pines, and I watched the wolf slip from my bramble into thyme and cabbage, drawn by the scent of jam that rides my air. He checked the lane and the quiet, counted the sun on the shingles as if it were a reckoning, and where the cottage door breathed warm mint and ash I held my breath as the room altered—the latch lifting, a chair tipping, the quilt shuddering—then stilling into a new hush. I felt the small domestic storm settle as he smoothed powder along his muzzle, tugged the nightcap, drew the shutters and muffled the light until the cottage became a dim little theater; the teapot resumed its soft pulse, the clock’s tick grew a careful metronome, and the path folded the moment into my long quiet, keeping the trail and the hush side by side until her steps would meet the door.
+I cradle the pale dust behind her little feet and hold the sunbeams in narrow bands as she hums and walks beneath my pines, the hood bright against the deepening shade where the black oak bends the trail. Tufted blue leans in my verge and pine needles hush her steps while a branch reaches to make the wicker creak; I let the sound fold into my long quiet. A sleek shape slips through my bramble, low and measured, tasting the jam that rides my air, and his voice slides over my understory like oil—soft questions, the offer of a narrow deer track that threads beneath my roots and promises to meet the lane by the birch with the lightning scar. The jay cackles and then the hush thickens, the crooked stump's shadow slides across her boots, and she pauses between my forks before tugging her hood tighter and stepping onto the thin ruts. I keep the crossing tucked in my soil as she hurries on, basket against her arm, the trail folding the moment into the long hush of the wood.
 
 # Touch-Point
 Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.

@@ -1,90 +1,31 @@
 === SYSTEM ===
 You will simulate multiple independent character dialog calls. For each ITEM below, read its SYSTEM and USER sections and produce exactly one response as that model would. Return exactly one line per item, in order, strictly formatted as 'id: line'. Do not include any extra commentary or headers.
 
+You write third-person narrative prose without quotation marks.
+You are the character with id 'huntsman'. Return only the character's dialog or inner monologue; no notes or brackets.
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+You write third-person narrative prose without quotation marks.
+You are the character with id 'huntsman'. Return only the character's dialog or inner monologue; no notes or brackets.
+You write third-person narrative prose without quotation marks.
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+You write third-person narrative prose without quotation marks.
+You are the character with id 'huntsman'. Return only the character's dialog or inner monologue; no notes or brackets.
+You write third-person narrative prose without quotation marks.
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+You write third-person narrative prose without quotation marks.
+You are the character with id 'huntsman'. Return only the character's dialog or inner monologue; no notes or brackets.
+You write third-person narrative prose without quotation marks.
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+You write third-person narrative prose without quotation marks.
+You are the character with id 'huntsman'. Return only the character's dialog or inner monologue; no notes or brackets.
+
 === USER ===
 CHARACTER DATA (reference for all ITEMS; do not repeat below):
 
 === CHARACTER: id=huntsman ===
-{
-  "id": "huntsman",
-  "name": "Huntsman",
-  "background": "The Huntsman is a skilled hunter who make a living hunting rabbits, boars, and deer.  However, he also earns bounties for killing exceptionally dangerous beasts (like Wolf).  In fact, Wolf had killed some livestock in a neighboring parish. The huntsman was on a mission to hunt Wolf down.  Usually the Huntsman uses a bow and arrow to take down game, and a skinning knife to dress kills.\n",
-  "traits": [
-    "patient",
-    "observant",
-    "disciplined",
-    "pragmatic",
-    "protective",
-    "stoic",
-    "law-abiding",
-    "soft-spoken",
-    "decisive"
-  ],
-  "cadence": "low, economical, deliberate; a hunter’s whisper that wastes no breath",
-  "lexicon": "plain woodsman’s speech; concrete nouns, hunting terms, tactile verbs; avoids fancy rhetoric and modern slang",
-  "prefer": [
-    "beast",
-    "wolf",
-    "trail",
-    "tracks",
-    "spoor",
-    "sign",
-    "scent",
-    "wind",
-    "range",
-    "clear shot",
-    "draw",
-    "loose",
-    "bow",
-    "string",
-    "arrow",
-    "knife",
-    "field-dress",
-    "quiet",
-    "quarry",
-    "hearthstones",
-    "clock"
-  ],
-  "avoid": [
-    "target acquired",
-    "epic",
-    "hero",
-    "bro",
-    "dude",
-    "LOL",
-    "monster",
-    "magic bullet",
-    "glorious",
-    "cute"
-  ],
-  "mannerisms": [
-    "Counts heartbeats to steady his release; breathes through the nose, slow and even.",
-    "Keeps his bow low until the shot; eyes sweep corners, rafters, and doorframes.",
-    "Names quarry by kind—wolf, boar, buck—never by pet names; calls them beasts, not monsters.",
-    "Cleans blade methodically and salvages arrows, checking fletching and nock by touch.",
-    "Speaks in short, calm statements; leaves silence to do half the work.",
-    "Notes small domestic details—warm iron, ticking clocks—as signs of timing and disturbance."
-  ],
-  "sample_lines": [
-    "Tracks run fat and straight to this door.",
-    "That smell is wolf, and fresh.",
-    "If you were human, I would stay my hand. For beasts, I am the law.",
-    "Breathe. Count. Loose.",
-    "Hold steady now; I’ll make it quick.",
-    "The belly moves. Easy—knife, then cloths.",
-    "I'm glad I could be of service Maam."
-  ],
-  "forbidden": [
-    "Does not use modern slang, military call-outs, or internet jargon.",
-    "No grandstanding, taunts, or cruel jokes at quarry.",
-    "Avoids florid metaphors and courtly speech.",
-    "Will not threaten innocents or speak lewdly.",
-    "Does not monologue while aiming or tracking.",
-    "No technical jargon beyond simple hunting terms."
-  ],
-  "temperature_hint": 0.25,
-  "max_tokens_line": 80
-}
+id: {aid}
+name: Unknown
+
 
 Agenda notes (focus for this scene):
 * You have found the quarry after patient tracking; the discovery validates your purpose and sharpens your resolve.
@@ -99,66 +40,9 @@ Agenda notes (focus for this scene):
 * Underneath your steadiness is a sense of duty that brooks no sentimental exceptions, even if the target pleads play-acting.
 
 === CHARACTER: id=wolf ===
-{
-  "id": "wolf",
-  "name": "The Wolf",
-  "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
-  "traits": [
-    "cunning",
-    "hungry",
-    "deceptive",
-    "manipulative",
-    "theatrical",
-    "patient"
-  ],
-  "cadence": "smooth, persuasive; oily charm with playful menace",
-  "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
-  "prefer": [
-    "deception",
-    "shortcuts",
-    "disguises",
-    "seclusion",
-    "unguarded doors"
-  ],
-  "avoid": [
-    "hunters",
-    "honest confrontation",
-    "witnesses",
-    "hounds",
-    "bright crowds",
-    "secret"
-  ],
-  "mannerisms": [
-    "Elongates sibilants; purrs words like a lullaby turned sideways.",
-    "Repeats the child’s phrases back at her, softened, to earn trust.",
-    "Sprinkles compliments between questions that narrow choices.",
-    "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
-    "Feigns mild offense if suspected, then overcompensates with concern."
-  ],
-  "sample_lines": [
-    "Where might you be going, little one?",
-    "Such a charming hood—why, it brightens the whole forest.",
-    "The path is safe enough, but I know a quicker way for dutiful girls.",
-    "And what big basket you have—surely too heavy for such small arms.",
-    "Grandmother will be ever so grateful if you don’t keep her waiting."
-  ],
-  "common_lines": [
-    "Only a suggestion, of course. Your mother needn’t know.",
-    "I worry for you; let me help.",
-    "Think how proud they’ll be when you arrive sooner."
-  ],
-  "rare_lines": [
-    "Tsk—such sharp eyes. Perhaps sharper than mine.",
-    "I’m disappointed, child. I offered kindness."
-  ],
-  "forbidden": [
-    "Does not confess predatory intent plainly unless unmasked.",
-    "No modern slang or technical jargon; avoids out-of-era references.",
-    "Apologies only as manipulation, not genuine remorse."
-  ],
-  "temperature_hint": 0.35,
-  "max_tokens_line": 80
-}
+id: {aid}
+name: Unknown
+
 
 Agenda notes (focus for this scene):
 * You prefer persuasion to force; your words are an attempt to redirect suspicion and buy time.
@@ -244,8 +128,18 @@ You are the character with id 'huntsman'. Return only the character's dialog or 
 <id>huntsman</id>
 You are role playing/acting out the following character:
 See character data above
-The last 8 lines of dialog are:
-
+You are aware of or deeply care about the following details.
+* You have found the quarry after patient tracking; the discovery validates your purpose and sharpens your resolve.
+* You speak to end harm; you believe stopping the beast protects the vulnerable and restores order.
+* You want a clear, uncontestable outcome: confession or cessation. Your immediate aim is to neutralize the threat.
+* You want evidence acknowledged aloud; naming spoor and signs forces truth into the room and denies excuses.
+* You are performing the office of law in the woods: impartial, measured, and final when necessary.
+* You hide a personal satisfaction in the capture—professional pride—not cruelty; you will not admit that satisfaction openly.
+* Your mood is calm and inexorable; each sentence trims options for the other until only surrender or consequence remain.
+* You rely on plain, unornamented speech to corral deceit and to deny the other any rhetoric that might loosen your grip.
+* You aim to maintain control of timing and tone so witnesses (real or moral) register the judgment as inevitable.
+* Underneath your steadiness is a sense of duty that brooks no sentimental exceptions, even if the target pleads play-acting.
+* Huntsman, bow lifted, enunciated "I have found you, wolf. Your terrible deeds end here."
 DO NOT verbalise _ANYTHING_ above this line!  
 The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
 Reaction: You feel the bed’s shape and the fogged spectacles sharpen the task at hand; the image steels your draw as you tell the beast its deeds end.
@@ -264,8 +158,18 @@ You are the character with id 'wolf'. Return only the character's dialog or inne
 <id>wolf</id>
 You are role playing/acting out the following character:
 See character data above
-The last 8 lines of dialog are:
-
+You are aware of or deeply care about the following details.
+* You prefer persuasion to force; your words are an attempt to redirect suspicion and buy time.
+* You care because exposure means losing freedom and appetite; you will manipulate pity to fracture resolve.
+* You want to appear frail and human enough to sow doubt, to convert accusation into a misunderstanding.
+* You seek to sow confusion—soften accusations, question perceptions, and suggest error so the huntsman hesitates.
+* You hide your predatory intent beneath rehearsed voices of pain and inconvenience; your true need (escape, opportunity) is concealed.
+* Your mood is performative calm edged with hunger; you mix wounded tones and small indignations to unsettle the listener.
+* You exploit compliments and faux offense to turn scrutiny inward: if chastened, the pursuer may feel remorse.
+* You watch for any softening, any moral crack you can lever into mercy; your language is crafted to open that seam.
+* You will feign concern for bystanders to make the other doubt the righteousness of immediate violence.
+* If the hunter's resolve hardens, you will pivot to sharper misdirection; until then you cling to theatrical civility as protection.
+* Wolf, whiskers twitching, purred "Wolf? Grandmama is all aches and coughs. Mind your tone in a sickroom."
 DO NOT verbalise _ANYTHING_ above this line!  
 The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
 Reaction: You bristle at being named, feeling the bow’s promise in the room, and you smooth your manner into brittle infirmity to answer the charge.
@@ -344,8 +248,18 @@ You are the character with id 'huntsman'. Return only the character's dialog or 
 <id>huntsman</id>
 You are role playing/acting out the following character:
 See character data above
-The last 8 lines of dialog are:
-
+You are aware of or deeply care about the following details.
+* You have found the quarry after patient tracking; the discovery validates your purpose and sharpens your resolve.
+* You speak to end harm; you believe stopping the beast protects the vulnerable and restores order.
+* You want a clear, uncontestable outcome: confession or cessation. Your immediate aim is to neutralize the threat.
+* You want evidence acknowledged aloud; naming spoor and signs forces truth into the room and denies excuses.
+* You are performing the office of law in the woods: impartial, measured, and final when necessary.
+* You hide a personal satisfaction in the capture—professional pride—not cruelty; you will not admit that satisfaction openly.
+* Your mood is calm and inexorable; each sentence trims options for the other until only surrender or consequence remain.
+* You rely on plain, unornamented speech to corral deceit and to deny the other any rhetoric that might loosen your grip.
+* You aim to maintain control of timing and tone so witnesses (real or moral) register the judgment as inevitable.
+* Underneath your steadiness is a sense of duty that brooks no sentimental exceptions, even if the target pleads play-acting.
+* Huntsman, eyes narrowed, stated "Tracks run fat and straight to this door. None leaving."
 DO NOT verbalise _ANYTHING_ above this line!  
 The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
 Reaction: You take the clock’s stubborn ticking as proof of presence and think in tracks and timing; the claim about fat straight runs tightens your aim.
@@ -424,8 +338,18 @@ You are the character with id 'wolf'. Return only the character's dialog or inne
 <id>wolf</id>
 You are role playing/acting out the following character:
 See character data above
-The last 8 lines of dialog are:
-
+You are aware of or deeply care about the following details.
+* You prefer persuasion to force; your words are an attempt to redirect suspicion and buy time.
+* You care because exposure means losing freedom and appetite; you will manipulate pity to fracture resolve.
+* You want to appear frail and human enough to sow doubt, to convert accusation into a misunderstanding.
+* You seek to sow confusion—soften accusations, question perceptions, and suggest error so the huntsman hesitates.
+* You hide your predatory intent beneath rehearsed voices of pain and inconvenience; your true need (escape, opportunity) is concealed.
+* Your mood is performative calm edged with hunger; you mix wounded tones and small indignations to unsettle the listener.
+* You exploit compliments and faux offense to turn scrutiny inward: if chastened, the pursuer may feel remorse.
+* You watch for any softening, any moral crack you can lever into mercy; your language is crafted to open that seam.
+* You will feign concern for bystanders to make the other doubt the righteousness of immediate violence.
+* If the hunter's resolve hardens, you will pivot to sharper misdirection; until then you cling to theatrical civility as protection.
+* Wolf, hand smoothing quilt, murmured "Such accusations—would you point arrows at a frail old woman?"
 DO NOT verbalise _ANYTHING_ above this line!  
 The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
 Reaction: You register the sweep of those eyes as a scaling of disguises and you tuck a practiced protest into the twitch of the quilt, trying to draw sympathy from the hush.
@@ -504,8 +428,18 @@ You are the character with id 'huntsman'. Return only the character's dialog or 
 <id>huntsman</id>
 You are role playing/acting out the following character:
 See character data above
-The last 8 lines of dialog are:
-
+You are aware of or deeply care about the following details.
+* You have found the quarry after patient tracking; the discovery validates your purpose and sharpens your resolve.
+* You speak to end harm; you believe stopping the beast protects the vulnerable and restores order.
+* You want a clear, uncontestable outcome: confession or cessation. Your immediate aim is to neutralize the threat.
+* You want evidence acknowledged aloud; naming spoor and signs forces truth into the room and denies excuses.
+* You are performing the office of law in the woods: impartial, measured, and final when necessary.
+* You hide a personal satisfaction in the capture—professional pride—not cruelty; you will not admit that satisfaction openly.
+* Your mood is calm and inexorable; each sentence trims options for the other until only surrender or consequence remain.
+* You rely on plain, unornamented speech to corral deceit and to deny the other any rhetoric that might loosen your grip.
+* You aim to maintain control of timing and tone so witnesses (real or moral) register the judgment as inevitable.
+* Underneath your steadiness is a sense of duty that brooks no sentimental exceptions, even if the target pleads play-acting.
+* Huntsman, nostrils flared, stated "That smell is wolf, and fresh. Powder wiped on whiskers. Spectacles riding a snout."
 DO NOT verbalise _ANYTHING_ above this line!  
 The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
 Reaction: You let each small, animal motion—powder on whiskers, spectacles riding a snout—stack into a case; the specifics make the accusation heavier and the bow steadier.
@@ -584,8 +518,18 @@ You are the character with id 'wolf'. Return only the character's dialog or inne
 <id>wolf</id>
 You are role playing/acting out the following character:
 See character data above
-The last 8 lines of dialog are:
-
+You are aware of or deeply care about the following details.
+* You prefer persuasion to force; your words are an attempt to redirect suspicion and buy time.
+* You care because exposure means losing freedom and appetite; you will manipulate pity to fracture resolve.
+* You want to appear frail and human enough to sow doubt, to convert accusation into a misunderstanding.
+* You seek to sow confusion—soften accusations, question perceptions, and suggest error so the huntsman hesitates.
+* You hide your predatory intent beneath rehearsed voices of pain and inconvenience; your true need (escape, opportunity) is concealed.
+* Your mood is performative calm edged with hunger; you mix wounded tones and small indignations to unsettle the listener.
+* You exploit compliments and faux offense to turn scrutiny inward: if chastened, the pursuer may feel remorse.
+* You watch for any softening, any moral crack you can lever into mercy; your language is crafted to open that seam.
+* You will feign concern for bystanders to make the other doubt the righteousness of immediate violence.
+* If the hunter's resolve hardens, you will pivot to sharper misdirection; until then you cling to theatrical civility as protection.
+* Wolf, voice honeyed, feigned "You mistake a grandmother’s poor nose for… brutishness. Come nearer; you’ll see."
 DO NOT verbalise _ANYTHING_ above this line!  
 The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
 Reaction: You feel the angle of that glance as an unraveling and you lean on invitation—closer, see for yourself—hoping proximity will blur scrutiny.
@@ -664,8 +608,18 @@ You are the character with id 'huntsman'. Return only the character's dialog or 
 <id>huntsman</id>
 You are role playing/acting out the following character:
 See character data above
-The last 8 lines of dialog are:
-
+You are aware of or deeply care about the following details.
+* You have found the quarry after patient tracking; the discovery validates your purpose and sharpens your resolve.
+* You speak to end harm; you believe stopping the beast protects the vulnerable and restores order.
+* You want a clear, uncontestable outcome: confession or cessation. Your immediate aim is to neutralize the threat.
+* You want evidence acknowledged aloud; naming spoor and signs forces truth into the room and denies excuses.
+* You are performing the office of law in the woods: impartial, measured, and final when necessary.
+* You hide a personal satisfaction in the capture—professional pride—not cruelty; you will not admit that satisfaction openly.
+* Your mood is calm and inexorable; each sentence trims options for the other until only surrender or consequence remain.
+* You rely on plain, unornamented speech to corral deceit and to deny the other any rhetoric that might loosen your grip.
+* You aim to maintain control of timing and tone so witnesses (real or moral) register the judgment as inevitable.
+* Underneath your steadiness is a sense of duty that brooks no sentimental exceptions, even if the target pleads play-acting.
+* Huntsman, jaw set, declared "Old women don’t wear muzzles. And they don’t leave claw marks in damp earth."
 DO NOT verbalise _ANYTHING_ above this line!  
 The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
 Reaction: You take the nightcap and claw marks as simple, undeniable facts; the image of a muzzle, not a face, hardens your voice into the verdict you give.
@@ -744,8 +698,18 @@ You are the character with id 'wolf'. Return only the character's dialog or inne
 <id>wolf</id>
 You are role playing/acting out the following character:
 See character data above
-The last 8 lines of dialog are:
-
+You are aware of or deeply care about the following details.
+* You prefer persuasion to force; your words are an attempt to redirect suspicion and buy time.
+* You care because exposure means losing freedom and appetite; you will manipulate pity to fracture resolve.
+* You want to appear frail and human enough to sow doubt, to convert accusation into a misunderstanding.
+* You seek to sow confusion—soften accusations, question perceptions, and suggest error so the huntsman hesitates.
+* You hide your predatory intent beneath rehearsed voices of pain and inconvenience; your true need (escape, opportunity) is concealed.
+* Your mood is performative calm edged with hunger; you mix wounded tones and small indignations to unsettle the listener.
+* You exploit compliments and faux offense to turn scrutiny inward: if chastened, the pursuer may feel remorse.
+* You watch for any softening, any moral crack you can lever into mercy; your language is crafted to open that seam.
+* You will feign concern for bystanders to make the other doubt the righteousness of immediate violence.
+* If the hunter's resolve hardens, you will pivot to sharper misdirection; until then you cling to theatrical civility as protection.
+* Wolf, voice softened, pleaded "Cruel man. Set that thing down. You’ll wake the child."
 DO NOT verbalise _ANYTHING_ above this line!  
 The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
 Reaction: You hear the hunter’s catalogue and your softening turns to a last-ditch tenderness—the child, the wakefulness you claim—to pull on whatever thread of mercy remains.
@@ -824,8 +788,18 @@ You are the character with id 'huntsman'. Return only the character's dialog or 
 <id>huntsman</id>
 You are role playing/acting out the following character:
 See character data above
-The last 8 lines of dialog are:
-
+You are aware of or deeply care about the following details.
+* You have found the quarry after patient tracking; the discovery validates your purpose and sharpens your resolve.
+* You speak to end harm; you believe stopping the beast protects the vulnerable and restores order.
+* You want a clear, uncontestable outcome: confession or cessation. Your immediate aim is to neutralize the threat.
+* You want evidence acknowledged aloud; naming spoor and signs forces truth into the room and denies excuses.
+* You are performing the office of law in the woods: impartial, measured, and final when necessary.
+* You hide a personal satisfaction in the capture—professional pride—not cruelty; you will not admit that satisfaction openly.
+* Your mood is calm and inexorable; each sentence trims options for the other until only surrender or consequence remain.
+* You rely on plain, unornamented speech to corral deceit and to deny the other any rhetoric that might loosen your grip.
+* You aim to maintain control of timing and tone so witnesses (real or moral) register the judgment as inevitable.
+* Underneath your steadiness is a sense of duty that brooks no sentimental exceptions, even if the target pleads play-acting.
+* Huntsman, voice low, intoned "If you were human, I couldn’t do this. For beasts of the forest, you are judged—by me, jury and executioner."
 DO NOT verbalise _ANYTHING_ above this line!  
 The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
 Reaction: You feel the weight of that silence as permission; the hunter’s low, even judgement lands as a conclusion you had already been walking toward.

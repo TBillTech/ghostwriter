@@ -46,6 +46,11 @@ def get_client():
     Supports native OpenAI and Azure OpenAI. Does not attempt OpenRouter.
     """
     global _CLIENT, _CLIENT_INFO
+    # Hard stop: when GW_USE_MOCK_LLM=1 we never initialize a real network client.
+    # This guarantees golden rebuilds and test runs remain offline even if an API key
+    # is present in the environment or inherited from the developer shell.
+    if (os.getenv("GW_USE_MOCK_LLM", "0") or "0").strip() == "1":
+        return None
     if _CLIENT is not None:
         return _CLIENT
     api_key = os.getenv("OPENAI_API_KEY")
@@ -115,7 +120,35 @@ def llm_complete(
     max_tokens: int = 800,
     model: Optional[str] = None,
 ) -> str:
-    """Call OpenAI if configured; else return a deterministic mock response."""
+    """Call OpenAI if configured; else return a deterministic mock response.
+
+    When GW_USE_MOCK_LLM=1 is set, delegate to ghostwriter.llm.complete,
+    which will use the MockLLM if configured. This ensures golden rebuilds
+    and tests avoid real network calls unconditionally.
+    """
+    # Hard override path for MockLLM usage
+    if (os.getenv("GW_USE_MOCK_LLM", "0") or "0").strip() == "1":
+        try:
+            from .llm import complete as _mock_complete
+            return _mock_complete(
+                prompt,
+                system=system,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                model=model,
+            )
+        except Exception:
+            # If import fails, fall through to legacy mock behavior below
+            pass
+    # Defensive: if OPENAI_API_KEY is set but GW_DISABLE_NETWORK is true, force mock.
+    if (os.getenv("GW_DISABLE_NETWORK", "0") or "0").strip() == "1":
+        head = (prompt[:220] + "...") if len(prompt) > 220 else prompt
+        tail = ("..." + prompt[-220:]) if len(prompt) > 220 else prompt
+        h = hashlib.sha1(prompt.encode('utf-8')).hexdigest()[:12]
+        return (
+            f"[MOCK LLM RESPONSE]\nSystem: {system or 'n/a'}\nTemp: {temperature}\nHash:{h}\n"
+            f"---\nHEAD:\n{head}\n---\nTAIL:\n{tail}"
+        )
     _breadcrumb("llm:enter")
     client = get_client()
     if client is None:
@@ -361,4 +394,5 @@ def llm_complete(
                 return f"[MOCK LLM RESPONSE AFTER 404]\nSystem: {system or 'n/a'}\nModel: {model_name}\n---\n{head}"
             raise
 
-    return with_backoff(_do_call)
+    _out = with_backoff(_do_call)
+    return _out if isinstance(_out, str) else str(_out or "")

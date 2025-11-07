@@ -163,19 +163,19 @@ These are the stories so far for each individual character for context of their 
 
 # Prior paragraph
 This is only for context. Do NOT repeat this:
-Wolf smirks. "Soft and practiced, I offer warmth, not fear. The quickest way lies in the hush between the trees, and I can guide you to it if your courage keeps pace."
+Wolf smirks. "The quickest way lies in the hush between the trees, and I can guide you to it if your courage keeps pace."
 
 He lets the last word ripple, repeating "quicker" with an extra sweetness.
 
 Red clutches the basket. "The shadows feel strange. My eyes aren't used to them yet."
 
-The wind shifts, carrying the scent of jam farther than her voice can reach. A jay cackles once and vanishes, leaving a silence heavier than the basket's weight.
+The wind shifts. A jay cackles once and vanishes, leaving a silence heavier than the basket's weight.
 
 A branch slides across the wicker. Her fingers tighten until it creaks. The crooked stump throws a long shadow across her boots, and her next step falters on loose needles.
 
 Red tugs her hood. "Thank you. Grandmother is waiting; I mustn't be late."
 
-"Is there a quicker way? Would it be safe, please?"
+"Is there really a quicker way? Would it be safe?"
 
 A pine needle crunches underfoot. Sunlight threads through the pines as the path tilts toward a choice the forest keeps for itself.
 
@@ -199,18 +199,9 @@ The Wolf suggests a shortcut to Grandmother's, and Red decides to take it.
 4. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
 5. **Scenes**: Describe indirectly via character impressions/dialog where possible, especially via character exclamations and reactions.
 
-Now, brainstorm creative lines to give the readers clarity and flavor, with the goal of building upon and making the touch point real. Consider the probabilities of items up to 2 or 3 sigma in the sampled distribution (but do not make this explicit).
-
-* [Clarity] wolf points with his muzzle toward a narrow deer track and says it is a quicker way to grandmother’s cottage
-* [Flavor] a breath of steam from the basket blows down the deer track eagerly, as if it, too, knows the way
-* [Clarity] red asks if it is safe and if it still leads to grandmother’s door without getting lost
-* [Flavor] red notes the deer track is stitched with tiny hoof-prints and thinks of grandmother’s stitching lessons
-* [Clarity] wolf assures red the track meets the main path by the old birch with the lightning scar
-* [Clarity] red repeats the landmark to remember it and glances at her basket as if weighing time
-* [Flavor] wolf praises her careful memory when she names the lightning-scarred birch, calling it “a bright mind’s lantern”
-* [Clarity] red adjusts her red hood and tells herself she will hurry and not dawdle for flowers
-* [Clarify] Red decides to take the path, and bids wolf farewell.
-* [Flavor] Wolf, replies, "happy trails until we meet again!"
+Now, provide groups of bullet points creatively. Please generate a set of five possible responses, several times, following the format given. Each round of responses, try to generate responses not in the prior reported distribution.
+Responses should each include a numeric <probability>.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.
 
 
 === RESPONSE ===

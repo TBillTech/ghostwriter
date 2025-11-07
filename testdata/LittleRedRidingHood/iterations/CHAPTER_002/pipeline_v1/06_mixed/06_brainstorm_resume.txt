@@ -169,15 +169,11 @@ I cradle the pale dust behind her little feet and hold the sunbeams in narrow ba
 
 # Prior paragraph
 This is only for context. Do NOT repeat this verbatim:
-The Wolf rapped once on the sun-warmed door.
-The Wolf crooned, "Grandmother, it’s me. Mama sent bread and jam. May I come in?"
-Grandmother (from within, muffled with age) murmured, "Lift the latch, child. I’ve been waiting."
-The Wolf hesitated a bare heartbeat, then shifted his weight on the step.
-The Wolf murmured, "The basket’s heavy—mind the latch for me?"
-Grandmother (muffled): "Thumb it hard, dear."
-The latch gave with a single creak; warm air sighed from the cottage.
-Grandmother: "Close it quick, sweetheart. There’s a chill."
-The Wolf: "Yes, Grandmother. I will be quick."
+He knocked once.
+
+"Grandmother, it’s me. Mama sent bread and jam. May I come in?"
+
+Grandmother (muffled): "Lift the latch, child. I’ve been waiting."
 
 # Scene
 Here is the scene the actors are placed in:
@@ -201,7 +197,10 @@ The cottage, accustomed to gentle footfalls, does not yet recognize the weight o
 4. Continuity: Respect Story-So-Far and Story-Relative-To.
 5. Scene Awareness: Use the scene and actors to ground both dialog and action.
 
-Now, brainstorm creative ideas that, when realized, may be either dialog or narrative depending on what is most natural. The touch-point itself needs to be vivid and clear in the readers mind. Consider probabilities up to 2–3 sigma in the sampled distribution (but do not make this explicit).
+Now, brainstorm creative ideas that, when realized, may be either dialog or narrative depending on what is most natural. The touch-point itself needs to be vivid and clear in the readers mind. Provide groups of bullet points creatively. Please generate a set of five possible responses, several times, following the format given. Each round of responses, try to generate responses not in the prior reported distribution.
+Responses should each include a numeric <probability>.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.
+
 
 === RESPONSE ===
 * Narrator: The latch lifts with a tame little click; warm air rolls out, stitched with mint and ash.

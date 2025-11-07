@@ -22,10 +22,10 @@ def test_build_character_call_prompt_substitutions():
     assert "<id>red</id>" in user or "id>red</id" in user
     assert "care about grandmother" in user
     assert "Say hello politely." in user
-    # Only last 2 dialog lines should appear
+    # If the template omits a <dialog> tag, dialog context should not be injected
     assert "where are you going?" not in user
-    assert "to grandmother's house." in user
-    assert "what big basket you have!" in user
+    assert "to grandmother's house." not in user
+    assert "what big basket you have!" not in user
 
 
 def test_substitute_character_calls_with_template(monkeypatch: pytest.MonkeyPatch, use_lr_book_env, lr_book_dir: Path):

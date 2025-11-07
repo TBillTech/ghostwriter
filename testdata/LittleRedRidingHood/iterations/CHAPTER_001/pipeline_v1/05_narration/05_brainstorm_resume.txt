@@ -190,29 +190,10 @@ Red walks the forest path, humming, basket in hand.
 7. **Style**: Keep sentences concise and vivid. Each bullet should contribute one clear beat of story progression or imagery.
 8. **Format**: Output only bullet points beginning with '*', with no headings or commentary.
 
-Now, brainstorm creative ideas to give the readers a picture of the environment and what is objectively happening, with the goal of building upon and making the Touch-Point real. Leave feelings and opinions for later. Consider the probabilities of items up to 2 or 3 sigma in the sampled distribution (but do not make this explicit).
+Now, brainstorm creative ideas to give the readers a picture of the environment and what is objectively happening, with the goal of building upon and making the Touch-Point real. Leave feelings and opinions for later. Now, provide groups of bullet points creatively. Please generate a set of five possible responses, several times, following the format given. Each round of responses, try to generate responses not in the prior reported distribution.
+Responses should each include a numeric <probability>.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.
 
-
-* red steps along the winding dirt trail, her stride small and steady.
-* The red_hood shows bright against the tall, shadowed pines.
-* The basket of goodies hangs on her arm, wicker creaking with each swing.
-* A light hum threads from red’s lips, soft as a nursery tune.
-* Sunbeams fall in narrow bands, sliding over the red_hood and the path.
-* The air carries damp earth and the sweet scent of jam from the basket.
-* Pine needles hush her footfalls; dust lifts and settles behind her heels.
-* Birds rustle in the branches, then grow still when the wind shifts.
-* A squirrel darts across the path, its tail a quick gray brush.
-* Red keeps to the center of the trail, where the ruts are shallow and firm.
-* A tuft of blue flowers leans from the verge, nodding as she passes.
-* Far off, a twig gives a dry snap, clear and singular.
-* wolf moves parallel through the undergrowth, low and quiet between bramble shadows.
-* The wolf’s paws find soft places; leaves rise and fall without a sound.
-* wolf lifts his muzzle, tasting the trail-stirred air and the sweetness of jam.
-* The red_hood makes a bright mark for him to follow through layered branches.
-* Red adjusts her grip; the basket settles, bread and jar shifting against wicker.
-* A cooler draft flows down the slope, and the birdsong thins again.
-* The path bends around a black-barked pine, and the forest deepens a shade.
-* wolf paces the curve ahead, counting her steps to the next turn.
 
 
 === RESPONSE ===

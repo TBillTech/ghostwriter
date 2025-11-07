@@ -142,33 +142,9 @@ The words fit. He settles deeper into the quilt.
 4. Continuity: Respect Story-So-Far and Story-Relative-To.
 5. Scene Awareness: Use the scene and actors to ground both dialog and action.
 
-Now, brainstorm creative ideas that, when realized, may be either dialog or narrative depending on what is most natural. The touch-point itself needs to be vivid and clear in the readers mind. Consider probabilities up to 2–3 sigma in the sampled distribution (but do not make this explicit).
-
-* Narrator: The shutter hook holds; daylight thins to a pewter wash that smooths edges and fattens shadows.
-* wolf: "Come in, dear heart. Mind the step."
-* Narrator: He pauses, listening for how the boards carry the words, testing whether the sibilants snag.
-* wolf: "Come in, dear heart. Mind the step," softer, smile pressed small behind the spectacles.
-* wolf: "Oh, what a day you must have had."
-* Narrator: The line floats and falls; he nudges it higher, letting a thin tremble lace the edges like ribbon.
-* wolf: "Oh, what a day you must have had," higher, kinder, a breathy chuckle stitched to the end.
-* Narrator: Powder prickles his nose; he swallows the urge to sneeze and smooths the nightcap over pinched ears.
-* Narrator: He settles deeper into the quilt, weight sinking until the puff holds him, the hem swallowing his breadth.
-* Narrator: The shutter hook holds; daylight thins to a pewter wash that fattens shadows and forgives edges.
-* Narrator: Kettle breath hums from the hob; china gives a polite clink and then remembers to be still.
-* Narrator: The feather quilt sighs as he shifts, strawberries rising around the falsified frailty.
-* wolf: "Come in, dear heart. Mind the step."
-* Narrator: He listens to his own words roll along the creaking boards, testing where the s slips, where the t taps.
-* Narrator: Spectacles fog and clear; he tilts his snout so the glass blurs generous.
-* wolf: "Come in, dear heart. Mind the step," smaller now, a smile sanded down to something grandmother-soft.
-* Narrator: Powder prickles his nose; he pinches the urge to sneeze beneath the nightcap’s blue ribbon.
-* Narrator: A draft noses the curtains; the bed’s little theater breathes and settles around him.
-* wolf: "Oh, what a day you must have had."
-* Narrator: The line lands too rich; he trims it thinner, lets kindness tremble like a frayed thread.
-* wolf: "Oh, what a day you must have had," higher, kinder, a breathy chuckle stitched to the end.
-* Narrator: He waits a beat, counting the hush between kettle murmurs as if they were footsteps on the stoop.
-* Narrator: One paw smooths the quilt’s puff so it swallows breadth and betrays only a narrow rise and fall.
-* Narrator: The chair he righted stays obediently square; the room holds its pose like a stage before the cue.
-* Narrator: The words fit. He lets his weight sink deeper into the quilt until the strawberries cradle the lie.
+Now, brainstorm creative ideas that, when realized, may be either dialog or narrative depending on what is most natural. The touch-point itself needs to be vivid and clear in the readers mind. Provide groups of bullet points creatively. Please generate a set of five possible responses, several times, following the format given. Each round of responses, try to generate responses not in the prior reported distribution.
+Responses should each include a numeric <probability>.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.
 
 
 === RESPONSE ===

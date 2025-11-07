@@ -2,10 +2,9 @@
 Brainstorm dialog beats as bullet points.
 
 === USER ===
-You are a creative writer working from structured YAML notes.  
-Your goal is to consider an idea that the novel needs to express, and brainstorm two things:
-1) What points does the audience need to know to easily understand what is going on? This adds clarity.
-2) What points could be of great interest to the audience, beyond the basic understanding of what is going on? This adds flavor.
+You are a creative writer working from structured YAML notes.
+Your goal is to brainstorm a sequence that blends dialog with narration to creation motion, mood, and reaction between characters, and also how the environment is conditioning their actions. We want to highlight dynamics, feeling, and challenge.
+The output of this brainstorm will guide a mixed touch-point: roughly half dialog and half narration (especially brief action or reaction lines) that together realize the touch-point.
 
 # Setting in general 
 {'factoids': ["Grandmother's Cottage", 'Forest Path', 'Basket of Goodies', 'Red Hood', 'Basket'], 'actors': ['Red', 'Grandmother', 'Wolf', 'Huntsman']}
@@ -250,7 +249,7 @@ Forest Path's point of view
 I kept the pale dust and sunbeams for her small feet and felt the wolf uncoil through my thyme long before either of them reached the cottage; I watched him time his knock to the tilt of the light and saw the house lean in as Red hummed her way along, hood bright, basket creaking like a promise. Sun freckled the floor when she nudged the door and called, and I took in the little betrayals inside—the curtained green pools, the kettle’s steam, the chair nudged as if left in a hurry, the candle bending light into dark pools—signs the wolf had been working his stagecraft. The voice that came back was slick and coaxing, and I felt the room hold its breath when Red stepped closer, fingers tightening at the napkin, the basket set at the bed's foot. The clock stuttered, the teapot chattered, the quilt rustled with breaths too long for age; whiskers powdered the gloom, spectacles fogged and were wiped, a paw hooked the edge, and the patchwork yawned. I kept the thin bar of light where her footsteps had passed as the bed closed over a new fullness, the cottage smoothed, and the mantle's tick resumed, carrying the echo of her vanished song along my lane.
 
 # Prior paragraph
-This is only for context. Do NOT repeat this:
+This is only for context. Do NOT repeat this verbatim:
 The room held its breath as the Huntsman drew, counted, and loosed. The arrow hummed through candle air and bedsheets and struck the wolf, burying itself in the wolf's eye. The wolf's spectacles leapt; the nightcap flipped; powder rose like ash and settled on the quilt. The bed heaved once; the wolf shuddered and sank, jaw slack beneath the patchwork, the arrow shaft tilting toward the ceiling. The feathering trembled in the ruined eye; the borrowed garments lay askew on the pillow. Beneath the patchwork the belly still moved, round and slow, as if something trapped remembered air. Herb-sour breath pressed through the cloth.
 
 The Huntsman turned back the quilt to the chin and the ruin of the eye, confirming the kill, then lowered the bow and set it against the hearthstones. He laid a steady palm on the mound to feel life within. He froze, breath low; curiosity and disbelief in equal measure. He rolled the body a hand’s width to free the mattress and drew a basin and laid towels on the stool. The Huntsman set the skinning knife's edge at the soft seam, then cut with the steady, practiced hand of a hunter.
@@ -258,7 +257,7 @@ The Huntsman turned back the quilt to the chin and the ruin of the eye, confirmi
 The mound slackened and shifted; something small worked forward through the rent. Grandmother spilled out first—pale, blinking, coughing the tea air and powder, alive and startled. The belly sagged flat; the quilt puddled around the ribs; the room’s shapes righted themselves. Red slid free next, slick with the wolf’s blood and flour dust; the Huntsman set a towel over her hair and face, guided her to the chair, wrapped another towel about her shoulders, and steadied her feet. The Huntsman wiped the knife on a cloth, checked Grandmother’s breath and pulse, checked Red’s, and the cottage began, very slowly, to remember how to be a house again.
 
 # Scene
-Here is the scene they actors are placed in:
+Here is the scene the actors are placed in:
 {'name': 'Inside: The Belly and the Blade', 'description': 'The bed inhales and exhales in heavy bellows. Beneath the nightcap and spectacles, the sleeper’s muzzle peeks powder-white, and the quilt mounds like a harvest sack. The huntsman recognizes the trespass not only in scent and shape but in the cruel satisfaction resting on those whiskered lips.\nHe does not shout. He Carefully aims the bow.\n', 'props': [{'name': 'Quilt', 'significance': 'Concealment and cradle', 'description': 'A hand-stitched patchwork pulled high, hiding both predator and prize within.'}, {'name': 'Nightcap and Spectacles', 'significance': 'The predator’s disguise', 'description': 'Borrowed garments perched absurdly on a wolfish brow.'}, {'name': 'Sewing Kit', 'significance': 'Tool for repair and closure', 'description': 'A tin with needles, coarse thread, and small scissors, tucked by the bedside.'}, {'name': 'Basin and Towels', 'significance': 'Practical aid for a quiet operation', 'description': 'A porcelain bowl and clean cloths ready from earlier tea-making and tidying.'}]}
 
 # Actors
@@ -266,46 +265,21 @@ Here are the actors in the scene:
 Red, Grandmother, Huntsman
 
 # The Touch-Point
-Please carefully read and understand this Touch-Point; This is the core idea that needs to be expounded upon:
+Please carefully read and understand this Touch-Point; This is the core idea to realize through a mix of dialog and narrative action:
 With the wolf dead, Grandmother and Red thank the huntsman. The huntsman says farewell.
 
 
 
 # Rules for generation:
-1. **Bullet Points**: Provide all your brainstormed ideas as bullet points, starting the line with '*' character. Use only simple statements, NOT additional markdown.  Do NOT put dashes at the front of the lines.
-2. **Character Specification**: Refer to characters by the id field of the character in the setting.  
-3. **Touch-Point**: Expressing this touch point creatively IS YOUR GOAL.  
-4. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
-5. **Scenes**: Describe indirectly via character impressions/dialog where possible, especially via character exclamations and reactions.
+1. Bullet Points: Provide all brainstormed ideas as bullet points, starting each line with '*'. Keep statements simple; no extra markdown.
+2. Character Specification: Refer to characters by their 'id' from the setting. Use quotes for dialog ideas.
+3. Narrator: For narration, for example action beats or extended body language, feel free to use "* Narrator:" at the beginning of the idea line.
+4. Continuity: Respect Story-So-Far and Story-Relative-To.
+5. Scene Awareness: Use the scene and actors to ground both dialog and action.
 
-Now, brainstorm creative lines to give the readers clarity and flavor, with the goal of building upon and making the touch point real. Consider the probabilities of items up to 2 or 3 sigma in the sampled distribution (but do not make this explicit).
-
-* Clarity: The wolf is dead; the arrow ended it, and danger has passed.
-* Clarity: red and grandma have been cut free and can breathe and speak.
-* Clarity: huntsman confirms both are alive and steady before stepping back.
-* Clarity: huntsman cleans his knife and gathers his bow from the hearthstones.
-* Clarity: red thanks huntsman first, shaken but polite, with simple words.
-* Clarity: grandma thanks huntsman warmly and briefly, with relief.
-* Clarity: huntsman answers in few words, says he did his duty.
-* Clarity: huntsman will take the carcass away for the bounty and to keep the house clean.
-* Clarity: the cottage is safe again; the kettle and clock sound like a home.
-* Clarity: huntsman makes a plain farewell and leaves by the door, quiet as he came.
-
-* Flavor: red whispers, “Thank you, sir. I’m sorry for the mess,” clutching the towel like a cloak.
-* Flavor: grandma, breath still thin, says, “Bless you, dear man. Come warm your hands,” and tries to pour tea with shaking fingers.
-* Flavor: huntsman, soft and low: “I’m glad I could be of service, ma’am.”
-* Flavor: red offers the Basket of Goodies with both hands. “Please—take bread for your road.”
-* Flavor: huntsman takes only a heel. “Enough. Leave the sweet for family.”
-* Flavor: grandma fusses tiredly. “Mind your boots; you’ll track the forest into my rug,” then laughs at herself and pats his sleeve.
-* Flavor: huntsman checks the room’s corners, a habit he does not name, then nods to the sewing kit. “You’ll want thread for quilts, not bellies, now.”
-* Flavor: red glances at the torn quilt edge and says, small but brave, “I can mend it. I did wrong to wander. I’ll make it right.”
-* Flavor: grandma smooths red’s hair under the towel. “Hush now, dear. You’re here.”
-* Flavor: huntsman lays a cloth over the wolf’s face before lifting. “No need to look.”
-* Flavor: the clock resumes its steady tick; the kettle sighs; flour-dust drifts like quiet snow in the sun-slice.
-* Flavor: at the door, huntsman pauses. “Latch at dusk. Keep to the path.” He taps the wood once, a promise kept.
-* Flavor: red calls after him, “Thank you,” with a little curtsey that wobbles.
-* Flavor: grandma adds, softer, “You’re a comfort to us, truly,” and the huntsman tips two fingers to his cap instead of a bow.
-* Flavor: outside, his boots fade on the Forest Path; inside, cups chink, and the house remembers its old warmth.
+Now, brainstorm creative ideas that, when realized, may be either dialog or narrative depending on what is most natural. The touch-point itself needs to be vivid and clear in the readers mind. Provide groups of bullet points creatively. Please generate a set of five possible responses, several times, following the format given. Each round of responses, try to generate responses not in the prior reported distribution.
+Responses should each include a numeric <probability>.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.
 
 
 === RESPONSE ===

@@ -29,6 +29,7 @@ from .mock_support import (
     update_golden_prompts as _update_golden_prompts,
     compute_prompts_hash as _compute_prompts_hash,
     write_prompt_hash as _write_prompt_hash,
+    copy_partial_book as _copy_partial_book,
 )
 
 
@@ -47,10 +48,148 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     p_golden.add_argument("--book-base", dest="book_base", help="Book base directory (defaults to GW_BOOK_BASE_DIR)")
     p_golden.add_argument("--dry-run", action="store_true", dest="dry_run", help="Scan and report without writing changes")
 
+    # Task 10: Rebuild goldens via MockLLM into a new directory
+    p_golden_rebuild = sub.add_parser("golden-rebuild", help="Rebuild a golden book using MockLLM into a destination directory")
+    p_golden_rebuild.add_argument("--src-base", dest="src_base", required=True, help="Source golden base directory to read responses from")
+    p_golden_rebuild.add_argument("--dest-base", dest="dest_base", required=True, help="Destination directory to rebuild into")
+    p_golden_rebuild.add_argument("--no-clear", action="store_true", dest="no_clear", help="Do not clear destination before rebuild")
+    # Partial rebuild / snapshot parameters (Task: add restriction up to a given step)
+    # If --chapter-id and --upto-step are provided, golden-rebuild performs a partial copy only
+    # (no MockLLM pipeline execution) using the existing copy_partial_book helper.
+    p_golden_rebuild.add_argument("--chapter-id", dest="chapter_id", help="Restrict to a single chapter id for partial snapshot (e.g., CHAPTER_001)")
+    p_golden_rebuild.add_argument("--version", dest="version", type=int, help="Highest pipeline version number to snapshot (includes all lower versions). Omit when using --all-versions to copy all.")
+    p_golden_rebuild.add_argument("--upto-step", dest="upto_step", help="Inclusive step directory name cutoff (e.g., 05_narration)")
+    p_golden_rebuild.add_argument("--upto-filename", dest="upto_filename", help="Optional filename cutoff within the final step directory")
+    p_golden_rebuild.add_argument("--apply-templates", action="store_true", dest="apply_templates", help="(Deprecated - templates now always applied) After partial copy, update USER prompts to current templates in the destination")
+    p_golden_rebuild.add_argument("--all-versions", action="store_true", dest="all_versions", help="Copy all pipeline_vN directories when performing a partial snapshot")
+
     p_phash = sub.add_parser("prompt-hash", help="Compute current prompts hash; optionally write to book base")
     p_phash.add_argument("--book-base", dest="book_base", help="If provided, write prompt_hash file to this directory")
 
     return parser.parse_args(argv)
+
+
+# --- Golden snapshot helpers to reduce duplication ---
+def _copy_roots(src_base: Path, dest_base: Path) -> None:
+    """Copy root files and chapters folder required to perform snapshots.
+
+    Copies SETTING.yaml, CHARACTERS.yaml, and chapters/*.
+    """
+    import shutil
+    dest_base.mkdir(parents=True, exist_ok=True)
+    for name in ["SETTING.yaml", "CHARACTERS.yaml"]:
+        sp = Path(src_base) / name
+        if sp.exists():
+            (dest_base / name).parent.mkdir(parents=True, exist_ok=True)
+            try:
+                shutil.copy2(sp, dest_base / name)
+            except Exception:
+                pass
+    chapters_src = Path(src_base) / "chapters"
+    if chapters_src.exists():
+        shutil.copytree(chapters_src, dest_base / "chapters", dirs_exist_ok=True)
+
+
+def _iter_chapter_files(base_with_chapters: Path) -> list[Path]:
+    """Return sorted list of CHAPTER_*.yaml paths under base/chapters."""
+    chapters_dir = Path(base_with_chapters) / "chapters"
+    if not chapters_dir.exists():
+        return []
+    return sorted(chapters_dir.glob("CHAPTER_*.yaml"))
+
+
+def _snapshot_copy_chapter(
+    *,
+    src_base: Path,
+    dest_base: Path,
+    chapter_id: str,
+    upto_step_dir: str = "all",
+    upto_filename: str | None = None,
+    all_versions: bool = True,
+    max_version: int | None = None,
+    clear_dest: bool = False,
+    effective_version: int = 1,
+) -> None:
+    """Perform snapshot copy for a single chapter via copy_partial_book.
+
+    Mirrors semantics used in golden-rebuild/partial and golden-update.
+    """
+    _copy_partial_book(
+        src_base=Path(src_base),
+        dest_base=Path(dest_base),
+        chapter_id=str(chapter_id),
+        version=effective_version,
+        upto_step_dir=str(upto_step_dir),
+        upto_filename=upto_filename,
+        clear_dest=bool(clear_dest),
+        copy_root_artifacts=True,
+        all_versions=bool(all_versions),
+        max_version=max_version,
+    )
+
+
+def _snapshot_copy_all_chapters(
+    *,
+    src_base: Path,
+    dest_base: Path,
+    clear_dest: bool = True,
+    upto_step_dir: str = "all",
+    upto_filename: str | None = None,
+    all_versions: bool = True,
+    max_version: int | None = None,
+) -> int:
+    """Prepare destination roots and snapshot all chapters; returns count processed."""
+    import shutil
+    dest_base = Path(dest_base)
+    if clear_dest and dest_base.exists():
+        shutil.rmtree(dest_base, ignore_errors=True)
+    _copy_roots(Path(src_base), dest_base)
+    processed = 0
+    for ch_file in _iter_chapter_files(dest_base):
+        _snapshot_copy_chapter(
+            src_base=Path(src_base),
+            dest_base=dest_base,
+            chapter_id=ch_file.stem,
+            upto_step_dir=upto_step_dir,
+            upto_filename=upto_filename,
+            all_versions=all_versions,
+            max_version=max_version,
+            clear_dest=False,  # never clear per-chapter during bulk copy
+            effective_version=1,  # ignored when all_versions=True
+        )
+        processed += 1
+    return processed
+
+
+def _apply_templates_and_counts(base_dir: Path) -> tuple[list[dict], int, int, int]:
+    """Apply templates to USER prompts and return (results, updated, unchanged, no-template)."""
+    results = _update_golden_prompts(Path(base_dir), dry_run=False)
+    updated = sum(1 for r in results if r.get("updated") == "yes")
+    unchanged = sum(1 for r in results if r.get("reason") == "unchanged")
+    no_tpl = sum(1 for r in results if r.get("reason") == "no-template")
+    return results, updated, unchanged, no_tpl
+
+
+def _write_current_prompt_hash_to(base_path: Path) -> str:
+    """Compute current prompts hash relative to 'prompts' directory and write to base_path."""
+    hv = _compute_prompts_hash("prompts")
+    _write_prompt_hash(Path(base_path), hv)
+    return hv
+
+
+def _replace_iterations(dest_base: Path, src_iterations: Path) -> None:
+    """Replace iterations/<CHAPTER_*> dirs in dest_base with those under src_iterations."""
+    import shutil
+    src_iterations = Path(src_iterations)
+    dest_iterations = Path(dest_base) / "iterations"
+    if not src_iterations.exists():
+        return
+    dest_iterations.mkdir(parents=True, exist_ok=True)
+    for ch_dir in sorted([d for d in src_iterations.iterdir() if d.is_dir() and d.name.startswith("CHAPTER_")]):
+        target = dest_iterations / ch_dir.name
+        if target.exists():
+            shutil.rmtree(target, ignore_errors=True)
+        shutil.copytree(ch_dir, target)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -242,8 +381,10 @@ def main(argv: list[str] | None = None) -> int:
                     actor_list: list[str] = []
                     # a) Top-level chapter setting
                     chs = ctx.chapter.get("setting") if isinstance(ctx.chapter, dict) else None
-                    if isinstance(chs, dict) and isinstance(chs.get("actors"), list):
-                        actor_list.extend([str(a) for a in chs.get("actors")])
+                    if isinstance(chs, dict):
+                        actors_val = chs.get("actors")
+                        if isinstance(actors_val, list):
+                            actor_list.extend([str(a) for a in actors_val])
                     # b) Touch-Points: collect actors from any 'setting' or 'actors' entries
                     try:
                         tps = []
@@ -252,13 +393,17 @@ def main(argv: list[str] | None = None) -> int:
                         if isinstance(tps, list):
                             for it in tps:
                                 # setting touch-point with actors list
-                                if isinstance(it, dict) and isinstance(it.get("setting"), dict):
+                                if isinstance(it, dict):
                                     st = it.get("setting")
-                                    if isinstance(st.get("actors"), list):
-                                        actor_list.extend([str(a) for a in st.get("actors")])
+                                    if isinstance(st, dict):
+                                        st_actors = st.get("actors")
+                                        if isinstance(st_actors, list):
+                                            actor_list.extend([str(a) for a in st_actors])
                                 # explicit actors touch-point: actors: [..]
-                                if isinstance(it, dict) and isinstance(it.get("actors"), list):
-                                    actor_list.extend([str(a) for a in it.get("actors")])
+                                if isinstance(it, dict):
+                                    it_actors = it.get("actors")
+                                    if isinstance(it_actors, list):
+                                        actor_list.extend([str(a) for a in it_actors])
                     except Exception:
                         pass
                     # Deduplicate while preserving order
@@ -312,20 +457,140 @@ def main(argv: list[str] | None = None) -> int:
             raise
 
     if ns.cmd == "golden-update":
-        # Determine base dir
-        import os
+        """Refactored golden-update: perform a full snapshot rebuild into a temp dir then copy back.
+
+        Steps:
+          1. Create temporary rebuild destination.
+          2. For every chapter CHAPTER_*.yaml under --book-base/chapters run snapshot equivalent of:
+             golden-rebuild --chapter-id CHAPTER_N --all-versions --upto-step all (reusing copy_partial_book).
+          3. Apply templates in the temp destination to ensure USER prompts match current templates.
+          4. If --dry-run: report counts and leave temp directory in place.
+             Else: copy rebuilt iteration artifacts back into --book-base (replace iterations/* for processed chapters) and delete temp.
+          5. Write/refresh prompt_hash in --book-base.
+        """
+        import os, tempfile, shutil
         base = ns.book_base or os.getenv("GW_BOOK_BASE_DIR")
         if not base:
             print("Error: --book-base not provided and GW_BOOK_BASE_DIR is not set.")
             return 2
-        # Run updater
-        results = _update_golden_prompts(base, dry_run=bool(getattr(ns, "dry_run", False)))
-        # Summarize to stdout
-        total = len(results)
-        updated = sum(1 for r in results if r.get("updated") == "yes")
-        no_tpl = sum(1 for r in results if r.get("reason") == "no-template")
-        unchanged = sum(1 for r in results if r.get("reason") == "unchanged")
-        print(f"Processed {total} files: {updated} updated, {unchanged} unchanged, {no_tpl} without template mapping")
+        base_path = Path(base)
+        if not base_path.exists():
+            print(f"Error: book base does not exist: {base_path}")
+            return 2
+        # Build temp destination
+        tmp_dir = Path(tempfile.mkdtemp(prefix="gw_golden_update_"))
+        # Copy roots and snapshot all chapters (all versions, all steps)
+        _copy_roots(base_path, tmp_dir)
+        processed = _snapshot_copy_all_chapters(
+            src_base=base_path,
+            dest_base=tmp_dir,
+            clear_dest=False,
+            upto_step_dir="all",
+            upto_filename=None,
+            all_versions=True,
+            max_version=None,
+        )
+        # Apply templates (update USER sections) in temp dir
+        _, updated, unchanged, no_tpl = _apply_templates_and_counts(tmp_dir)
+        dry_run = bool(getattr(ns, "dry_run", False))
+        # Compute and write prompt hash for current templates into base (same as old behavior)
+        hv = _write_current_prompt_hash_to(base_path)
+        if dry_run:
+            print(
+                "Golden update (dry-run snapshot) complete.\n"
+                f"  Base: {base_path}\n"
+                f"  Temp rebuild: {tmp_dir}\n"
+                f"  Chapters processed: {processed}\n"
+                f"  Templates applied: updated={updated}, unchanged={unchanged}, no-template={no_tpl}\n"
+                f"  prompt_hash={hv}\n"
+                "No files copied back (dry-run)."
+            )
+        else:
+            # Replace iterations/<CHAPTER> directories with rebuilt ones
+            _replace_iterations(base_path, tmp_dir / "iterations")
+            # Optional cleanup of temp dir
+            try:
+                shutil.rmtree(tmp_dir, ignore_errors=True)
+            except Exception:
+                pass
+            print(
+                "Golden update complete.\n"
+                f"  Base: {base_path}\n"
+                f"  Chapters processed: {processed}\n"
+                f"  Templates applied: updated={updated}, unchanged={unchanged}, no-template={no_tpl}\n"
+                f"  prompt_hash={hv}\n"
+                "Iterations replaced with rebuilt snapshot."
+            )
+        return 0
+
+    if ns.cmd == "golden-rebuild":
+        # Branch: partial snapshot only (no pipeline execution)
+        if getattr(ns, "chapter_id", None) and getattr(ns, "upto_step", None):
+            clear = not bool(getattr(ns, "no_clear", False))
+            # Determine version semantics:
+            # --all-versions with no --version -> copy all pipeline_vN found (uniform cutoff)
+            # --version N (without --all-versions) -> copy pipeline_v1..vN (lower versions full, highest uses cutoff)
+            # --version N with --all-versions -> copy pipeline_v1..vN (uniform cutoff across all)
+            all_versions_flag = bool(getattr(ns, "all_versions", False))
+            highest_version = ns.version if ns.version and ns.version > 0 else None
+            # Pass effective_version as the highest for copy semantics
+            effective_version = highest_version or 1
+            _snapshot_copy_chapter(
+                src_base=Path(ns.src_base),
+                dest_base=Path(ns.dest_base),
+                chapter_id=str(ns.chapter_id),
+                upto_step_dir=str(ns.upto_step),
+                upto_filename=getattr(ns, "upto_filename", None),
+                all_versions=all_versions_flag,
+                max_version=highest_version if all_versions_flag else None,
+                clear_dest=clear,
+                effective_version=effective_version,
+            )
+            # Always apply templates post-copy (flag retained for backward compatibility)
+            _, updated, unchanged, no_tpl = _apply_templates_and_counts(Path(ns.dest_base))
+            parts = [
+                "Golden partial snapshot complete.\n",
+                f"  Source: {ns.src_base}\n",
+                f"  Destination: {ns.dest_base}\n",
+                f"  Chapter: {ns.chapter_id} " + (
+                    (
+                        (f"pipeline_v1..v{effective_version} (lower versions ALL steps, highest up to {ns.upto_step})")
+                        if not all_versions_flag and highest_version else
+                        (f"pipeline_v1..v{highest_version} up to {ns.upto_step}" if all_versions_flag and highest_version else "ALL pipeline versions up to {ns.upto_step}")
+                    )
+                ) + "\n",
+                f"  Clear destination: {'no' if ns.no_clear else 'yes'}\n",
+            ]
+            parts.append(
+                f"  Templates applied: updated={updated}, unchanged={unchanged}, no-template={no_tpl}\n"
+            )
+            parts.append("You can now inspect the partial book state for targeted tests.")
+            print("".join(parts))
+            return 0
+        # Full rebuild path (original behavior)
+        # Refactored full rebuild: reuse shared helpers
+        clear = not bool(getattr(ns, "no_clear", False))
+        dest_base = Path(ns.dest_base)
+        src_base = Path(ns.src_base)
+        processed = _snapshot_copy_all_chapters(
+            src_base=src_base,
+            dest_base=dest_base,
+            clear_dest=clear,
+            upto_step_dir="all",
+            upto_filename=None,
+            all_versions=True,
+            max_version=None,
+        )
+        # Apply templates across destination
+        _, updated, unchanged, no_tpl = _apply_templates_and_counts(dest_base)
+        print(
+            "Golden rebuild (snapshot mode) complete.\n"
+            f"  Source: {ns.src_base}\n"
+            f"  Destination: {ns.dest_base}\n"
+            f"  Chapters processed: {processed}\n"
+            f"  Templates applied: updated={updated}, unchanged={unchanged}, no-template={no_tpl}\n"
+            "All pipeline versions and steps copied per chapter."
+        )
         return 0
 
     if ns.cmd == "prompt-hash":

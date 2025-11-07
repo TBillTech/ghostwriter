@@ -25,6 +25,204 @@ from ..characters import load_characters_list, render_character_call
 from ..utils import to_text
 
 
+def build_dialog_batch_user(
+    *,
+    reps4: Dict[str, str],
+    actor_lines: str,
+    body_lang: str,
+    agenda_text: str,
+    reactions_text: str,
+    state,
+) -> str:
+    """Construct the exact USER content for the dialog batch call.
+
+    This mirrors the runtime composition used when generating dialog batches.
+    Keeping this logic here allows other components (e.g., mock regeneration) to reuse it
+    for byte-for-byte parity.
+    """
+    import re as _re
+    _A_RE = _re.compile(r"^\s*([A-Za-z0-9_.\-]+)\s*:\s+(.+)")
+
+    # Parse actor lines to ordered pairs
+    lines_pairs: List[tuple[str, str]] = []
+    for ln in actor_lines.splitlines():
+        m = _A_RE.match(ln)
+        if m:
+            lines_pairs.append((m.group(1), m.group(2)))
+
+    # Parse reactions
+    reactions_vals: List[str] = []
+    for ln in reactions_text.splitlines():
+        m = _A_RE.match(ln)
+        if m:
+            reactions_vals.append(m.group(2))
+
+    # Parse agenda by actor (same as runtime)
+    def _parse_agenda_by_actor(text: str) -> Dict[str, str]:
+        by_actor: Dict[str, List[str]] = {}
+        current: Optional[str] = None
+        _ARE = _re.compile(r"^\s*([A-Za-z0-9_.\-]+)\s*:\s*$")
+        for ln in text.splitlines():
+            if not ln.strip():
+                continue
+            if not ln.lstrip().startswith(('*', '-')) and _ARE.match(ln):
+                m2 = _ARE.match(ln)
+                if m2:
+                    aid_key = m2.group(1).strip()
+                    current = aid_key
+                    by_actor.setdefault(aid_key, [])
+                continue
+            if current is not None and ln.lstrip().startswith(('*', '-')):
+                content = ln.lstrip()[1:].lstrip()
+                if content:
+                    by_actor[current].append(content)
+        return {aid: "\n".join([f"* {i}" for i in items]) for aid, items in by_actor.items() if items}
+
+    agenda_by_actor = _parse_agenda_by_actor(agenda_text)
+
+    # Preload character YAML for ids
+    char_yaml_by_id: Dict[str, str] = {}
+    try:
+        all_chars = load_characters_list(state.ctx)
+        if isinstance(all_chars, list) and all_chars:
+            for ch in all_chars:
+                cid = str(ch.get("id", "")).strip()
+                if cid:
+                    char_yaml_by_id[cid.lower()] = to_text(ch)
+    except Exception:
+        pass
+
+    # Helper to pick nth body-language bullet
+    def _pick(text: str, n: int) -> str:
+        cnt = [ln.lstrip()[1:].lstrip() for ln in text.splitlines() if ln.lstrip().startswith(('*', '-'))]
+        if 1 <= n <= len(cnt):
+            return f"* {cnt[n-1]}"
+        return ""
+
+    from ..characters import build_character_call_prompt as build_character_call_prompt
+
+    items_sections: List[str] = []
+    # Collect unique character ids (exclude narrator) to build a single CHARACTER DATA section
+    unique_actor_ids: List[str] = []
+    for aid, _ in lines_pairs:
+        low = aid.strip().lower()
+        if low != "narrator" and aid not in unique_actor_ids:
+            unique_actor_ids.append(aid)
+    # Build CHARACTER DATA block to de-duplicate character YAML and include agenda notes
+    character_data_sections: List[str] = []
+    if unique_actor_ids:
+        character_data_sections.append("CHARACTER DATA (reference for all ITEMS; do not repeat below):")
+        for aid in unique_actor_ids:
+            yaml_text = char_yaml_by_id.get(aid.strip().lower(), "")
+            agenda_block_top = (agenda_by_actor.get(aid, "") or "").strip()
+            block_lines: List[str] = []
+            block_lines.append(f"=== CHARACTER: id={aid} ===")
+            if yaml_text:
+                block_lines.append(yaml_text.strip())
+            else:
+                block_lines.append("id: {aid}\nname: Unknown\n")
+            if agenda_block_top:
+                block_lines.append("")
+                block_lines.append("Agenda notes (focus for this scene):")
+                block_lines.append(agenda_block_top)
+            character_data_sections.append("\n".join(block_lines))
+
+    for b_index, (actor_id, line_hint) in enumerate(lines_pairs, start=1):
+        agenda_block = agenda_by_actor.get(actor_id, "")
+        reaction_line = reactions_vals[b_index - 1] if 1 <= b_index <= len(reactions_vals) else ""
+
+        if actor_id.strip().lower() == "narrator":
+            tpln = "narration_in_dialog_prompt.md"
+            repsN = dict(reps4)
+            repsN["[REACTION]"] = reaction_line
+            repsN["[LINE_INTENT]"] = line_hint
+            repsN["[AGENDA]"] = agenda_block or ""
+            try:
+                dialog_map = {a: state.recent_dialog(a) for a in (getattr(state, "active_actors", []) or [])}
+                from ..utils import to_text as _to_text
+                repsN["[DIALOG_HISTORY]"] = _to_text(dialog_map)
+            except Exception:
+                repsN["[DIALOG_HISTORY]"] = ""
+            userN = apply_template(str(Path("prompts") / tpln), repsN) if (Path("prompts") / tpln).exists() else (
+                f"Write a short narrative beat (no quotes) that fits this scene.\n\n"
+                f"Line intent: {line_hint}\nReaction to prior line: {reaction_line}\nAgenda notes: {agenda_block}\n"
+            )
+            try:
+                userN = userN.replace(
+                    "Write the narrative prose now (no quotes):",
+                    "Append the narrative prose for this ITEM at the very end.",
+                )
+            except Exception:
+                pass
+            systemN = "You write third-person narrative prose without quotation marks."
+            item = (
+                f"ITEM {b_index}: id={actor_id}\n=== SYSTEM ===\n{systemN}\n=== USER ===\n{userN}\n"
+            )
+            items_sections.append(item)
+            continue
+
+        # Character lines
+        body_for_line = _pick(body_lang, b_index)  # still applied after batch response
+        agenda_combined = (agenda_block + ("\n" if agenda_block else "") + body_for_line).strip() if body_for_line.strip() else agenda_block
+        combined_prompt = (
+            f"Reaction: {reaction_line}\n"
+            f"Line intent: {line_hint}\n"
+        )
+        dialog_lines_ctx = state.recent_dialog(actor_id)
+        system_i, user_i = build_character_call_prompt(
+            actor_id,
+            combined_prompt,
+            dialog_lines_ctx,
+            agenda=agenda_combined,
+            character_yaml=char_yaml_by_id.get(actor_id.strip().lower()),
+        )
+        # Pre-process per-item USER prompt to reduce repetition and move agenda into the top character block
+        try:
+            # Replace the character YAML block with a reference
+            intro_marker = "You are role playing/acting out the following character:"
+            aware_marker = "You are aware of or deeply care about the following details"
+            last_marker = "The last"
+            if intro_marker in user_i:
+                # Insert reference text after intro marker
+                before_intro, rest = user_i.split(intro_marker, 1)
+                # Find the next marker (aware of details) within rest
+                idx_aware = rest.find(aware_marker)
+                if idx_aware != -1:
+                    # Keep intro line + reference, then drop original YAML
+                    after_intro = rest[idx_aware:]
+                    user_i = before_intro + intro_marker + "\nSee character data above\n" + after_intro
+            # Remove the per-item agenda section entirely (moved to CHARACTER DATA)
+            idx_aware_full = user_i.find(aware_marker)
+            if idx_aware_full != -1:
+                # Find the beginning of the next section (starts with 'The last') after the aware section
+                idx_next = user_i.find(last_marker, idx_aware_full)
+                if idx_next != -1:
+                    user_i = user_i[:idx_aware_full] + user_i[idx_next:]
+            # Replace final instruction line wording
+            user_i = user_i.replace(
+                "Now, say more or less the same thing in your own words and voice.",
+                "Append more or less the same thing in your own voice at the end of this document.",
+            )
+        except Exception:
+            pass
+        item = (
+            f"ITEM {b_index}: id={actor_id}\n=== SYSTEM ===\n{system_i}\n=== USER ===\n{user_i}\n"
+        )
+        items_sections.append(item)
+
+    # Prepend CHARACTER DATA section if available and return batch USER
+    header_block = (("\n\n".join(character_data_sections) + "\n\n") if character_data_sections else "")
+    batch_user = (
+        header_block
+        + "Follow these rules:\n"
+        + "- Output N lines: one per ITEM, same order.\n"
+        + "- Each line formatted 'id: line'.\n"
+        + "- Keep each line concise; no stage directions; narrator uses prose without quotes.\n\n"
+        + "\n".join(items_sections)
+    )
+    return batch_user
+
+
 def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_paragraph: str = "", log_dir: Optional[Path] = None) -> str:
     appended: Dict[str, List[str]] = {}
     reps = build_pipeline_replacements(ctx.setting, ctx.chapter, ctx.chapter_id, ctx.version, tp, state, prior_paragraph=prior_paragraph, ctx=ctx)
@@ -147,10 +345,11 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
             if not ln.strip():
                 continue
             if not ln.lstrip().startswith(('*', '-')) and _re2.match(r"^\s*([A-Za-z0-9_.\-]+)\s*:\s*$", ln):
-                m = _re2.match(r"^\s*([A-Za-z0-9_.\-]+)\s*:\s*$", ln)
-                if m:
-                    current = m.group(1).strip()
-                    by_actor.setdefault(current, [])
+                m2 = _re2.match(r"^\s*([A-Za-z0-9_.\-]+)\s*:\s*$", ln)
+                if m2:
+                    aid_key = m2.group(1).strip()
+                    current = aid_key
+                    by_actor.setdefault(aid_key, [])
                 continue
             if current is not None and ln.lstrip().startswith(('*', '-')):
                 content = ln.lstrip()[1:].lstrip()
@@ -237,106 +436,21 @@ def run_dialog_pipeline(tp, state, *, ctx: RunContext, tp_index: int, prior_para
                 block_lines.append("Agenda notes (focus for this scene):")
                 block_lines.append(agenda_block_top)
             character_data_sections.append("\n".join(block_lines))
-    for b_index, (actor_id, line_hint) in enumerate(lines_pairs, start=1):
-        agenda_block = agenda_by_actor.get(actor_id, "")
-        reaction_line = reactions_vals[b_index - 1] if 1 <= b_index <= len(reactions_vals) else ""
-
-        if actor_id.strip().lower() == "narrator":
-            tpln = "narration_in_dialog_prompt.md"
-            repsN = dict(reps4)
-            repsN["[REACTION]"] = reaction_line
-            repsN["[LINE_INTENT]"] = line_hint
-            repsN["[AGENDA]"] = agenda_block or ""
-            try:
-                dialog_map = {a: state.recent_dialog(a) for a in (getattr(state, "active_actors", []) or [])}
-                from ..utils import to_text as _to_text
-                repsN["[DIALOG_HISTORY]"] = _to_text(dialog_map)
-            except Exception:
-                repsN["[DIALOG_HISTORY]"] = ""
-            userN = apply_template(str(Path("prompts") / tpln), repsN) if (Path("prompts") / tpln).exists() else (
-                f"Write a short narrative beat (no quotes) that fits this scene.\n\n"
-                f"Line intent: {line_hint}\nReaction to prior line: {reaction_line}\nAgenda notes: {agenda_block}\n"
-            )
-            # Pre-process narrator instructions per request
-            try:
-                userN = userN.replace(
-                    "Write the narrative prose now (no quotes):",
-                    "Append the narrative prose for this ITEM at the very end.",
-                )
-            except Exception:
-                pass
-            systemN = "You write third-person narrative prose without quotation marks."
-            item = (
-                f"ITEM {b_index}: id={actor_id}\n=== SYSTEM ===\n{systemN}\n=== USER ===\n{userN}\n"
-            )
-            items_sections.append(item)
-            continue
-
-        # Character lines
-        body_for_line = _pick(body_lang, b_index)  # still applied after batch response
-        agenda_combined = (agenda_block + ("\n" if agenda_block else "") + body_for_line).strip() if body_for_line.strip() else agenda_block
-        combined_prompt = (
-            f"Reaction: {reaction_line}\n"
-            f"Line intent: {line_hint}\n"
-        )
-        dialog_lines_ctx = state.recent_dialog(actor_id)
-        system_i, user_i = build_character_call_prompt(
-            actor_id,
-            combined_prompt,
-            dialog_lines_ctx,
-            agenda=agenda_combined,
-            character_yaml=char_yaml_by_id.get(actor_id.strip().lower()),
-        )
-        # Pre-process per-item USER prompt to reduce repetition and move agenda into the top character block
-        try:
-            # Replace the character YAML block with a reference
-            intro_marker = "You are role playing/acting out the following character:"
-            aware_marker = "You are aware of or deeply care about the following details"
-            last_marker = "The last"
-            if intro_marker in user_i:
-                # Insert reference text after intro marker
-                before_intro, rest = user_i.split(intro_marker, 1)
-                # Find the next marker (aware of details) within rest
-                idx_aware = rest.find(aware_marker)
-                if idx_aware != -1:
-                    # Keep intro line + reference, then drop original YAML
-                    after_intro = rest[idx_aware:]
-                    user_i = before_intro + intro_marker + "\nSee character data above\n" + after_intro
-            # Remove the per-item agenda section entirely (moved to CHARACTER DATA)
-            idx_aware_full = user_i.find(aware_marker)
-            if idx_aware_full != -1:
-                # Find the beginning of the next section (starts with 'The last') after the aware section
-                idx_next = user_i.find(last_marker, idx_aware_full)
-                if idx_next != -1:
-                    user_i = user_i[:idx_aware_full] + user_i[idx_next:]
-            # Replace final instruction line wording
-            user_i = user_i.replace(
-                "Now, say more or less the same thing in your own words and voice.",
-                "Append more or less the same thing in your own voice at the end of this document.",
-            )
-        except Exception:
-            pass
-        item = (
-            f"ITEM {b_index}: id={actor_id}\n=== SYSTEM ===\n{system_i}\n=== USER ===\n{user_i}\n"
-        )
-        items_sections.append(item)
-
-    # Compose batch system and user
+    # Compose batch call
     batch_system = (
         "You will simulate multiple independent character dialog calls. "
         "For each ITEM below, read its SYSTEM and USER sections and produce exactly one response as that model would. "
         "Return exactly one line per item, in order, strictly formatted as 'id: line'. "
         "Do not include any extra commentary or headers."
     )
-    # Prepend CHARACTER DATA section if available
-    header_block = ("\n\n".join(character_data_sections) + "\n\n") if character_data_sections else ""
-    batch_user = (
-        header_block
-        + "Follow these rules:\n"
-        "- Output N lines: one per ITEM, same order.\n"
-        "- Each line formatted 'id: line'.\n"
-        "- Keep each line concise; no stage directions; narrator uses prose without quotes.\n\n"
-        + "\n".join(items_sections)
+    # Build batch USER via shared helper for exact parity
+    batch_user = build_dialog_batch_user(
+        reps4=reps4,
+        actor_lines=actor_lines,
+        body_lang=body_lang,
+        agenda_text=agenda_text,
+        reactions_text=reactions_text,
+        state=state,
     )
 
     # Use the same env as CHARACTER_DIALOG (same as per-line calls)

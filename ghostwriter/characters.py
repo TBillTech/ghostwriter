@@ -188,19 +188,26 @@ def build_character_call_prompt(
         chosen = tail[-n:] if tail else lines[-n:]
         return "\n".join(chosen)
 
-    # Replace dialog placeholders
-    user = re.sub(r"The last\s+N\s+lines of dialog", f"The last {chosen_n} lines of dialog", user)
-    def _repl_dialog(m: re.Match) -> str:
-        token = (m.group(1) or "").strip()
-        if token.lower() == "n":
-            n = chosen_n
-        else:
-            try:
-                n = int(token)
-            except Exception:
-                n = 0
-        return _last_n_lines(dialog_lines, n)  # type: ignore[arg-type]
-    user = re.sub(r"<dialog>\s*(\d+|[Nn])\s*</dialog>", _repl_dialog, user)
+    # Replace dialog placeholders (only if present). If template author removed <dialog> blocks, do NOT inject dialog context.
+    had_dialog_tag_numeric = bool(re.search(r"<dialog>\s*(\d+|[Nn])\s*</dialog>", user))
+    had_plain_N_phrase = "The last N lines of dialog" in user
+    if had_dialog_tag_numeric:
+        user = re.sub(r"The last\s+N\s+lines of dialog", f"The last {chosen_n} lines of dialog", user)
+        def _repl_dialog(m: re.Match) -> str:
+            token = (m.group(1) or "").strip()
+            if token.lower() == "n":
+                n = chosen_n
+            else:
+                try:
+                    n = int(token)
+                except Exception:
+                    n = 0
+            return _last_n_lines(dialog_lines, n)  # type: ignore[arg-type]
+        user = re.sub(r"<dialog>\s*(\d+|[Nn])\s*</dialog>", _repl_dialog, user)
+    else:
+        # If template still has the phrase but no explicit <dialog> tag, only rewrite the phrase to chosen_n; do not inject dialog lines.
+        if had_plain_N_phrase:
+            user = user.replace("The last N lines of dialog", f"The last {chosen_n} lines of dialog")
 
     # Substitute <prompt/>
     user = user.replace("<prompt/>", call_prompt)

@@ -166,9 +166,12 @@ Wolf purred, "Good morning, little traveler — where are you headed with that b
 
 The forest quieted. 
 
-"To my Grandmother's cottage, please." She hugged the basket closer. "Bread and jam — she is ill." 
+"To my Grandmother's cottage." She hugged the basket closer.
 
-"And what treasures have you tucked inside for a sick grandmother?" Wolf asked, voice as smooth as oil. "How far is she from here, if you don't mind my asking?" 
+"And what treasures have you tucked inside for a sick grandmother?" Wolf asked, voice as smooth as oil.
+"Bread and jam — she is ill." 
+ 
+"I'm sorry to hear that. How far is she from here, if you don't mind my asking?" 
 
 "Past the three tall pines and the crooked stump — not far."
 
@@ -192,10 +195,9 @@ Danger hinted at in the dark trees and Wolf's smile.
 4. Continuity: Respect Story-So-Far and Story-Relative-To.
 5. Scene Awareness: Use the scene and actors to ground both dialog and action.
 
-Now, brainstorm creative ideas that, when realized, may be either dialog or narrative depending on what is most natural. The touch-point itself needs to be vivid and clear in the readers mind. Consider probabilities up to 2–3 sigma in the sampled distribution (but do not make this explicit).
-
-* Wolf's smile appears as a contrast, just like the shadows and the bright sun beams.
-* "I don't think my eyes have adjusted to all these shadwos. At moments, I feel disoriented!"
+Now, brainstorm creative ideas that, when realized, may be either dialog or narrative depending on what is most natural. The touch-point itself needs to be vivid and clear in the readers mind. Provide groups of bullet points creatively. Please generate a set of five possible responses, several times, following the format given. Each round of responses, try to generate responses not in the prior reported distribution.
+Responses should each include a numeric <probability>.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.
 
 
 === RESPONSE ===

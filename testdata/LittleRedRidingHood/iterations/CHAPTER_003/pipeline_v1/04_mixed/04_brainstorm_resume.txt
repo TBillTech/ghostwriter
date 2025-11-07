@@ -192,29 +192,9 @@ Wolf (as Grandmother): “So thoughtful, my little bird. Set it down and come ki
 4. Continuity: Respect Story-So-Far and Story-Relative-To.
 5. Scene Awareness: Use the scene and actors to ground both dialog and action.
 
-Now, brainstorm creative ideas that, when realized, may be either dialog or narrative depending on what is most natural. The touch-point itself needs to be vivid and clear in the readers mind. Consider probabilities up to 2–3 sigma in the sampled distribution (but do not make this explicit).
-
-* Narrator: Ivy brushes the bright hood as the old latch yields, iron cold against her palm; the basket creaks like a small promise.
-* red: "Grandmother?"
-* Narrator: The word softens into thyme-warm air; net curtains sieve the light into greenish pools; the clock’s timid tick grows bold.
-* wolf: "A-hem—come in, dear heart. Mind the draught."
-* Narrator: The voice is papery yet syrup-smooth; the quilted mound lies still as if holding its breath.
-* red: "It’s only me, with bread and jam."
-* Narrator: She nudges the door wider with her hip, clutching the wicker; a faint chill curls past her ankles.
-* wolf: "Such a dutiful girl. Do shut the door, sweetling."
-* Narrator: The latch sighs as it settles; a floorboard answers with a shy creak under her first step.
-* red: "You sound a little different… are you chilly?"
-* wolf: "A touch, a touch—these rooms make echoes behind the lace."
-* Narrator: The net curtains blur the bed’s outline; spectacles glint dull in the dim.
-* red: "Shall I open the shutters for more light?"
-* wolf: "Oh, no—no, child. The light pricks these old eyes."
-* Narrator: The teapot whispers and rattles its lid like a nervous breath; the clock ticks between her small steps.
-* red: "May I put the basket on the table?"
-* wolf: "Set it by the bed, pet, so I needn’t reach."
-* Narrator: She hesitates; the hood feels warm against her neck; her mother’s words tug at her, then loosen.
-* red: "All right. Please don’t strain."
-* wolf: "Your kindness warms me more than fire."
-* Narrator: The room holds its pose—the chair square, the saucer true—while she crosses the threshold into the arranged hush.
+Now, brainstorm creative ideas that, when realized, may be either dialog or narrative depending on what is most natural. The touch-point itself needs to be vivid and clear in the readers mind. Provide groups of bullet points creatively. Please generate a set of five possible responses, several times, following the format given. Each round of responses, try to generate responses not in the prior reported distribution.
+Responses should each include a numeric <probability>.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.
 
 
 === RESPONSE ===

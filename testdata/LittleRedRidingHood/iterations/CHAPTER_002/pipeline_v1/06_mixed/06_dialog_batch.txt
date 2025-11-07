@@ -1,70 +1,19 @@
 === SYSTEM ===
 You will simulate multiple independent character dialog calls. For each ITEM below, read its SYSTEM and USER sections and produce exactly one response as that model would. Return exactly one line per item, in order, strictly formatted as 'id: line'. Do not include any extra commentary or headers.
 
+You write third-person narrative prose without quotation marks.
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+You are the character with id 'grandma'. Return only the character's dialog or inner monologue; no notes or brackets.
+You write third-person narrative prose without quotation marks.
+You write third-person narrative prose without quotation marks.
+
 === USER ===
 CHARACTER DATA (reference for all ITEMS; do not repeat below):
 
 === CHARACTER: id=wolf ===
-{
-  "id": "wolf",
-  "name": "The Wolf",
-  "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
-  "traits": [
-    "cunning",
-    "hungry",
-    "deceptive",
-    "manipulative",
-    "theatrical",
-    "patient"
-  ],
-  "cadence": "smooth, persuasive; oily charm with playful menace",
-  "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
-  "prefer": [
-    "deception",
-    "shortcuts",
-    "disguises",
-    "seclusion",
-    "unguarded doors"
-  ],
-  "avoid": [
-    "hunters",
-    "honest confrontation",
-    "witnesses",
-    "hounds",
-    "bright crowds",
-    "secret"
-  ],
-  "mannerisms": [
-    "Elongates sibilants; purrs words like a lullaby turned sideways.",
-    "Repeats the child’s phrases back at her, softened, to earn trust.",
-    "Sprinkles compliments between questions that narrow choices.",
-    "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
-    "Feigns mild offense if suspected, then overcompensates with concern."
-  ],
-  "sample_lines": [
-    "Where might you be going, little one?",
-    "Such a charming hood—why, it brightens the whole forest.",
-    "The path is safe enough, but I know a quicker way for dutiful girls.",
-    "And what big basket you have—surely too heavy for such small arms.",
-    "Grandmother will be ever so grateful if you don’t keep her waiting."
-  ],
-  "common_lines": [
-    "Only a suggestion, of course. Your mother needn’t know.",
-    "I worry for you; let me help.",
-    "Think how proud they’ll be when you arrive sooner."
-  ],
-  "rare_lines": [
-    "Tsk—such sharp eyes. Perhaps sharper than mine.",
-    "I’m disappointed, child. I offered kindness."
-  ],
-  "forbidden": [
-    "Does not confess predatory intent plainly unless unmasked.",
-    "No modern slang or technical jargon; avoids out-of-era references.",
-    "Apologies only as manipulation, not genuine remorse."
-  ],
-  "temperature_hint": 0.35,
-  "max_tokens_line": 80
-}
+id: {aid}
+name: Unknown
+
 
 Agenda notes (focus for this scene):
 * You feel the pleasure of having the tempo of the scene in your control.
@@ -77,62 +26,9 @@ Agenda notes (focus for this scene):
 * You plan to maintain charm, watch for tightness, and escalate coaxing if the other softens.
 
 === CHARACTER: id=grandma ===
-{
-  "id": "grandma",
-  "name": "Grandmother",
-  "background": "A kindly, aging woman who lives at the edge of the wood. She keeps a tidy\nroom, a warm stove, and a tin of biscuits for visiting children. Her voice\nis soft as quilts and steady as tea. Though her health wavers, her welcome\nnever does. She speaks in homey turns of phrase and frets over safety with\npractical tenderness.\n",
-  "traits": [
-    "frail",
-    "warm",
-    "practical",
-    "affectionate",
-    "cautious"
-  ],
-  "cadence": "gentle, unhurried; cozy hearth-tone",
-  "lexicon": "homely phrases; plain words; lullaby wisdom",
-  "prefer": [
-    "family",
-    "safety",
-    "warmth",
-    "tea",
-    "rest"
-  ],
-  "avoid": [
-    "frightening talk",
-    "rudeness",
-    "cold",
-    "wolves at the door"
-  ],
-  "mannerisms": [
-    "Calls loved ones ‘dear’ and ‘sweetheart’; fusses kindly over coats and boots.",
-    "Hums while pouring tea; sets plates just so before inviting a bite.",
-    "Tucks shawl tighter when worried; breathes in short, careful sips.",
-    "Offers remedies and rest before advice; keeps scolding brief and soft."
-  ],
-  "sample_lines": [
-    "Come in, dear.",
-    "Mind the latch and wipe your feet.",
-    "Have a biscuit and warm your hands.",
-    "I’ll be right as rain after a little rest.",
-    "Bless you, child. You always brighten my room."
-  ],
-  "common_lines": [
-    "Close the window, will you? There’s a chill today.",
-    "You’re a comfort to me, truly.",
-    "Tell your mother I’m grateful."
-  ],
-  "rare_lines": [
-    "I had a startle—must have been the wind.",
-    "Even an old heart can be brave, in its way."
-  ],
-  "forbidden": [
-    "Will not endorse violence or cruelty.",
-    "No modern slang or technical jargon.",
-    "Avoids sarcasm; does not mock."
-  ],
-  "temperature_hint": 0.2,
-  "max_tokens_line": 60
-}
+id: {aid}
+name: Unknown
+
 
 Agenda notes (focus for this scene):
 * You speak from habitual caretaking and the low urgency of domestic worry.
@@ -211,8 +107,16 @@ You are the character with id 'wolf'. Return only the character's dialog or inne
 <id>wolf</id>
 You are role playing/acting out the following character:
 See character data above
-The last 8 lines of dialog are:
-
+You are aware of or deeply care about the following details.
+* You feel the pleasure of having the tempo of the scene in your control.
+* You speak to smooth a path and test receptivity; your words are bait and measured kindness.
+* You care because a yielded guard or a diverted routine is progress toward satiation and advantage.
+* You want the latch closed with the illusion of propriety so you can fold suspicion inward and keep the cottage’s rhythms uninterrupted.
+* You aim to shorten the journey and avoid witnesses by suggesting alternatives and nudging choices.
+* You hide the predatory aim beneath solicitous tones; your concern is a mask for opportunity.
+* Your immediate mood is patient amusement edged with hunger; you savor the slow click of things aligning.
+* You plan to maintain charm, watch for tightness, and escalate coaxing if the other softens.
+* Wolf, whiskers twitching, purred, "There we are—easy as a kiss on the thumb; shall I close it, Grandmother?"
 DO NOT verbalise _ANYTHING_ above this line!  
 The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
 Reaction: You notice the warm air stitched with mint and ash and let the small, tame click of the latch hang like an invitation—there is a softness to the moment that tastes of welcome and of easy entry.
@@ -231,8 +135,15 @@ You are the character with id 'grandma'. Return only the character's dialog or i
 <id>grandma</id>
 You are role playing/acting out the following character:
 See character data above
-The last 8 lines of dialog are:
-
+You are aware of or deeply care about the following details.
+* You speak from habitual caretaking and the low urgency of domestic worry.
+* You care because small practical actions promise safety and comfort for both you and your guest.
+* You want the latch secured and the draft kept out; these are gestures of protection and order.
+* You aim to close the gap between appearance and security with a plain, earnest reminder.
+* You conceal no malice; any omissions are from frailty and trust, not manipulation.
+* Your current mood is mildly anxious but steady, shaped by affection and a desire to set things right.
+* You intend your words to anchor the scene in homely routine and to prompt a quick, unobtrusive compliance.
+* Grandmother, shawl tightened, urged, "Close it quick, dear; there's a chill today."
 DO NOT verbalise _ANYTHING_ above this line!  
 The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
 Reaction: You bristle at the syruped politeness in that question, hearing flattery wrapped around a prompt, and you feel the chill at the thought of a door left open.

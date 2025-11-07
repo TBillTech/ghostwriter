@@ -69,7 +69,8 @@ def _build_index(book_base_dir: str | Path) -> Dict[str, List[str]]:
 
 
 def complete(prompt: str, *, system: Optional[str] = None, temperature: float = 0.0, max_tokens: int = 0, model: Optional[str] = None, reasoning_effort: Optional[str] = None) -> str:
-    base = os.getenv("GW_BOOK_BASE_DIR")
+    # Allow reading golden responses from a different base than the active run base
+    base = os.getenv("GW_MOCKLLM_GOLDEN_BASE") or os.getenv("GW_BOOK_BASE_DIR")
     if not base:
         raise ValueError("GW_BOOK_BASE_DIR is required for MockLLM")
     idx = _build_index(base)
