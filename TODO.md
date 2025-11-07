@@ -133,9 +133,9 @@ This document outlines the tasks necessary to get the driver.py working correctl
 
 13. **Create Integration Tests**
     - [x] Test complete workflow from YAML to draft generation (with mocked LLM)
-    - [ ] Test iteration loop with simulated verification results
-    - [ ] Test story-so-far and story-relative-to generation
-    - [ ] Test multi-chapter workflow
+    - [x] Test iteration loop with simulated verification results (brainstorm gating, pause/resume, version progression)
+    - [x] Test story-so-far and story-relative-to generation (regeneration when missing, deterministic mock fallback)
+    - [x] Test multi-chapter workflow (chapter 2 run does not mutate chapter 1 artifacts)
     - [x] Test the two-phase pre-draft → substitution → edit pipeline end-to-end with a Mock LLM
 
 ## Completion Criteria

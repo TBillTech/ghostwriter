@@ -862,6 +862,76 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 raise
             except Exception:
                 pass
+            # Regeneration path: if gate files were removed, recreate them from existing final artifacts (applies even if latest>0)
+            try:
+                # Gate-file regeneration should only apply to initial authoring (branch_b False). Edit branches (v2+) skip this to avoid
+                # spurious human-in-loop pauses when users clean up artifacts.
+                if (not branch_b) and tp_type in ("narration", "dialog", "implicit", "mixed") and tp_log_dir is not None:
+                    fdraft_p = tp_log_dir / "touch_point_first_draft.txt"
+                    fsugg_p = tp_log_dir / "first_suggestions.txt"
+                    final_p = tp_log_dir / "touch_point_draft.txt"
+                    sugg_p = tp_log_dir / "suggestions.txt"
+                    # If either first gate file missing but we have a final draft (or suggestions), reconstruct gate and pause
+                    if (not fdraft_p.exists() or not fsugg_p.exists()):
+                        # Use existing final draft as first draft; if missing, attempt to read prior polished from state (no-op fallback)
+                        if final_p.exists():
+                            try:
+                                save_text(fdraft_p, read_file(str(final_p)) or "")
+                            except Exception:
+                                save_text(fdraft_p, "")
+                        else:
+                            # No final draft: create empty stub to force user intervention
+                            save_text(fdraft_p, "")
+                        # Derive first suggestions from suggestions.txt if present else empty
+                        if sugg_p.exists():
+                            try:
+                                save_text(fsugg_p, read_file(str(sugg_p)) or "")
+                            except Exception:
+                                save_text(fsugg_p, "")
+                        else:
+                            save_text(fsugg_p, "")
+                        # Remove subtle edit outputs so subsequent resume takes proper gate path
+                        try:
+                            if final_p.exists():
+                                final_p.unlink()
+                        except Exception:
+                            pass
+                        try:
+                            if sugg_p.exists():
+                                sugg_p.unlink()
+                        except Exception:
+                            pass
+                        raise UserActionRequired("Waiting for user suggestions on first draft.")
+            except UserActionRequired:
+                raise
+            except Exception:
+                pass
+            # On edit branches (v2+), ensure suggestions.txt exists even for previously completed steps
+            try:
+                if branch_b and tp_type in ("narration", "dialog", "implicit", "mixed") and tp_log_dir is not None:
+                    sug_p = tp_log_dir / "suggestions.txt"
+                    if not sug_p.exists():
+                        # Prefer mirroring first_suggestions.txt if present; else derive from check.txt; else create empty
+                        fs_p = tp_log_dir / "first_suggestions.txt"
+                        if fs_p.exists():
+                            save_text(sug_p, read_file(str(fs_p)) or "")
+                        else:
+                            try:
+                                chk_p = tp_log_dir / "check.txt"
+                                if chk_p.exists():
+                                    txt = read_file(str(chk_p))
+                                    import re as _re
+                                    m = _re.split(r"^===\s*RESPONSE\s*===\s*$", txt, maxsplit=1, flags=_re.M)
+                                    save_text(sug_p, (m[1].strip() if len(m) == 2 else ""))
+                                else:
+                                    save_text(sug_p, "")
+                            except Exception:
+                                try:
+                                    save_text(sug_p, "")
+                                except Exception:
+                                    pass
+            except Exception:
+                pass
             continue
 
         polished_text = ""

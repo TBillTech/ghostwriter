@@ -184,13 +184,16 @@ def _ensure_brainstorm_done_on_resume(tp_type: str, reps: Dict[str, str], *, log
         log_maker=(lambda attempt: (log_dir / f"{tp_index:02d}_brainstorm_resume{'_r'+str(attempt) if attempt>1 else ''}.txt")),
     )
     try:
-        combined = (seed_bullets.strip() + ("\n" if seed_bullets.strip() and not seed_bullets.strip().endswith("\n") else "")) + brainstorm_raw
+        # Never accept a trailing DONE from the model during resume brainstorming.
+        # Human must explicitly add DONE to the brainstorm.txt to proceed.
+        brainstorm_no_done = _strip_trailing_done(brainstorm_raw)
+        combined = (seed_bullets.strip() + ("\n" if seed_bullets.strip() and not seed_bullets.strip().endswith("\n") else "")) + brainstorm_no_done
         bs_path.write_text(combined, encoding="utf-8")
     except Exception:
         pass
-    if not _brainstorm_has_done(brainstorm_raw):
-        print("Brainstorming still in progress.")
-        raise UserActionRequired("Brainstorming still in progress.")
+    # Always pause after appending/creating brainstorm bullets until user adds DONE.
+    print("Brainstorming still in progress.")
+    raise UserActionRequired("Brainstorming still in progress.")
 
 
 def _inline_body_with_dialog(body_bullet: str, dialog: str) -> str:
@@ -245,8 +248,9 @@ def _parse_agenda_by_actor(text: str) -> Dict[str, str]:
         if not ln.lstrip().startswith(('*', '-')) and re.match(r"^\s*([A-Za-z0-9_.\-]+)\s*:\s*$", ln):
             m = re.match(r"^\s*([A-Za-z0-9_.\-]+)\s*:\s*$", ln)
             if m:
-                current = m.group(1).strip()
-                by_actor.setdefault(current, [])
+                actor = m.group(1).strip()
+                current = actor
+                by_actor.setdefault(actor, [])
             continue
         if current is not None and ln.lstrip().startswith(('*', '-')):
             content = ln.lstrip()[1:].lstrip()
