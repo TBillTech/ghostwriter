@@ -1,0 +1,20 @@
+Characters:
+  - id: hero
+    name: The Hero
+    traits: [curious, kind, brave]
+    cadence: simple, friendly
+    sample_lines:
+      - "I want to do this right."
+      - "Let’s take a careful step."
+    temperature_hint: 0.25
+    max_tokens_line: 80
+
+  - id: guide
+    name: The Guide
+    traits: [calm, helpful, wise]
+    cadence: gentle, short sentences
+    sample_lines:
+      - "Try the easy path first."
+      - "Breathe. One thing at a time."
+    temperature_hint: 0.20
+    max_tokens_line: 70

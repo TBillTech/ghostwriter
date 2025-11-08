@@ -1,0 +1,17 @@
+Touch-Points:
+  - setting:
+      factoids: ["Time Period", "Path"]
+      actors: ["The Hero", "The Guide"]
+  - scene:
+      name: "A Simple Path"
+      description: "Trees on both sides. Soft wind. Birds chirp."
+  - dialog: "The Hero meets the Guide and asks what to do first."
+  - narration: "They start walking together toward a small goal."
+  - implicit: "The Guide points to a flower and smiles."
+
+Story-So-Far: |
+  A normal day. The Hero is ready to learn.
+
+Story-Relative-To:
+  The Hero: "Curious and brave, but new to the path."
+  The Guide: "Calm and helpful; gives small tips."

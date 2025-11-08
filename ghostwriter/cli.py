@@ -66,6 +66,10 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     p_phash = sub.add_parser("prompt-hash", help="Compute current prompts hash; optionally write to book base")
     p_phash.add_argument("--book-base", dest="book_base", help="If provided, write prompt_hash file to this directory")
 
+    # Tutorial helper: create a minimal starter book in an empty directory
+    p_new = sub.add_parser("new-book", help="Create a starter book in an empty directory")
+    p_new.add_argument("book_base", help="Destination directory for the new book (must be empty or not exist)")
+
     return parser.parse_args(argv)
 
 
@@ -602,6 +606,84 @@ def main(argv: list[str] | None = None) -> int:
             print(f"prompt_hash updated at {base}: {hv}")
         else:
             print(hv)
+        return 0
+
+    if ns.cmd == "new-book":
+        # Create a starter book structure by copying from tutorial/MyFirstBook
+        import os, shutil
+        dest = Path(getattr(ns, "book_base", "")).expanduser()
+        if not str(dest):
+            print("Error: You must provide a destination directory for the new book.")
+            return 2
+        # Check destination state
+        if dest.exists():
+            if not dest.is_dir():
+                print(f"Error: Destination exists and is not a directory: {dest}")
+                return 2
+            # Directory must be empty
+            try:
+                if any(dest.iterdir()):
+                    print(
+                        "Error: Destination directory is not empty. Please specify an empty directory for creating a new book template."
+                    )
+                    return 2
+            except Exception:
+                print(
+                    "Error: Unable to read destination directory. Choose a different path or fix permissions."
+                )
+                return 2
+        else:
+            try:
+                dest.mkdir(parents=True, exist_ok=True)
+            except Exception as e:
+                print(f"Error: Could not create destination directory: {dest} ({e})")
+                return 2
+
+        # Source template location
+        src = Path(__file__).resolve().parents[1] / "tutorial" / "MyFirstBook"
+        if not src.exists():
+            print(
+                f"Error: Tutorial source not found at {src}. Please ensure 'tutorial/MyFirstBook' exists in the repository."
+            )
+            return 2
+
+        # Files to copy
+        try:
+            # Ensure chapters directory exists
+            (dest / "chapters").mkdir(parents=True, exist_ok=True)
+            # Copy core files
+            for name in ["SETTING.yaml", "CHARACTERS.yaml"]:
+                sp = src / name
+                if not sp.exists():
+                    print(f"Error: Missing template file: {sp}")
+                    return 2
+                shutil.copy2(sp, dest / name)
+            # Copy chapters files
+            for rel in ["chapters/CONTENT_TABLE.yaml", "chapters/CHAPTER_001.yaml"]:
+                sp = src / rel
+                if not sp.exists():
+                    print(f"Error: Missing template file: {sp}")
+                    return 2
+                (dest / Path(rel)).parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(sp, dest / Path(rel))
+        except Exception as e:
+            print(f"Error: Failed to copy template files: {e}")
+            return 2
+
+        # Success message and next steps
+        print(
+            "New book template created.\n"
+            f"  Location: {dest}\n"
+            "Created files:\n"
+            "  - SETTING.yaml\n"
+            "  - CHARACTERS.yaml\n"
+            "  - chapters/CONTENT_TABLE.yaml\n"
+            "  - chapters/CHAPTER_001.yaml\n\n"
+            "Next steps:\n"
+            "  1) Run: python -m ghostwriter.cli run CHAPTER_001.yaml --book-base "
+            f"{dest}\n"
+            "  2) Edit the YAML files to make the story yours and run again."
+        )
         return 0
 
     print("No command executed.")
