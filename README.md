@@ -227,6 +227,18 @@ Tuning tips:
   - Add character‑specific `<dialog>4</dialog>` tags in the template if some characters should pay attention only to the last few lines (e.g., aloof or distracted personas).
   - Incorporate more structured guidance into `<agenda/>` (e.g., “Goal: persuade Henry to advance; Tactic: gentle reassurance, avoid military jargon”) to sharpen intent nuances.
 
+### Music touch-point gates (Slices 1–4)
+
+The music track feature now ships with the first two interactive gates:
+
+- **Voice context assembly** (`ghostwriter.music.context`): parses chapter `voices:` directives, links each voice token to matching characters/factoids, and summarizes any sanitized `score.musicxml` assets already in the iteration folder. The resulting payload (`build_music_prompt_context`) fuels all music prompts.
+- **First-score gate** (`ghostwriter.music.pipeline.ensure_first_score_gate`): whenever a prose touch-point creates a first-draft gate, the system also generates `touch_point_first_score.musicxml` and `first_score_suggestions.txt` when voices are defined. This uses `prompts/music_first_score_prompt.md` plus `prompts/music_check_prompt.md` for immediate feedback.
+- **Subtle-score refinement** (`ghostwriter.music.pipeline.run_subtle_score_pass`): on resume (or any vN subtle-edit branch) the edited first score and feedback are refined into `touch_point_score.musicxml` with fresh `score_suggestions.txt`, via `prompts/music_subtle_edit_prompt.md` and the shared check prompt.
+- **Sanitized imports**: Slice 1’s importer/sanitizer continues to normalize optional raw MIDI drops into `import.musicxml`, `score.musicxml`, and `monitor.mid`; the voice context automatically surfaces those summaries to the gates above.
+- **Exports & packaging** (`ghostwriter.music.exporter.finalize_music_exports`): every completed run assembles available touch-point scores into `score_vN.musicxml`, mirrors the latest build under `iterations/<chapter>/score/`, renders `final.mid` plus per-voice MIDIs, emits a structured `manifest.json`, and creates `score_bundle_vN.zip` for easy sharing.
+
+These steps mirror the prose workflow: first-score artifacts pause for author edits, then subtle refinement resumes deterministically. See `tests/music/test_pipeline.py` for mocked examples of both gates, and ensure the music dependencies (`music21`, `mido`, `pretty_midi`, `numpy`) are installed via `pip install -r requirements.txt`.
+
 If you substantially change the template, run the test suite to ensure formatting validators still pass, then perform a golden update (see instructions below—added in the next section) so example artifacts match the new prompt wording.
 
 If you do change the prompts, it is possible the unit tests may no longer pass.  Also, it is confusing for the LRRH golden example to have prompts that do not match what the program outputs. If you do change the prompts, you probably will want to run the golden-update on the book like so:
@@ -275,8 +287,10 @@ Notes and tips
 - Verify: After refreshing, run the test suite to ensure repo state and prompts are consistent:
 
   ```bash
-  python -m pytest -q
+  YAML_CEXT_DISABLED=1 python -m pytest -q
   ```
+
+  Setting `YAML_CEXT_DISABLED=1` sidesteps intermittent PyYAML segmentation faults observed on some Python builds.
 
 This keeps the Little Red Riding Hood golden examples aligned with the current prompt templates and validators.
 
@@ -804,6 +818,15 @@ Runtime/testing dependencies are pinned in `requirements.txt`. Key libraries:
 - openai — LLM client (to be used when core integration is implemented)
 - python-dotenv — environment variable loading from `.env`
 - pytest, pytest-mock — test framework and mocking utilities
+- numpy — required by musical tooling
+- mido, pretty_midi — MIDI inspection and rendering helpers
+- music21 — MusicXML parsing/serialization for the new music importer/sanitizer
+
+### Music importer utilities (Slice 1)
+
+- `ghostwriter.music.process_import_directory(import_dir)` reads raw `.mid`, `.midi`, or `.mid2` files under a voice import folder and writes a normalized `import.musicxml` with tempo/time-signature/instrument metadata embedded as an XML comment.
+- `ghostwriter.music.ensure_sanitized(import_dir)` (invoked automatically by `process_import_directory`) reparses `import.musicxml`, emits a sanitized `score.musicxml`, and keeps a playable `monitor.mid` in sync so authors can audition the track.
+- Dependencies listed above are required for these helpers. Install via `pip install -r requirements.txt` before running the music workflow.
 
 ## Usage
 

@@ -1,0 +1,133 @@
+# Music Track Output Feature — Technical Design
+
+## 1. Context and Goals
+- Extend GhostWriter so that every chapter Touch-Point can also produce symbolic music artifacts aligned with the prose pipelines.
+- Support ingestion of user-supplied MIDI/MusicXML, refinement loops, AI-assisted generation, and export to DAW-friendly formats.
+- Maintain compatibility with the existing iteration/version model (`pipeline_vN/`, `draft_vN.txt`, `final.txt`) while introducing analogous score artifacts.
+- Provide a clear developer roadmap for modules, prompts, tests, and deliverables derived from `MUSIC_REQUIREMENTS.md`.
+
+## 2. User Story and Human-in-the-Loop Workflow
+**Feature Story**: “As an author-composer, I want GhostWriter to help me co-create music that mirrors my chapter beats, so I can iterate on both prose and soundtrack together.”
+
+**Workflow Overview**
+1. Author prepares chapter YAML with new `voices` metadata and optional `music:` directive. Note: if either of voices or music touch_point is missing from the chapter YAML, then simply don't execute the music part of the workflow. 
+2. Optional: Author imports or drops raw MIDI/MusicXML assets into `iterations/CHAPTER_xxx/pipeline_vN/NN_<type>/NN_track_<voice>_import/`.
+3. If raw asset import directory present, system converts imports to normalized `import.musicxml`; author reviews/edits; system sanitizes into `score.musicxml` and `monitor.mid`.
+4. If raw asset import directory is absent, or if score.musicxml is present, GhostWriter runs content pipelines:
+   - Uses prose context (touch-point text, brainstorm bullets) + voice metadata to prompt the LLM for `touch_point_first_score.musicxml` followed by `first_score_suggestions.txt`.
+   - Author edits suggestions/score and resumes to produce `touch_point_score.musicxml` followed by `score_suggestions.txt`.
+5. On version completion, GhostWriter aggregates `touch_point_score.musicxml` into `score_vN.musicxml`, plus renders consolidated `score/final.musicxml`, `score/final.mid`, and per-voice MIDI files.
+6. Bundle is packaged for sharing (zip). User can continue iterating (vN+1) with updated assets.
+
+Note: In order to gracefully handle the case when the user wants to refine either the prose or the music separately, and not the other, well will add a minor enhancement: If the prior version (vN-1) suggestions.txt is only whitespace, then don't run the subtle_edit, but only copy the touch_point_* file, and create an empty suggestions.txt for vN.
+
+**Human Gates**
+- Optional import normalization: author edits `import.musicxml` before system generates `score.musicxml`.
+- First-score gate: analogous to prose first-draft gate (edit `touch_point_first_score.musicxml`, `first_score_suggestions.txt`).
+- Subtle-score gate: author can tweak `touch_point_score.musicxml` or global `score_vN.musicxml`; reconciliation regenerates per-voice suggestions.
+
+## 3. Architecture Overview
+```
+chapters/CHAPTER_XXX.yaml
+  ├─ voices: ["major.beat.drum.engine", ...]
+  └─ music: "cinematic track in D minor; slow tempo ..."
+
+iterations/CHAPTER_XXX/pipeline_vN/NN_<type>/
+  ├─ NN_track_<voice>_import/
+  │   ├─ raw midi files (.mid, .mid2)
+  │   ├─ import.musicxml (round-trip editable)
+  │   ├─ score.musicxml (sanitized)
+  │   └─ monitor.mid (preview)
+  ├─ touch_point_first_score.musicxml
+  ├─ first_score_suggestions.txt
+  ├─ touch_point_score.musicxml
+  └─ score_suggestions.txt
+
+iterations/CHAPTER_XXX/
+  ├─ score_vN.musicxml
+  └─ score/
+      ├─ final.musicxml
+      ├─ final.mid
+      ├─ <voice>.mid (per voice)
+      └─ manifest.json
+```
+
+## 4. Chapter YAML Additions
+- Introduce optional `voices:` list under chapter root.
+  - Token format: `<chords>.<register>.<instrument>.<idea>[.<role>]`
+  - Loosely validate components against enumerations: the exact strings do not need to be enforced, but the required fields should be present (major, minor, diminished, augmented, chromatic / bass, tenor, alto, beat / free-form instrument string / story entity or mood / optional melody|harmony). T
+- `Music:` scalar string describing global direction (tempo, key, mood).
+- Parser updates ensure `RunContext` exposes `chapter.get("voices", [])` and `chapter.get("Music")`.
+
+## 5. LLM Prompt Integration
+For each content touch-point that generates music:
+1. Collect context:
+   - Touch-point type + text, brainstorm bullets, prior `touch_point_score.musicxml` (last 2 measures) if available.
+   - Voice-specific assets: voice components, sanitized `score.musicxml` from import dir if present, character/factoid lookup based on voice idea.
+   - Global music directive, tempo/time signature summary, and aggregated metadata (tempo map, key).
+2. Prompt templates:
+   - `prompts/music_first_score_prompt.md` → Produces `touch_point_first_score.musicxml` and `first_score_suggestions.txt`.
+   - `prompts/music_subtle_edit_prompt.md` → Applies refinements using edited first score & suggestions.
+   - `prompts/music_check_prompt.md` → Generates actionable `score_suggestions.txt`.
+3. Validation: ensure MusicXML snippet parses; quantize measure alignment to chapter tempo grid.
+4. Reuse `UserActionRequired` gates mirroring prose pipeline.
+
+## 6. MIDI Input and Output Handling
+### Input
+- Accept `.mid`, `.midi`, `.mid2` (MIDI 2.0), optionally zipped packages.
+- Use `mido`/`pretty_midi` for event extraction → canonical representation (tempo map, time signature changes, key detection heuristics).
+- Convert to MusicXML via `music21`, preserving:
+  - Measures aligned by computed beats.
+  - Instrument names (map GM program numbers to human-readable strings).
+  - Channel, velocity (mapped to dynamics), pitch bend (control tags).
+- Write `import.musicxml` with formatted XML, developer comments (`<!-- Detected tempo: 90 BPM -->`).
+- When user edits `import.musicxml`, run sanitization pass: schema validation, measure renumbering, consistent divisions.
+- Generate `score.musicxml` + `monitor.mid` using `music21.converter.parse` and `.write('musicxml')` / `.write('midi')`.
+
+### Output
+- Aggregate `touch_point_score.musicxml` into `score_vN.musicxml` by concatenating parts/measure sequences.
+- Derive `score/final.musicxml` (latest version) plus renderings:
+  - `score/final.mid`: multi-track, default to MIDI 2.0 when `GW_MIDI2_ENABLED=1` (default).
+  - Per-voice MIDI files (single track each) named after voice token.
+- Ensure metadata (track names, tempo map) preserved.
+- Generate `score/manifest.json` summarizing tempo, key, track metadata.
+
+## 7. Module Plan
+| Module | Responsibility | Notes |
+|--------|----------------|-------|
+| `ghostwriter/music/importer.py` | Detect and convert incoming MIDI/MusicXML into normalized MusicXML | Wraps `mido`, `pretty_midi`, `music21`; exposes `generate_import_score(path, voices)` |
+| `ghostwriter/music/sanitizer.py` | Validate/clean user-edited MusicXML, enforce measure alignment, regenerate monitor MIDI | Provides `sanitize_import(from_path, to_musicxml, to_mid)` |
+| `ghostwriter/music/context.py` | Derive tempo, key, voice metadata; map voices to characters/factoids | Shared utilities for prompt-building |
+| `ghostwriter/music/pipeline.py` | Orchestrate per-touch-point gates (first-score, subtle edit) | Mirrors prose pipeline structure |
+| `ghostwriter/music/exporter.py` | Build `score_vN.musicxml`, render final/per-voice MIDI, write manifest | Integrates with `music21` rendering |
+| `ghostwriter/music/prompts.py` | Helpers to format LLM prompt payloads | Similar to `ghostwriter/templates.py` |
+| Updates to `ghostwriter/pipelines/narration.py` (and dialog/mixed) | Hook into music pipelines post prose generation | Ensure gating order maintained |
+| Updates to `ghostwriter/resume.py` | Include music checkpoints in resume flow | |
+
+## 8. Testing Strategy
+- **Unit Tests**
+  - `tests/music/test_importer.py`: MIDI → MusicXML conversion (fixtures under `testdata/music/`).
+  - `tests/music/test_sanitizer.py`: user-edited MusicXML sanitized correctly; monitor MIDIs regenerated.
+  - `tests/music/test_context.py`: voice-to-character/factoid mapping, tempo summaries.
+  - `tests/music/test_exporter.py`: aggregation of touch-point scores into final outputs.
+- **Golden Integration Tests**
+  - Extend LittleRedRidingHood testbed with sample voice definitions and short MIDI fixtures; assert deterministic exports.
+  - Compare generated `score_vN.musicxml` and per-voice MIDIs against golden files (using tolerant diff for XML).
+- **Prompt Regression Tests**
+  - Mock LLM responses for `music_first_score_prompt.md` and `music_subtle_edit_prompt.md` to confirm gate transitions.
+  - Validate schema of outputs after mock responses.
+- **Schema Validation**
+  - Add CI step to run `musicxml.xsd` validation on produced artifacts.
+
+## 9. Open Questions / Risks
+- MusicXML size & diffing: may require custom diff tools to keep suggestions actionable.
+- MIDI 2.0 support depth: initial export via `pretty_midi` (MIDI 1.0) with optional upgrade path.
+- LLM token limits for larger scores—may need summarization of prior measures beyond last two.
+
+## 10. Incremental Delivery Plan
+1. Land importer + sanitizer with CLI hooks and basic tests.
+2. Add voice metadata parsing and prompt context builders.
+3. Integrate first-score gate and mock LLM flow.
+4. Implement subtle-score refinements and suggestion regeneration.
+5. Finish exporter + packaging bundle.
+6. Final polish: documentation, CLI options, env toggles, golden refresh.

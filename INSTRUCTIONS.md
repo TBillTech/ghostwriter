@@ -2,15 +2,11 @@
 
 Use this document to guide your work in this repository. Keep your responses short, concrete, and actionable.
 
-The user can invoke following these instructions, which means to perfectly follow the details under the Next steps section below by saying: 
-
-Follow instructions
-
 ## Next steps
 
-Work on Task 13: Additional testing.
-Ensure tests run via the venv and remain independent of external LLMs by using fixtures or monkeypatching where needed.
+All music slices (1–5) are complete. Coordinate with the user to define the next milestone or backlog grooming tasks.
 
+Relevant `music_design.md` is in the project root
 Relevant `TODO.md` is in the project root
 Relevant `README.md` is in the project root
 
@@ -57,5 +53,5 @@ Relevant `README.md` is in the project root
 - Update the session conversation summary at the end of TODO.md.
 - Update the README.md with any findings that appeared during the session which are worth remarking on.  Be sure to preserve any solutions to command line issues, so we don't have to repeat broken command lines in the future.
 - Update these `INSTRUCTIONS.md` by setting "Focus" to the next actionable tasks in `TODO.md`.
-	- Current: Task 12 underway (additional unit tests). Prior Task 8 completed; Task 9 MockLLM is implemented for tests. Focus remains on expanding core unit tests.
+	- Current: Awaiting new TODO entries post-Slice 5; confirm next goals with the user before proceeding.
 - Finally, commit all file changes.

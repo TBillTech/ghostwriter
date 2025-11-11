@@ -14,6 +14,19 @@ except Exception:
     gw_run_mixed_pipeline = None  # type: ignore
     gw_run_subtle_edit_pipeline = None  # type: ignore
 
+try:
+    from .music import (
+        build_voice_context as gw_music_build_voice_context,
+        ensure_first_score_gate as gw_music_first_gate,
+        run_subtle_score_pass as gw_music_subtle_pass,
+        finalize_music_exports as gw_music_finalize_exports,
+    )
+except Exception:
+    gw_music_build_voice_context = None  # type: ignore
+    gw_music_first_gate = None  # type: ignore
+    gw_music_subtle_pass = None  # type: ignore
+    gw_music_finalize_exports = None  # type: ignore
+
 # Standard library imports
 import os
 import re
@@ -753,6 +766,22 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
     base_log_dir = iter_dir_for(chapter_id) / f"pipeline_v{version_num}"
     base_log_dir.mkdir(parents=True, exist_ok=True)
 
+    music_voice_context = None
+    music_prompt_payload = None
+    if gw_music_build_voice_context is not None:
+        try:
+            mvc = gw_music_build_voice_context(ctx, pipeline_version=version_num)
+            if mvc and getattr(mvc, "voices", None):
+                music_voice_context = mvc
+                try:
+                    music_prompt_payload = mvc.as_prompt_payload()
+                except Exception:
+                    music_prompt_payload = None
+        except Exception as exc:
+            _log_warning(f"MUSIC: failed to build voice context ({exc})", base_log_dir)
+            music_voice_context = None
+            music_prompt_payload = None
+
     # Chapter Global Editing: if user edited draft_vN.txt, propagate to per-touch-point drafts and refresh suggestions
     try:
         changed = reconcile_chapter_global_edits(ctx, version_num)
@@ -1094,12 +1123,48 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                         pass
                     print("Stopping run due to error. See run_error.log in base directory.")
                     return
+
+            if (
+                (subtle_edit_post_gate or branch_b)
+                and tp_log_dir is not None
+                and gw_music_subtle_pass is not None
+                and music_voice_context is not None
+                and music_prompt_payload
+            ):
+                try:
+                    gw_music_subtle_pass(
+                        tp_dir=tp_log_dir,
+                        tp_index=i,
+                        tp_type=tp_type,
+                        tp_text=tp_text,
+                        voice_context=music_voice_context,
+                        prompt_payload=music_prompt_payload,
+                    )
+                except Exception as exc:
+                    _log_warning(f"MUSIC: subtle score pass failed ({exc})", tp_log_dir)
         else:
             # Unknown types treated as narration by default
             if branch_b:
                 if gw_run_subtle_edit_pipeline is None:
                     raise GWError("ghostwriter.pipelines.run_subtle_edit_pipeline not available")
                 polished_text = gw_run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=prior_draft, prior_suggestions=prior_suggestions, log_dir=tp_log_dir, ctx=ctx)
+                if (
+                    tp_log_dir is not None
+                    and gw_music_subtle_pass is not None
+                    and music_voice_context is not None
+                    and music_prompt_payload
+                ):
+                    try:
+                        gw_music_subtle_pass(
+                            tp_dir=tp_log_dir,
+                            tp_index=i,
+                            tp_type=tp_type,
+                            tp_text=tp_text,
+                            voice_context=music_voice_context,
+                            prompt_payload=music_prompt_payload,
+                        )
+                    except Exception as exc:
+                        _log_warning(f"MUSIC: subtle score pass failed ({exc})", tp_log_dir)
             else:
                 if gw_run_narration_pipeline is None:
                     raise GWError("ghostwriter.pipelines.run_narration_pipeline not available")
@@ -1198,7 +1263,29 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                             "appended_dialog": state.last_appended_dialog,
                         }
                         save_text(tp_log_dir / "touch_point_state.json", _gw_to_text(cp))
-                        raise UserActionRequired("Waiting for user suggestions on first draft.")
+                        music_gate_triggered = False
+                        if (
+                            gw_music_first_gate is not None
+                            and music_voice_context is not None
+                            and music_prompt_payload
+                        ):
+                            try:
+                                music_gate_triggered = gw_music_first_gate(
+                                    tp_dir=tp_log_dir,
+                                    tp_index=i,
+                                    tp_type=tp_type,
+                                    tp_text=tp_text,
+                                    voice_context=music_voice_context,
+                                    prompt_payload=music_prompt_payload,
+                                )
+                            except Exception as exc:
+                                _log_warning(f"MUSIC: first-score gate failed ({exc})", tp_log_dir)
+                                music_gate_triggered = False
+                        message = "Waiting for user suggestions on first draft"
+                        if music_gate_triggered:
+                            message += " and first score"
+                        message += "."
+                        raise UserActionRequired(message)
                 except UserActionRequired:
                     # Re-raise to propagate graceful stop to CLI/driver
                     raise
@@ -1269,3 +1356,16 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
         full_text = (final_path.read_text(encoding="utf-8") if Path(final_path).exists() else "")
         generate_story_so_far_and_relative(ctx, full_text)
         print("Regenerated story_so_far.txt and story_relative_to.txt")
+
+    if gw_music_finalize_exports is not None:
+        try:
+            gw_music_finalize_exports(
+                chapter_id=chapter_id,
+                version=version_num,
+                voice_context=music_voice_context,
+            )
+        except Exception as exc:
+            try:
+                _log_warning(f"MUSIC: export bundle failed ({exc})", base_log_dir)
+            except Exception:
+                pass
