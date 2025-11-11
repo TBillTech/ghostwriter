@@ -2,6 +2,9 @@ You are an expert narrative composer creating a first-pass motif that aligns wit
 
 [VOICE_CONTEXT_JSON]
 
+Character context (referenced entities):
+[CHARACTER_CONTEXT_JSON]
+
 Touch-point metadata:
 - index: [TOUCH_POINT_INDEX]
 - type: [TOUCH_POINT_TYPE]

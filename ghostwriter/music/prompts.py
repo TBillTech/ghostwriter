@@ -29,6 +29,7 @@ def build_first_score_prompt(
 ) -> str:
     replacements = {
         "[VOICE_CONTEXT_JSON]": _json_block(prompt_payload),
+        "[CHARACTER_CONTEXT_JSON]": _json_block(prompt_payload.get("character_outlines") or []),
         "[EXISTING_SCORES_JSON]": _json_block(existing_scores) or "{}",
         "[TOUCH_POINT_INDEX]": str(tp_index),
         "[TOUCH_POINT_TYPE]": tp_type,

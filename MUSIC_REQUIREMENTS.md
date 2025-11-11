@@ -77,7 +77,7 @@ Functional Requirements:
 
 Voices will be defined in the chapter yaml, similiar to how actors are done.  Each voice has four parts, the "chords", the "register", the "instrument", and the "idea" in the story. The "chords" will normally be one of major, minor, diminished, augmented, or chromatic. The "register" will normally be one of base, tenor, alto, or beat. The "instrument" is a simple instrument description like electric-piano, strings, or soundscape. Ideas can be actors, props, or atomosphere. Optionally, the voice may have a ".melody" or ".harmony" as an additional final specification. Here are a few examples of voices: "augmented.base.base.wolf.harmony", "major.beat.drum.engine", "diminished.tenor.soundscape.moon", "minor.alto.strings.mob.melody", "major.tenor.cello.Ralph".
 
-Music will be a description defined in the chapter yaml as well. It doesn't adhere to an exact format, but instructs the LLM about the song globally.  For example: "Music: a cinematic track in D minor; slow tempo, haunting melody, steady bass, light percussion." 
+Music will be a description defined in the chapter yaml as well. It doesn't adhere to an exact format, but instructs the LLM about the song globally.  For example: "music: a cinematic track in D minor; slow tempo, haunting melody, steady bass, light percussion." 
 
 Create tracks in the musicxml for each voice defined in the chapter, similiar to how actors are tracked. 
 

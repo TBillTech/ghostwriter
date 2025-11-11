@@ -118,5 +118,5 @@ def test_build_voice_context_collects_metadata(use_lr_book_env, lr_book_dir: Pat
     red_payload = next(item for item in payload["voices"] if item["token"] == red_spec.token)
     assert any(cid.lower() == "red" for cid in red_payload["characters"])
 
-    assert payload["missing_assets"] == []
+    assert "missing_assets" not in payload
     assert any(entry["voice_token"] == red_spec.token for entry in payload["score_summaries"])

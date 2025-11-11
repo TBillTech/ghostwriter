@@ -75,8 +75,12 @@ def test_ensure_first_score_gate_creates_artifacts(tmp_path: Path, monkeypatch: 
 
     first_score = tp_dir / "touch_point_first_score.musicxml"
     suggestions = tp_dir / "first_score_suggestions.txt"
+    first_score_trace = tp_dir / "first_score.txt"
+    score_check_trace = tp_dir / "score_check.txt"
     assert first_score.exists()
     assert suggestions.exists()
+    assert first_score_trace.exists()
+    assert score_check_trace.exists()
 
     # Second invocation should no-op once artifacts exist
     again = ensure_first_score_gate(
@@ -138,7 +142,11 @@ def test_run_subtle_score_pass_uses_feedback(tmp_path: Path, monkeypatch: pytest
 
     final_score = tp_dir / "touch_point_score.musicxml"
     final_feedback = tp_dir / "score_suggestions.txt"
+    subtle_score_trace = tp_dir / "subtle_score.txt"
+    subtle_check_trace = tp_dir / "score_check.txt"
     assert final_score.exists()
     assert final_feedback.exists()
     assert "note" in final_score.read_text(encoding="utf-8")
     assert final_feedback.read_text(encoding="utf-8").startswith("-")
+    assert subtle_score_trace.exists()
+    assert subtle_check_trace.exists()

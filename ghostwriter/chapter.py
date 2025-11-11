@@ -410,7 +410,7 @@ def parse_touchpoints_from_chapter(chapter: dict) -> List[TouchPoint]:
     if not isinstance(tps_raw, list):
         return result
     # Supported touch-point types
-    allowed = {"actors", "scene", "foreshadowing", "narration", "implicit", "mixed", "setting", "dialog"}
+    allowed = {"actors", "scene", "foreshadowing", "narration", "implicit", "mixed", "setting", "dialog", "voices", "music"}
 
     def _normalize(item) -> List[TouchPoint]:
         # Dict form: {key: value}
@@ -970,6 +970,8 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
             state.set_scene(tp.get("content", ""))
         elif tp_type == "foreshadowing":
             state.add_foreshadowing(tp.get("content", ""))
+        elif tp_type in ("voices", "music"):
+            polished_text = ""
         elif tp_type == "setting":
             # Do not re-parse YAML here; store the content and compute character subset from active state
             try:

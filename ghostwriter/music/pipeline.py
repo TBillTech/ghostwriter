@@ -41,6 +41,8 @@ def ensure_first_score_gate(
 
     first_score_path = tp_dir / "touch_point_first_score.musicxml"
     first_suggestions_path = tp_dir / "first_score_suggestions.txt"
+    first_score_trace = tp_dir / "first_score.txt"
+    score_check_trace = tp_dir / "score_check.txt"
 
     if first_score_path.exists() and first_suggestions_path.exists():
         return False
@@ -93,6 +95,22 @@ def ensure_first_score_gate(
         raise
 
     save_text(first_score_path, response)
+    try:
+        if not first_score_trace.exists():
+            trace_content = [
+                "=== SYSTEM ===",
+                "Compose a valid MusicXML score that fits the touch-point context.",
+                "",
+                "=== USER ===",
+                prompt,
+                "",
+                "=== RESPONSE ===",
+                response,
+                "",
+            ]
+            save_text(first_score_trace, "\n".join(trace_content))
+    except Exception:
+        pass
 
     check_prompt = build_music_check_prompt(
         prompt_payload=prompt_payload,
@@ -115,6 +133,22 @@ def ensure_first_score_gate(
         model=check_model,
     )
     save_text(first_suggestions_path, suggestions)
+    try:
+        if not score_check_trace.exists():
+            trace_content = [
+                "=== SYSTEM ===",
+                "Provide concise, actionable feedback on the score.",
+                "",
+                "=== USER ===",
+                check_prompt,
+                "",
+                "=== RESPONSE ===",
+                suggestions,
+                "",
+            ]
+            save_text(score_check_trace, "\n".join(trace_content))
+    except Exception:
+        pass
 
     try:
         _log_info(
@@ -147,6 +181,8 @@ def run_subtle_score_pass(
     first_feedback_path = tp_dir / "first_score_suggestions.txt"
     final_score_path = tp_dir / "touch_point_score.musicxml"
     final_feedback_path = tp_dir / "score_suggestions.txt"
+    subtle_score_trace = tp_dir / "subtle_score.txt"
+    subtle_check_trace = tp_dir / "score_check.txt"  # reused name; overwritten after subtle pass
 
     if not first_score_path.exists():
         return False
@@ -187,6 +223,22 @@ def run_subtle_score_pass(
         model=model,
     )
     save_text(final_score_path, response)
+    try:
+        if not subtle_score_trace.exists():
+            trace_content = [
+                "=== SYSTEM ===",
+                "Refine the MusicXML score according to feedback while keeping it valid.",
+                "",
+                "=== USER ===",
+                prompt,
+                "",
+                "=== RESPONSE ===",
+                response,
+                "",
+            ]
+            save_text(subtle_score_trace, "\n".join(trace_content))
+    except Exception:
+        pass
 
     check_prompt = build_music_check_prompt(
         prompt_payload=prompt_payload,
@@ -209,6 +261,21 @@ def run_subtle_score_pass(
         model=check_model,
     )
     save_text(final_feedback_path, suggestions)
+    try:
+        trace_content = [
+            "=== SYSTEM ===",
+            "Provide concise, actionable feedback on the score.",
+            "",
+            "=== USER ===",
+            check_prompt,
+            "",
+            "=== RESPONSE ===",
+            suggestions,
+            "",
+        ]
+        save_text(subtle_check_trace, "\n".join(trace_content))
+    except Exception:
+        pass
 
     try:
         _log_info(

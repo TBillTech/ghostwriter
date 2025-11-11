@@ -227,15 +227,22 @@ Tuning tips:
   - Add character‑specific `<dialog>4</dialog>` tags in the template if some characters should pay attention only to the last few lines (e.g., aloof or distracted personas).
   - Incorporate more structured guidance into `<agenda/>` (e.g., “Goal: persuade Henry to advance; Tactic: gentle reassurance, avoid military jargon”) to sharpen intent nuances.
 
-### Music touch-point gates (Slices 1–4)
+### Music touch-point gates (Slices 1–5)
 
 The music track feature now ships with the first two interactive gates:
 
 - **Voice context assembly** (`ghostwriter.music.context`): parses chapter `voices:` directives, links each voice token to matching characters/factoids, and summarizes any sanitized `score.musicxml` assets already in the iteration folder. The resulting payload (`build_music_prompt_context`) fuels all music prompts.
 - **First-score gate** (`ghostwriter.music.pipeline.ensure_first_score_gate`): whenever a prose touch-point creates a first-draft gate, the system also generates `touch_point_first_score.musicxml` and `first_score_suggestions.txt` when voices are defined. This uses `prompts/music_first_score_prompt.md` plus `prompts/music_check_prompt.md` for immediate feedback.
+  - Debug traces: `first_score.txt` (SYSTEM/USER/RESPONSE for score generation) and `score_check.txt` (SYSTEM/USER/RESPONSE for score suggestions) are written alongside the artifacts for inspection.
 - **Subtle-score refinement** (`ghostwriter.music.pipeline.run_subtle_score_pass`): on resume (or any vN subtle-edit branch) the edited first score and feedback are refined into `touch_point_score.musicxml` with fresh `score_suggestions.txt`, via `prompts/music_subtle_edit_prompt.md` and the shared check prompt.
+  - Debug traces: `subtle_score.txt` captures the refinement prompt/response; `score_check.txt` is overwritten with the latest check trace after subtle pass.
 - **Sanitized imports**: Slice 1’s importer/sanitizer continues to normalize optional raw MIDI drops into `import.musicxml`, `score.musicxml`, and `monitor.mid`; the voice context automatically surfaces those summaries to the gates above.
 - **Exports & packaging** (`ghostwriter.music.exporter.finalize_music_exports`): every completed run assembles available touch-point scores into `score_vN.musicxml`, mirrors the latest build under `iterations/<chapter>/score/`, renders `final.mid` plus per-voice MIDIs, emits a structured `manifest.json`, and creates `score_bundle_vN.zip` for easy sharing.
+
+Character outlines in music prompts
+
+- When a voice references known characters (e.g., idea "wolf" linked to `id: wolf`), the first-score prompt now includes a compact `character_outlines` block with the fields most useful to composition (id, name, background, traits, cadence, lexicon, prefer/avoid, mannerisms, sample/common/rare lines, forbidden). This gives the model concrete persona guidance instead of only names.
+- You can toggle this with the environment variable `GW_INCLUDE_CHARACTER_OUTLINES_MUSIC` (default: 1). Set to `0` to omit character outlines from the prompt if you prefer lighter requests.
 
 These steps mirror the prose workflow: first-score artifacts pause for author edits, then subtle refinement resumes deterministically. See `tests/music/test_pipeline.py` for mocked examples of both gates, and ensure the music dependencies (`music21`, `mido`, `pretty_midi`, `numpy`) are installed via `pip install -r requirements.txt`.
 

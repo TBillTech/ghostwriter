@@ -9,6 +9,7 @@ and gate orchestration.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import os
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
@@ -158,6 +159,39 @@ class VoiceContext:
             if all(entry.get("voice_token") != token for entry in summary_entries):
                 summary_entries.append(summary.as_dict())
 
+        # Optionally include character outlines for any referenced characters across voices
+        include_char_ctx = os.getenv("GW_INCLUDE_CHARACTER_OUTLINES_MUSIC", "1") == "1"
+        character_outlines: List[Dict[str, Any]] = []
+        if include_char_ctx:
+            seen_keys: set[str] = set()
+            wanted_fields = {
+                "id",
+                "name",
+                "background",
+                "traits",
+                "cadence",
+                "lexicon",
+                "prefer",
+                "avoid",
+                "mannerisms",
+                "sample_lines",
+                "common_lines",
+                "rare_lines",
+                "forbidden",
+            }
+            for spec in self.voices:
+                for ref in getattr(spec, "character_refs", []) or []:
+                    if not isinstance(ref, dict):
+                        continue
+                    key = str(ref.get("id") or ref.get("name") or "").strip().lower()
+                    if not key or key in seen_keys:
+                        continue
+                    seen_keys.add(key)
+                    outline: Dict[str, Any] = {k: ref[k] for k in wanted_fields if k in ref}
+                    # Ensure deterministic key ordering by adding a token list reference if applicable
+                    if outline:
+                        character_outlines.append(outline)
+
         return {
             "directive": self.directive,
             "tempo_summary": tempo_summary,
@@ -180,7 +214,7 @@ class VoiceContext:
                 for spec in self.voices
             ],
             "score_summaries": summary_entries,
-            "missing_assets": list(self.missing_assets),
+            "character_outlines": character_outlines,
         }
 
 
@@ -295,18 +329,29 @@ def write_voice_token(import_dir: Path, token: str) -> Path:
 
 def _extract_music_directive(chapter: Dict[str, Any]) -> str:
     raw = _get_case_insensitive(chapter, "music")
-    if isinstance(raw, str):
+    if isinstance(raw, str) and raw.strip():
         return raw.strip()
-    return str(raw).strip() if raw is not None else ""
+    if raw is not None:
+        text = str(raw).strip()
+        if text:
+            return text
+    for entry in _gather_touchpoint_values(chapter, "music"):
+        if isinstance(entry, str) and entry.strip():
+            return entry.strip()
+        if entry is not None:
+            text = str(entry).strip()
+            if text:
+                return text
+    return ""
 
 
 def _extract_voice_entries(chapter: Dict[str, Any]) -> List[tuple[str, Dict[str, Any]]]:
-    raw = _get_case_insensitive(chapter, "voices")
-    if raw is None:
-        return []
     entries: List[tuple[str, Dict[str, Any]]] = []
-    for token, meta in _normalize_voice_entry(raw):
-        entries.append((token, meta))
+    raw = _get_case_insensitive(chapter, "voices")
+    if raw is not None:
+        entries.extend(_normalize_voice_entry(raw))
+    for entry in _gather_touchpoint_values(chapter, "voices"):
+        entries.extend(_normalize_voice_entry(entry))
     return entries
 
 
@@ -548,6 +593,21 @@ def _get_case_insensitive(data: Dict[str, Any], key: str) -> Any:
         if isinstance(k, str) and k.lower() == target:
             return value
     return None
+
+
+def _gather_touchpoint_values(chapter: Dict[str, Any], key: str) -> List[Any]:
+    tps = _get_case_insensitive(chapter, "Touch-Points")
+    if not isinstance(tps, list):
+        return []
+    values: List[Any] = []
+    target = key.lower()
+    for item in tps:
+        if not isinstance(item, dict):
+            continue
+        for k, value in item.items():
+            if isinstance(k, str) and k.strip().lower() == target:
+                values.append(value)
+    return values
 
 
 __all__ = [
