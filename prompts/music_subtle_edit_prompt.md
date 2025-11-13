@@ -17,7 +17,10 @@ Author feedback and suggestions:
 Instructions:
 1. Preserve the narrative intent, voice assignments, and overall structure unless the feedback explicitly requests otherwise.
 2. Apply the feedback, improving transitions, balance, articulation, and dynamics as needed.
-3. Ensure the result is valid MusicXML, fully specified and ready for performance.
+3. Ensure the result is valid MusicCSV, fully specified and ready for performance using the format reference below.
 4. Keep measure numbering and part ordering stable relative to the previous draft.
 
-Return only the updated MusicXML score.
+MusicCSV format reference:
+[MUSICCSV_FORMAT_PROMPT]
+
+Return only the updated MusicCSV score (metadata.json, tracks.csv, measures.csv, notes.csv) with no commentary.

@@ -5,7 +5,6 @@ from pathlib import Path
 import pytest
 import yaml
 
-music21 = pytest.importorskip("music21")
 mido = pytest.importorskip("mido")
 
 from ghostwriter.context import RunContext
@@ -16,6 +15,7 @@ from ghostwriter.music.context import (
     parse_voice_token,
     write_voice_token,
 )
+from ghostwriter.musiccsv import MusicCSV, write_musiccsv
 
 
 def _write_score_assets(
@@ -26,21 +26,73 @@ def _write_score_assets(
     denominator: int,
     midi_pitch: int,
 ) -> None:
-    import music21
+    pitch_name = _midi_to_pitch(midi_pitch)
+    music = MusicCSV(
+        metadata={
+            "title": "Context Score",
+            "composer": "Tester",
+            "tempo": tempo_bpm,
+            "time_signature": f"{numerator}/{denominator}",
+            "key_signature": "C",
+            "divisions_per_quarter": 480,
+            "version": "0.1",
+        },
+        tracks=[
+            {
+                "track": 1,
+                "label": "Track",
+                "part": "Part",
+                "instrument": "Piano",
+                "channel": 1,
+                "program": 0,
+                "volume": 100,
+            }
+        ],
+        measures=[
+            {
+                "measure": 1,
+                "time_signature": f"{numerator}/{denominator}",
+                "key_signature": "C",
+                "tempo": tempo_bpm,
+                "start_beat": 0.0,
+                "pickup": False,
+            }
+        ],
+        notes=[
+            {
+                "track": 1,
+                "measure": 1,
+                "beat": 1.0,
+                "pitch": pitch_name,
+                "duration": 1.0,
+                "velocity": 80,
+                "tie": "none",
+                "articulation": None,
+                "pedal": False,
+                "lyric": None,
+                "ornament": None,
+                "comment": None,
+                "grace": False,
+                "repeat": None,
+                "tuplet": None,
+            }
+        ],
+    )
 
-    score = music21.stream.Score()  # type: ignore[attr-defined]
-    part = music21.stream.Part()  # type: ignore[attr-defined]
-    part.append(music21.meter.TimeSignature(f"{numerator}/{denominator}"))  # type: ignore[attr-defined]
-    part.append(music21.tempo.MetronomeMark(number=tempo_bpm))  # type: ignore[attr-defined]
-    part.append(music21.instrument.Instrument())  # type: ignore[attr-defined]
-    tone = music21.note.Note(midi_pitch)
-    tone.quarterLength = 1
-    part.append(tone)
-    score.append(part)
+    directory.mkdir(parents=True, exist_ok=True)
+    score_path = directory / "score.musiccsv"
+    import_path = directory / "import.musiccsv"
+    write_musiccsv(score_path, music)
+    write_musiccsv(import_path, music)
+    midi_path = directory / "monitor.mid"
+    music.to_midi(midi_path)
 
-    score.write("musicxml", fp=str(directory / "score.musicxml"))
-    score.write("musicxml", fp=str(directory / "import.musicxml"))
-    score.write("midi", fp=str(directory / "monitor.mid"))
+
+def _midi_to_pitch(midi_value: int) -> str:
+    names = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+    octave = midi_value // 12 - 1
+    name = names[midi_value % 12]
+    return f"{name}{octave}"
 
 
 def test_parse_voice_token_handles_roles() -> None:
@@ -65,6 +117,7 @@ def test_build_voice_context_collects_metadata(use_lr_book_env, lr_book_dir: Pat
             "token": "minor.bass.cello.wolf",
             "role": "support",
         },
+        "major.bass.soundscape.forest_path",
     ]
     data["music"] = "Slow burn in D minor; start around 90 BPM."
     chapter_path.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
@@ -75,6 +128,7 @@ def test_build_voice_context_collects_metadata(use_lr_book_env, lr_book_dir: Pat
     voice_defs = [
         ("major.alto.flute.red.melody", {"tempo": 90, "numerator": 3, "denominator": 4, "note": 60}),
         ("minor.bass.cello.wolf", {"tempo": 110, "numerator": 4, "denominator": 4, "note": 50}),
+        ("major.bass.soundscape.forest_path", {"tempo": 72, "numerator": 4, "denominator": 4, "note": 48}),
     ]
 
     for idx, (token, params) in enumerate(voice_defs):
@@ -93,13 +147,15 @@ def test_build_voice_context_collects_metadata(use_lr_book_env, lr_book_dir: Pat
     voice_context = build_voice_context(ctx, pipeline_version=1)
 
     assert voice_context.directive.startswith("Slow burn")
-    assert len(voice_context.voices) == 2
+    assert len(voice_context.voices) == 3
 
     red_spec = next(spec for spec in voice_context.voices if spec.idea.lower() == "red")
     wolf_spec = next(spec for spec in voice_context.voices if spec.idea.lower() == "wolf")
+    forest_spec = next(spec for spec in voice_context.voices if spec.idea.lower() == "forest_path")
 
     assert any(cid.lower() == "red" for cid in red_spec.character_ids)
     assert any(cid.lower() == "wolf" for cid in wolf_spec.character_ids)
+    assert any(name == "Forest Path" for name in forest_spec.factoid_names)
 
     assert not voice_context.missing_assets
 
@@ -117,6 +173,9 @@ def test_build_voice_context_collects_metadata(use_lr_book_env, lr_book_dir: Pat
 
     red_payload = next(item for item in payload["voices"] if item["token"] == red_spec.token)
     assert any(cid.lower() == "red" for cid in red_payload["characters"])
+
+    forest_payload = next(item for item in payload["voices"] if item["token"] == forest_spec.token)
+    assert "Forest Path" in forest_payload["factoids"]
 
     assert "missing_assets" not in payload
     assert any(entry["voice_token"] == red_spec.token for entry in payload["score_summaries"])

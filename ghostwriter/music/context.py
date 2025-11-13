@@ -14,21 +14,12 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
 import logging
-import warnings
-
-try:  # pragma: no cover - exercised via pytest.importorskip in tests
-    from music21 import converter, key as m21_key
-except ImportError as exc:  # pragma: no cover - surfaced to caller
-    raise ImportError(
-        "music21 is required for the music context helpers. Install optional music"
-        " dependencies via `pip install -r requirements.txt`."
-    ) from exc
 
 from ..context import RunContext
 from ..templates import iter_dir_for
 from ..utils import _norm_token
+from ..musiccsv import read_musiccsv, validate_musiccsv, resolve_derived_fields, MusicCSV
 
-warnings.filterwarnings("ignore", module="music21")
 
 logger = logging.getLogger(__name__)
 
@@ -111,7 +102,7 @@ class VoiceSpec:
 
 @dataclass
 class ScoreSummary:
-    """Lightweight metadata derived from a sanitized MusicXML score."""
+    """Lightweight metadata derived from a sanitized MusicCSV score."""
 
     voice_token: str
     score_path: Path
@@ -430,13 +421,13 @@ def _collect_score_summaries(ctx: RunContext, voice_specs: List[VoiceSpec], vers
         spec = index.get(_normalize_lookup(token))
         if spec is None:
             continue
-        score_path = import_dir / "score.musicxml"
+        score_path = import_dir / "score.musiccsv"
         if not score_path.exists():
-            score_path = import_dir / "import.musicxml"
+            score_path = import_dir / "import.musiccsv"
         if not score_path.exists():
             continue
         try:
-            summary = _summarize_musicxml(score_path, spec.token)
+            summary = _summarize_musiccsv(score_path, spec.token)
         except Exception as exc:  # pragma: no cover - defensive branch
             logger.debug("Failed to summarize %s: %s", score_path, exc)
             continue
@@ -444,61 +435,68 @@ def _collect_score_summaries(ctx: RunContext, voice_specs: List[VoiceSpec], vers
     return summaries
 
 
-def _summarize_musicxml(path: Path, voice_token: str) -> ScoreSummary:
-    stream = converter.parse(str(path))
+def _summarize_musiccsv(path: Path, voice_token: str) -> ScoreSummary:
+    music = read_musiccsv(path)
+    validate_musiccsv(music)
+    derived = resolve_derived_fields(music)
 
-    tempos = set()
-    try:
-        for _offset, _end, mark in stream.metronomeMarkBoundaries():
-            number = getattr(mark, "number", None)
-            if number is not None:
-                tempos.add(f"{float(number):.2f}")
-            else:
-                tempos.add(str(mark))
-    except Exception:
-        pass
+    def _format_number(value: Any) -> str:
+        try:
+            number = float(value)
+        except Exception:
+            return str(value)
+        text = f"{number:.2f}"
+        return text.rstrip("0").rstrip(".") if "." in text else text
+
+    tempos: set[str] = set()
+    meta_tempo = (music.metadata or {}).get("tempo")
+    if meta_tempo is not None:
+        tempos.add(_format_number(meta_tempo))
+    for measure in music.measures:
+        tempo_value = measure.get("tempo")
+        if tempo_value is not None:
+            tempos.add(_format_number(tempo_value))
     if not tempos:
         tempos.add("Unknown")
 
-    time_signatures = {
-        ts.ratioString for ts in stream.recurse().getElementsByClass("TimeSignature")
-    }
+    time_signatures: set[str] = set()
+    meta_signature = (music.metadata or {}).get("time_signature")
+    if isinstance(meta_signature, str) and meta_signature.strip():
+        time_signatures.add(meta_signature.strip())
+    for measure in music.measures:
+        value = measure.get("time_signature")
+        if isinstance(value, str) and value.strip():
+            time_signatures.add(value.strip())
     if not time_signatures:
         time_signatures.add("Unknown")
 
-    key_signatures = set()
-    try:
-        detected = stream.analyze("key")
-        if detected:
-            key_signatures.add(str(detected))
-    except Exception:
-        pass
-    for key_obj in stream.recurse().getElementsByClass(m21_key.Key):
-        key_signatures.add(str(key_obj))
-    for key_sig in stream.recurse().getElementsByClass(m21_key.KeySignature):
-        try:
-            as_key = key_sig.asKey()
-            key_signatures.add(str(as_key))
-        except Exception:
-            key_signatures.add(str(key_sig))
+    key_signatures: set[str] = set()
+    meta_key = (music.metadata or {}).get("key_signature")
+    if isinstance(meta_key, str) and meta_key.strip():
+        key_signatures.add(meta_key.strip())
+    for measure in music.measures:
+        value = measure.get("key_signature")
+        if isinstance(value, str) and value.strip():
+            key_signatures.add(value.strip())
     if not key_signatures:
         key_signatures.add("Unknown")
 
-    measure_numbers: List[int] = []
-    for measure in stream.recurse().getElementsByClass("Measure"):
-        number = getattr(measure, "measureNumber", None) or getattr(measure, "number", None)
-        if number is None:
-            continue
-        try:
-            measure_numbers.append(int(number))
-        except Exception:
-            continue
+    measure_numbers = [int(row.get("measure", 0) or 0) for row in music.measures if row.get("measure")]
     measure_count = max(measure_numbers) if measure_numbers else 0
+    if measure_count == 0:
+        note_measures = [int(note.get("measure", 0) or 0) for note in music.notes if note.get("measure")]
+        if note_measures:
+            measure_count = max(note_measures)
 
-    try:
-        duration = float(getattr(stream.duration, "quarterLength", 0.0) or 0.0)
-    except Exception:
-        duration = 0.0
+    divisions = int((music.metadata or {}).get("divisions_per_quarter") or 480)
+    total_ticks = 0
+    for note in derived.notes:
+        absolute_tick = note.get("absolute_tick")
+        duration_ticks = note.get("duration_ticks")
+        if absolute_tick is None or duration_ticks is None:
+            continue
+        total_ticks = max(total_ticks, int(absolute_tick) + int(duration_ticks))
+    duration_quarter_length = float(total_ticks / divisions) if divisions else 0.0
 
     return ScoreSummary(
         voice_token=voice_token,
@@ -507,7 +505,7 @@ def _summarize_musicxml(path: Path, voice_token: str) -> ScoreSummary:
         time_signatures=sorted(time_signatures),
         key_signatures=sorted(key_signatures),
         measure_count=measure_count,
-        duration_quarter_length=duration,
+        duration_quarter_length=duration_quarter_length,
     )
 
 
@@ -572,7 +570,7 @@ def _dedupe_refs(items: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
 def _normalize_lookup(value: Any) -> str:
     text = _norm_token(value)
-    return text.replace(" ", "")
+    return text.replace(" ", "").replace("_", "").replace("-", "")
 
 
 def _coerce_to_iterable(value: Any) -> List[str]:

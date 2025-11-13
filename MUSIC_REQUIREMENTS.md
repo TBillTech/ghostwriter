@@ -5,14 +5,14 @@ Create a music collaboration feature that allows the user and AI to share, under
 
 Support interoperability with common DAWs via MIDI/MIDI 2.0.
 
-Use MusicXML internally to allow the LLM (and human users) to reason about structure, measures, instruments, harmony, and timing.
+Use MusicCSV internally to allow the LLM (and human users) to reason about structure, measures, instruments, harmony, and timing.
 
 Enable AI-assisted music authoring, where users can tweak results interactively (“user-in-the-loop”).
 
 1️⃣ Input & Ingestion Layer
 Purpose:
 
-Convert incoming musical data (e.g., .mid, .mid2, .musicxml) into a normalized, enriched internal MusicXML representation.
+Convert incoming musical data (e.g., .mid, .mid2) into a normalized, enriched internal MusicCSV representation.
 
 Detect incoming musical data 
 
@@ -36,9 +36,9 @@ Channel assignments
 
 Parse note events into measure-based structure using tempo and time signature.
 
-MusicXML Conversion
+MusicCSV Conversion
 
-Generate an initial MusicXML file representing the parsed data.
+Generate an initial MusicCSV archive representing the parsed data.
 
 Ensure proper encoding of:
 
@@ -50,7 +50,7 @@ Articulations (if available)
 
 Tempo and dynamics
 
-Produce human-readable indentation and comments in the MusicXML for ease of editing.
+Emit a human-readable text form (for LLM review) stored alongside the archive so edits remain straightforward.
 
 User-in-the-Loop Refinement
 
@@ -58,20 +58,20 @@ Look for directories under iterations/CHAPTER_XXX/pipeline_vN/xx_naration (or xx
 
 Provide a text-edit round-trip based files under xx_track_[voice]_import/
 
-If the file xx_track_[voice]_import/import.musicxml file is missing, then generate it from the importable files.
+If the file xx_track_[voice]_import/import.musiccsv file is missing, then generate it from the importable files.
 
-Any importable files such as .midi, etc... (not including .musicxml files and not including the monitor.mid file) should be read from this directory to create the import.musicxml file.
+Any importable files such as .midi, etc... (not including the monitor.mid file) should be read from this directory to create the import.musiccsv file.
 
-The user then reads the import.musicxml file and confirms or edits detected tempo/time signature, instrument metadata (name, type, range, MIDI program), and adjusting measure alignment (barline correction)
+The user then reviews the MusicCSV text summary, confirms or edits detected tempo/time signature, instrument metadata (name, type, range, MIDI program), and adjusts measure alignment (barline correction) via the CSV/JSON payloads.
 
-IF the output file (score.musicxml) is absent, then sanitize and fix user-edited import.musicxml to ensure structural integrity, and write this output to the xx_track_[voice]_import/score.musicxml
+IF the output file (score.musiccsv) is absent, then sanitize and fix user-edited import.musiccsv to ensure structural integrity, and write this output to the xx_track_[voice]_import/score.musiccsv
 
-Also, anytime you write out score.musicxml, overwrite the monitor.mid.  The monitor.mid file should be a reasonable approximation of the score which can be played by the user to hear the notes and/or beats. 
+Also, anytime you write out score.musiccsv, overwrite the monitor.mid.  The monitor.mid file should be a reasonable approximation of the score which can be played by the user to hear the notes and/or beats. 
 
 2️⃣ Internal Representation & Processing Layer
 Purpose:
 
-Maintain a semantically rich symbolic music representation (MusicXML) for reasoning, analysis, and generation. It is expected to track the touch-point bullets in a novel and interesting isomorphism between the story and the music.
+Maintain a semantically rich symbolic music representation (MusicCSV) for reasoning, analysis, and generation. It is expected to track the touch-point bullets in a novel and interesting isomorphism between the story and the music.
 
 Functional Requirements:
 
@@ -79,19 +79,19 @@ Voices will be defined in the chapter yaml, similiar to how actors are done.  Ea
 
 Music will be a description defined in the chapter yaml as well. It doesn't adhere to an exact format, but instructs the LLM about the song globally.  For example: "music: a cinematic track in D minor; slow tempo, haunting melody, steady bass, light percussion." 
 
-Create tracks in the musicxml for each voice defined in the chapter, similiar to how actors are tracked. 
+Create tracks in the MusicCSV score for each voice defined in the chapter, similar to how actors are tracked. 
 
-When prompting the LLM to produce the xx_narration, xx_dialog, or xx_mixed /first_score.musicxml, be sure to provide the last two measures from the prior touch_point, if it exists.
+When prompting the LLM to produce the xx_narration, xx_dialog, or xx_mixed /first_score.musiccsv, be sure to provide the last two measures from the prior touch_point, if it exists.
 
-The workflow for touch_point_first_score.musicxml, first_score_suggestions.txt, feeding touch_point_score.musicxml and score_suggestions.txt should echo the one already built for touch_point_first_draft.txt, first_suggestions.txt, touch_point_draft.txt, and suggestions.txt.
+The workflow for touch_point_first_score.musiccsv, first_score_suggestions.txt, feeding touch_point_score.musiccsv and score_suggestions.txt should echo the one already built for touch_point_first_draft.txt, first_suggestions.txt, touch_point_draft.txt, and suggestions.txt.
 
-MusicXML Parser/Serializer
+MusicCSV Parser/Serializer
 
-Implement or integrate a library (e.g., music21) to parse and manipulate MusicXML.
+Implement or integrate a library (e.g., the internal `ghostwriter.musiccsv` helpers) to parse and manipulate MusicCSV archives.
 
 Allow in-memory modification of structure (notes, measures, instruments, etc.).
 
-Serialize back to valid MusicXML conforming to the schema.
+Serialize back to valid MusicCSV conforming to the specification.
 
 Musical Knowledge Model
 
@@ -117,11 +117,11 @@ Handle tempo curves (ritardando, accelerando).
 
 AI Reasoning Interface
 
-LLM integration layer that exposes the internal MusicXML as text for analysis or generation.
+LLM integration layer that exposes the internal MusicCSV as text for analysis or generation.
 
 LLM prompts should include:
 
-Any provided xx_track_[voice]_import/score.musicxml, but make sure to clearly link the [voice] title with the xml.
+Any provided xx_track_[voice]_import/score.musiccsv, but make sure to clearly link the [voice] title with the CSV snippet.
 
 Story Context, including the touch_point, brainstorm.txt bullets, and voice context. For voice context, voices should be matched to props, actors, and factoids in a best effort bag-of-words way. For example, if the voice is "base.wolf", then the prompt for generating the "base.wolf" track should provide the character outline for wolf. On the other hand, if the voice were "soundscape.moon", then factoids with moon in the name in the setting on should be provided in the prompt instead. If no factoids, props, or characters can be found, then just tell the LLM to do it's best with general knowledge of the voice.
 
@@ -131,7 +131,7 @@ Current structure (number of measures, instruments)
 
 Musical intent or requested operation (e.g., “generate a harmonic accompaniment”)
 
-Results parsed back into MusicXML delta or new track.
+Results parsed back into MusicCSV delta or new track.
 
 Harmonic and Rhythmic Coherence
 
@@ -156,15 +156,15 @@ Allow AI or user to modify roles and regenerate related parts accordingly.
 3️⃣ Output & Export Layer
 Purpose:
 
-Convert enriched MusicXML compositions back into standard formats for interoperability.
+Convert enriched MusicCSV compositions back into standard formats for interoperability.
 
-Similiar to how draft_vN.txt is a concatenation of the touch_point_draft.txt files, there should be a score_vN.musicxml which should concatenate the touch_point_score.musicxml files from the pipeline_vN.
+Similar to how draft_vN.txt is a concatenation of the touch_point_draft.txt files, there should be a score_vN.musiccsv which concatenates the touch_point_score.musiccsv files from the pipeline_vN.
 
-Similiar to how the final.txt is condensed from the latest draft_vN.txt, a score/ directory should be regenerated by condensing the score_vN.muisicxml into a score/final.musicxml and also broken out into each individual voice track in the same directory, for example: `score/augmented.base.base.wolf.harmony.mid`, `score/diminished.tenor.soundscape.moon.mid`, etc..
+Similar to how the final.txt is condensed from the latest draft_vN.txt, a score/ directory should be regenerated by condensing the score_vN.musiccsv into a score/final.musiccsv and also broken out into each individual voice track in the same directory, for example: `score/augmented.base.base.wolf.harmony.mid`, `score/diminished.tenor.soundscape.moon.mid`, etc..
 
 Functional Requirements:
 
-MusicXML to MIDI Conversion
+MusicCSV to MIDI Conversion
 
 Translate note events, dynamics, and tempo changes into MIDI 1.0 or 2.0 events.
 
@@ -216,7 +216,7 @@ As described above, each draft_vN will regenerate a bundle:
 
 CHAPTER_XXX/pipeline_vN/score/
   ├── manifest.json
-  ├── final.musicxml
+  ├── final.musiccsv
   ├── final.mid
   ├── diminished.tenor.soundscape.moon.mid
   ├── augmented.base.base.wolf.harmony.mid
@@ -230,16 +230,16 @@ Human-AI Round-Trip
 
 Workflow should allow:
 
-User edits MusicXML (by hand or DAW) (see discussion above).
+User edits MusicCSV (by hand or DAW tooling that understands the CSV format) (see discussion above).
 
-AI reads updated MusicXML, interprets changes, and generates follow-up suggestions (see discussion above).
+AI reads updated MusicCSV, interprets changes, and generates follow-up suggestions (see discussion above).
 
 5️⃣ Auxiliary & Developer Requirements
 Libraries and Tooling
 
 Core parsing & conversion:
 
-mido, pretty_midi, and music21
+mido, pretty_midi, and the internal MusicCSV helpers
 
 Serialization:
 
@@ -251,12 +251,12 @@ Input/output structured prompt templates for musical context
 
 Testing:
 
-Use reference .mid and .musicxml samples for regression testing
+Use reference .mid and .musiccsv samples for regression testing
 
 🧩 Summary of Major Components
 Layer	Primary Role	Key Technologies
-Input/Ingestion	Parse MIDI → MusicXML	mido, music21
-Representation/Processing	Maintain internal enriched structure	custom classes, XML DOM
+Input/Ingestion	Parse MIDI → MusicCSV	mido, ghostwriter.musiccsv
+Representation/Processing	Maintain internal enriched structure	custom MusicCSV classes
 AI Integration	Reason about structure and generate new parts	LLM with prompt templates
-Output/Export	MusicXML → MIDI	pretty_midi, music21
+Output/Export	MusicCSV → MIDI	pretty_midi, ghostwriter.musiccsv
 Collaboration Layer	Packaging, metadata, versioning	JSON, ZIP, diff tools

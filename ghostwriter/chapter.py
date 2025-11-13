@@ -935,6 +935,37 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 raise
             except Exception:
                 pass
+            try:
+                if (
+                    (not branch_b)
+                    and tp_type in ("narration", "dialog", "implicit", "mixed")
+                    and tp_log_dir is not None
+                    and gw_music_first_gate is not None
+                    and music_voice_context is not None
+                    and music_prompt_payload
+                ):
+                    required_music_files = [
+                        tp_log_dir / "touch_point_first_score.musiccsv",
+                        tp_log_dir / "first_score_suggestions.txt",
+                        tp_log_dir / "first_monitor.mid",
+                    ]
+                    if any(not path.exists() for path in required_music_files):
+                        regenerated = gw_music_first_gate(
+                            tp_dir=tp_log_dir,
+                            tp_index=i,
+                            tp_type=tp_type,
+                            tp_text=tp_text,
+                            voice_context=music_voice_context,
+                            prompt_payload=music_prompt_payload,
+                        )
+                        if regenerated:
+                            raise UserActionRequired(
+                                "Music first-score artifacts regenerated; review before continuing."
+                            )
+            except UserActionRequired:
+                raise
+            except Exception:
+                pass
             # On edit branches (v2+), ensure suggestions.txt exists even for previously completed steps
             try:
                 if branch_b and tp_type in ("narration", "dialog", "implicit", "mixed") and tp_log_dir is not None:
@@ -1280,6 +1311,8 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                                     voice_context=music_voice_context,
                                     prompt_payload=music_prompt_payload,
                                 )
+                            except UserActionRequired:
+                                raise
                             except Exception as exc:
                                 _log_warning(f"MUSIC: first-score gate failed ({exc})", tp_log_dir)
                                 music_gate_triggered = False

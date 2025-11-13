@@ -5,7 +5,7 @@ including import normalization, sanitization, and future score generation
 stages referenced in MUSIC_REQUIREMENTS.md.
 """
 
-from .importer import process_import_directory, generate_import_musicxml
+from .importer import process_import_directory, generate_import_musiccsv
 from .sanitizer import sanitize_import, ensure_sanitized
 from .context import (
     VoiceSpec,
@@ -21,7 +21,7 @@ from .exporter import finalize_music_exports
 
 __all__ = [
     "process_import_directory",
-    "generate_import_musicxml",
+    "generate_import_musiccsv",
     "sanitize_import",
     "ensure_sanitized",
     "VoiceSpec",

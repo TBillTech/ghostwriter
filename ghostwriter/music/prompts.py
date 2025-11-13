@@ -10,6 +10,10 @@ from ..templates import apply_template
 _TEMPLATE_FIRST_SCORE = "prompts/music_first_score_prompt.md"
 _TEMPLATE_CHECK = "prompts/music_check_prompt.md"
 _TEMPLATE_SUBTLE_EDIT = "prompts/music_subtle_edit_prompt.md"
+_TEMPLATE_CSV_FORMAT = "prompts/musiccsv_format_prompt.txt"
+
+
+_FORMAT_REFERENCE = apply_template(_TEMPLATE_CSV_FORMAT, {})
 
 
 def _json_block(data: Any) -> str:
@@ -27,13 +31,16 @@ def build_first_score_prompt(
     tp_type: str,
     tp_text: str,
 ) -> str:
+    payload_for_json = dict(prompt_payload)
+    character_context = payload_for_json.pop("character_outlines", None)
     replacements = {
-        "[VOICE_CONTEXT_JSON]": _json_block(prompt_payload),
-        "[CHARACTER_CONTEXT_JSON]": _json_block(prompt_payload.get("character_outlines") or []),
+        "[VOICE_CONTEXT_JSON]": _json_block(payload_for_json),
+        "[CHARACTER_CONTEXT_JSON]": _json_block(character_context or []),
         "[EXISTING_SCORES_JSON]": _json_block(existing_scores) or "{}",
         "[TOUCH_POINT_INDEX]": str(tp_index),
         "[TOUCH_POINT_TYPE]": tp_type,
         "[TOUCH_POINT_TEXT]": tp_text.strip(),
+        "[MUSICCSV_FORMAT_PROMPT]": _FORMAT_REFERENCE,
     }
     return apply_template(_TEMPLATE_FIRST_SCORE, replacements)
 
@@ -44,14 +51,14 @@ def build_music_check_prompt(
     tp_index: int,
     tp_type: str,
     tp_text: str,
-    musicxml_snippet: str,
+    musiccsv_snippet: str,
 ) -> str:
     replacements = {
         "[VOICE_CONTEXT_JSON]": _json_block(prompt_payload),
         "[TOUCH_POINT_INDEX]": str(tp_index),
         "[TOUCH_POINT_TYPE]": tp_type,
         "[TOUCH_POINT_TEXT]": tp_text.strip(),
-        "[MUSICXML_SNIPPET]": musicxml_snippet.strip(),
+        "[MUSICCSV_SNIPPET]": musiccsv_snippet.strip(),
     }
     return apply_template(_TEMPLATE_CHECK, replacements)
 
@@ -72,6 +79,7 @@ def build_subtle_edit_prompt(
         "[TOUCH_POINT_TEXT]": tp_text.strip(),
         "[PREVIOUS_SCORE]": previous_score.strip(),
         "[AUTHOR_FEEDBACK]": author_feedback.strip() or "(No feedback supplied.)",
+        "[MUSICCSV_FORMAT_PROMPT]": _FORMAT_REFERENCE,
     }
     return apply_template(_TEMPLATE_SUBTLE_EDIT, replacements)
 

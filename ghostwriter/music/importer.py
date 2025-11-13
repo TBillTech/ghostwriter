@@ -1,10 +1,10 @@
 """Utilities for normalizing imported musical assets.
 
-Slice 1 of the music feature focuses on converting raw MIDI / MusicXML files
-into a normalized MusicXML representation that GhostWriter (and users) can
-reason about. The importer exposes helpers that process a per-voice import
-folder, generate `import.musicxml` when possible, and ensure the downstream
-sanitizer can build a stable score file.
+Slice 1 of the music feature focuses on converting raw MIDI files into a
+normalized MusicCSV representation that GhostWriter (and users) can reason
+about. The importer exposes helpers that process a per-voice import folder,
+generate ``import.musiccsv`` when possible, and ensure the downstream sanitizer
+can build a stable score file.
 
 The functions in this module intentionally avoid coupling to the broader
 pipeline orchestration so that future slices can plug them into narration,
@@ -14,25 +14,16 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, List, Optional
+from typing import List, Optional
 import logging
-import warnings
 
-try:  # pragma: no cover - guard import for environments lacking music libs
-    from music21 import converter, instrument, key, meter, tempo
-except ImportError as exc:  # pragma: no cover - surfaced to caller
-    raise ImportError(
-        "music21 is required for the music importer. Install optional music"
-        " dependencies via `pip install -r requirements.txt`."
-    ) from exc
+from ..musiccsv import MusicCSV, read_musiccsv, write_musiccsv, validate_musiccsv
 
 SUPPORTED_IMPORT_EXTENSIONS = {".mid", ".midi", ".mid2"}
-_IMPORT_FILENAME = "import.musicxml"
+_IMPORT_FILENAME = "import.musiccsv"
 
 logger = logging.getLogger(__name__)
 
-# Silence verbose music21 warnings that would otherwise pollute CLI output.
-warnings.filterwarnings("ignore", module="music21")
 
 
 @dataclass
@@ -58,12 +49,11 @@ def process_import_directory(import_dir: Path) -> Optional[ImportArtifacts]:
     """Normalize raw musical assets inside *import_dir*.
 
     Workflow (aligned with MUSIC_REQUIREMENTS.md):
-    1. If ``import.musicxml`` is missing and raw MIDI files exist, convert the
-       first available raw file into normalized MusicXML, inserting helpful
-       metadata as XML comments.
-    2. Leave creation of ``score.musicxml`` and ``monitor.mid`` to the
-       sanitizer (invoked in a later stage). The importer simply guarantees the
-       presence of ``import.musicxml`` when raw assets are available.
+     1. If ``import.musiccsv`` is missing and raw MIDI files exist, convert the
+         first available raw file into normalized MusicCSV.
+     2. Leave creation of ``score.musiccsv`` and ``monitor.mid`` to the
+         sanitizer (invoked in a later stage). The importer simply guarantees the
+         presence of ``import.musiccsv`` when raw assets are available.
 
     Returns
     -------
@@ -77,8 +67,9 @@ def process_import_directory(import_dir: Path) -> Optional[ImportArtifacts]:
     import_path = import_dir / _IMPORT_FILENAME
     if import_path.exists():
         logger.debug("Import file already present: %s", import_path)
-        stream = converter.parse(str(import_path))
-        metadata = _extract_metadata(stream)
+        music = read_musiccsv(import_path)
+        validate_musiccsv(music)
+        metadata = _extract_metadata(music)
         _maybe_sanitize(import_dir)
         return ImportArtifacts(import_path=import_path, metadata=metadata, source_files=[])
 
@@ -87,29 +78,17 @@ def process_import_directory(import_dir: Path) -> Optional[ImportArtifacts]:
         logger.debug("No importable audio files found in %s", import_dir)
         return None
 
-    stream = _load_stream(raw_files[0])
-    if hasattr(stream, "flatten"):
-        try:
-            stream = stream.flatten()  # type: ignore[assignment]
-        except Exception:
-            pass
-    elif hasattr(stream, "flat"):
-        try:
-            stream = stream.flat  # type: ignore[attr-defined,assignment]
-        except Exception:
-            pass
-    metadata = _extract_metadata(stream)
-    _write_musicxml(stream, import_path, metadata)
+    music = MusicCSV.from_midi(raw_files[0])
+    validate_musiccsv(music)
+    metadata = _extract_metadata(music)
+    write_musiccsv(import_path, music)
     _maybe_sanitize(import_dir)
     return ImportArtifacts(import_path=import_path, metadata=metadata, source_files=raw_files)
-
-
-def generate_import_musicxml(import_dir: Path) -> Optional[Path]:
-    """Legacy-friendly alias returning the generated ``import.musicxml`` path."""
+def generate_import_musiccsv(import_dir: Path) -> Optional[Path]:
+    """Generate ``import.musiccsv`` for *import_dir* when possible."""
 
     artifacts = process_import_directory(import_dir)
     return artifacts.import_path if artifacts else None
-
 
 # ---------------------------------------------------------------------------
 # Internal helpers
@@ -124,92 +103,76 @@ def _find_importable_files(directory: Path) -> List[Path]:
         if ext in SUPPORTED_IMPORT_EXTENSIONS:
             results.append(candidate)
     return results
+def _extract_metadata(music: MusicCSV) -> ImportMetadata:
+    def _fmt(value: Optional[float | int | str]) -> Optional[str]:
+        if value is None:
+            return None
+        try:
+            number = float(value)
+            text = f"{number:.2f}"
+            return text.rstrip("0").rstrip(".") if "." in text else text
+        except Exception:
+            return str(value)
 
+    tempos: set[str] = set()
+    meta_tempo = (music.metadata or {}).get("tempo")
+    if meta_tempo is not None:
+        formatted = _fmt(meta_tempo)
+        if formatted:
+            tempos.add(formatted)
+    for measure in music.measures:
+        tempo_value = measure.get("tempo")
+        formatted = _fmt(tempo_value)
+        if formatted:
+            tempos.add(formatted)
 
-def _load_stream(source: Path):
-    logger.info("Loading music asset: %s", source)
-    return converter.parse(str(source))
+    time_signatures: set[str] = set()
+    meta_sig = (music.metadata or {}).get("time_signature")
+    if isinstance(meta_sig, str) and meta_sig.strip():
+        time_signatures.add(meta_sig.strip())
+    for measure in music.measures:
+        value = measure.get("time_signature")
+        if isinstance(value, str) and value.strip():
+            time_signatures.add(value.strip())
 
+    key_signatures: set[str] = set()
+    meta_key = (music.metadata or {}).get("key_signature")
+    if isinstance(meta_key, str) and meta_key.strip():
+        key_signatures.add(meta_key.strip())
+    for measure in music.measures:
+        value = measure.get("key_signature")
+        if isinstance(value, str) and value.strip():
+            key_signatures.add(value.strip())
 
-def _extract_metadata(stream) -> ImportMetadata:
-    tempos = {
-        f"{mark.number:.2f}" if getattr(mark, "number", None) else str(mark)
-        for _offset, _end, mark in stream.metronomeMarkBoundaries()
-    }
-    time_signatures = {
-        ts.ratioString
-        for ts in stream.recurse().getElementsByClass("TimeSignature")
-    }
-    key_sigs = set()
-    detected_key = stream.analyze("key")
-    if detected_key is not None:
-        key_sigs.add(str(detected_key))
-    key_sigs.update(str(k) for k in stream.recurse().getElementsByClass(key.Key))
-    key_sigs.update(str(k) for k in stream.recurse().getElementsByClass(key.KeySignature))
-
-    instruments_found = {
-        _instrument_name(instr)
-        for instr in stream.recurse().getElementsByClass(instrument.Instrument)
-    }
-    if not instruments_found and hasattr(stream, "parts"):
-        for part in stream.parts:
-            maybe_instr = part.getInstrument(returnDefault=True)
-            instruments_found.add(_instrument_name(maybe_instr))
+    instruments_found: set[str] = set()
+    for track in music.tracks:
+        instruments_found.add(_instrument_name(track))
 
     return ImportMetadata(
-        tempos=sorted(filter(None, tempos)) or ["Unknown"],
-        time_signatures=sorted(filter(None, time_signatures)) or ["Unknown"],
-        key_signatures=sorted(filter(None, key_sigs)) or ["Unknown"],
-        instruments=sorted(filter(None, instruments_found)) or ["Unknown"],
+        tempos=sorted(tempos) or ["Unknown"],
+        time_signatures=sorted(time_signatures) or ["Unknown"],
+        key_signatures=sorted(key_signatures) or ["Unknown"],
+        instruments=sorted(instruments_found) or ["Unknown"],
     )
 
 
-def _instrument_name(instr) -> str:
-    if instr is None:
-        return "Unknown"
-    name = getattr(instr, "instrumentName", None) or getattr(instr, "bestName", None)
-    if name:
-        return str(name)
-    if getattr(instr, "midiProgram", None) is not None:
-        return f"Program {instr.midiProgram}"
-    return instr.__class__.__name__
-
-
-def _metadata_comment(metadata: ImportMetadata) -> str:
-    parts = [
-        f"Tempo(s): {', '.join(metadata.tempos)}",
-        f"Time Signature(s): {', '.join(metadata.time_signatures)}",
-        f"Key Signature(s): {', '.join(metadata.key_signatures)}",
-        f"Instrument(s): {', '.join(metadata.instruments)}",
-    ]
-    return " | ".join(parts)
-
-
-def _write_musicxml(stream, destination: Path, metadata: ImportMetadata) -> None:
-    destination = Path(destination)
-    destination.parent.mkdir(parents=True, exist_ok=True)
-
-    xml_path = stream.write("musicxml")
-    # music21 returns a filename when fp is omitted; read and pretty-print before writing.
-    xml_text = Path(xml_path).read_text(encoding="utf-8")
-
-    from xml.dom import minidom  # Local import to avoid module load during tests if not needed.
-
-    dom = minidom.parseString(xml_text)
-    comment_text = _metadata_comment(metadata)
-    comment_node = dom.createComment(comment_text)
-    dom.insertBefore(comment_node, dom.documentElement)
-    pretty_xml = dom.toprettyxml(indent="  ")
-    destination.write_text(pretty_xml, encoding="utf-8")
-
-    # Clean up temporary file generated by music21 when no explicit fp is provided.
-    Path(xml_path).unlink(missing_ok=True)
+def _instrument_name(track: dict) -> str:
+    instrument_name = track.get("instrument")
+    if isinstance(instrument_name, str) and instrument_name.strip():
+        return instrument_name.strip()
+    label = track.get("label") or track.get("part")
+    if isinstance(label, str) and label.strip():
+        return label.strip()
+    track_id = track.get("track")
+    if track_id:
+        return f"Track {track_id}"
+    return "Unknown"
 
 
 def _maybe_sanitize(import_dir: Path) -> None:
     try:
         from .sanitizer import ensure_sanitized
-    except ImportError:  # pragma: no cover - sanitizer depends on music21 too
+    except ImportError:  # pragma: no cover - defensive
         return
 
     ensure_sanitized(import_dir)

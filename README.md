@@ -231,20 +231,20 @@ Tuning tips:
 
 The music track feature now ships with the first two interactive gates:
 
-- **Voice context assembly** (`ghostwriter.music.context`): parses chapter `voices:` directives, links each voice token to matching characters/factoids, and summarizes any sanitized `score.musicxml` assets already in the iteration folder. The resulting payload (`build_music_prompt_context`) fuels all music prompts.
-- **First-score gate** (`ghostwriter.music.pipeline.ensure_first_score_gate`): whenever a prose touch-point creates a first-draft gate, the system also generates `touch_point_first_score.musicxml` and `first_score_suggestions.txt` when voices are defined. This uses `prompts/music_first_score_prompt.md` plus `prompts/music_check_prompt.md` for immediate feedback.
-  - Debug traces: `first_score.txt` (SYSTEM/USER/RESPONSE for score generation) and `score_check.txt` (SYSTEM/USER/RESPONSE for score suggestions) are written alongside the artifacts for inspection.
-- **Subtle-score refinement** (`ghostwriter.music.pipeline.run_subtle_score_pass`): on resume (or any vN subtle-edit branch) the edited first score and feedback are refined into `touch_point_score.musicxml` with fresh `score_suggestions.txt`, via `prompts/music_subtle_edit_prompt.md` and the shared check prompt.
+- **Voice context assembly** (`ghostwriter.music.context`): parses chapter `voices:` directives, links each voice token to matching characters/factoids, and summarizes any sanitized `score.musiccsv` assets already in the iteration folder. The resulting payload (`build_music_prompt_context`) fuels all music prompts.
+- **First-score gate** (`ghostwriter.music.pipeline.ensure_first_score_gate`): whenever a prose touch-point creates a first-draft gate, the system also generates `touch_point_first_score.musiccsv`, `first_score_suggestions.txt`, and a quick-audition `first_monitor.mid` when voices are defined. This uses `prompts/music_first_score_prompt.md` plus `prompts/music_check_prompt.md` for immediate feedback.
+  - Debug traces: `first_score.txt` (SYSTEM/USER/RESPONSE for score generation) and `score_check.txt` (SYSTEM/USER/RESPONSE for score suggestions) are written alongside the artifacts for inspection; `first_monitor.mid` mirrors the generated score so authors can listen without opening a DAW.
+- **Subtle-score refinement** (`ghostwriter.music.pipeline.run_subtle_score_pass`): on resume (or any vN subtle-edit branch) the edited first score and feedback are refined into `touch_point_score.musiccsv` with fresh `score_suggestions.txt`, via `prompts/music_subtle_edit_prompt.md` and the shared check prompt.
   - Debug traces: `subtle_score.txt` captures the refinement prompt/response; `score_check.txt` is overwritten with the latest check trace after subtle pass.
-- **Sanitized imports**: Slice 1’s importer/sanitizer continues to normalize optional raw MIDI drops into `import.musicxml`, `score.musicxml`, and `monitor.mid`; the voice context automatically surfaces those summaries to the gates above.
-- **Exports & packaging** (`ghostwriter.music.exporter.finalize_music_exports`): every completed run assembles available touch-point scores into `score_vN.musicxml`, mirrors the latest build under `iterations/<chapter>/score/`, renders `final.mid` plus per-voice MIDIs, emits a structured `manifest.json`, and creates `score_bundle_vN.zip` for easy sharing.
+- **Sanitized imports**: Slice 1’s importer/sanitizer continues to normalize optional raw MIDI drops into `import.musiccsv`, `score.musiccsv`, and `monitor.mid`; the voice context automatically surfaces those summaries to the gates above.
+- **Exports & packaging** (`ghostwriter.music.exporter.finalize_music_exports`): every completed run assembles available touch-point scores into `score_vN.musiccsv`, mirrors the latest build under `iterations/<chapter>/score/`, renders `final.mid` plus per-voice MIDIs, emits a structured `manifest.json`, and creates `score_bundle_vN.zip` for easy sharing.
 
 Character outlines in music prompts
 
 - When a voice references known characters (e.g., idea "wolf" linked to `id: wolf`), the first-score prompt now includes a compact `character_outlines` block with the fields most useful to composition (id, name, background, traits, cadence, lexicon, prefer/avoid, mannerisms, sample/common/rare lines, forbidden). This gives the model concrete persona guidance instead of only names.
 - You can toggle this with the environment variable `GW_INCLUDE_CHARACTER_OUTLINES_MUSIC` (default: 1). Set to `0` to omit character outlines from the prompt if you prefer lighter requests.
 
-These steps mirror the prose workflow: first-score artifacts pause for author edits, then subtle refinement resumes deterministically. See `tests/music/test_pipeline.py` for mocked examples of both gates, and ensure the music dependencies (`music21`, `mido`, `pretty_midi`, `numpy`) are installed via `pip install -r requirements.txt`.
+These steps mirror the prose workflow: first-score artifacts pause for author edits, then subtle refinement resumes deterministically. See `tests/music/test_pipeline.py` for mocked examples of both gates, and ensure the music dependencies (`mido`, `pretty_midi`, `numpy`) are installed via `pip install -r requirements.txt`.
 
 If you substantially change the template, run the test suite to ensure formatting validators still pass, then perform a golden update (see instructions below—added in the next section) so example artifacts match the new prompt wording.
 
@@ -827,12 +827,11 @@ Runtime/testing dependencies are pinned in `requirements.txt`. Key libraries:
 - pytest, pytest-mock — test framework and mocking utilities
 - numpy — required by musical tooling
 - mido, pretty_midi — MIDI inspection and rendering helpers
-- music21 — MusicXML parsing/serialization for the new music importer/sanitizer
 
 ### Music importer utilities (Slice 1)
 
-- `ghostwriter.music.process_import_directory(import_dir)` reads raw `.mid`, `.midi`, or `.mid2` files under a voice import folder and writes a normalized `import.musicxml` with tempo/time-signature/instrument metadata embedded as an XML comment.
-- `ghostwriter.music.ensure_sanitized(import_dir)` (invoked automatically by `process_import_directory`) reparses `import.musicxml`, emits a sanitized `score.musicxml`, and keeps a playable `monitor.mid` in sync so authors can audition the track.
+- `ghostwriter.music.process_import_directory(import_dir)` reads raw `.mid`, `.midi`, or `.mid2` files under a voice import folder and writes a normalized `import.musiccsv` with tempo/time-signature/instrument metadata embedded as JSON.
+- `ghostwriter.music.ensure_sanitized(import_dir)` (invoked automatically by `process_import_directory`) reparses `import.musiccsv`, emits a sanitized `score.musiccsv`, and keeps a playable `monitor.mid` in sync so authors can audition the track.
 - Dependencies listed above are required for these helpers. Install via `pip install -r requirements.txt` before running the music workflow.
 
 ## Usage

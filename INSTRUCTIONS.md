@@ -4,7 +4,7 @@ Use this document to guide your work in this repository. Keep your responses sho
 
 ## Next steps
 
-All music slices (1–5) are complete. Coordinate with the user to define the next milestone or backlog grooming tasks.
+Work on task 7, implement musicCSV format and conversion utilities.
 
 Relevant `music_design.md` is in the project root
 Relevant `TODO.md` is in the project root

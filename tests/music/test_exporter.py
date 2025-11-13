@@ -7,35 +7,91 @@ import zipfile
 import pytest
 import yaml
 
-music21 = pytest.importorskip("music21")  # noqa: F401
 mido = pytest.importorskip("mido")  # noqa: F401
 
 from ghostwriter.context import RunContext
 from ghostwriter.templates import iter_dir_for
 from ghostwriter.music.context import build_voice_context, write_voice_token
 from ghostwriter.music.exporter import finalize_music_exports
+from ghostwriter.musiccsv import MusicCSV, write_musiccsv
+
+
+_NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+
+
+def _midi_to_pitch(midi: int) -> str:
+    octave = midi // 12 - 1
+    name = _NOTE_NAMES[midi % 12]
+    return f"{name}{octave}"
+
+
+def _make_musiccsv(pitch: int) -> MusicCSV:
+    pitch_name = _midi_to_pitch(pitch)
+    return MusicCSV(
+        metadata={
+            "title": "Test Score",
+            "composer": "Tester",
+            "tempo": 90,
+            "time_signature": "4/4",
+            "key_signature": "C",
+            "divisions_per_quarter": 480,
+            "version": "0.1",
+        },
+        tracks=[
+            {
+                "track": 1,
+                "label": "Track",
+                "part": "Part",
+                "instrument": "Piano",
+                "channel": 1,
+                "program": 0,
+                "volume": 100,
+            }
+        ],
+        measures=[
+            {
+                "measure": 1,
+                "time_signature": "4/4",
+                "key_signature": "C",
+                "tempo": 90,
+                "start_beat": 0.0,
+                "pickup": False,
+            }
+        ],
+        notes=[
+            {
+                "track": 1,
+                "measure": 1,
+                "beat": 1.0,
+                "pitch": pitch_name,
+                "duration": 1.0,
+                "velocity": 80,
+                "tie": "none",
+                "articulation": None,
+                "pedal": False,
+                "lyric": None,
+                "ornament": None,
+                "comment": None,
+                "grace": False,
+                "repeat": None,
+                "tuplet": None,
+            }
+        ],
+    )
 
 
 def _write_simple_score(path: Path, *, pitch: int) -> None:
-    score = music21.stream.Score()  # type: ignore[attr-defined]
-    part = music21.stream.Part()  # type: ignore[attr-defined]
-    part.append(music21.meter.TimeSignature("4/4"))  # type: ignore[attr-defined]
-    part.append(music21.tempo.MetronomeMark(number=90))  # type: ignore[attr-defined]
-    part.append(music21.instrument.Instrument())  # type: ignore[attr-defined]
-    note = music21.note.Note(pitch)
-    note.quarterLength = 1
-    part.append(note)
-    score.append(part)
     path.parent.mkdir(parents=True, exist_ok=True)
-    score.write("musicxml", fp=str(path))
+    write_musiccsv(path, _make_musiccsv(pitch))
 
 
 def _write_voice_assets(base_dir: Path, token: str, *, pitch: int) -> Path:
     import_dir = base_dir / f"00_track_{token.replace('.', '_')}_import"
     import_dir.mkdir(parents=True, exist_ok=True)
-    score_path = import_dir / "score.musicxml"
+    score_path = import_dir / "score.musiccsv"
     _write_simple_score(score_path, pitch=pitch)
-    (import_dir / "import.musicxml").write_text(score_path.read_text(encoding="utf-8"), encoding="utf-8")
+    import_path = import_dir / "import.musiccsv"
+    write_musiccsv(import_path, _make_musiccsv(pitch))
     (import_dir / "monitor.mid").write_bytes(b"")
     write_voice_token(import_dir, token)
     return score_path
@@ -57,8 +113,8 @@ def test_finalize_music_exports_creates_bundle(use_lr_book_env, lr_book_dir: Pat
     tp1_dir.mkdir(parents=True, exist_ok=True)
     tp2_dir.mkdir(parents=True, exist_ok=True)
 
-    _write_simple_score(tp1_dir / "touch_point_score.musicxml", pitch=60)
-    _write_simple_score(tp2_dir / "touch_point_first_score.musicxml", pitch=65)
+    _write_simple_score(tp1_dir / "touch_point_score.musiccsv", pitch=60)
+    _write_simple_score(tp2_dir / "touch_point_first_score.musiccsv", pitch=65)
 
     _write_voice_assets(tp1_dir, "major.alto.flute.red.melody", pitch=60)
     _write_voice_assets(tp1_dir, "minor.tenor.violin.wolf", pitch=67)
@@ -70,19 +126,21 @@ def test_finalize_music_exports_creates_bundle(use_lr_book_env, lr_book_dir: Pat
     assert result["written"] is True
 
     chapter_dir = iter_dir_for("CHAPTER_001")
-    score_path = chapter_dir / "score_v1.musicxml"
+    score_path = chapter_dir / "score_v1.musiccsv"
     assert score_path.exists()
 
     score_dir = chapter_dir / "score"
-    final_musicxml = score_dir / "final.musicxml"
+    final_musiccsv = score_dir / "final.musiccsv"
     final_midi = score_dir / "final.mid"
     manifest_path = score_dir / "manifest.json"
     bundle_path = score_dir / "score_bundle_v1.zip"
 
-    assert final_musicxml.exists()
+    assert final_musiccsv.exists()
     assert final_midi.exists()
     assert manifest_path.exists()
     assert bundle_path.exists()
+
+    assert result["final_musiccsv"] == final_musiccsv
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     assert manifest["chapter_id"] == "CHAPTER_001"
@@ -91,12 +149,17 @@ def test_finalize_music_exports_creates_bundle(use_lr_book_env, lr_book_dir: Pat
     dialog_entry = next(entry for entry in manifest["touch_points"] if entry["type"] == "dialog")
     assert dialog_entry["finalized"] is False
 
-    midi_assets = [score_dir / path.split("/")[-1] for path in manifest["outputs"]["per_voice_midis"]]
+    outputs = manifest["outputs"]
+    assert outputs["score_musiccsv"] == "score_v1.musiccsv"
+    assert outputs["final_musiccsv"] == "score/final.musiccsv"
+    assert outputs["final_midi"] == "score/final.mid"
+
+    midi_assets = [score_dir / path.split("/")[-1] for path in outputs["per_voice_midis"]]
     for midi_path in midi_assets:
         assert midi_path.exists()
 
     with zipfile.ZipFile(bundle_path) as zf:
         names = set(zf.namelist())
-        assert "score_v1.musicxml" in names
-        assert "score/final.musicxml" in names
+        assert "score_v1.musiccsv" in names
+        assert "score/final.musiccsv" in names
     assert "score/manifest.json" in names
