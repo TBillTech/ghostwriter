@@ -21,9 +21,11 @@ Touch-Points:
           description: "A bright red cloak and hood, a gift from Grandmother that draws the eye."
   - actors: [Red, Wolf]
   - foreshadowing: Wolf hasn't eaten in a while.
-  - voices: [major.tenor.base.wolf.harmony, major.alto.flute.red.melody, major.beat.drum.axe, major.bass.soundscape.forest_path]
-  - music: a cinematic track; fast tempo, haunting melody, steady bass, rapid percussion. Generate 10 measures.
   - narration: "Red walks the forest path, humming, basket in hand."
+  - music: 
+      - title: The Forest Path
+      - description: a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.
+      - voices: [major.tenor.base.wolf.harmony, major.alto.flute.red.melody, major.beat.drum.axe, major.bass.soundscape.forest_path]
   - dialog: "The Wolf greets Red and asks where she's going."
   - mixed: "Danger hinted at in the dark trees and Wolf's smile."
   - dialog: "The Wolf suggests a shortcut to Grandmother's, and Red decides to take it."

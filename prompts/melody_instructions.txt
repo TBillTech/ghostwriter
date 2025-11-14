@@ -1,0 +1,41 @@
+You need to invent a melody, and you should do it like this:
+First imagine 4 notes, labelled A, B1, C1 and C2. Define B2 equal to B1, labelling the same note, to simplify the discussion of the edges. 
+Here is the asignment between the 4 note labels and the actual notes to use for them:
+[dwell_notes]
+
+I chose these notes motivated by the key signature, style of music, and feeling of the piece. The piece is intended to dwell on these notes the most, listed in that order of importance and repetition, for example the weights might be (0.5, 0.25, 0.125, 0.125). In addition, imagine the following connections between notes: A-A, A-B1, B1-B2, A-B2, A-C1, C1-C2, A-C2, B1-C1, B2-C2. Each of these "edges" is a sequence of elements with durations scaled to 1 being a single beat based on the time signature. An element can be one of the following:
+* A scientific note like `C4`, `F#3`, or `Bb2`
+* A chord like `C4;F#3`
+* A rapid passage like `C5>Bb4>G4>C5`
+* A rest
+
+Here are the edges I have constructed to be used the next step for creating the melody:
+[music_edges]
+
+Craft the melody according to the following rules:
+* Build the melody from a sequence of the edges you invented earlier.
+* You start the song at A and so will start by choosing an edge that includes A.
+* After following an edge, you "arrive" at the next dwell note, and then choose the next edge begging at that note.
+* If you need to follow an edge backwards, simply reverse the order of the notes in the edge (and optionally reverse rapid passages). 
+* You can follow any edge in either direction, for example, if you follow edge A-C1, you can then follow edge C1-B1 (but in reverse).
+* When choosing which edge to follow next, the weights should be honored.  For example, if you compare edge A-A with A-C1, prefer A-A to A-C1 with weight 0.5 to 0.125.
+* The count of measures should be between 120 and 150. Try to touch each edge once, even if some of the edges have low weight. 
+[additional_rules]
+
+To output a melody use entirely scientific note note notation and the lengths of the notes per measure as an integer fraction with the time signature controlling what the unit means. The melody should be output as a concise csv file with the columns (measure, element, duration). "measure" is the measure number starting at 1, and counting up to the end measure of 120 to 150 or so. "element" should be a concise description of the musical element, either a scientific note number like `C4`, `F#3`, or `Bb2`, multiple scientific note numbers in a chord like `C4;F#3`, a rapid passage like `C4>Db4>E4>F#4`, or simply the term `rest`. Duration should depend on the time signature and be the length of the note. For example, 4/4 time means each using of proportional length of 1 is a quarter note, and 1.25 is a quarter tied with a sixteenth. 
+
+Here is an example output including only 4 measures:
+
+measure,element,duration
+1,D4,1.5
+1,F#4,1.5
+2,D4,1
+2,E4,0.5
+2,F#4,1.5
+3,A4,1
+3,G4,1
+3,F#4,1
+4,D4,1.5
+4,rest,1.5
+
+Now output the melody in the above format, including no other information.

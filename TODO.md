@@ -73,6 +73,36 @@ This document outlines the tasks currently being worked for this project for new
     - [x] Remove MusicXML-specific modules, schemas, and tests that are superseded by MusicCSV to avoid dual-maintenance paths.
     - [x] Migrate integration tests to assert against MusicCSV outputs and adjust fixtures accordingly.
 
+9. ** Refactor to make one song for a music touch-point **
+    Upon further reflection, songs may or may not be 1 to 1 with touch points. Plus, all the files building up in the same directory are getting messy.  Let's refactor the program to do something a little more controlled and independent for music tracks.  Let's do the music if and only if there is a music touch-point in the chapter.  Let's do the following:
+    - [ ] Do the music touch-point process if and only if the touch-point is exactly music. This means, music won't be done in narration, dialog, or mixed anymore.
+    - [ ] Restructure the music and voices in the yaml so that the music touch-point looks like this example:
+        - music: 
+            - title: "The Forest Path"
+            - description: a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.
+            - voices: [major.tenor.base.wolf.harmony, major.alto.flute.red.melody, major.beat.drum.axe, major.bass.soundscape.forest_path]
+    - [ ] Make sure that most recent paragraph is avialable when substituting in to music prompt templates.
+
+10. ** Break music generation down into multiple steps **
+    The music previously generated was naive and kind of random. I think we can do better, by focusing on building more thought out and recursive melodies. I have an idea I would like to implement, and overall, the algorithm breaks down like this:
+    - [ ] Prompt the LLM with the previous paragraph, relative character and factoids, and ask it to generate the metadata.json, and tracks.csv. These two artifacts can be stored in the prompt + response log file for this prompt.
+    - [ ] Prompt the LLM with melody_elements_instructions_prompt.txt.  This prompt needs to prompt the LLM with the previous paragraph, and relative character and factoids like is done previously first_score_suggestions.txt, but this time, append metadat.json, and then append melody_elements_instructions.txt. Read out and parse the artifacts which are the 4 dwell notes and the 9 melodic edges.
+    - [ ] Repeat the music construction three times, once with the following additional rules substituted into melody_instructions.txt:
+        - standard additional_rules: none
+        - complimentary additoinal_rules: * create a complimentary melody by inverting the weights, for example, (1.0-0.5,1.0-0.25,1.0-0.125,1.0-0.125) = (0.5, 0.75, 0.875, 0.857)
+        - reprise additional_rules: * Before following the above steps, adjust the musical edges by stretching them out by another measure, and adding appropriate additional notes to makes sense to fill out the new timing.
+    Music Constructions instructions (to be repeated for each type of melody):
+    - [ ] Construct a melody by prompting the LLM with the melody_instructions.txt template.
+    - [ ] Save off the melody artifact from the output of the prompt and save it in a file: melody.csv (or complimentary_melody.csv or reprise_melody.csv)
+    - [ ] Generate the measures.csv from the melody artifact (Hopefully this can be done in Python without LLM in the loop).
+    - [ ] For each voice in the music touch-point, do the following:
+        - [ ] Modify first_score_suggesions.txt to focus on exactly the voice to be generated
+        - [ ] For the melody voice, substitute the melody artifact into the first_score_suggestions.txt, instructing the LLM to convert the given melody into a track (all syntax for the output artifact of the track should remain as before), and save as melody.musiccsv
+        - [ ] For the other voices, substitute the melody track AND any other already generated tracks into the first_score_suggesstions.txt, instructing the LLM to build the given harmony, beat, base, or other track to match and harmonize with the given music so far.
+        - [ ] NO LONGER ask the first_score_suggestions.txt to generate the metadata.json, tracks.csv, measures.csv.
+    - [ ] Combine the outputs of all the voices with the metadata.json, tracks.csv, and measures.csv to form the <title>.musiccsv and the <title>.mid (or <title>.complimentary.musiccsv and <title>.complimentary.mid or <title>.reprise.musiccsv and <title>.reprise.mid)
+    - [ ] When the pipeline_vN is complete, similiar to how final.txt is collated and regenerated, create a sound_track directory. Copy each of the <title>.mid files from the vN pipeline music touch_points, using the normalized title from the music touch-point as the file name.
+
 ## Session Summary (Oct 24, 2025)
 
 - Implemented Previous Task: pre-draft user-in-the-loop across narration, dialog, and implicit.
