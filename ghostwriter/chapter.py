@@ -992,6 +992,34 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                                     pass
             except Exception:
                 pass
+            # If music first score exists but final score is missing, run subtle pass even on resume skips
+            try:
+                if (
+                    tp_type in ("narration", "dialog", "implicit", "mixed")
+                    and tp_log_dir is not None
+                    and gw_music_subtle_pass is not None
+                    and music_voice_context is not None
+                    and music_prompt_payload
+                ):
+                    first_score_file = tp_log_dir / "touch_point_first_score.musiccsv"
+                    final_score_file = tp_log_dir / "touch_point_score.musiccsv"
+                    suggestions_file = tp_log_dir / "first_score_suggestions.txt"
+                    if first_score_file.exists() and suggestions_file.exists() and not final_score_file.exists():
+                        try:
+                            gw_music_subtle_pass(
+                                tp_dir=tp_log_dir,
+                                tp_index=i,
+                                tp_type=tp_type,
+                                tp_text=tp_text,
+                                voice_context=music_voice_context,
+                                prompt_payload=music_prompt_payload,
+                            )
+                        except UserActionRequired:
+                            raise
+                        except Exception as exc:
+                            _log_warning(f"MUSIC: subtle score pass failed ({exc})", tp_log_dir)
+            except Exception:
+                pass
             continue
 
         polished_text = ""
@@ -1157,8 +1185,19 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                     print("Stopping run due to error. See run_error.log in base directory.")
                     return
 
+            music_needs_refinement = False
+            if tp_log_dir is not None:
+                try:
+                    first_score_file = tp_log_dir / "touch_point_first_score.musiccsv"
+                    final_score_file = tp_log_dir / "touch_point_score.musiccsv"
+                    suggestions_file = tp_log_dir / "first_score_suggestions.txt"
+                    if first_score_file.exists() and suggestions_file.exists() and not final_score_file.exists():
+                        music_needs_refinement = True
+                except Exception:
+                    music_needs_refinement = False
+
             if (
-                (subtle_edit_post_gate or branch_b)
+                (subtle_edit_post_gate or branch_b or music_needs_refinement)
                 and tp_log_dir is not None
                 and gw_music_subtle_pass is not None
                 and music_voice_context is not None
@@ -1173,6 +1212,8 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                         voice_context=music_voice_context,
                         prompt_payload=music_prompt_payload,
                     )
+                except UserActionRequired:
+                    raise
                 except Exception as exc:
                     _log_warning(f"MUSIC: subtle score pass failed ({exc})", tp_log_dir)
         else:
@@ -1182,20 +1223,34 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                     raise GWError("ghostwriter.pipelines.run_subtle_edit_pipeline not available")
                 polished_text = gw_run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=prior_draft, prior_suggestions=prior_suggestions, log_dir=tp_log_dir, ctx=ctx)
                 if (
-                    tp_log_dir is not None
+                    (tp_log_dir is not None)
                     and gw_music_subtle_pass is not None
                     and music_voice_context is not None
                     and music_prompt_payload
                 ):
                     try:
-                        gw_music_subtle_pass(
-                            tp_dir=tp_log_dir,
-                            tp_index=i,
-                            tp_type=tp_type,
-                            tp_text=tp_text,
-                            voice_context=music_voice_context,
-                            prompt_payload=music_prompt_payload,
+                        first_score_file = tp_log_dir / "touch_point_first_score.musiccsv"
+                        final_score_file = tp_log_dir / "touch_point_score.musiccsv"
+                        suggestions_file = tp_log_dir / "first_score_suggestions.txt"
+                        music_needs_refinement_edit = (
+                            first_score_file.exists()
+                            and suggestions_file.exists()
+                            and not final_score_file.exists()
                         )
+                    except Exception:
+                        music_needs_refinement_edit = False
+                    try:
+                        if branch_b or music_needs_refinement_edit:
+                            gw_music_subtle_pass(
+                                tp_dir=tp_log_dir,
+                                tp_index=i,
+                                tp_type=tp_type,
+                                tp_text=tp_text,
+                                voice_context=music_voice_context,
+                                prompt_payload=music_prompt_payload,
+                            )
+                    except UserActionRequired:
+                        raise
                     except Exception as exc:
                         _log_warning(f"MUSIC: subtle score pass failed ({exc})", tp_log_dir)
             else:
@@ -1315,7 +1370,9 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                                 raise
                             except Exception as exc:
                                 _log_warning(f"MUSIC: first-score gate failed ({exc})", tp_log_dir)
-                                music_gate_triggered = False
+                                raise UserActionRequired(
+                                    "Music first-score generation failed; inspect the attempt logs and retry."
+                                ) from exc
                         message = "Waiting for user suggestions on first draft"
                         if music_gate_triggered:
                             message += " and first score"

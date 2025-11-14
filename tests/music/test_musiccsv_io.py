@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import zipfile
 
 from ghostwriter.musiccsv import (
     MusicCSV,
@@ -106,10 +107,25 @@ def test_directory_roundtrip(tmp_path: Path) -> None:
     assert loaded == music
 
 
-def test_archive_roundtrip(tmp_path: Path) -> None:
+def test_file_roundtrip(tmp_path: Path) -> None:
     music = _sample_musiccsv()
-    archive = tmp_path / "score.musiccsv"
-    write_musiccsv(archive, music)
+    file_path = tmp_path / "score.musiccsv"
+    write_musiccsv(file_path, music)
+    text = file_path.read_text(encoding="utf-8")
+    assert "### metadata.json" in text
+    assert "### notes.csv" in text
+    loaded = read_musiccsv(file_path)
+    assert loaded == music
+
+
+def test_read_legacy_archive(tmp_path: Path) -> None:
+    music = _sample_musiccsv()
+    legacy_dir = tmp_path / "legacy"
+    write_musiccsv(legacy_dir, music)
+    archive = tmp_path / "legacy.musiccsv"
+    with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+        for name in ("metadata.json", "tracks.csv", "measures.csv", "notes.csv"):
+            zf.write(legacy_dir / name, arcname=name)
     loaded = read_musiccsv(archive)
     assert loaded == music
 

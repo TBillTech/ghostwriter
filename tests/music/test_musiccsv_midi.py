@@ -154,7 +154,7 @@ def test_to_midi_respects_track_channels(tmp_path: Path) -> None:
         for msg in track
         if not getattr(msg, "is_meta", False) and hasattr(msg, "channel")
     }
-    assert 5 in channels
+    assert 4 in channels
 
 
 def test_inverse_roundtrip_from_existing_midi(tmp_path: Path) -> None:
@@ -181,3 +181,72 @@ def test_inverse_roundtrip_from_existing_midi(tmp_path: Path) -> None:
     round_trip = MusicCSV.from_midi(reexport_path)
 
     assert round_trip == music
+
+
+def test_to_midi_sanitizes_unicode_metadata(tmp_path: Path) -> None:
+    music = _sample_musiccsv()
+    music.metadata["title"] = "Wolf — Red Encounter"
+    music.tracks[0]["label"] = "Lead — Flute"
+
+    midi_path = tmp_path / "unicode.mid"
+    music.to_midi(midi_path)
+
+    midi = mido.MidiFile(midi_path)
+    for track in midi.tracks:
+        for msg in track:
+            msg_type = getattr(msg, "type", "")
+            if msg_type in {"track_name", "instrument_name", "text"}:
+                data = getattr(msg, "name", None)
+                if data is None and hasattr(msg, "text"):
+                    data = msg.text
+                if data is not None:
+                    data.encode("latin-1")
+
+
+def test_to_midi_handles_uniform_start_beats(tmp_path: Path) -> None:
+    music = MusicCSV(
+        metadata={
+            "title": "Uniform Starts",
+            "composer": "Tester",
+            "tempo": 120,
+            "time_signature": "4/4",
+            "key_signature": "C",
+            "divisions_per_quarter": 480,
+            "version": "0.1",
+        },
+        tracks=[
+            {
+                "track": 1,
+                "label": "Lead",
+                "instrument": "Acoustic Grand Piano",
+                "channel": 1,
+                "program": 0,
+                "volume": 100,
+            }
+        ],
+        measures=[
+            {"measure": 1, "time_signature": "4/4", "key_signature": "C", "tempo": 120.0, "start_beat": 1.0},
+            {"measure": 2, "time_signature": "4/4", "key_signature": "C", "tempo": 120.0, "start_beat": 1.0},
+            {"measure": 3, "time_signature": "4/4", "key_signature": "C", "tempo": 120.0, "start_beat": 1.0},
+        ],
+        notes=[
+            {"track": 1, "measure": 1, "beat": 1.0, "pitch": "C4", "duration": 1.0, "velocity": 90},
+            {"track": 1, "measure": 3, "beat": 1.0, "pitch": "E4", "duration": 1.0, "velocity": 90},
+        ],
+    )
+
+    midi_path = tmp_path / "uniform.mid"
+    music.to_midi(midi_path)
+
+    midi = mido.MidiFile(midi_path)
+    ticks_per_measure = 4 * midi.ticks_per_beat
+    on_times = []
+    for track in midi.tracks:
+        elapsed = 0
+        for msg in track:
+            elapsed += msg.time
+            if not getattr(msg, "is_meta", False) and msg.type == "note_on" and msg.velocity > 0:
+                on_times.append(elapsed)
+
+    assert on_times, "Expected at least one note_on event"
+    assert max(on_times) >= ticks_per_measure * 2

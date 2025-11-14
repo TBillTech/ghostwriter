@@ -70,7 +70,7 @@ This document outlines the tasks currently being worked for this project for new
     - [x] Replace all score outputs (formerly `.musicxml` artifacts such as `touch_point_first_score.musicxml`, `touch_point_score.musicxml`, `score_vN.musicxml`) with MusicCSV equivalents and keep filenames predictable (e.g., `.musiccsv` + zipped bundle).
     - [x] Update exporter/sanitizer to call `MusicCSV.to_midi` internally and regenerate `monitor.mid` / per-voice MIDIs without MusicXML intermediates.
     - [x] Rewrite pipeline prompts and templates to reference `musiccsv_format_prompt.txt`, ensuring LLM instructions match the new format.
-    - [ ] Remove MusicXML-specific modules, schemas, and tests that are superseded by MusicCSV to avoid dual-maintenance paths.
+    - [x] Remove MusicXML-specific modules, schemas, and tests that are superseded by MusicCSV to avoid dual-maintenance paths.
     - [x] Migrate integration tests to assert against MusicCSV outputs and adjust fixtures accordingly.
 
 ## Session Summary (Oct 24, 2025)

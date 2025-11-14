@@ -143,14 +143,14 @@ def test_ensure_first_score_gate_creates_artifacts(tmp_path: Path, monkeypatch: 
 
     first_score = tp_dir / "touch_point_first_score.musiccsv"
     suggestions = tp_dir / "first_score_suggestions.txt"
-    first_score_trace = tp_dir / "first_score.txt"
     score_check_trace = tp_dir / "score_check.txt"
     first_monitor = tp_dir / "first_monitor.mid"
+    attempt_trace = tp_dir / "first_score_attempt_1.txt"
     assert first_score.exists()
     assert suggestions.exists()
-    assert first_score_trace.exists()
     assert score_check_trace.exists()
     assert first_monitor.exists()
+    assert attempt_trace.exists()
 
     # Second invocation should no-op once artifacts exist
     again = ensure_first_score_gate(
@@ -248,7 +248,7 @@ def test_ensure_first_score_gate_raises_when_monitor_fails_on_regen(tmp_path: Pa
             voice_context=voice_context,
             prompt_payload=payload,
         )
-    assert (tp_dir / "first_score.txt").exists()
+    assert (tp_dir / "first_score_attempt_1.txt").exists()
 
 
 def test_first_score_trace_written_before_monitor_failure(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, voice_context_payload):
@@ -279,7 +279,7 @@ def test_first_score_trace_written_before_monitor_failure(tmp_path: Path, monkey
         )
 
     assert (tp_dir / "touch_point_first_score.musiccsv").exists()
-    assert (tp_dir / "first_score.txt").exists()
+    assert (tp_dir / "first_score_attempt_1.txt").exists()
 
 
 def test_first_score_gate_retries_on_empty_response(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, voice_context_payload):
@@ -308,6 +308,7 @@ def test_first_score_gate_retries_on_empty_response(tmp_path: Path, monkeypatch:
     assert created
     assert (tp_dir / "touch_point_first_score.musiccsv").exists()
     assert (tp_dir / "first_monitor.mid").exists()
+    assert (tp_dir / "first_score_attempt_2.txt").exists()
 
 
 def test_first_score_gate_raises_after_failed_retries(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, voice_context_payload):
@@ -374,12 +375,14 @@ def test_run_subtle_score_pass_uses_feedback(tmp_path: Path, monkeypatch: pytest
 
     final_score = tp_dir / "touch_point_score.musiccsv"
     final_feedback = tp_dir / "score_suggestions.txt"
-    subtle_score_trace = tp_dir / "subtle_score.txt"
     subtle_check_trace = tp_dir / "score_check.txt"
+    subtle_attempt = tp_dir / "subtle_score_attempt_1.txt"
+    monitor_mid = tp_dir / "monitor.mid"
     assert final_score.exists()
     assert final_feedback.exists()
     updated_music = read_musiccsv(final_score)
     assert any(note.get("pitch") == "E4" for note in updated_music.notes)
     assert final_feedback.read_text(encoding="utf-8").startswith("-")
-    assert subtle_score_trace.exists()
     assert subtle_check_trace.exists()
+    assert subtle_attempt.exists()
+    assert monitor_mid.exists()

@@ -33,6 +33,29 @@ logger = logging.getLogger(__name__)
 _MAX_MUSICCSV_SNIPPET = 4000
 
 
+def _truncate_musiccsv_text(text: str, limit: Optional[int]) -> str:
+    """Return ``text`` clipped to ``limit`` characters without cutting mid-line."""
+
+    if limit is None or limit <= 0 or len(text) <= limit:
+        return text
+
+    cutoff = text.rfind("\n", 0, limit)
+    if cutoff == -1:
+        cutoff = limit
+
+    truncated = text[:cutoff].rstrip("\n")
+    return truncated + "\n# truncated"
+
+
+def _next_attempt_path(tp_dir: Path, prefix: str) -> Path:
+    attempt = 1
+    while True:
+        candidate = tp_dir / f"{prefix}_{attempt}.txt"
+        if not candidate.exists():
+            return candidate
+        attempt += 1
+
+
 def _try_parse_musiccsv(text: str) -> Tuple[bool, str, Optional[MusicCSV]]:
     stripped = (text or "").strip()
     if not stripped:
@@ -83,7 +106,6 @@ def ensure_first_score_gate(
 
     first_score_path = tp_dir / "touch_point_first_score.musiccsv"
     first_suggestions_path = tp_dir / "first_score_suggestions.txt"
-    first_score_trace = tp_dir / "first_score.txt"
     score_check_trace = tp_dir / "score_check.txt"
     first_monitor_path = tp_dir / "first_monitor.mid"
 
@@ -116,8 +138,7 @@ def ensure_first_score_gate(
             if summary.score_path.exists():
                 music = read_musiccsv(summary.score_path)
                 text = musiccsv_to_text(music)
-                if len(text) > _MAX_MUSICCSV_SNIPPET:
-                    text = text[:_MAX_MUSICCSV_SNIPPET] + "\n# truncated"
+                text = _truncate_musiccsv_text(text, _MAX_MUSICCSV_SNIPPET)
                 info["musiccsv"] = text
         except Exception:
             pass
@@ -137,6 +158,11 @@ def ensure_first_score_gate(
         default_max_tokens=2000,
     )
     reasoning = reasoning_for_prompt("music_first_score_prompt.md", "MUSIC_FIRST_SCORE")
+
+    def _log_path_for_attempt(attempt: int) -> Optional[Path]:
+        # Persist prompt/response pairs even when validation fails so authors can debug.
+        return tp_dir / f"first_score_attempt_{attempt}.txt"
+
     try:
         response = llm_call_with_validation(
             "Compose a valid MusicCSV score that fits the touch-point context.",
@@ -146,6 +172,7 @@ def ensure_first_score_gate(
             max_tokens=max_tokens,
             validator=_validate_musiccsv,
             reasoning_effort=reasoning,
+            log_maker=_log_path_for_attempt,
             context_tag=f"music_first_score tp={tp_index:02d}",
         )
     except Exception as exc:  # pragma: no cover - defensive logging
@@ -158,28 +185,10 @@ def ensure_first_score_gate(
             "Generated score failed validation after LLM call. Inspect the response and try again."
         )
     write_musiccsv(first_score_path, music)
-    try:
-        if not first_score_trace.exists():
-            trace_content = [
-                "=== SYSTEM ===",
-                "Compose a valid MusicCSV score that fits the touch-point context.",
-                "",
-                "=== USER ===",
-                prompt,
-                "",
-                "=== RESPONSE ===",
-                response,
-                "",
-            ]
-            save_text(first_score_trace, "\n".join(trace_content))
-    except Exception:
-        pass
 
     _render_monitor_midi(music, first_monitor_path, tp_dir)
 
-    snippet_text = musiccsv_to_text(music)
-    if len(snippet_text) > _MAX_MUSICCSV_SNIPPET:
-        snippet_text = snippet_text[:_MAX_MUSICCSV_SNIPPET] + "\n# truncated"
+    snippet_text = _truncate_musiccsv_text(musiccsv_to_text(music), None)
 
     check_prompt = build_music_check_prompt(
         prompt_payload=prompt_payload,
@@ -250,8 +259,8 @@ def run_subtle_score_pass(
     first_feedback_path = tp_dir / "first_score_suggestions.txt"
     final_score_path = tp_dir / "touch_point_score.musiccsv"
     final_feedback_path = tp_dir / "score_suggestions.txt"
-    subtle_score_trace = tp_dir / "subtle_score.txt"
     subtle_check_trace = tp_dir / "score_check.txt"  # reused name; overwritten after subtle pass
+    monitor_mid_path = tp_dir / "monitor.mid"
 
     if not first_score_path.exists():
         return False
@@ -285,6 +294,7 @@ def run_subtle_score_pass(
         default_temp=0.4,
         default_max_tokens=2200,
     )
+    attempt_log_path = _next_attempt_path(tp_dir, "subtle_score_attempt")
     response = llm_complete(
         prompt,
         system="Refine the MusicCSV score according to feedback while keeping it valid.",
@@ -292,32 +302,30 @@ def run_subtle_score_pass(
         max_tokens=max_tokens,
         model=model,
     )
+    try:
+        trace_content = [
+            "=== SYSTEM ===",
+            "Refine the MusicCSV score according to feedback while keeping it valid.",
+            "",
+            "=== USER ===",
+            prompt,
+            "",
+            "=== RESPONSE ===",
+            response,
+            "",
+        ]
+        save_text(attempt_log_path, "\n".join(trace_content))
+    except Exception:
+        pass
     ok, message, music = _try_parse_musiccsv(response)
     if not ok or music is None:
         raise UserActionRequired(
             "Generated subtle score failed validation. Inspect the response and try again."
         )
     write_musiccsv(final_score_path, music)
-    try:
-        if not subtle_score_trace.exists():
-            trace_content = [
-                "=== SYSTEM ===",
-                "Refine the MusicCSV score according to feedback while keeping it valid.",
-                "",
-                "=== USER ===",
-                prompt,
-                "",
-                "=== RESPONSE ===",
-                response,
-                "",
-            ]
-            save_text(subtle_score_trace, "\n".join(trace_content))
-    except Exception:
-        pass
+    _render_monitor_midi(music, monitor_mid_path, tp_dir)
 
-    subtle_snippet = musiccsv_to_text(music)
-    if len(subtle_snippet) > _MAX_MUSICCSV_SNIPPET:
-        subtle_snippet = subtle_snippet[:_MAX_MUSICCSV_SNIPPET] + "\n# truncated"
+    subtle_snippet = _truncate_musiccsv_text(musiccsv_to_text(music), None)
 
     check_prompt = build_music_check_prompt(
         prompt_payload=prompt_payload,

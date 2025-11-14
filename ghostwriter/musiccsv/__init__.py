@@ -60,6 +60,9 @@ _NOTE_NAMES_SHARP = [
 ]
 _PITCH_RE = re.compile(r"^\s*([A-Ga-g])([#b]?)(-?\d+)\s*$")
 _TIME_SIGNATURE_RE = re.compile(r"^\s*(\d+)\s*/\s*(\d+)\s*$")
+_KEY_SIGNATURE_NORMALIZE_RE = re.compile(
+    r"^\s*([A-Ga-g])(?:\s*([#b♯♭]|sharp|flat))?(?:\s*([Mm](?:aj(?:or)?|in(?:or)?)?))?\s*$"
+)
 _VALID_TIES = {"start", "stop", "continue", "none"}
 _VALID_REPEAT_VALUES = {"start", "end", "segno", "coda", "fine", "dal_capo", "dal_segno", "to_coda", "alternate"}
 _TUPLET_RE = re.compile(r"^\s*(\d+)\s*:\s*(\d+)\s*$")
@@ -113,6 +116,46 @@ def _format_bool(value: Optional[bool]) -> str:
     if value is None:
         return ""
     return "true" if value else "false"
+
+
+def _normalize_key_signature(value: Any) -> Optional[str]:
+    if value is None:
+        return None
+    text = str(value).strip()
+    if text == "":
+        return ""
+
+    normalized = text.replace("♯", "#").replace("♭", "b")
+    match = _KEY_SIGNATURE_NORMALIZE_RE.match(normalized)
+    if not match:
+        return text
+
+    note = match.group(1).upper()
+    accidental_token = (match.group(2) or "").lower()
+    mode_token = (match.group(3) or "").lower()
+
+    accidental_map = {
+        "": "",
+        "#": "#",
+        "sharp": "#",
+        "♯": "#",
+        "b": "b",
+        "flat": "b",
+        "♭": "b",
+    }
+    accidental = accidental_map.get(accidental_token, "")
+
+    if mode_token in {"", "m", "maj", "major"}:
+        suffix = "" if mode_token in {"", "maj", "major"} else "m"
+    elif mode_token in {"min", "minor"}:
+        suffix = "m"
+    else:
+        suffix = ""
+
+    if mode_token in {"m", "min", "minor"}:
+        suffix = "m"
+
+    return f"{note}{accidental}{suffix}"
 
 
 @dataclass
@@ -283,12 +326,25 @@ class _ZipLoader(_Loader):
         self._zip.close()
 
 
+def _sanitize_midi_text(value: Any) -> str:
+    text = "" if value is None else str(value)
+    try:
+        text.encode("latin-1")
+        return text
+    except UnicodeEncodeError:
+        return text.encode("latin-1", errors="replace").decode("latin-1")
+
+
 def read_musiccsv(path: str | Path) -> MusicCSV:
     path = Path(path)
     if path.is_dir():
         loader: _Loader = _DirLoader(path)
     elif path.suffix == _MUSICCSV_SUFFIX and path.exists():
-        loader = _ZipLoader(path)
+        if zipfile.is_zipfile(path):
+            loader = _ZipLoader(path)
+        else:
+            text = path.read_text(encoding="utf-8")
+            return musiccsv_from_text(text)
     else:
         raise FileNotFoundError(f"Unsupported MusicCSV path: {path}")
 
@@ -320,11 +376,10 @@ def write_musiccsv(path: str | Path, data: MusicCSV | Dict[str, Any]) -> None:
         (base / _NOTES_FILENAME).write_text(_dump_csv(music.notes, _NOTE_FIELD_TYPES), encoding="utf-8")
 
     if path.suffix == _MUSICCSV_SUFFIX:
-        with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
-            zf.writestr(_METADATA_FILENAME, json.dumps(music.metadata, indent=2, sort_keys=True) + "\n")
-            zf.writestr(_TRACKS_FILENAME, _dump_csv(music.tracks, _TRACK_FIELD_TYPES))
-            zf.writestr(_MEASURES_FILENAME, _dump_csv(music.measures, _MEASURE_FIELD_TYPES))
-            zf.writestr(_NOTES_FILENAME, _dump_csv(music.notes, _NOTE_FIELD_TYPES))
+        text = musiccsv_to_text(music)
+        if not text.endswith("\n"):
+            text += "\n"
+        path.write_text(text, encoding="utf-8")
     else:
         _write_to_fs(path)
 
@@ -539,7 +594,7 @@ def _from_midi_events(path: Path, midi, mido_module) -> MusicCSV:
             "label": label,
             "part": label,
             "instrument": instrument_value,
-            "channel": channel_hint,
+            "channel": (channel_hint + 1) if channel_hint is not None else None,
             "program": program,
             "volume": None,
         }
@@ -628,10 +683,10 @@ def _from_midi_events(path: Path, midi, mido_module) -> MusicCSV:
 
 def _write_meta_track(meta_track, music: MusicCSV, ticks_per_beat: int, mido_module) -> None:
     metadata = music.metadata or {}
-    title = str(metadata.get("title") or "MusicCSV Export")
+    title = _sanitize_midi_text(metadata.get("title") or "MusicCSV Export")
     meta_track.append(mido_module.MetaMessage("track_name", name=title, time=0))
 
-    payload = json.dumps(music.to_dict(), separators=(",", ":"))
+    payload = json.dumps(music.to_dict(), separators=(",", ":"), ensure_ascii=True)
     meta_track.append(
         mido_module.MetaMessage("text", text=f"{_MUSICCSV_EMBED_PREFIX}{payload}", time=0)
     )
@@ -640,7 +695,7 @@ def _write_meta_track(meta_track, music: MusicCSV, ticks_per_beat: int, mido_mod
 
     last_tempo = metadata.get("tempo")
     last_time_signature = metadata.get("time_signature")
-    last_key_signature = metadata.get("key_signature")
+    last_key_signature = _normalize_key_signature(metadata.get("key_signature"))
 
     if last_tempo is not None:
         events.append(
@@ -708,7 +763,7 @@ def _write_meta_track(meta_track, music: MusicCSV, ticks_per_beat: int, mido_mod
                 )
             )
             last_time_signature = time_signature_value
-        key_signature_value = measure.get("key_signature")
+        key_signature_value = _normalize_key_signature(measure.get("key_signature"))
         if key_signature_value and key_signature_value != last_key_signature:
             events.append(
                 (
@@ -738,14 +793,26 @@ def _assign_track_channels(tracks: Sequence[Dict[str, Any]]) -> Dict[int, int]:
     for track in tracks:
         track_id = int(track.get("track", 0))
         channel_value = track.get("channel")
-        if channel_value is None:
+        channel = None
+        if channel_value is None or (isinstance(channel_value, str) and not channel_value.strip()):
+            channel = None
+        else:
+            try:
+                raw = int(channel_value)
+            except (TypeError, ValueError):
+                raw = None
+            if raw is not None:
+                if raw <= 0:
+                    channel = 0
+                else:
+                    channel = (raw - 1) % 16
+        if channel is None:
             while next_channel in assigned:
                 next_channel = (next_channel + 1) % 16
             channel = next_channel
             assigned.add(channel)
             next_channel = (next_channel + 1) % 16
         else:
-            channel = int(channel_value) % 16
             assigned.add(channel)
         channel_map[track_id] = channel
     return channel_map
@@ -755,17 +822,57 @@ def _build_measure_context(music: MusicCSV) -> Dict[int, Dict[str, Any]]:
     context: Dict[int, Dict[str, Any]] = {}
     default_signature = str(music.metadata.get("time_signature") or "4/4")
     measures_sorted = sorted(music.measures, key=lambda row: row.get("measure", 0))
+    previous_entry: Optional[Dict[str, Any]] = None
+    tolerance = 1e-6
+
+    def _coerce_float(value: Any) -> Optional[float]:
+        if value is None:
+            return None
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return None
+
+    fallback_signature = default_signature
     for measure in measures_sorted:
         number = int(measure.get("measure", 0))
         if number <= 0:
             continue
-        signature = str(measure.get("time_signature") or default_signature)
-        start_beat = measure.get("start_beat")
-        if start_beat is None:
-            start_beat = (number - 1) * _beats_per_measure_from_signature(signature)
-        context[number] = {"start_beat": float(start_beat), "time_signature": signature}
+        signature = str(measure.get("time_signature") or fallback_signature)
+        beats_in_measure = _beats_per_measure_from_signature(signature)
+        raw_start = _coerce_float(measure.get("start_beat"))
+
+        if previous_entry is None:
+            if raw_start is None:
+                start_beat = 0.0
+            elif raw_start >= 1.0 - tolerance:
+                start_beat = 0.0
+            else:
+                start_beat = raw_start
+        else:
+            prev_start = float(previous_entry["start_beat"])
+            prev_length = float(previous_entry.get("length_beats", _beats_per_measure_from_signature(previous_entry["time_signature"])))
+            expected_start = prev_start + prev_length
+            if raw_start is None or raw_start <= prev_start + tolerance or raw_start <= 1.0 + tolerance:
+                start_beat = expected_start
+            else:
+                start_beat = raw_start
+
+        entry = {
+            "start_beat": float(start_beat),
+            "time_signature": signature,
+            "length_beats": beats_in_measure,
+        }
+        context[number] = entry
+        previous_entry = entry
+        fallback_signature = signature
+
     if not context:
-        context[1] = {"start_beat": 0.0, "time_signature": default_signature}
+        context[1] = {
+            "start_beat": 0.0,
+            "time_signature": default_signature,
+            "length_beats": _beats_per_measure_from_signature(default_signature),
+        }
     return context
 
 
@@ -773,8 +880,22 @@ def _ensure_measure_entry(
     context: Dict[int, Dict[str, Any]], measure_number: int, default_signature: str
 ) -> Dict[str, Any]:
     if measure_number not in context:
-        start_beat = (measure_number - 1) * _beats_per_measure_from_signature(default_signature)
-        context[measure_number] = {"start_beat": float(start_beat), "time_signature": default_signature}
+        prior_numbers = [num for num in context if num < measure_number]
+        if prior_numbers:
+            last_number = max(prior_numbers)
+            last_entry = context[last_number]
+            last_length = float(
+                last_entry.get("length_beats", _beats_per_measure_from_signature(last_entry["time_signature"]))
+            )
+            delta = measure_number - last_number
+            start_beat = float(last_entry["start_beat"]) + last_length * delta
+        else:
+            start_beat = 0.0
+        context[measure_number] = {
+            "start_beat": float(start_beat),
+            "time_signature": default_signature,
+            "length_beats": _beats_per_measure_from_signature(default_signature),
+        }
     return context[measure_number]
 
 
@@ -788,13 +909,13 @@ def _write_instrument_track(
     mido_module,
 ) -> None:
     track_id = int(track_row.get("track", 0))
-    label = str(track_row.get("label") or f"Track {track_id}")
+    label = _sanitize_midi_text(track_row.get("label") or f"Track {track_id}")
     midi_track.append(mido_module.MetaMessage("track_name", name=label, time=0))
 
     instrument_name = track_row.get("instrument")
     if instrument_name:
         midi_track.append(
-            mido_module.MetaMessage("instrument_name", name=str(instrument_name), time=0)
+            mido_module.MetaMessage("instrument_name", name=_sanitize_midi_text(instrument_name), time=0)
         )
 
     program = track_row.get("program")
@@ -1036,8 +1157,16 @@ def validate_musiccsv(data: MusicCSV | Dict[str, Any]) -> None:
 
         tie = note.get("tie")
         if tie is not None:
-            if not isinstance(tie, str) or tie not in _VALID_TIES:
-                errors.append(f"{note_prefix}.tie must be one of {_VALID_TIES} or null")
+            if not isinstance(tie, str):
+                errors.append(f"{note_prefix}.tie must be a string or null")
+            else:
+                tie_value = tie.strip()
+                if tie_value == "":
+                    note["tie"] = ""
+                elif tie_value in _VALID_TIES:
+                    note["tie"] = tie_value
+                else:
+                    errors.append(f"{note_prefix}.tie must be blank or one of {_VALID_TIES} or null")
 
         pedal = note.get("pedal")
         if pedal is not None and not isinstance(pedal, bool):

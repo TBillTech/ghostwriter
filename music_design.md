@@ -83,6 +83,7 @@ For each content touch-point that generates music:
 - Persist `import.musiccsv` plus a text summary suitable for LLM inspection.
 - When the user edits `import.musiccsv`, run the sanitizer pass: schema validation, derived-field resolution, measure renumbering, consistent divisions.
 - Generate `score.musiccsv` + `monitor.mid` by validating sanitized MusicCSV and calling `MusicCSV.to_midi`.
+- Surface the canonical MusicCSV format instructions to the LLM by embedding `prompts/musiccsv_format_prompt.txt` in every generation prompt.
 
 ### Output
 - Aggregate `touch_point_score.musiccsv` into `score_vN.musiccsv` by concatenating parts/measure sequences.
