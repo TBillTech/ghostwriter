@@ -75,21 +75,22 @@ This document outlines the tasks currently being worked for this project for new
 
 9. ** Refactor to make one song for a music touch-point **
     Upon further reflection, songs may or may not be 1 to 1 with touch points. Plus, all the files building up in the same directory are getting messy.  Let's refactor the program to do something a little more controlled and independent for music tracks.  Let's do the music if and only if there is a music touch-point in the chapter.  Let's do the following:
-    - [ ] Do the music touch-point process if and only if the touch-point is exactly music. This means, music won't be done in narration, dialog, or mixed anymore.
-    - [ ] Restructure the music and voices in the yaml so that the music touch-point looks like this example:
+    - [x] Do the music touch-point process if and only if the touch-point is exactly music. This means, music won't be done in narration, dialog, or mixed anymore.
+    - [x] Restructure the music and voices in the yaml so that the music touch-point looks like this example:
         - music: 
             - title: "The Forest Path"
             - description: a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.
             - voices: [major.tenor.base.wolf.harmony, major.alto.flute.red.melody, major.beat.drum.axe, major.bass.soundscape.forest_path]
-    - [ ] Make sure that most recent paragraph is avialable when substituting in to music prompt templates.
+    - [x] Make sure that most recent paragraph is avialable when substituting in to music prompt templates.
 
 10. ** Break music generation down into multiple steps **
     The music previously generated was naive and kind of random. I think we can do better, by focusing on building more thought out and recursive melodies. I have an idea I would like to implement, and overall, the algorithm breaks down like this:
-    - [ ] Prompt the LLM with the previous paragraph, relative character and factoids, and ask it to generate the metadata.json, and tracks.csv. These two artifacts can be stored in the prompt + response log file for this prompt.
+    - [x] Prompt the LLM with the previous paragraph, relative character and factoids, and ask it to generate the metadata.json, and tracks.csv. These two artifacts can be stored in the prompt + response log file for this prompt.
     - [ ] Prompt the LLM with melody_elements_instructions_prompt.txt.  This prompt needs to prompt the LLM with the previous paragraph, and relative character and factoids like is done previously first_score_suggestions.txt, but this time, append metadat.json, and then append melody_elements_instructions.txt. Read out and parse the artifacts which are the 4 dwell notes and the 9 melodic edges.
+    - [ ] Music melody should be constructed using the music_melody_prompt.md .  It should be just like the music_melody_edges_prompt.md, except that instead it uses melody_instructions.txt.  Note that melody_instructions.txt itself is a template that needs some substitutions.
     - [ ] Repeat the music construction three times, once with the following additional rules substituted into melody_instructions.txt:
         - standard additional_rules: none
-        - complimentary additoinal_rules: * create a complimentary melody by inverting the weights, for example, (1.0-0.5,1.0-0.25,1.0-0.125,1.0-0.125) = (0.5, 0.75, 0.875, 0.857)
+        - complimentary additional_rules: * create a complimentary melody by inverting the weights, for example, (1.0-0.5,1.0-0.25,1.0-0.125,1.0-0.125) = (0.5, 0.75, 0.875, 0.857)
         - reprise additional_rules: * Before following the above steps, adjust the musical edges by stretching them out by another measure, and adding appropriate additional notes to makes sense to fill out the new timing.
     Music Constructions instructions (to be repeated for each type of melody):
     - [ ] Construct a melody by prompting the LLM with the melody_instructions.txt template.

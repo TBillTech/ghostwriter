@@ -4,7 +4,7 @@ Use this document to guide your work in this repository. Keep your responses sho
 
 ## Next steps
 
-Work on task 7, implement musicCSV format and conversion utilities.
+Work on task 9, move music generation into the music touchpoint.
 
 Relevant `music_design.md` is in the project root
 Relevant `TODO.md` is in the project root

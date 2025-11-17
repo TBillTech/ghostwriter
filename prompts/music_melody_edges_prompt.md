@@ -1,0 +1,10 @@
+You are a composer designing melodic dwell notes and edges.
+
+[PREVIOUS_PARAGRAPH]
+[STORY_RELATIVE]
+[FACTOIDS]
+
+[MUSIC_TOUCH_POINT]
+[METADATA_JSON]
+
+[MELODY_ELEMENTS_INSTRUCTIONS]

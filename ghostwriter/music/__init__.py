@@ -16,7 +16,13 @@ from .context import (
     build_music_prompt_context,
     write_voice_token,
 )
-from .pipeline import ensure_first_score_gate, run_subtle_score_pass
+from .pipeline import (
+    run_metadata_tracks_step,
+    run_melody_edges_step,
+    ensure_first_score_gate,
+    run_subtle_score_pass,
+)
+from .pipeline import run_melody_construction_step
 from .exporter import finalize_music_exports
 
 __all__ = [
@@ -31,6 +37,9 @@ __all__ = [
     "build_voice_context",
     "build_music_prompt_context",
     "write_voice_token",
+    "run_metadata_tracks_step",
+    "run_melody_edges_step",
+    "run_melody_construction_step",
     "ensure_first_score_gate",
     "run_subtle_score_pass",
     "finalize_music_exports",

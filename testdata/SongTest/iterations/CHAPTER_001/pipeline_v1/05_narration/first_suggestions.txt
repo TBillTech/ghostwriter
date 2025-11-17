@@ -1,0 +1,15 @@
+- Replace opening sentence with the explicit touch-point: change "Red follows the winding path as it bends between the trunks, her figure a bright stroke of color in the shadows." to: "Red walks the forest path, humming, basket in hand." (Keep the following imagery but start with this clear, required statement.)
+
+- Fix inconsistent capitalization/ambiguous noun: change "Hood" to "hood" and reword "Shafts of light cross Red's face and Hood" to "Shafts of light cross Red's face and red hood" or "Shafts of light cross Red's face and her red hood."
+
+- Clarify the wolf's pacing phrasing: replace "Wolf matches his pace to her sound" with a clearer image, e.g. "Wolf sets his steps to the rhythm of her humming" or "Wolf matches his steps to her humming."
+
+- Remove/reduce redundancy about shadows: combine two similar sentences into one tighter line. Replace "Wolf stays just where the shadows thicken, listening to Red's footsteps and the soft clink of the basket, waiting for a moment to step closer." and "keeping to the darker thickets." with, for example: "Wolf lingers in the thickest shadow, listening to Red's footsteps and the soft clink of the basket, waiting for the right moment to close the distance."
+
+- Tighten passive phrasing about stones/forest closing: change "Loose stones crunch and roll aside under Red's soles, then settle again as the forest closes behind her." to something crisper, e.g.: "Loose stones crunch beneath Red's feet and settle as the forest closes behind her."
+
+- Add one small Red-specific gesture to anchor character and keep her voice: insert a brief line showing her mannerism (polite, earnest, physical): e.g. "She fingers the basket handle as she hums, thinking of Grandmother," or "She clutches the basket for a moment when the path dips, then relaxes and hums on." (Keep it simple and literal.)
+
+- Avoid any explicit mention or implication of the wolf's hunger: do not add lines like "Wolf hasn't eaten in a while" or other direct references to appetite. (Keep any menace atmospheric and behavioral—listening, shadowing, flattering—not hunger-driven.)
+
+- Check pronoun clarity once more: ensure every sentence that begins with a pronoun clearly refers to Red or Wolf (use names if there's any potential ambiguity).

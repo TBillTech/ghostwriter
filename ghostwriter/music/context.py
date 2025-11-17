@@ -271,11 +271,31 @@ def parse_voice_token(token: str, *, metadata: Optional[Dict[str, Any]] = None) 
     )
 
 
-def build_voice_context(ctx: RunContext, *, pipeline_version: Optional[int] = None) -> VoiceContext:
+def build_voice_context(
+    ctx: RunContext,
+    *,
+    pipeline_version: Optional[int] = None,
+    voice_tokens: Optional[Any] = None,
+    directive: Optional[str] = None,
+) -> VoiceContext:
     """Construct a :class:`VoiceContext` for the provided run context."""
 
-    voice_entries = _extract_voice_entries(ctx.chapter)
-    voice_specs: List[VoiceSpec] = [parse_voice_token(token, metadata=meta) for token, meta in voice_entries]
+    if voice_tokens is not None:
+        voice_entries: List[tuple[str, Dict[str, Any]]] = []
+        sources = voice_tokens if isinstance(voice_tokens, (list, tuple, set)) else [voice_tokens]
+        for entry in sources:
+            voice_entries.extend(_normalize_voice_entry(entry))
+    else:
+        voice_entries = _extract_voice_entries(ctx.chapter)
+
+    seen_tokens: set[str] = set()
+    voice_specs: List[VoiceSpec] = []
+    for token, meta in voice_entries:
+        norm = _normalize_lookup(token)
+        if norm in seen_tokens:
+            continue
+        seen_tokens.add(norm)
+        voice_specs.append(parse_voice_token(token, metadata=meta))
     _attach_entity_links(voice_specs, ctx)
 
     version = pipeline_version if pipeline_version is not None else ctx.version
@@ -284,10 +304,13 @@ def build_voice_context(ctx: RunContext, *, pipeline_version: Optional[int] = No
     aggregates = _aggregate_summaries(score_summaries)
     missing_assets = [spec.token for spec in voice_specs if spec.token not in score_summaries]
 
-    directive = _extract_music_directive(ctx.chapter)
+    if directive is None:
+        directive_text = _extract_music_directive(ctx.chapter)
+    else:
+        directive_text = str(directive)
 
     return VoiceContext(
-        directive=directive,
+        directive=directive_text,
         voices=voice_specs,
         score_summaries=score_summaries,
         aggregate_tempos=aggregates["tempos"],
@@ -297,10 +320,21 @@ def build_voice_context(ctx: RunContext, *, pipeline_version: Optional[int] = No
     )
 
 
-def build_music_prompt_context(ctx: RunContext, *, pipeline_version: Optional[int] = None) -> Dict[str, Any]:
+def build_music_prompt_context(
+    ctx: RunContext,
+    *,
+    pipeline_version: Optional[int] = None,
+    voice_tokens: Optional[Any] = None,
+    directive: Optional[str] = None,
+) -> Dict[str, Any]:
     """Return a serialisable payload describing chapter music context."""
 
-    voice_context = build_voice_context(ctx, pipeline_version=pipeline_version)
+    voice_context = build_voice_context(
+        ctx,
+        pipeline_version=pipeline_version,
+        voice_tokens=voice_tokens,
+        directive=directive,
+    )
     return voice_context.as_prompt_payload()
 
 
@@ -318,21 +352,42 @@ def write_voice_token(import_dir: Path, token: str) -> Path:
 # Internal helpers
 
 
-def _extract_music_directive(chapter: Dict[str, Any]) -> str:
-    raw = _get_case_insensitive(chapter, "music")
-    if isinstance(raw, str) and raw.strip():
-        return raw.strip()
-    if raw is not None:
-        text = str(raw).strip()
+def _music_value_to_text(value: Any) -> str:
+    if isinstance(value, dict):
+        title = str(value.get("title") or "").strip()
+        description = str(value.get("description") or "").strip()
+        directive = str(value.get("directive") or "").strip()
+        pieces: List[str] = []
+        if title and description:
+            pieces.append(f"{title}: {description}")
+        elif title:
+            pieces.append(title)
+        elif description:
+            pieces.append(description)
+        if directive:
+            pieces.append(directive)
+        summary = "\n".join([p for p in pieces if p.strip()])
+        if summary.strip():
+            return summary.strip()
+        return str(value)
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    if value is not None:
+        text = str(value).strip()
         if text:
             return text
+    return ""
+
+
+def _extract_music_directive(chapter: Dict[str, Any]) -> str:
+    raw = _get_case_insensitive(chapter, "music")
+    text = _music_value_to_text(raw)
+    if text:
+        return text
     for entry in _gather_touchpoint_values(chapter, "music"):
-        if isinstance(entry, str) and entry.strip():
-            return entry.strip()
-        if entry is not None:
-            text = str(entry).strip()
-            if text:
-                return text
+        text = _music_value_to_text(entry)
+        if text:
+            return text
     return ""
 
 

@@ -1,0 +1,17 @@
+{
+  "title": "The Forest Path",
+  "tempo": 140,
+  "time_signature": "4/4",
+  "key_signature": "A minor",
+  "divisions_per_quarter": 480,
+  "duration_minutes_target": 3.0,
+  "tags": [
+    "cinematic",
+    "fast",
+    "haunting",
+    "steady_bass",
+    "rapid_percussion",
+    "scene:forest_path"
+  ],
+  "description": "A cinematic piece for the scene 'The Forest Path' — fast tempo, haunting melody, steady bass, rapid percussion. Voices: major.tenor.base.wolf.harmony, major.alto.flute.red.melody, major.beat.drum.axe, major.bass.soundscape.forest_path."
+}

@@ -1,0 +1,12 @@
+You are a composer constructing a full melodic line for this piece.
+
+[PREVIOUS_PARAGRAPH]
+[STORY_RELATIVE]
+[FACTOIDS]
+
+[MUSIC_TOUCH_POINT]
+[METADATA_JSON]
+[DWELL_NOTES]
+[MELODIC_EDGES]
+
+[MELODY_INSTRUCTIONS]

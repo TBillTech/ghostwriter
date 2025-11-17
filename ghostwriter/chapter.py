@@ -20,12 +20,19 @@ try:
         ensure_first_score_gate as gw_music_first_gate,
         run_subtle_score_pass as gw_music_subtle_pass,
         finalize_music_exports as gw_music_finalize_exports,
+        # New metadata/tracks helper is exported via music.__all__
+        run_metadata_tracks_step as gw_music_metadata_tracks,
+        run_melody_edges_step as gw_music_melody_edges,
+        run_melody_construction_step as gw_music_melody_construct,
     )
 except Exception:
     gw_music_build_voice_context = None  # type: ignore
     gw_music_first_gate = None  # type: ignore
     gw_music_subtle_pass = None  # type: ignore
     gw_music_finalize_exports = None  # type: ignore
+    gw_music_metadata_tracks = None  # type: ignore
+    gw_music_melody_edges = None  # type: ignore
+    gw_music_melody_construct = None  # type: ignore
 
 # Standard library imports
 import os
@@ -34,6 +41,7 @@ import json
 import time
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
+import copy
 
 from .context import RunContext, GWError, UserActionRequired
 from .templates import (
@@ -388,7 +396,7 @@ def reconcile_chapter_global_edits(ctx: RunContext, version_num: int) -> bool:
     return any_changes
 
 
-TouchPoint = Dict[str, str]
+TouchPoint = Dict[str, Any]
 
 
 def parse_touchpoints_from_chapter(chapter: dict) -> List[TouchPoint]:
@@ -420,8 +428,23 @@ def parse_touchpoints_from_chapter(chapter: dict) -> List[TouchPoint]:
             if k in allowed:
                 if k == "actors" and isinstance(v, list):
                     content = ", ".join([str(x) for x in v])
-                else:
-                    content = str(v)
+                    return [{"type": k, "content": content, "raw": _gw_to_text(item).strip()}]
+                if k == "music":
+                    payload: Dict[str, Any]
+                    if isinstance(v, dict):
+                        payload = copy.deepcopy(v)
+                    else:
+                        payload = {"description": str(v) if v is not None else ""}
+                    title = str(payload.get("title", "") or "").strip()
+                    description = str(payload.get("description", "") or "").strip()
+                    if not description and isinstance(v, dict):
+                        description = _gw_to_text(v).strip()
+                    content = description or title or _gw_to_text(item).strip()
+                    tp_entry = {"type": k, "content": content, "raw": _gw_to_text(item).strip()}
+                    if payload:
+                        tp_entry["payload"] = payload  # type: ignore[assignment]
+                    return [tp_entry]
+                content = str(v)
                 return [{"type": k, "content": content, "raw": _gw_to_text(item).strip()}]
         # String form: "key: value"
         if isinstance(item, str):
@@ -446,6 +469,96 @@ def parse_touchpoints_from_chapter(chapter: dict) -> List[TouchPoint]:
             tp["id"] = str(idx)
             result.append(tp)
     return result
+
+
+def _flatten_voice_tokens(value: Any) -> List[str]:
+    tokens: List[str] = []
+
+    def _collect(node: Any) -> None:
+        if node is None:
+            return
+        if isinstance(node, str):
+            token = node.strip()
+            if token:
+                tokens.append(token)
+            return
+        if isinstance(node, dict):
+            token_val = node.get("token") or node.get("voice")
+            if isinstance(token_val, str) and token_val.strip():
+                tokens.append(token_val.strip())
+            nested = node.get("tokens") or node.get("voices")
+            if isinstance(nested, (list, tuple, set)):
+                for sub in nested:
+                    _collect(sub)
+            return
+        if isinstance(node, (list, tuple, set)):
+            for sub in node:
+                _collect(sub)
+
+    _collect(value)
+    return tokens
+
+
+def _build_music_prompt_payload_for_tp(
+    ctx: RunContext,
+    version_num: int,
+    tp: TouchPoint,
+    prior_paragraph: str,
+) -> Tuple[Optional[Any], Dict[str, Any], Dict[str, Any]]:
+    payload_data = tp.get("payload") if isinstance(tp.get("payload"), dict) else {}
+    if not isinstance(payload_data, dict):
+        payload_data = {}
+
+    title = str(payload_data.get("title") or "").strip()
+    description = str(payload_data.get("description") or "").strip()
+    directive_override = str(payload_data.get("directive") or "").strip()
+    if not description:
+        description = str(tp.get("content", "") or "").strip()
+    if not directive_override:
+        directive_override = description or title
+
+    voices_source = payload_data.get("voices")
+    voice_input = copy.deepcopy(voices_source) if voices_source is not None else None
+    voice_tokens_flat = _flatten_voice_tokens(voice_input if voice_input is not None else voices_source)
+    if voice_input is None:
+        voice_input = voice_tokens_flat
+
+    voice_context = None
+    prompt_payload: Dict[str, Any] = {}
+    if gw_music_build_voice_context is not None:
+        try:
+            voice_context = gw_music_build_voice_context(
+                ctx,
+                pipeline_version=version_num,
+                voice_tokens=voice_input,
+                directive=directive_override or title,
+            )
+        except TypeError:
+            voice_context = gw_music_build_voice_context(ctx, pipeline_version=version_num)
+        except Exception:
+            voice_context = None
+
+    if voice_context is not None:
+        prompt_payload = copy.deepcopy(voice_context.as_prompt_payload())
+    else:
+        prompt_payload = {}
+
+    prompt_payload.setdefault("directive", directive_override or title or "")
+    prompt_payload["touch_point_title"] = title
+    prompt_payload["touch_point_description"] = description
+    prompt_payload["touch_point_prior_paragraph"] = prior_paragraph or ""
+    prompt_payload["touch_point_voices"] = list(voice_tokens_flat)
+    prompt_payload["touch_point_metadata"] = copy.deepcopy(payload_data)
+
+    meta = {
+        "title": title,
+        "description": description,
+        "directive": directive_override,
+        "voice_tokens": list(voice_tokens_flat),
+        "raw_payload": copy.deepcopy(payload_data),
+    }
+
+    return voice_context, prompt_payload, meta
 
 
 class ChapterState:
@@ -767,20 +880,14 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
     base_log_dir.mkdir(parents=True, exist_ok=True)
 
     music_voice_context = None
-    music_prompt_payload = None
     if gw_music_build_voice_context is not None:
         try:
             mvc = gw_music_build_voice_context(ctx, pipeline_version=version_num)
             if mvc and getattr(mvc, "voices", None):
                 music_voice_context = mvc
-                try:
-                    music_prompt_payload = mvc.as_prompt_payload()
-                except Exception:
-                    music_prompt_payload = None
         except Exception as exc:
             _log_warning(f"MUSIC: failed to build voice context ({exc})", base_log_dir)
             music_voice_context = None
-            music_prompt_payload = None
 
     # Chapter Global Editing: if user edited draft_vN.txt, propagate to per-touch-point drafts and refresh suggestions
     try:
@@ -803,8 +910,13 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
     records: List[Tuple[str, str, str, str]] = []
     prior_paragraph = ""
     # Resume support: scan completed TPs and rebuild state
+    _breadcrumb("resume:scan:start")
     completed = _resume_scan(base_log_dir)
     if completed:
+        try:
+            _breadcrumb(f"resume:scan:found:{sorted(completed.keys())}")
+        except Exception:
+            pass
         # Apply state in order and populate records/prior_paragraph
         for i in sorted(completed.keys()):
             info = completed[i]
@@ -878,9 +990,66 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
         print(f"[v{version_num}] Touch-point {i}/{total} – {tp_type}: {tp_text[:60]}")
         tp_log_dir = (base_log_dir / f"{i:02d}_{tp_type}") if base_log_dir else None
 
+        music_tp_voice_context = None
+        music_tp_prompt_payload: Optional[Dict[str, Any]] = None
+        music_tp_meta: Dict[str, Any] = {}
+        if tp_type == "music":
+            try:
+                _breadcrumb(f"music:enter:i={i}")
+            except Exception:
+                pass
+            try:
+                music_tp_voice_context, music_tp_prompt_payload, music_tp_meta = _build_music_prompt_payload_for_tp(
+                    ctx,
+                    version_num,
+                    tp,
+                    prior_paragraph,
+                )
+            except Exception as exc:
+                _log_warning(f"MUSIC: failed to build per-touch-point payload ({exc})", tp_log_dir)
+                music_tp_voice_context = None
+                music_tp_prompt_payload = None
+                music_tp_meta = {}
+            if music_tp_voice_context is None:
+                music_tp_voice_context = music_voice_context
+            if music_tp_prompt_payload is None and music_tp_voice_context is not None:
+                try:
+                    music_tp_prompt_payload = music_tp_voice_context.as_prompt_payload()
+                except Exception:
+                    music_tp_prompt_payload = {}
+
         # Skip already completed touch-points by checkpoint presence
         if i in completed:
-            _log_info(f"RESUME: Skipping completed touch-point {i} ({tp_type}).", base_log_dir)
+            # For music, require new metadata/tracks artifacts before treating as completed
+            if tp_type == "music":
+                meta_ok = False
+                try:
+                    if tp_log_dir is not None:
+                        meta_ok = (tp_log_dir / "metadata.json").exists() and (tp_log_dir / "tracks.csv").exists()
+                except Exception:
+                    meta_ok = False
+                if not meta_ok:
+                    try:
+                        _breadcrumb(f"music:resume:not_completed:i={i}")
+                    except Exception:
+                        pass
+                    # Treat as not completed: fall through into normal music handling below
+                    completed.pop(i, None)
+                else:
+                    try:
+                        _breadcrumb(f"music:resume:completed:i={i}")
+                    except Exception:
+                        pass
+                    _log_info(f"RESUME: Skipping completed touch-point {i} ({tp_type}).", base_log_dir)
+                    try:
+                        if tp_log_dir is not None and music_tp_meta:
+                            tp_log_dir.mkdir(parents=True, exist_ok=True)
+                            save_text(tp_log_dir / "music_touch_point.json", json.dumps(music_tp_meta, indent=2))
+                    except Exception:
+                        pass
+                    continue
+            else:
+                _log_info(f"RESUME: Skipping completed touch-point {i} ({tp_type}).", base_log_dir)
             # Even if draft exists, ensure brainstorm DONE gating is satisfied; if not, re-run brainstorm and exit
             try:
                 if not branch_b:  # Only enforce brainstorm gating on initial authoring runs
@@ -935,37 +1104,6 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 raise
             except Exception:
                 pass
-            try:
-                if (
-                    (not branch_b)
-                    and tp_type in ("narration", "dialog", "implicit", "mixed")
-                    and tp_log_dir is not None
-                    and gw_music_first_gate is not None
-                    and music_voice_context is not None
-                    and music_prompt_payload
-                ):
-                    required_music_files = [
-                        tp_log_dir / "touch_point_first_score.musiccsv",
-                        tp_log_dir / "first_score_suggestions.txt",
-                        tp_log_dir / "first_monitor.mid",
-                    ]
-                    if any(not path.exists() for path in required_music_files):
-                        regenerated = gw_music_first_gate(
-                            tp_dir=tp_log_dir,
-                            tp_index=i,
-                            tp_type=tp_type,
-                            tp_text=tp_text,
-                            voice_context=music_voice_context,
-                            prompt_payload=music_prompt_payload,
-                        )
-                        if regenerated:
-                            raise UserActionRequired(
-                                "Music first-score artifacts regenerated; review before continuing."
-                            )
-            except UserActionRequired:
-                raise
-            except Exception:
-                pass
             # On edit branches (v2+), ensure suggestions.txt exists even for previously completed steps
             try:
                 if branch_b and tp_type in ("narration", "dialog", "implicit", "mixed") and tp_log_dir is not None:
@@ -992,34 +1130,154 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                                     pass
             except Exception:
                 pass
-            # If music first score exists but final score is missing, run subtle pass even on resume skips
+            continue
+
+        if tp_type == "music":
+            polished_text = str(music_tp_meta.get("description", "") or "").strip()
+            if tp_log_dir is not None:
+                try:
+                    tp_log_dir.mkdir(parents=True, exist_ok=True)
+                    if music_tp_meta:
+                        save_text(tp_log_dir / "music_touch_point.json", json.dumps(music_tp_meta, indent=2))
+                except Exception:
+                    pass
+
+            if gw_music_metadata_tracks is None and gw_music_first_gate is None and gw_music_subtle_pass is None:
+                records.append((tp_id, tp_type, tp_text, polished_text))
+                _write_tp_checkpoint(tp_log_dir, tp_id, tp_type, tp_text, polished_text, state)
+                continue
+
+            if music_tp_voice_context is None or music_tp_prompt_payload is None:
+                _log_warning("MUSIC: Missing voice context or payload; cannot proceed with music touch-point.", tp_log_dir)
+                raise UserActionRequired("Music touch-point is missing required voice context. Update the YAML and retry.")
+
+            # Step 1: metadata + tracks layout
             try:
-                if (
-                    tp_type in ("narration", "dialog", "implicit", "mixed")
-                    and tp_log_dir is not None
-                    and gw_music_subtle_pass is not None
-                    and music_voice_context is not None
-                    and music_prompt_payload
-                ):
-                    first_score_file = tp_log_dir / "touch_point_first_score.musiccsv"
-                    final_score_file = tp_log_dir / "touch_point_score.musiccsv"
-                    suggestions_file = tp_log_dir / "first_score_suggestions.txt"
-                    if first_score_file.exists() and suggestions_file.exists() and not final_score_file.exists():
-                        try:
-                            gw_music_subtle_pass(
-                                tp_dir=tp_log_dir,
-                                tp_index=i,
-                                tp_type=tp_type,
-                                tp_text=tp_text,
-                                voice_context=music_voice_context,
-                                prompt_payload=music_prompt_payload,
-                            )
-                        except UserActionRequired:
-                            raise
-                        except Exception as exc:
-                            _log_warning(f"MUSIC: subtle score pass failed ({exc})", tp_log_dir)
-            except Exception:
-                pass
+                if gw_music_metadata_tracks is not None:
+                    try:
+                        _breadcrumb(f"music:metadata:start:i={i}")
+                    except Exception:
+                        pass
+                    gw_music_metadata_tracks(
+                        tp_dir=tp_log_dir or base_log_dir,
+                        tp_index=i,
+                        tp_type=tp_type,
+                        prompt_payload=music_tp_prompt_payload,
+                    )
+                    try:
+                        _breadcrumb(f"music:metadata:done:i={i}")
+                    except Exception:
+                        pass
+            except UserActionRequired:
+                raise
+            except Exception as exc:
+                _log_warning(f"MUSIC: metadata/tracks step failed ({exc})", tp_log_dir)
+                raise UserActionRequired("Music metadata/tracks step failed; inspect metadatatracks.txt and retry.") from exc
+
+            # Step 2: melody dwell notes and edges (user-in-the-loop after success)
+            try:
+                if gw_music_melody_edges is not None:
+                    try:
+                        _breadcrumb(f"music:edges:start:i={i}")
+                    except Exception:
+                        pass
+                    edges_created = gw_music_melody_edges(
+                        tp_dir=tp_log_dir or base_log_dir,
+                        tp_index=i,
+                        tp_type=tp_type,
+                        prompt_payload=music_tp_prompt_payload,
+                    )
+                    try:
+                        _breadcrumb(f"music:edges:done:i={i}")
+                    except Exception:
+                        pass
+                    if edges_created:
+                        # Always pause after a new edges artifact so authors can review/edit
+                        raise UserActionRequired(
+                            "Melody dwell notes and edges generated; review and tweak melody_edges.txt before continuing."
+                        )
+            except UserActionRequired:
+                raise
+            except Exception as exc:
+                _log_warning(f"MUSIC: melody edges step failed ({exc})", tp_log_dir)
+                raise UserActionRequired("Music melody edges step failed; inspect melodyelements.txt and retry.") from exc
+
+            # Step 3: construct the standard melody from dwell/edge elements.
+            try:
+                if gw_music_melody_construct is not None:
+                    try:
+                        _breadcrumb(f"music:melody:start:i={i}")
+                    except Exception:
+                        pass
+                    gw_music_melody_construct(
+                        tp_dir=tp_log_dir or base_log_dir,
+                        tp_index=i,
+                        tp_type=tp_type,
+                        prompt_payload=music_tp_prompt_payload,
+                        variant="standard",
+                    )
+                    try:
+                        _breadcrumb(f"music:melody:done:i={i}")
+                    except Exception:
+                        pass
+            except UserActionRequired:
+                raise
+            except Exception as exc:
+                _log_warning(f"MUSIC: melody construction step failed ({exc})", tp_log_dir)
+                raise UserActionRequired("Music melody construction step failed; inspect the melody log and retry.") from exc
+
+            first_score_file = (tp_log_dir / "touch_point_first_score.musiccsv") if tp_log_dir else None
+            first_suggestions_file = (tp_log_dir / "first_score_suggestions.txt") if tp_log_dir else None
+            final_score_file = (tp_log_dir / "touch_point_score.musiccsv") if tp_log_dir else None
+            final_feedback_file = (tp_log_dir / "score_suggestions.txt") if tp_log_dir else None
+            # monitor.mid will be produced by the subtle pass when finalizing the score
+
+            # Step 4: ensure first-score artifacts
+            need_first = True
+            if first_score_file is not None and first_suggestions_file is not None:
+                need_first = not (first_score_file.exists() and first_suggestions_file.exists())
+            if need_first:
+                try:
+                    created = gw_music_first_gate(
+                        tp_dir=tp_log_dir or base_log_dir,
+                        tp_index=i,
+                        tp_type=tp_type,
+                        tp_text=tp_text,
+                        voice_context=music_tp_voice_context,
+                        prompt_payload=music_tp_prompt_payload,
+                    ) if gw_music_first_gate is not None else False
+                except UserActionRequired:
+                    raise
+                except Exception as exc:
+                    _log_warning(f"MUSIC: first-score generation failed ({exc})", tp_log_dir)
+                    raise UserActionRequired("Music first-score generation failed; inspect logs before retrying.") from exc
+                if created:
+                    raise UserActionRequired("Music first-score artifacts generated; review before continuing.")
+
+            # Step 2: ensure final score via subtle pass
+            final_ready = bool(final_score_file and final_score_file.exists())
+            if not final_ready and first_score_file is not None and first_score_file.exists():
+                try:
+                    ran = gw_music_subtle_pass(
+                        tp_dir=tp_log_dir or base_log_dir,
+                        tp_index=i,
+                        tp_type=tp_type,
+                        tp_text=tp_text,
+                        voice_context=music_tp_voice_context,
+                        prompt_payload=music_tp_prompt_payload,
+                    ) if gw_music_subtle_pass is not None else False
+                    if ran:
+                        final_ready = bool(final_score_file and final_score_file.exists())
+                except UserActionRequired:
+                    raise
+                except Exception as exc:
+                    _log_warning(f"MUSIC: subtle score pass failed ({exc})", tp_log_dir)
+                    raise UserActionRequired("Music subtle score pass failed; address the score feedback and retry.") from exc
+
+            if not final_ready:
+                raise UserActionRequired("Music touch-point still awaiting refinement. Edit the first score or feedback, then retry.")
+            records.append((tp_id, tp_type, tp_text, polished_text))
+            _write_tp_checkpoint(tp_log_dir, tp_id, tp_type, tp_text, polished_text, state)
             continue
 
         polished_text = ""
@@ -1029,7 +1287,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
             state.set_scene(tp.get("content", ""))
         elif tp_type == "foreshadowing":
             state.add_foreshadowing(tp.get("content", ""))
-        elif tp_type in ("voices", "music"):
+        elif tp_type in ("voices", ):
             polished_text = ""
         elif tp_type == "setting":
             # Do not re-parse YAML here; store the content and compute character subset from active state
@@ -1185,74 +1443,12 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                     print("Stopping run due to error. See run_error.log in base directory.")
                     return
 
-            music_needs_refinement = False
-            if tp_log_dir is not None:
-                try:
-                    first_score_file = tp_log_dir / "touch_point_first_score.musiccsv"
-                    final_score_file = tp_log_dir / "touch_point_score.musiccsv"
-                    suggestions_file = tp_log_dir / "first_score_suggestions.txt"
-                    if first_score_file.exists() and suggestions_file.exists() and not final_score_file.exists():
-                        music_needs_refinement = True
-                except Exception:
-                    music_needs_refinement = False
-
-            if (
-                (subtle_edit_post_gate or branch_b or music_needs_refinement)
-                and tp_log_dir is not None
-                and gw_music_subtle_pass is not None
-                and music_voice_context is not None
-                and music_prompt_payload
-            ):
-                try:
-                    gw_music_subtle_pass(
-                        tp_dir=tp_log_dir,
-                        tp_index=i,
-                        tp_type=tp_type,
-                        tp_text=tp_text,
-                        voice_context=music_voice_context,
-                        prompt_payload=music_prompt_payload,
-                    )
-                except UserActionRequired:
-                    raise
-                except Exception as exc:
-                    _log_warning(f"MUSIC: subtle score pass failed ({exc})", tp_log_dir)
         else:
             # Unknown types treated as narration by default
             if branch_b:
                 if gw_run_subtle_edit_pipeline is None:
                     raise GWError("ghostwriter.pipelines.run_subtle_edit_pipeline not available")
                 polished_text = gw_run_subtle_edit_pipeline(tp, state, setting=setting, chapter=chapter, chapter_id=chapter_id, version=version_num, tp_index=i, prior_polished=prior_draft, prior_suggestions=prior_suggestions, log_dir=tp_log_dir, ctx=ctx)
-                if (
-                    (tp_log_dir is not None)
-                    and gw_music_subtle_pass is not None
-                    and music_voice_context is not None
-                    and music_prompt_payload
-                ):
-                    try:
-                        first_score_file = tp_log_dir / "touch_point_first_score.musiccsv"
-                        final_score_file = tp_log_dir / "touch_point_score.musiccsv"
-                        suggestions_file = tp_log_dir / "first_score_suggestions.txt"
-                        music_needs_refinement_edit = (
-                            first_score_file.exists()
-                            and suggestions_file.exists()
-                            and not final_score_file.exists()
-                        )
-                    except Exception:
-                        music_needs_refinement_edit = False
-                    try:
-                        if branch_b or music_needs_refinement_edit:
-                            gw_music_subtle_pass(
-                                tp_dir=tp_log_dir,
-                                tp_index=i,
-                                tp_type=tp_type,
-                                tp_text=tp_text,
-                                voice_context=music_voice_context,
-                                prompt_payload=music_prompt_payload,
-                            )
-                    except UserActionRequired:
-                        raise
-                    except Exception as exc:
-                        _log_warning(f"MUSIC: subtle score pass failed ({exc})", tp_log_dir)
             else:
                 if gw_run_narration_pipeline is None:
                     raise GWError("ghostwriter.pipelines.run_narration_pipeline not available")
@@ -1351,33 +1547,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                             "appended_dialog": state.last_appended_dialog,
                         }
                         save_text(tp_log_dir / "touch_point_state.json", _gw_to_text(cp))
-                        music_gate_triggered = False
-                        if (
-                            gw_music_first_gate is not None
-                            and music_voice_context is not None
-                            and music_prompt_payload
-                        ):
-                            try:
-                                music_gate_triggered = gw_music_first_gate(
-                                    tp_dir=tp_log_dir,
-                                    tp_index=i,
-                                    tp_type=tp_type,
-                                    tp_text=tp_text,
-                                    voice_context=music_voice_context,
-                                    prompt_payload=music_prompt_payload,
-                                )
-                            except UserActionRequired:
-                                raise
-                            except Exception as exc:
-                                _log_warning(f"MUSIC: first-score gate failed ({exc})", tp_log_dir)
-                                raise UserActionRequired(
-                                    "Music first-score generation failed; inspect the attempt logs and retry."
-                                ) from exc
-                        message = "Waiting for user suggestions on first draft"
-                        if music_gate_triggered:
-                            message += " and first score"
-                        message += "."
-                        raise UserActionRequired(message)
+                        raise UserActionRequired("Waiting for user suggestions on first draft.")
                 except UserActionRequired:
                     # Re-raise to propagate graceful stop to CLI/driver
                     raise

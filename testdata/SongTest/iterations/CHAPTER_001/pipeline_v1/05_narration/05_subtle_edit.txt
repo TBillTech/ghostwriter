@@ -1,0 +1,201 @@
+=== SYSTEM ===
+Apply subtle edits to the provided prose respecting suggestions and style.
+
+=== USER ===
+You are a Creative Writer hoping to write the next bestseller, but your first draft has some issues.
+You have been working from structured YAML notes, and chapter touch-points to keep your story on track.
+Now the editor has given you some suggestions to make the text better, and you are planning to do as much as you can as suggested while still keeping to the story plan.  
+
+Also, you may need to improve typesetting and odd punctuation. If you see a line that is "escaped", with single quotes in double quotes, un-escape it. This needs to be prose or dialog with prose.  There should not be titles, markdown, play style character indicators or any formatting that would be unusual for a fiction book.  Do allow tables or charts when they make sense.
+
+# Setting for this chapter general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters in this chapter
+{
+  "Selected-Characters": [
+    {
+      "id": "red",
+      "name": "Little Red Riding Hood",
+      "background": "A bright, tender-hearted village girl sent to bring food and comfort to her\nailing grandmother. She’s been warned to keep to the path and not speak to\nstrangers, but curiosity and kindness tug at her feet. She loves flowers,\nbirdsong, and the way sunlight freckles through the trees. Her iconic red\nhood and basket are more than props—they’re little anchors of bravery when\nthe woods press close. She’s polite by upbringing, literal in her\nunderstanding, and brave in small, practical ways.\n",
+      "traits": [
+        "curious",
+        "kind",
+        "naive",
+        "brave",
+        "easily-distracted",
+        "polite"
+      ],
+      "cadence": "light, earnest",
+      "lexicon": "simple words, fairy-tale tone; polite forms like \"please\" and \"thank you\"",
+      "prefer": [
+        "flowers",
+        "Grandmother",
+        "safe path",
+        "helpfulness",
+        "honesty"
+      ],
+      "avoid": [
+        "lying",
+        "strangers' tricks",
+        "dark thickets",
+        "leaving the path"
+      ],
+      "mannerisms": [
+        "Clutches her basket when nervous; relaxes as soon as she can offer help.",
+        "Answers questions plainly; takes idioms literally before catching on.",
+        "Soft little gasps of wonder at woodland sights; quiet hums of nursery tunes.",
+        "Uses simple, sincere phrases over fancy words; sprinkles in ‘please’ and ‘thank you.’",
+        "When scolded, lowers her eyes and apologizes, then tries to fix things at once."
+      ],
+      "sample_lines": [
+        "I'm bringing goodies to Grandmother.",
+        "I promised to stay on the path—well, mostly.",
+        "These flowers will cheer her right up, don’t you think?",
+        "Mama says it’s safest if I hurry, but I can help for just a minute.",
+        "If you know a shorter way, I suppose that would be kind…"
+      ],
+      "common_lines": [
+        "Grandmother’s waiting; I mustn’t dawdle.",
+        "Oh! I didn’t mean to be rude.",
+        "Thank you, but I should be on my way."
+      ],
+      "rare_lines": [
+        "I’m frightened, but I won’t run.",
+        "I did wrong to wander. I’ll make it right."
+      ],
+      "forbidden": [
+        "Does not use modern slang or technical jargon.",
+        "Will not be cruel, lewd, or cynical; no scheming language."
+      ],
+      "temperature_hint": 0.25,
+      "max_tokens_line": 80
+    },
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red promised to bring goodies to her ailing grandmother.
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+{
+  "Story-Relative-To": {
+    "Red": "Eager to help, trusts strangers.",
+    "Wolf": "Hungry, looking for an opportunity.",
+    "Forest Path": "Quiet, but shadows watch."
+  }
+}
+
+# Touch-Point
+Please carefully read and understand this Touch-Point. It is what the story needs to keep on track.
+Red walks the forest path, humming, basket in hand.
+
+# Rules for generation:
+1. **Edit ONLY**: Try to copy the draft copy as much as possible.  ONLY make changes if the specific suggestions call for it. Keep changes strategic and necessary, and try to conserve the prior copy. 
+
+# Prior draft copy
+What follows is the most recent draft text of what was written which needs to be revised:
+Red follows the winding path as it bends between the trunks, her figure a bright stroke of color in the shadows. Shafts of light cross Red's face and Hood as she passes, painting quick stripes of brightness on the red cloth. Her humming threads through the trees, rising and falling as the path climbs over small roots and dips into shallow hollows. The basket rests against Red's hip, light enough to swing, heavy enough to tug her arm in a steady rhythm.
+
+Loose stones crunch and roll aside under Red's soles, then settle again as the forest closes behind her. A jay falls silent on a high branch as Red approaches, tilts its head, then flies deeper into the gloom. From somewhere off the path, unseen by Red, Wolf matches his pace to her sound, keeping to the darker thickets. Wolf stays just where the shadows thicken, listening to Red's footsteps and the soft clink of the basket, waiting for a moment to step closer.
+
+# Specific suggestions
+The prior draft has these specific issues that need to be addressed:
+- Replace opening sentence with the explicit touch-point: change "Red follows the winding path as it bends between the trunks, her figure a bright stroke of color in the shadows." to: "Red walks the forest path, humming, basket in hand." (Keep the following imagery but start with this clear, required statement.)
+
+- Fix inconsistent capitalization/ambiguous noun: change "Hood" to "hood" and reword "Shafts of light cross Red's face and Hood" to "Shafts of light cross Red's face and red hood" or "Shafts of light cross Red's face and her red hood."
+
+- Clarify the wolf's pacing phrasing: replace "Wolf matches his pace to her sound" with a clearer image, e.g. "Wolf sets his steps to the rhythm of her humming" or "Wolf matches his steps to her humming."
+
+- Remove/reduce redundancy about shadows: combine two similar sentences into one tighter line. Replace "Wolf stays just where the shadows thicken, listening to Red's footsteps and the soft clink of the basket, waiting for a moment to step closer." and "keeping to the darker thickets." with, for example: "Wolf lingers in the thickest shadow, listening to Red's footsteps and the soft clink of the basket, waiting for the right moment to close the distance."
+
+- Tighten passive phrasing about stones/forest closing: change "Loose stones crunch and roll aside under Red's soles, then settle again as the forest closes behind her." to something crisper, e.g.: "Loose stones crunch beneath Red's feet and settle as the forest closes behind her."
+
+- Add one small Red-specific gesture to anchor character and keep her voice: insert a brief line showing her mannerism (polite, earnest, physical): e.g. "She fingers the basket handle as she hums, thinking of Grandmother," or "She clutches the basket for a moment when the path dips, then relaxes and hums on." (Keep it simple and literal.)
+
+- Avoid any explicit mention or implication of the wolf's hunger: do not add lines like "Wolf hasn't eaten in a while" or other direct references to appetite. (Keep any menace atmospheric and behavioral—listening, shadowing, flattering—not hunger-driven.)
+
+- Check pronoun clarity once more: ensure every sentence that begins with a pronoun clearly refers to Red or Wolf (use names if there's any potential ambiguity).
+
+Now, re-draft the copy, changing as little as possible.  ONLY change things in order to sasify the suggestions, or to fix typesetting.
+
+=== RESPONSE ===
+Red walks the forest path, humming, basket in hand. Shafts of light cross Red's face and her red hood as she passes, painting quick stripes of brightness on the cloth. Her humming threads through the trees, rising and falling as the path climbs over small roots and dips into shallow hollows. She fingers the basket handle as she hums, thinking of Grandmother. The basket rests against Red's hip, light enough to swing, heavy enough to tug her arm in a steady rhythm.
+
+Loose stones crunch beneath Red's feet and settle as the forest closes behind her. A jay falls silent on a high branch as Red approaches, tilts its head, then flies deeper into the gloom. From somewhere off the path, unseen by Red, Wolf matches his steps to her humming. He lingers in the thickest shadow, listening to Red's footsteps and the soft clink of the basket, waiting for the right moment to close the distance.

@@ -8,9 +8,10 @@ import logging
 from ..env import env_for_prompt
 from ..llm import complete as llm_complete
 from ..logging import log_warning as _log_warning, log_info as _log_info
-from ..utils import save_text
+from ..utils import save_text, read_file
 from ..context import UserActionRequired
 from ..pipelines.common import llm_call_with_validation, reasoning_for_prompt
+from ..templates import apply_template as _apply_template
 from ..musiccsv import (
     MusicCSV,
     MusicCSVValidationError,
@@ -26,6 +27,7 @@ from .prompts import (
     build_first_score_prompt,
     build_music_check_prompt,
     build_subtle_edit_prompt,
+    build_metadata_tracks_prompt,
 )
 
 logger = logging.getLogger(__name__)
@@ -45,6 +47,285 @@ def _truncate_musiccsv_text(text: str, limit: Optional[int]) -> str:
 
     truncated = text[:cutoff].rstrip("\n")
     return truncated + "\n# truncated"
+
+
+def run_metadata_tracks_step(
+    *,
+    tp_dir: Path,
+    tp_index: int,
+    tp_type: str,
+    prompt_payload: Optional[Dict[str, Any]],
+) -> bool:
+    """Run the first metadata/tracks-only step for a music touch-point.
+
+    This writes three artifacts when successful:
+    - ``metadatatracks.txt`` — prompt + response log for this step.
+    - ``metadata.json`` — pretty-printed JSON block for MusicCSV metadata.
+    - ``tracks.csv`` — CSV describing track layout.
+    """
+
+    if not prompt_payload:
+        return False
+
+    tp_dir = Path(tp_dir)
+    tp_dir.mkdir(parents=True, exist_ok=True)
+
+    log_path = tp_dir / "metadatatracks.txt"
+    metadata_path = tp_dir / "metadata.json"
+    tracks_path = tp_dir / "tracks.csv"
+
+    if metadata_path.exists() and tracks_path.exists():
+        return False
+
+    title = str(prompt_payload.get("touch_point_title", "") or "")
+    description = str(prompt_payload.get("touch_point_description", "") or "")
+    prior_paragraph = str(prompt_payload.get("touch_point_prior_paragraph", "") or "")
+
+    prompt = build_metadata_tracks_prompt(
+        prompt_payload=prompt_payload,
+        tp_index=tp_index,
+        tp_type=tp_type,
+        tp_title=title,
+        tp_description=description,
+        tp_prior_paragraph=prior_paragraph,
+    )
+    model, temp, max_tokens = env_for_prompt(
+        "music_metadata_tracks_prompt.md",
+        "MUSIC_METADATA_TRACKS",
+        default_temp=0.4,
+        default_max_tokens=1800,
+    )
+
+    response = llm_complete(
+        prompt,
+        system=(
+            "Design score metadata.json and tracks.csv only; "
+            "do not generate measures or notes."
+        ),
+        temperature=temp,
+        max_tokens=max_tokens,
+        model=model,
+    )
+
+    try:
+        log_content = [
+            "=== SYSTEM ===",
+            "Design score metadata.json and tracks.csv only; do not generate measures or notes.",
+            "",
+            "=== USER ===",
+            prompt,
+            "",
+            "=== RESPONSE ===",
+            response,
+            "",
+        ]
+        save_text(log_path, "\n".join(log_content))
+    except Exception:
+        pass
+
+    text = response or ""
+    lower = text.lower()
+    meta_idx = lower.find("metadata.json")
+    tracks_idx = lower.find("tracks.csv")
+    if meta_idx == -1 or tracks_idx == -1 or tracks_idx <= meta_idx:
+        raise UserActionRequired(
+            "Metadata/tracks step did not return both metadata.json and tracks.csv blocks. "
+            "Edit metadatatracks.txt or retry."
+        )
+
+    meta_block = text[meta_idx:tracks_idx]
+    tracks_block = text[tracks_idx:]
+
+    meta_lines = meta_block.splitlines()[1:]
+    tracks_lines = tracks_block.splitlines()[1:]
+
+    meta_text = "\n".join(meta_lines).strip()
+    tracks_text = "\n".join(tracks_lines).strip()
+
+    if not meta_text or not tracks_text:
+        raise UserActionRequired(
+            "Unable to parse metadata.json or tracks.csv from the response. "
+            "Edit metadatatracks.txt and retry."
+        )
+
+    save_text(metadata_path, meta_text + "\n")
+    save_text(tracks_path, tracks_text + "\n")
+
+    try:
+        _log_info(
+            f"MUSIC: wrote metadata.json and tracks.csv for tp={tp_index:02d} at {tp_dir}",
+            tp_dir,
+        )
+    except Exception:
+        pass
+
+    return True
+
+
+def run_melody_edges_step(
+    *,
+    tp_dir: Path,
+    tp_index: int,
+    tp_type: str,
+    prompt_payload: Optional[Dict[str, Any]],
+) -> bool:
+    """Run the melody-elements / edges step for a music touch-point.
+
+    This expects that ``metadata.json`` already exists in ``tp_dir`` and will
+    construct a prompt that combines the existing music prompt payload,
+    the metadata JSON, and the ``melody_elements_instructions.txt`` template.
+
+    Artifacts written on success:
+    - ``melodyelements.txt``  — prompt + response log for this step.
+    - ``melody_edges.txt``    — raw dwell/edge description block from the LLM.
+
+    The caller is responsible for raising ``UserActionRequired`` to pause and
+    allow human review of the edges after this step completes.
+    """
+
+    if not prompt_payload:
+        return False
+
+    tp_dir = Path(tp_dir)
+    tp_dir.mkdir(parents=True, exist_ok=True)
+
+    metadata_path = tp_dir / "metadata.json"
+    if not metadata_path.exists():
+        raise UserActionRequired(
+            "Melody edges step requires metadata.json to exist. Run metadata/tracks first."
+        )
+
+    log_path = tp_dir / "melodyelements.txt"
+    edges_path = tp_dir / "melody_edges.txt"
+
+    # Idempotency: if edges already exist, nothing to do.
+    if edges_path.exists():
+        return False
+
+    title = str(prompt_payload.get("touch_point_title", "") or "")
+    description = str(prompt_payload.get("touch_point_description", "") or "")
+    prior_paragraph = str(prompt_payload.get("touch_point_prior_paragraph", "") or "")
+
+    # Load story-relative/factoid style context if present in payload
+    story_relative = str(prompt_payload.get("story_relative_to_block", "") or "")
+    factoids_block = str(prompt_payload.get("factoids_block", "") or "")
+
+    try:
+        metadata_text = metadata_path.read_text(encoding="utf-8")
+    except Exception as exc:  # pragma: no cover - defensive
+        raise UserActionRequired(
+            f"Unable to read metadata.json for melody edges step: {exc}"
+        ) from exc
+
+    # Load the static melody-elements instructions from prompts
+    from pathlib import Path as _P
+    base_root = _P(__file__).resolve().parents[2]
+    instr_path = base_root / "prompts" / "melody_elements_instructions.txt"
+    try:
+        instructions_text = read_file(str(instr_path))
+    except Exception as exc:  # pragma: no cover - defensive
+        raise UserActionRequired(
+            f"Unable to read melody_elements_instructions.txt: {exc}"
+        ) from exc
+
+    model, temp, max_tokens = env_for_prompt(
+        "music_melody_edges_prompt.md",
+        "MUSIC_MELODY_EDGES",
+        default_temp=0.4,
+        default_max_tokens=2200,
+    )
+    # Build the user prompt from a dedicated template, with the
+    # instructions injected as a replacement block.
+    replacements: Dict[str, Any] = {
+        "[PREVIOUS_PARAGRAPH]": prior_paragraph or "",
+        "[STORY_RELATIVE]": story_relative or "",
+        "[FACTOIDS]": factoids_block or "",
+        "[MUSIC_TOUCH_POINT]": (f"Title: {title}\nDescription: {description}".strip()),
+        "[METADATA_JSON]": metadata_text.strip(),
+        "[MELODY_ELEMENTS_INSTRUCTIONS]": instructions_text.strip(),
+    }
+    try:
+        user_prompt = _apply_template("prompts/music_melody_edges_prompt.md", {k: str(v) for k, v in replacements.items()})
+    except Exception:
+        # Fallback: simple concatenation if template application fails.
+        lines = []
+        lines.append("You are a composer designing melodic dwell notes and edges.")
+        lines.append("")
+        if prior_paragraph:
+            lines.append("[PREVIOUS_PARAGRAPH]")
+            lines.append(prior_paragraph)
+            lines.append("")
+        if story_relative:
+            lines.append("[STORY_RELATIVE]")
+            lines.append(str(story_relative))
+            lines.append("")
+        if factoids_block:
+            lines.append("[FACTOIDS]")
+            lines.append(str(factoids_block))
+            lines.append("")
+        if title or description:
+            lines.append("[MUSIC_TOUCH_POINT]")
+            if title:
+                lines.append(f"Title: {title}")
+            if description:
+                lines.append(f"Description: {description}")
+            lines.append("")
+        lines.append("[METADATA_JSON]")
+        lines.append(metadata_text.strip())
+        lines.append("")
+        lines.append("[MELODY_ELEMENTS_INSTRUCTIONS]")
+        lines.append(instructions_text.strip())
+        lines.append("")
+        user_prompt = "\n".join(lines)
+
+    response = llm_complete(
+        user_prompt,
+        system=(
+            "Use the provided context and metadata to choose four dwell notes "
+            "(A, B1/B2, C1, C2) and construct the nine melodic edges as "
+            "described. Output first the dwell notes block, then each edge "
+            "CSV exactly as specified in the instructions."
+        ),
+        temperature=temp,
+        max_tokens=max_tokens,
+        model=model,
+    )
+
+    # Always log full context for debugging and human editing.
+    try:
+        log_lines = [
+            "=== SYSTEM ===",
+            "Use the provided context and metadata to choose four dwell notes (A, B1/B2, C1, C2) and construct the nine melodic edges as described.",
+            "",
+            "=== USER ===",
+            user_prompt,
+            "",
+            "=== RESPONSE ===",
+            response or "",
+            "",
+        ]
+        save_text(log_path, "\n".join(log_lines))
+    except Exception:
+        pass
+
+    text = (response or "").strip()
+    if not text:
+        raise UserActionRequired(
+            "Melody edges step produced an empty response. Edit melodyelements.txt or retry."
+        )
+
+    # For now, store the raw dwell + edge description for human editing.
+    save_text(edges_path, text + "\n")
+
+    try:
+        _log_info(
+            f"MUSIC: wrote melody edges artifact for tp={tp_index:02d} at {tp_dir}",
+            tp_dir,
+        )
+    except Exception:
+        pass
+
+    return True
 
 
 def _next_attempt_path(tp_dir: Path, prefix: str) -> Path:
@@ -239,6 +520,201 @@ def ensure_first_score_gate(
     return True
 
 
+def run_melody_construction_step(
+    *,
+    tp_dir: Path,
+    tp_index: int,
+    tp_type: str,
+    prompt_payload: Optional[Dict[str, Any]],
+    variant: str = "standard",
+) -> bool:
+    """Construct a full melody using the music_melody_prompt.md template.
+
+    This step consumes prior artifacts and templates but does *not* yet
+    integrate with downstream track-building. It is focused on generating
+    a structured melody artifact for later use.
+
+    Expected inputs in ``tp_dir``:
+    - ``metadata.json``     — score metadata from the metadata/tracks step.
+    - ``melody_edges.txt``  — dwell notes and melodic edges (LLM + human edited).
+
+    Artifacts written on success (for the given variant):
+    - ``melody_{variant}.txt``  — prompt + response log for this step.
+    - ``melody_{variant}.csv``  — raw melody CSV emitted by the LLM.
+
+    The ``variant`` parameter is meant to support "standard", "complimentary",
+    and "reprise" melodies, but this helper does not yet hard-code any
+    additional_rules; those should be expressed in the substituted
+    MELODY_INSTRUCTIONS template text.
+    """
+
+    if not prompt_payload:
+        return False
+
+    tp_dir = Path(tp_dir)
+    tp_dir.mkdir(parents=True, exist_ok=True)
+
+    metadata_path = tp_dir / "metadata.json"
+    edges_path = tp_dir / "melody_edges.txt"
+    if not metadata_path.exists() or not edges_path.exists():
+        raise UserActionRequired(
+            "Melody construction step requires metadata.json and melody_edges.txt. "
+            "Run the earlier music steps first."
+        )
+
+    # Variant-normalized names
+    variant_safe = (variant or "standard").strip().lower()
+    log_path = tp_dir / f"melody_{variant_safe}.txt"
+    melody_csv_path = tp_dir / f"melody_{variant_safe}.csv"
+
+    # Idempotency: if melody CSV already exists, do nothing.
+    if melody_csv_path.exists():
+        return False
+
+    title = str(prompt_payload.get("touch_point_title", "") or "")
+    description = str(prompt_payload.get("touch_point_description", "") or "")
+    prior_paragraph = str(prompt_payload.get("touch_point_prior_paragraph", "") or "")
+
+    story_relative = str(prompt_payload.get("story_relative_to_block", "") or "")
+    factoids_block = str(prompt_payload.get("factoids_block", "") or "")
+
+    try:
+        metadata_text = metadata_path.read_text(encoding="utf-8")
+    except Exception as exc:  # pragma: no cover - defensive
+        raise UserActionRequired(
+            f"Unable to read metadata.json for melody construction: {exc}"
+        ) from exc
+
+    try:
+        edges_text = edges_path.read_text(encoding="utf-8")
+    except Exception as exc:  # pragma: no cover - defensive
+        raise UserActionRequired(
+            f"Unable to read melody_edges.txt for melody construction: {exc}"
+        ) from exc
+
+    # Load melody_instructions template text for inclusion.
+    from pathlib import Path as _P
+    base_root = _P(__file__).resolve().parents[2]
+    instr_path = base_root / "prompts" / "melody_instructions.txt"
+    try:
+        melody_instructions = read_file(str(instr_path))
+    except Exception as exc:  # pragma: no cover - defensive
+        raise UserActionRequired(
+            f"Unable to read melody_instructions.txt: {exc}"
+        ) from exc
+
+    # Future work: inject variant-specific additional_rules into the
+    # MELODY_INSTRUCTIONS template before applying it.
+
+    replacements: Dict[str, Any] = {
+        "[PREVIOUS_PARAGRAPH]": prior_paragraph or "",
+        "[STORY_RELATIVE]": story_relative or "",
+        "[FACTOIDS]": factoids_block or "",
+        "[MUSIC_TOUCH_POINT]": (f"Title: {title}\nDescription: {description}".strip()),
+        "[METADATA_JSON]": metadata_text.strip(),
+        "[DWELL_NOTES]": edges_text.strip(),
+        "[MELODIC_EDGES]": edges_text.strip(),
+        "[MELODY_INSTRUCTIONS]": melody_instructions.strip(),
+    }
+
+    try:
+        user_prompt = _apply_template(
+            "prompts/music_melody_prompt.md",
+            {k: str(v) for k, v in replacements.items()},
+        )
+    except Exception:
+        # Fallback: basic concatenation if templating fails.
+        lines = []
+        lines.append("You are a composer constructing a full melodic line for this piece.")
+        lines.append("")
+        if prior_paragraph:
+            lines.append("[PREVIOUS_PARAGRAPH]")
+            lines.append(prior_paragraph)
+            lines.append("")
+        if story_relative:
+            lines.append("[STORY_RELATIVE]")
+            lines.append(str(story_relative))
+            lines.append("")
+        if factoids_block:
+            lines.append("[FACTOIDS]")
+            lines.append(str(factoids_block))
+            lines.append("")
+        if title or description:
+            lines.append("[MUSIC_TOUCH_POINT]")
+            if title:
+                lines.append(f"Title: {title}")
+            if description:
+                lines.append(f"Description: {description}")
+            lines.append("")
+        lines.append("[METADATA_JSON]")
+        lines.append(metadata_text.strip())
+        lines.append("")
+        lines.append("[DWELL_NOTES]")
+        lines.append(edges_text.strip())
+        lines.append("")
+        lines.append("[MELODIC_EDGES]")
+        lines.append(edges_text.strip())
+        lines.append("")
+        lines.append("[MELODY_INSTRUCTIONS]")
+        lines.append(melody_instructions.strip())
+        lines.append("")
+        user_prompt = "\n".join(lines)
+
+    model, temp, max_tokens = env_for_prompt(
+        "music_melody_prompt.md",
+        "MUSIC_MELODY",
+        default_temp=0.4,
+        default_max_tokens=2200,
+    )
+
+    response = llm_complete(
+        user_prompt,
+        system=(
+            "Using the dwell notes, melodic edges, and instructions, "
+            "construct a single coherent melody as a CSV table."
+        ),
+        temperature=temp,
+        max_tokens=max_tokens,
+        model=model,
+    )
+
+    # Log the full context and response for human inspection.
+    try:
+        log_lines = [
+            "=== SYSTEM ===",
+            "Using the dwell notes, melodic edges, and instructions, construct a single coherent melody as a CSV table.",
+            "",
+            "=== USER ===",
+            user_prompt,
+            "",
+            "=== RESPONSE ===",
+            response or "",
+            "",
+        ]
+        save_text(log_path, "\n".join(log_lines))
+    except Exception:
+        pass
+
+    text = (response or "").strip()
+    if not text:
+        raise UserActionRequired(
+            "Melody construction step produced an empty response. Edit the melody log and retry."
+        )
+
+    # For now, accept the raw response as the melody CSV artifact.
+    save_text(melody_csv_path, text + "\n")
+
+    try:
+        _log_info(
+            f"MUSIC: wrote melody CSV for variant '{variant_safe}' tp={tp_index:02d} at {tp_dir}",
+            tp_dir,
+        )
+    except Exception:
+        pass
+
+    return True
+
+
 def run_subtle_score_pass(
     *,
     tp_dir: Path,
@@ -376,6 +852,9 @@ def run_subtle_score_pass(
 
 
 __all__ = [
+    "run_metadata_tracks_step",
+    "run_melody_edges_step",
+    "run_melody_construction_step",
     "ensure_first_score_gate",
     "run_subtle_score_pass",
 ]
