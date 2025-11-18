@@ -13,10 +13,12 @@
 1. Author prepares chapter YAML with new `voices` metadata and optional `music:` directive. Note: if either voices or the music directive is missing from the chapter YAML, skip the music portion of the workflow.
 2. Optional: Author drops raw MIDI assets into `iterations/CHAPTER_xxx/pipeline_vN/NN_<type>/NN_track_<voice>_import/`.
 3. When raw assets are present, the importer converts them into normalized `import.musiccsv`; the sanitizer validates user edits and maintains `score.musiccsv` plus `monitor.mid`.
-4. If an import directory is absent, or after a sanitized score exists, GhostWriter runs the content pipelines:
-  - Uses prose context (touch-point text, brainstorm bullets) and voice metadata to prompt the LLM for `touch_point_first_score.musiccsv`, producing paired `first_score_suggestions.txt`.
-  - Author edits suggestions/score and resumes to produce `touch_point_score.musiccsv` followed by `score_suggestions.txt`.
-5. On version completion, GhostWriter aggregates `touch_point_score.musiccsv` into `score_vN.musiccsv`, renders consolidated `score/final.musiccsv`, `score/final.mid`, and per-voice MIDI files.
+4. If an import directory is absent, or after a sanitized score exists, GhostWriter runs the content pipelines using a **per-voice / per-variant** model:
+  - Uses prose context (touch-point text, brainstorm bullets) and voice metadata to prompt the LLM for **per-voice, per-variant note CSVs** named `notes_<voice_token>_<variant>.csv` (e.g., `notes_major.tenor.flute.red.melody_standard.csv`).
+  - These calls are made via a multi-voice first-pass composer that iterates voices in a stable order, passing reduced-note grids for the melody and already-scored voices.
+  - A helper then assembles **per-variant first-pass scores** `first_<title>_<variant>.musiccsv` and per-variant monitor MIDIs `first_monitor_<title>_<variant>.mid` from shared `metadata.json`, `tracks.csv`, `measures_<variant>.csv`, and all `notes_<voice_token>_<variant>.csv`.
+  - A second-pass composer reuses the same per-voice/per-variant flow but includes suggestion text as additional context, producing final `<title>_<variant>.musiccsv` and `monitor_<title>_<variant>.mid`.
+5. On version completion, GhostWriter aggregates the final per-variant scores into `score_vN.musiccsv`, renders consolidated `score/final.musiccsv`, `score/final.mid`, and per-voice MIDI files.
 6. Bundle is packaged for sharing (zip). User can iterate (vN+1) with updated assets.
 
 Note: In order to gracefully handle the case when the user wants to refine either the prose or the music separately, and not the other, well will add a minor enhancement: If the prior version (vN-1) suggestions.txt is only whitespace, then don't run the subtle_edit, but only copy the touch_point_* file, and create an empty suggestions.txt for vN.
@@ -38,10 +40,29 @@ iterations/CHAPTER_XXX/pipeline_vN/NN_<type>/
   │   ├─ import.musiccsv (round-trip editable)
   │   ├─ score.musiccsv (sanitized)
   │   └─ monitor.mid (preview)
-  ├─ touch_point_first_score.musiccsv
-  ├─ first_score_suggestions.txt
-  ├─ touch_point_score.musiccsv
-  └─ score_suggestions.txt
+  ├─ metadata.json
+  ├─ tracks.csv
+  ├─ measures_standard.csv
+  ├─ measures_complimentary.csv
+  ├─ measures_reprise.csv
+  ├─ notes_<voice_token>_standard.csv
+  ├─ notes_<voice_token>_complimentary.csv
+  ├─ notes_<voice_token>_reprise.csv
+  ├─ first_<title>_standard.musiccsv
+  ├─ first_<title>_complimentary.musiccsv
+  ├─ first_<title>_reprise.musiccsv
+  ├─ first_monitor_<title>_standard.mid
+  ├─ first_monitor_<title>_complimentary.mid
+  ├─ first_monitor_<title>_reprise.mid
+  ├─ first_score_suggestions_standard.txt
+  ├─ first_score_suggestions_complimentary.txt
+  ├─ first_score_suggestions_reprise.txt
+  ├─ <title>_standard.musiccsv
+  ├─ <title>_complimentary.musiccsv
+  ├─ <title>_reprise.musiccsv
+  ├─ monitor_<title>_standard.mid
+  ├─ monitor_<title>_complimentary.mid
+  └─ monitor_<title>_reprise.mid
 
 iterations/CHAPTER_XXX/
   ├─ score_vN.musiccsv

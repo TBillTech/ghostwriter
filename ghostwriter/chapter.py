@@ -24,6 +24,8 @@ try:
         run_metadata_tracks_step as gw_music_metadata_tracks,
         run_melody_edges_step as gw_music_melody_edges,
         run_melody_construction_step as gw_music_melody_construct,
+        run_multi_voice_first_pass as gw_music_multi_voice_first_pass,
+        assemble_first_pass_variant as gw_music_assemble_first_variant,
     )
 except Exception:
     gw_music_build_voice_context = None  # type: ignore
@@ -33,6 +35,8 @@ except Exception:
     gw_music_metadata_tracks = None  # type: ignore
     gw_music_melody_edges = None  # type: ignore
     gw_music_melody_construct = None  # type: ignore
+    gw_music_multi_voice_first_pass = None  # type: ignore
+    gw_music_assemble_first_variant = None  # type: ignore
 
 # Standard library imports
 import os
@@ -1265,55 +1269,102 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 _log_warning(f"MUSIC: complimentary/reprise melody construction failed ({exc})", tp_log_dir)
                 raise UserActionRequired("Music complimentary/reprise melody construction failed; inspect the melody logs and retry.") from exc
 
-            first_score_file = (tp_log_dir / "touch_point_first_score.musiccsv") if tp_log_dir else None
-            first_suggestions_file = (tp_log_dir / "first_score_suggestions.txt") if tp_log_dir else None
-            final_score_file = (tp_log_dir / "touch_point_score.musiccsv") if tp_log_dir else None
-            final_feedback_file = (tp_log_dir / "score_suggestions.txt") if tp_log_dir else None
-            # monitor.mid will be produced by the subtle pass when finalizing the score
+            # Step 4: per-voice first-pass composition (no user feedback in v1).
+            try:
+                if gw_music_multi_voice_first_pass is not None:
+                    for variant in ("standard", "complimentary", "reprise"):
+                        suggestions_text = ""
+                        # On edit branches (v2+), feed any existing first-pass suggestions
+                        # into the second-pass composer as additional conditioning.
+                        if branch_b and tp_log_dir is not None:
+                            variant_safe = variant.strip().lower()
+                            sugg_path = tp_log_dir / f"first_score_suggestions_{variant_safe}.txt"
+                            try:
+                                if sugg_path.exists():
+                                    suggestions_text = read_file(str(sugg_path)) or ""
+                            except Exception:
+                                suggestions_text = ""
+                        gw_music_multi_voice_first_pass(
+                            tp_dir=tp_log_dir or base_log_dir,
+                            tp_index=i,
+                            tp_type=tp_type,
+                            tp_text=tp_text,
+                            voice_context=music_tp_voice_context,
+                            prompt_payload=music_tp_prompt_payload,
+                            variant=variant,
+                            suggestions_text=suggestions_text,
+                        )
+            except UserActionRequired:
+                raise
+            except Exception as exc:
+                _log_warning(f"MUSIC: multi-voice first-pass composition failed ({exc})", tp_log_dir)
+                raise UserActionRequired("Music multi-voice first-pass composition failed; inspect logs before retrying.") from exc
 
-            # Step 4: ensure first-score artifacts (no extra pause in v1).
-            need_first = True
-            if first_score_file is not None and first_suggestions_file is not None:
-                need_first = not (first_score_file.exists() and first_suggestions_file.exists())
-            if need_first:
-                try:
-                    created = gw_music_first_gate(
-                        tp_dir=tp_log_dir or base_log_dir,
-                        tp_index=i,
-                        tp_type=tp_type,
-                        tp_text=tp_text,
-                        voice_context=music_tp_voice_context,
-                        prompt_payload=music_tp_prompt_payload,
-                    ) if gw_music_first_gate is not None else False
-                except UserActionRequired:
-                    # Do not pause here; treat failures as errors that require inspection.
-                    raise
-                except Exception as exc:
-                    _log_warning(f"MUSIC: first-score generation failed ({exc})", tp_log_dir)
-                    raise UserActionRequired("Music first-score generation failed; inspect logs before retrying.") from exc
+            # Step 5: assemble per-variant first-pass MusicCSV + monitor MIDIs.
+            try:
+                if gw_music_assemble_first_variant is not None:
+                    title = str(music_tp_meta.get("title") or "").strip() or "untitled"
+                    for variant in ("standard", "complimentary", "reprise"):
+                        gw_music_assemble_first_variant(
+                            tp_dir=tp_log_dir or base_log_dir,
+                            title=title,
+                            variant=variant,
+                        )
+            except Exception as exc:
+                _log_warning(f"MUSIC: first-pass aggregation failed ({exc})", tp_log_dir)
+                raise UserActionRequired("Music first-pass aggregation failed; inspect logs before retrying.") from exc
 
-            # Step 5: ensure final score via subtle pass
-            final_ready = bool(final_score_file and final_score_file.exists())
-            if not final_ready and first_score_file is not None and first_score_file.exists():
-                try:
-                    ran = gw_music_subtle_pass(
-                        tp_dir=tp_log_dir or base_log_dir,
-                        tp_index=i,
-                        tp_type=tp_type,
-                        tp_text=tp_text,
-                        voice_context=music_tp_voice_context,
-                        prompt_payload=music_tp_prompt_payload,
-                    ) if gw_music_subtle_pass is not None else False
-                    if ran:
-                        final_ready = bool(final_score_file and final_score_file.exists())
-                except UserActionRequired:
-                    raise
-                except Exception as exc:
-                    _log_warning(f"MUSIC: subtle score pass failed ({exc})", tp_log_dir)
-                    raise UserActionRequired("Music subtle score pass failed; address the score feedback and retry.") from exc
+            # Step 6: run per-variant first-pass checks and write suggestions files.
+            try:
+                from .music import assemble_first_pass_variant as _gw_music_assemble_first_variant  # re-import for type checkers
+                from .music import MusicCSV as _MusicCSV
+                from .music import musiccsv_to_text as _musiccsv_to_text
+                if gw_music_assemble_first_variant is not None:
+                    title = str(music_tp_meta.get("title") or "").strip() or "untitled"
+                    for variant in ("standard", "complimentary", "reprise"):
+                        variant_safe = variant.strip().lower()
+                        first_score_path = (tp_log_dir or base_log_dir) / f"first_{title.replace(' ', '_')}_{variant_safe}.musiccsv"
+                        if not first_score_path.exists():
+                            continue
+                        try:
+                            from .musiccsv import read_musiccsv as _read_musiccsv
+                        except Exception:
+                            _read_musiccsv = read_musiccsv  # type: ignore[name-defined]
+                        try:
+                            music_obj = _read_musiccsv(first_score_path)
+                            snippet_text = _truncate_musiccsv_text(_musiccsv_to_text(music_obj), None)
+                        except Exception:
+                            continue
+                        try:
+                            check_prompt = build_music_check_prompt(
+                                prompt_payload=music_tp_prompt_payload,
+                                tp_index=i,
+                                tp_type=tp_type,
+                                tp_text=tp_text,
+                                musiccsv_snippet=snippet_text,
+                            )
+                            check_model, check_temp, check_max = _env_for_prompt(
+                                "music_check_prompt.md",
+                                "MUSIC_SCORE_CHECK",
+                                default_temp=0.0,
+                                default_max_tokens=800,
+                            )
+                            suggestions = llm_complete(
+                                check_prompt,
+                                system="Provide concise, actionable feedback on the score.",
+                                temperature=check_temp,
+                                max_tokens=check_max,
+                                model=check_model,
+                            )
+                            sugg_name = f"first_score_suggestions_{variant_safe}.txt"
+                            if tp_log_dir is not None:
+                                save_text(tp_log_dir / sugg_name, suggestions)
+                        except Exception:
+                            # Best-effort diagnostics only; do not fail v1 on check errors.
+                            continue
+            except Exception as exc:
+                _log_warning(f"MUSIC: first-pass per-variant checks encountered an error ({exc})", tp_log_dir)
 
-            if not final_ready:
-                raise UserActionRequired("Music touch-point still awaiting refinement. Edit the first score or feedback, then retry.")
             records.append((tp_id, tp_type, tp_text, polished_text))
             _write_tp_checkpoint(tp_log_dir, tp_id, tp_type, tp_text, polished_text, state)
             continue

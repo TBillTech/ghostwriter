@@ -400,41 +400,53 @@ def _measures_from_melody_csv(melody_csv_text: str) -> List[Dict[str, Any]]:
     return rows
 
 
-def ensure_first_score_gate(
+def _compose_first_pass_for_voice(
     *,
     tp_dir: Path,
     tp_index: int,
     tp_type: str,
     tp_text: str,
-    voice_context: Optional[VoiceContext],
-    prompt_payload: Optional[Dict[str, Any]],
-) -> bool:
-    """Run the first-score gate if required, returning True when artifacts were generated."""
+    voice_context: VoiceContext,
+    prompt_payload: Dict[str, Any],
+    target_voice_index: int,
+    variant: str = "standard",
+    suggestions_text: str = "",
+) -> MusicCSV:
+    """Compose a first-pass MusicCSV score for a single voice.
 
-    if voice_context is None or not voice_context.voices or not prompt_payload:
-        return False
+    This helper is the internal building block for the multi-voice,
+    multi-variant composer. It prepares reduced-note context and
+    shared metadata/measures, builds the first-score prompt for the
+    requested voice, and returns the validated MusicCSV result.
+    """
 
     tp_dir = Path(tp_dir)
     tp_dir.mkdir(parents=True, exist_ok=True)
 
-    first_score_path = tp_dir / "touch_point_first_score.musiccsv"
-    first_suggestions_path = tp_dir / "first_score_suggestions.txt"
-    score_check_trace = tp_dir / "score_check.txt"
-    first_monitor_path = tp_dir / "first_monitor.mid"
+    if not voice_context.voices:
+        raise UserActionRequired("No voices available in VoiceContext for music composition.")
 
-    if first_score_path.exists() and first_suggestions_path.exists():
-        if first_monitor_path.exists():
-            return False
-        try:
-            music = read_musiccsv(first_score_path)
-        except Exception as exc:
-            _log_warning(f"MUSIC: unable to read first score for monitor MIDI: {exc}", tp_dir)
-            raise UserActionRequired(
-                "Unable to read the stored MusicCSV first score to render the monitor MIDI. Inspect the score and try again."
-            ) from exc
-        _render_monitor_midi(music, first_monitor_path, tp_dir)
-        return True
+    if target_voice_index < 0 or target_voice_index >= len(voice_context.voices):
+        raise UserActionRequired("Requested target_voice_index is out of range for VoiceContext.voices.")
 
+    # Load shared metadata and variant-specific measures.
+    metadata_text = ""
+    measures_text = ""
+    try:
+        meta_path = tp_dir / "metadata.json"
+        if meta_path.exists():
+            metadata_text = meta_path.read_text(encoding="utf-8").strip()
+    except Exception:
+        metadata_text = ""
+    try:
+        safe_variant = (variant or "standard").strip().lower()
+        measures_path = tp_dir / f"measures_{safe_variant}.csv"
+        if measures_path.exists():
+            measures_text = measures_path.read_text(encoding="utf-8").strip()
+    except Exception:
+        measures_text = ""
+
+    # Build reduced-note grids from any existing scores referenced in the voice context.
     existing_scores: Dict[str, Dict[str, Any]] = {}
     for spec in voice_context.voices:
         summary = voice_context.score_summaries.get(spec.token)
@@ -449,36 +461,16 @@ def ensure_first_score_gate(
         }
         try:
             if summary.score_path.exists():
-                music = read_musiccsv(summary.score_path)
-                text = musiccsv_to_text(music)
+                music_obj = read_musiccsv(summary.score_path)
+                text = musiccsv_to_text(music_obj)
                 text = _truncate_musiccsv_text(text, _MAX_MUSICCSV_SNIPPET)
                 info["musiccsv"] = text
         except Exception:
             pass
         existing_scores[spec.token] = info
 
-    # For now, target the first declared voice token when building the
-    # per-voice first score. Future revisions may iterate per voice.
-    first_voice = voice_context.voices[0]
+    target_voice = voice_context.voices[target_voice_index]
 
-    # Load shared metadata and measures artifacts (standard melody variant).
-    metadata_text = ""
-    measures_text = ""
-    try:
-        meta_path = tp_dir / "metadata.json"
-        if meta_path.exists():
-            metadata_text = meta_path.read_text(encoding="utf-8").strip()
-    except Exception:
-        metadata_text = ""
-    try:
-        measures_path = tp_dir / "measures_standard.csv"
-        if measures_path.exists():
-            measures_text = measures_path.read_text(encoding="utf-8").strip()
-    except Exception:
-        measures_text = ""
-
-    # Build reduced-note grids for alignment. For now we only pass through
-    # summaries for any existing scores that have already been imported.
     melody_reduced = ""
     other_reduced_blocks: List[str] = []
     for token, summary in existing_scores.items():
@@ -489,30 +481,37 @@ def ensure_first_score_gate(
             score_path = Path(score_path_str)
             if not score_path.exists():
                 continue
-            music = read_musiccsv(score_path)
-            reduced = reduced_notes_csv(music)
+            music_obj = read_musiccsv(score_path)
+            reduced = reduced_notes_csv(music_obj)
         except Exception:
             continue
         label = f"# voice: {token}\n{reduced.strip()}" if reduced.strip() else f"# voice: {token} (no notes)"
-        if token == first_voice.token:
+        if token == target_voice.token:
             melody_reduced = reduced.strip()
         else:
             other_reduced_blocks.append(label)
 
     other_reduced = "\n\n".join(other_reduced_blocks).strip()
 
+    # Include suggestion text for this pass if provided; callers are
+    # responsible for scoping it by variant.
+    payload_with_suggestions = dict(prompt_payload or {})
+    if suggestions_text.strip():
+        key = f"music_suggestions_{(variant or 'standard').strip().lower()}"
+        payload_with_suggestions[key] = suggestions_text.strip()
+
     prompt = build_first_score_prompt(
-        prompt_payload=prompt_payload,
+        prompt_payload=payload_with_suggestions,
         existing_scores=existing_scores,
         tp_index=tp_index,
         tp_type=tp_type,
         tp_text=tp_text,
-        voice_token=first_voice.token,
-        voice_chord=first_voice.chord,
-        voice_register=first_voice.register,
-        voice_instrument=first_voice.instrument,
-        voice_idea=first_voice.idea,
-        voice_role=first_voice.role or "",
+        voice_token=target_voice.token,
+        voice_chord=target_voice.chord,
+        voice_register=target_voice.register,
+        voice_instrument=target_voice.instrument,
+        voice_idea=target_voice.idea,
+        voice_role=target_voice.role or "",
         metadata_json=metadata_text,
         measures_csv=measures_text,
         melody_reduced_csv=melody_reduced,
@@ -551,8 +550,63 @@ def ensure_first_score_gate(
         raise UserActionRequired(
             "Generated score failed validation after LLM call. Inspect the response and try again."
         )
-    write_musiccsv(first_score_path, music)
 
+    return music
+
+
+def ensure_first_score_gate(
+    *,
+    tp_dir: Path,
+    tp_index: int,
+    tp_type: str,
+    tp_text: str,
+    voice_context: Optional[VoiceContext],
+    prompt_payload: Optional[Dict[str, Any]],
+) -> bool:
+    """Legacy single-score first gate using the internal per-voice composer.
+
+    This wrapper preserves existing behavior for callers that still expect a
+    monolithic ``touch_point_first_score.musiccsv`` while internally
+    delegating to ``_compose_first_pass_for_voice`` targeting the first
+    declared voice and the "standard" variant.
+    """
+
+    if voice_context is None or not voice_context.voices or not prompt_payload:
+        return False
+
+    tp_dir = Path(tp_dir)
+    tp_dir.mkdir(parents=True, exist_ok=True)
+
+    first_score_path = tp_dir / "touch_point_first_score.musiccsv"
+    first_suggestions_path = tp_dir / "first_score_suggestions.txt"
+    score_check_trace = tp_dir / "score_check.txt"
+    first_monitor_path = tp_dir / "first_monitor.mid"
+
+    if first_score_path.exists() and first_suggestions_path.exists():
+        if first_monitor_path.exists():
+            return False
+        try:
+            music = read_musiccsv(first_score_path)
+        except Exception as exc:
+            _log_warning(f"MUSIC: unable to read first score for monitor MIDI: {exc}", tp_dir)
+            raise UserActionRequired(
+                "Unable to read the stored MusicCSV first score to render the monitor MIDI. Inspect the score and try again."
+            ) from exc
+        _render_monitor_midi(music, first_monitor_path, tp_dir)
+        return True
+
+    music = _compose_first_pass_for_voice(
+        tp_dir=tp_dir,
+        tp_index=tp_index,
+        tp_type=tp_type,
+        tp_text=tp_text,
+        voice_context=voice_context,
+        prompt_payload=prompt_payload,
+        target_voice_index=0,
+        variant="standard",
+    )
+
+    write_musiccsv(first_score_path, music)
     _render_monitor_midi(music, first_monitor_path, tp_dir)
 
     snippet_text = _truncate_musiccsv_text(musiccsv_to_text(music), None)
@@ -604,6 +658,75 @@ def ensure_first_score_gate(
         pass
 
     return True
+
+
+def run_multi_voice_first_pass(
+    *,
+    tp_dir: Path,
+    tp_index: int,
+    tp_type: str,
+    tp_text: str,
+    voice_context: VoiceContext,
+    prompt_payload: Dict[str, Any],
+    variant: str = "standard",
+    suggestions_text: str = "",
+) -> List[Path]:
+    """Compose first-pass per-voice scores for a single variant.
+
+    Iterates ``voice_context.voices`` in order, calling the internal
+    per-voice composer for each, and writes ``notes_<voice_token>_<variant>.csv``
+    files beneath ``tp_dir``. Returns the list of note CSV paths.
+    """
+
+    tp_dir = Path(tp_dir)
+    tp_dir.mkdir(parents=True, exist_ok=True)
+
+    written: List[Path] = []
+    safe_variant = (variant or "standard").strip().lower()
+
+    for idx, voice in enumerate(voice_context.voices):
+        notes_path = tp_dir / f"notes_{voice.token}_{safe_variant}.csv"
+        if notes_path.exists():
+            written.append(notes_path)
+            continue
+
+        music = _compose_first_pass_for_voice(
+            tp_dir=tp_dir,
+            tp_index=tp_index,
+            tp_type=tp_type,
+            tp_text=tp_text,
+            voice_context=voice_context,
+            prompt_payload=prompt_payload,
+            target_voice_index=idx,
+            variant=safe_variant,
+            suggestions_text=suggestions_text,
+        )
+
+        # Extract notes for the target voice's track index if present; for
+        # now, write the entire notes table as a CSV view for that voice.
+        try:
+            from io import StringIO
+            import csv
+
+            output = StringIO()
+            writer = csv.writer(output)
+            writer.writerow(["measure", "beat", "pitch", "duration"])
+            for note in music.notes:
+                measure = note.get("measure")
+                beat = note.get("beat")
+                pitch = note.get("pitch")
+                duration = note.get("duration")
+                if measure is None or beat is None or pitch is None or duration is None:
+                    continue
+                writer.writerow([measure, beat, pitch, duration])
+            notes_path.write_text(output.getvalue(), encoding="utf-8")
+        except Exception as exc:
+            _log_warning(f"MUSIC: failed to write notes CSV for {voice.token}: {exc}", tp_dir)
+            raise
+
+        written.append(notes_path)
+
+    return written
 
 
 def run_melody_construction_step(
@@ -1056,4 +1179,127 @@ __all__ = [
     "run_melody_construction_step",
     "ensure_first_score_gate",
     "run_subtle_score_pass",
+    "run_multi_voice_first_pass",
+    "assemble_first_pass_variant",
 ]
+
+
+def assemble_first_pass_variant(
+    *,
+    tp_dir: Path,
+    title: str,
+    variant: str,
+) -> Optional[Path]:
+    """Assemble a first-pass MusicCSV and monitor MIDI for a single variant.
+
+    This helper loads ``metadata.json``, ``tracks.csv``, and
+    ``measures_<variant>.csv`` from ``tp_dir``, merges all
+    ``notes_<voice_token>_<variant>.csv`` files that follow the
+    canonical naming convention into a single ``MusicCSV`` object, and
+    writes ``first_<title>_<variant>.musiccsv`` plus
+    ``first_monitor_<title>_<variant>.mid``.
+
+    Returns the path to the assembled ``first_*.musiccsv`` or ``None``
+    if required inputs are missing. No LLM calls are involved.
+    """
+
+    tp_dir = Path(tp_dir)
+    safe_variant = (variant or "standard").strip().lower()
+
+    metadata_path = tp_dir / "metadata.json"
+    tracks_path = tp_dir / "tracks.csv"
+    measures_path = tp_dir / f"measures_{safe_variant}.csv"
+    if not (metadata_path.exists() and tracks_path.exists() and measures_path.exists()):
+        return None
+
+    # Start from an empty MusicCSV and populate core tables.
+    music = MusicCSV(metadata={}, measures=[], tracks=[], notes=[])
+
+    import csv
+
+    # Load metadata.json (as JSON dict) if possible; otherwise, treat as opaque text.
+    try:
+        import json as _json
+
+        meta_text = metadata_path.read_text(encoding="utf-8")
+        meta_obj = _json.loads(meta_text)
+        if isinstance(meta_obj, dict):
+            music.metadata = meta_obj
+        else:
+            music.metadata = {"raw": meta_text}
+    except Exception:
+        try:
+            music.metadata = {"raw": metadata_path.read_text(encoding="utf-8")}
+        except Exception:
+            music.metadata = {}
+
+    # Load tracks.csv verbatim.
+    try:
+        with tracks_path.open("r", encoding="utf-8", newline="") as f:
+            reader = csv.DictReader(f)
+            music.tracks = [dict(row) for row in reader]
+    except Exception as exc:
+        _log_warning(f"MUSIC: failed to read tracks.csv for first-pass assembly: {exc}", tp_dir)
+        return None
+
+    # Load measures_<variant>.csv verbatim.
+    try:
+        with measures_path.open("r", encoding="utf-8", newline="") as f:
+            reader = csv.DictReader(f)
+            music.measures = [dict(row) for row in reader]
+    except Exception as exc:
+        _log_warning(f"MUSIC: failed to read measures_{safe_variant}.csv for first-pass assembly: {exc}", tp_dir)
+        return None
+
+    # Collect all notes_<voice_token>_<variant>.csv files under tp_dir.
+    notes_files: List[Path] = []
+    suffix = f"_{safe_variant}.csv"
+    for path in tp_dir.glob("notes_*_*.csv"):
+        name = path.name
+        if not name.endswith(suffix):
+            continue
+        notes_files.append(path)
+
+    if not notes_files:
+        # Nothing to assemble for this variant.
+        return None
+
+    # Append note rows from each notes CSV. At this stage we treat all
+    # notes as belonging to a single logical score; track assignment is
+    # left to the LLM and metadata/tracks.csv.
+    for path in sorted(notes_files):
+        try:
+            with path.open("r", encoding="utf-8", newline="") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    # Ensure minimal required columns exist.
+                    if not row.get("measure") or not row.get("beat") or not row.get("pitch"):
+                        continue
+                    music.notes.append(dict(row))
+        except Exception as exc:
+            _log_warning(f"MUSIC: failed to merge notes from {path}: {exc}", tp_dir)
+
+    # Validate and write out the assembled first-pass score.
+    try:
+        validate_musiccsv(music)
+    except Exception as exc:
+        _log_warning(f"MUSIC: assembled first-pass variant failed validation: {exc}", tp_dir)
+        # Continue anyway; caller can inspect the artifact.
+
+    safe_title = str(title or "untitled").strip().replace(" ", "_")
+    first_score_path = tp_dir / f"first_{safe_title}_{safe_variant}.musiccsv"
+    write_musiccsv(first_score_path, music)
+
+    # Render monitor MIDI for this variant.
+    first_monitor_path = tp_dir / f"first_monitor_{safe_title}_{safe_variant}.mid"
+    _render_monitor_midi(music, first_monitor_path, tp_dir)
+
+    try:
+        _log_info(
+            f"MUSIC: assembled first-pass variant '{safe_variant}' at {first_score_path}",
+            tp_dir,
+        )
+    except Exception:
+        pass
+
+    return first_score_path

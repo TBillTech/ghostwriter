@@ -125,57 +125,57 @@ This document outlines the tasks currently being worked for this project for new
             - [ ] On the next run (final v1), detect the presence of first score suggestions and:
                 - [ ] Re-use per-voice first-score pipeline to re-generate all voices for each variant, but this time including and incorporating user-edited suggestions.
                 - [ ] Outputs of this loop should be `<title>_<variant>.musiccsv` and `monitor_<title>_<variant>.mid` completion as the final artifact for that chapter version.
-    - [ ] When the `pipeline_vN` run is complete, similar to how `final.txt` is collated and regenerated, create a `sound_track` directory. Copy each of the `<title>.mid` (or `<title>_<variant>.mid`) files from the `pipeline_vN` music touch-points, using the normalized title from the music touch-point as the file name.
+    - [x] When the `pipeline_vN` run is complete, similar to how `final.txt` is collated and regenerated, create a `sound_track` directory. Copy each of the `<title>.mid` (or `<title>_<variant>.mid`) files from the `pipeline_vN` music touch-points, using the normalized title from the music touch-point as the file name.
 
 11. **Per-voice / per-variant prompt and artifact model**
-    - [ ] Define the canonical artifact naming for the refactored pipeline:
-        - [ ] Per-voice, per-variant note CSVs: `notes_<voice_token>_<variant>.csv`.
-        - [ ] Per-variant assembled first-pass scores: `first_<title>_<variant>.musiccsv`.
-        - [ ] Per-variant monitor MIDIs: `first_monitor_<title>_<variant>.mid`.
-        - [ ] Final refined scores: `<title>_<variant>.musiccsv`.
-        - [ ] Final monitor MIDIs: `monitor_<title>_<variant>.mid`.
-    - [ ] Update `music_design.md` and any inline comments to reflect the per-voice/per-variant artifact layout.
-    - [ ] Confirm that the prompt-level requirements in Task 10 (**Prompt design** subtasks) are satisfied and reference this artifact model. (Task 10 prompt-design subtasks moved here.)
+    - [x] Define the canonical artifact naming for the refactored pipeline:
+        - [x] Per-voice, per-variant note CSVs: `notes_<voice_token>_<variant>.csv`.
+        - [x] Per-variant assembled first-pass scores: `first_<title>_<variant>.musiccsv`.
+        - [x] Per-variant monitor MIDIs: `first_monitor_<title>_<variant>.mid`.
+        - [x] Final refined scores: `<title>_<variant>.musiccsv`.
+        - [x] Final monitor MIDIs: `monitor_<title>_<variant>.mid`.
+    - [x] Update `music_design.md` and any inline comments to reflect the per-voice/per-variant artifact layout.
+    - [x] Confirm that the prompt-level requirements in Task 10 (**Prompt design** subtasks) are satisfied and reference this artifact model. (Task 10 prompt-design subtasks moved here.)
 
 12. **Multi-voice, multi-variant first-pass composer (Step 4)**
-    - [ ] Introduce a new helper in `ghostwriter/music/pipeline.py` that:
-        - [ ] Takes `VoiceContext`, `prompt_payload`, and a target variant (standard/complimentary/reprise).
-        - [ ] Iterates over `voice_context.voices` in a stable order.
-        - [ ] For each voice, builds music-so-far reduced-note grids from any previously written `notes_<voice_token>_<variant>.csv` (and/or normalized MusicCSV) and calls the per-voice first-pass prompt.
-        - [ ] Writes `notes_<voice_token>_<variant>.csv` for the new voice and keeps the shared `metadata.json` + `measures_*.csv` untouched.
-    - [ ] Refactor or wrap `ensure_first_score_gate` so that it becomes an internal per-voice composer used by this new helper, rather than writing a single `touch_point_first_score.musiccsv`.
-    - [ ] Ensure the helper can be called three times (for standard/complimentary/reprise) without clobbering per-voice artifacts.
-    - [ ] Update Task 10 “Pipeline flow from an empty music directory (v1)” subtasks to reference this helper instead of the legacy monolithic gate. (Subtasks moved conceptually here.)
+    - [x] Introduce a new helper in `ghostwriter/music/pipeline.py` that:
+        - [x] Takes `VoiceContext`, `prompt_payload`, and a target variant (standard/complimentary/reprise).
+        - [x] Iterates over `voice_context.voices` in a stable order.
+        - [x] For each voice, builds music-so-far reduced-note grids from any previously written `notes_<voice_token>_<variant>.csv` (and/or normalized MusicCSV) and calls the per-voice first-pass prompt.
+        - [x] Writes `notes_<voice_token>_<variant>.csv` for the new voice and keeps the shared `metadata.json` + `measures_*.csv` untouched.
+    - [x] Refactor or wrap `ensure_first_score_gate` so that it becomes an internal per-voice composer used by this new helper, rather than writing a single `touch_point_first_score.musiccsv`.
+    - [x] Ensure the helper can be called three times (for standard/complimentary/reprise) without clobbering per-voice artifacts.
+    - [x] Update Task 10 “Pipeline flow from an empty music directory (v1)” subtasks to reference this helper instead of the legacy monolithic gate. (Subtasks moved conceptually here.)
 
 13. **Aggregation and exports for first-pass per variant**
-    - [ ] Implement a helper (or extend `finalize_music_exports`) to:
-        - [ ] Load `metadata.json`, `tracks.csv`, and `measures_<variant>.csv`.
-        - [ ] Merge all `notes_<voice_token>_<variant>.csv` into a single in-memory `MusicCSV` object per variant.
-        - [ ] Write `first_<title>_<variant>.musiccsv` for each of standard, complimentary, and reprise.
-        - [ ] Render `first_monitor_<title>_<variant>.mid` via `MusicCSV.to_midi`.
-    - [ ] Ensure this aggregation step does not require additional LLM calls and can be repeated idempotently.
-    - [ ] Mark Task 10 “Aggregation and exports” subtasks as implemented via this helper. (Task 10 aggregation subtasks moved here.)
-    - [ ] Note: this helper should **not** be used as the primary location for applying LLM-driven musical suggestions; it is a pure assembly/export step.
+    - [x] Implement a helper (or extend `finalize_music_exports`) to:
+        - [x] Load `metadata.json`, `tracks.csv`, and `measures_<variant>.csv`.
+        - [x] Merge all `notes_<voice_token>_<variant>.csv` into a single in-memory `MusicCSV` object per variant.
+        - [x] Write `first_<title>_<variant>.musiccsv` for each of standard, complimentary, and reprise.
+        - [x] Render `first_monitor_<title>_<variant>.mid` via `MusicCSV.to_midi`.
+    - [x] Ensure this aggregation step does not require additional LLM calls and can be repeated idempotently.
+    - [x] Mark Task 10 “Aggregation and exports” subtasks as implemented via this helper. (Task 10 aggregation subtasks moved here.)
+    - [x] Note: this helper should **not** be used as the primary location for applying LLM-driven musical suggestions; it is a pure assembly/export step.
 
 14. **Chapter pipeline integration: non-pausing v1 flow**
-    - [ ] Update the music branch in `run_pipelines_for_chapter` so that, after all `melody_*.csv` and `measures_*.csv` are present:
-        - [ ] It calls the multi-voice first-pass composer (Task 12) for each variant **without** incorporating suggestion text yet.
-        - [ ] It invokes the aggregation/export helper (Task 13) to produce `first_<title>_<variant>.musiccsv` and `first_monitor_<title>_<variant>.mid`.
-    - [ ] Remove the legacy `ensure_first_score_gate`-driven “Music touch-point still awaiting refinement…” pause from the v1 path.
-    - [ ] Ensure that v1 runs to completion for a music touch-point, leaving all first-pass per-variant artifacts and suggestions in place without HIL pauses.
-    - [ ] Keep subtle-edit/v2 integration stubs in place but no longer block v1 on them.
-    - [ ] Mark Task 10 “Pipeline flow from an empty music directory (v1) Step 4” as implemented here. (Subtasks moved.)
+    - [x] Update the music branch in `run_pipelines_for_chapter` so that, after all `melody_*.csv` and `measures_*.csv` are present:
+        - [x] It calls the multi-voice first-pass composer (Task 12) for each variant **without** incorporating suggestion text yet.
+        - [x] It invokes the aggregation/export helper (Task 13) to produce `first_<title>_<variant>.musiccsv` and `first_monitor_<title>_<variant>.mid`.
+    - [x] Remove the legacy `ensure_first_score_gate`-driven “Music touch-point still awaiting refinement…” pause from the v1 path.
+    - [x] Ensure that v1 runs to completion for a music touch-point, leaving all first-pass per-variant artifacts and suggestions in place without HIL pauses.
+    - [x] Keep subtle-edit/v2 integration stubs in place but no longer block v1 on them.
+    - [x] Mark Task 10 “Pipeline flow from an empty music directory (v1) Step 4” as implemented here. (Subtasks moved.)
 
 15. **Variant checks and v2 refinement loop**
-    - [ ] Extend `music_check_prompt.md` usage so that:
-        - [ ] It runs against each `first_<title>_<variant>.musiccsv`.
-        - [ ] Writes variant-specific suggestion files (e.g., `first_score_suggestions_standard.txt`).
-    - [ ] Ensure these checks are invoked from the chapter pipeline after first-pass aggregation, but do **not** raise `UserActionRequired` for v1; they should be best-effort diagnostics.
-    - [ ] Design the v2 subtle-edit flow for music so that:
-        - [ ] The presence of first-pass suggestions triggers a **second-pass** call to the multi-voice, multi-variant composer (Task 12), running at the per-voice, per-variant level rather than at the aggregated full-score level.
-        - [ ] Feed suggestion text into these second-pass prompts as additional conditioning, alongside the existing reduced-note grids and context.
-        - [ ] The outputs of this second pass are `<title>_<variant>.musiccsv` and `monitor_<title>_<variant>.mid` per variant, assembled via the same aggregation/export helper as first-pass.
-    - [ ] Mark Task 10 “Check and feedback loop” subtasks as implemented via this v2 flow. (Subtasks moved here.)
+    - [x] Extend `music_check_prompt.md` usage so that:
+        - [x] It runs against each `first_<title>_<variant>.musiccsv`.
+        - [x] Writes variant-specific suggestion files (e.g., `first_score_suggestions_standard.txt`).
+    - [x] Ensure these checks are invoked from the chapter pipeline after first-pass aggregation, but do **not** raise `UserActionRequired` for v1; they should be best-effort diagnostics.
+    - [x] Design the v2 subtle-edit flow for music so that:
+        - [x] The presence of first-pass suggestions triggers a **second-pass** call to the multi-voice, multi-variant composer (Task 12), running at the per-voice, per-variant level rather than at the aggregated full-score level.
+        - [x] Feed suggestion text into these second-pass prompts as additional conditioning, alongside the existing reduced-note grids and context.
+        - [x] The outputs of this second pass are `<title>_<variant>.musiccsv` and `monitor_<title>_<variant>.mid` per variant, assembled via the same aggregation/export helper as first-pass.
+    - [x] Mark Task 10 “Check and feedback loop” subtasks as implemented via this v2 flow. (Subtasks moved here.)
 
 ## Session Summary (Oct 24, 2025)
 

@@ -333,6 +333,54 @@ def finalize_music_exports(
     manifest_path = score_dir / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
+    # Collate a simple soundtrack directory with per-touch-point monitor MIDIs.
+    # For each music touch-point directory under pipeline_vN, we prefer any
+    # final monitor MIDIs (monitor_<title>_<variant>.mid) and fall back to
+    # first-pass monitor files (first_monitor_<title>_<variant>.mid). These
+    # are copied into CHAPTER/iterations/CHAPTER_ID/sound_track/.
+    try:
+        sound_track_dir = chapter_dir / "sound_track"
+        sound_track_dir.mkdir(parents=True, exist_ok=True)
+        for child in sorted(pipeline_dir.iterdir()):
+            if not child.is_dir():
+                continue
+            _idx, tp_type = _parse_tp_dir_name(child.name)
+            if tp_type != "music":
+                continue
+            title = "untitled"
+            meta_path = child / "music_touch_point.json"
+            try:
+                if meta_path.exists():
+                    meta_obj = json.loads(meta_path.read_text(encoding="utf-8"))
+                    if isinstance(meta_obj, dict):
+                        t = str(meta_obj.get("title") or "").strip()
+                        if t:
+                            title = t
+            except Exception:
+                title = title
+            safe_title = _safe_filename(title)
+            # Prefer final per-variant monitor MIDIs if present; else first-pass.
+            variants = ("standard", "complimentary", "reprise")
+            for variant in variants:
+                variant_safe = variant.strip().lower()
+                candidates = [
+                    child / f"monitor_{safe_title}_{variant_safe}.mid",
+                    child / f"first_monitor_{safe_title}_{variant_safe}.mid",
+                ]
+                for src in candidates:
+                    if not src.exists():
+                        continue
+                    dest_name = f"{safe_title}_{variant_safe}.mid"
+                    dest_path = sound_track_dir / dest_name
+                    try:
+                        # Overwrite if re-running the pipeline; idempotent.
+                        dest_path.write_bytes(src.read_bytes())
+                    except Exception as exc:
+                        logger.warning("MUSIC export: failed to copy %s to soundtrack (%s)", src, exc)
+                    break
+    except Exception as exc:  # pragma: no cover - defensive soundtrack collation
+        logger.warning("MUSIC export: soundtrack collation failed (%s)", exc)
+
     bundle_path = score_dir / f"score_bundle_v{version}.zip"
     bundle_files: List[Tuple[Path, str]] = [
         (target_score, target_score.name),
