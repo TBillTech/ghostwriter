@@ -1,9 +1,0 @@
-{
-  "title": "",
-  "description": "[{'title': 'The Forest Path'}, {'description': 'a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.'}, {'voices': ['major.tenor.base.wolf.harmony', 'major.alto.flute.red.melody', 'major.beat.drum.axe', 'major.bass.soundscape.forest_path']}]",
-  "directive": "[{'title': 'The Forest Path'}, {'description': 'a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.'}, {'voices': ['major.tenor.base.wolf.harmony', 'major.alto.flute.red.melody', 'major.beat.drum.axe', 'major.bass.soundscape.forest_path']}]",
-  "voice_tokens": [],
-  "raw_payload": {
-    "description": "[{'title': 'The Forest Path'}, {'description': 'a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.'}, {'voices': ['major.tenor.base.wolf.harmony', 'major.alto.flute.red.melody', 'major.beat.drum.axe', 'major.bass.soundscape.forest_path']}]"
-  }
-}

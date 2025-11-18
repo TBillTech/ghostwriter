@@ -1,5 +1,0 @@
-track,label,part,instrument,channel,program,role,voice_token
-1,Red Melody,Melody,Flute,1,73,lead,major.alto.flute.red.melody
-2,Wolf Harmony,Harmony,French Horn,1,61,inner-voice,major.tenor.base.wolf.harmony
-3,Forest Bass,Bass,Synth Pad,1,89,foundation/atmosphere,major.bass.soundscape.forest_path
-4,Path Drums,Drums,Standard Kit,10,0,percussion groove,major.beat.drum.axe

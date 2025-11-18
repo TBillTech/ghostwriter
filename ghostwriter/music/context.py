@@ -672,3 +672,38 @@ __all__ = [
     "build_music_prompt_context",
     "write_voice_token",
 ]
+
+
+def reduced_notes_csv(music: MusicCSV, *, track_filter: Optional[int] = None) -> str:
+    """Return a compact CSV view of notes as measure,beat,pitch,duration.
+
+    This helper is intended for prompt context, not for round-tripping. It
+    omits track, velocity, ties, and other columns so that large scores can
+    be presented to the model in a token-efficient form while still
+    preserving harmonic and rhythmic information.
+    """
+
+    import csv
+    from io import StringIO
+
+    output = StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["measure", "beat", "pitch", "duration"])
+
+    for note in music.notes:
+        try:
+            track = note.get("track")
+            if track_filter is not None and track != track_filter:
+                continue
+            measure = note.get("measure")
+            beat = note.get("beat")
+            pitch = note.get("pitch")
+            duration = note.get("duration")
+            if measure is None or beat is None or pitch is None or duration is None:
+                continue
+            writer.writerow([measure, beat, pitch, duration])
+        except Exception:
+            continue
+
+    return output.getvalue().strip()
+

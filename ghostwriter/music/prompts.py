@@ -31,16 +31,36 @@ def build_first_score_prompt(
     tp_index: int,
     tp_type: str,
     tp_text: str,
+    voice_token: str,
+    voice_chord: str,
+    voice_register: str,
+    voice_instrument: str,
+    voice_idea: str,
+    voice_role: str,
+    metadata_json: str,
+    measures_csv: str,
+    melody_reduced_csv: str,
+    other_voices_reduced_csv: str,
 ) -> str:
     payload_for_json = dict(prompt_payload)
     character_context = payload_for_json.pop("character_outlines", None)
     replacements = {
         "[VOICE_CONTEXT_JSON]": _json_block(payload_for_json),
         "[CHARACTER_CONTEXT_JSON]": _json_block(character_context or []),
-        "[EXISTING_SCORES_JSON]": _json_block(existing_scores) or "{}",
+        "[EXISTING_VOICE_SCORE_JSON]": _json_block(existing_scores) or "{}",
         "[TOUCH_POINT_INDEX]": str(tp_index),
         "[TOUCH_POINT_TYPE]": tp_type,
         "[TOUCH_POINT_TEXT]": tp_text.strip(),
+        "[VOICE_TOKEN]": voice_token,
+        "[VOICE_CHORD]": voice_chord,
+        "[VOICE_REGISTER]": voice_register,
+        "[VOICE_INSTRUMENT]": voice_instrument,
+        "[VOICE_IDEA]": voice_idea,
+        "[VOICE_ROLE]": voice_role,
+        "[METADATA_JSON]": metadata_json,
+        "[MEASURES_CSV]": measures_csv,
+        "[MELODY_REDUCED_CSV]": melody_reduced_csv,
+        "[OTHER_VOICES_REDUCED_CSV]": other_voices_reduced_csv,
         "[MUSICCSV_FORMAT_PROMPT]": _FORMAT_REFERENCE,
     }
     return apply_template(_TEMPLATE_FIRST_SCORE, replacements)

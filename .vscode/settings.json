@@ -15,5 +15,8 @@
     "python.languageServer": "Pylance",
 
     // Make type checking feedback visible while testing Pylance
-    "python.analysis.typeCheckingMode": "basic"
+    "python.analysis.typeCheckingMode": "basic",
+
+    "python.defaultInterpreterPath": "venv/bin/python",
+    "python.terminal.activateEnvironment": true
 }

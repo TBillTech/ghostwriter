@@ -6,7 +6,5 @@ You are a composer constructing a full melodic line for this piece.
 
 [MUSIC_TOUCH_POINT]
 [METADATA_JSON]
-[DWELL_NOTES]
-[MELODIC_EDGES]
 
 [MELODY_INSTRUCTIONS]

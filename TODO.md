@@ -84,25 +84,98 @@ This document outlines the tasks currently being worked for this project for new
     - [x] Make sure that most recent paragraph is avialable when substituting in to music prompt templates.
 
 10. ** Break music generation down into multiple steps **
-    The music previously generated was naive and kind of random. I think we can do better, by focusing on building more thought out and recursive melodies. I have an idea I would like to implement, and overall, the algorithm breaks down like this:
-    - [x] Prompt the LLM with the previous paragraph, relative character and factoids, and ask it to generate the metadata.json, and tracks.csv. These two artifacts can be stored in the prompt + response log file for this prompt.
-    - [ ] Prompt the LLM with melody_elements_instructions_prompt.txt.  This prompt needs to prompt the LLM with the previous paragraph, and relative character and factoids like is done previously first_score_suggestions.txt, but this time, append metadat.json, and then append melody_elements_instructions.txt. Read out and parse the artifacts which are the 4 dwell notes and the 9 melodic edges.
-    - [ ] Music melody should be constructed using the music_melody_prompt.md .  It should be just like the music_melody_edges_prompt.md, except that instead it uses melody_instructions.txt.  Note that melody_instructions.txt itself is a template that needs some substitutions.
-    - [ ] Repeat the music construction three times, once with the following additional rules substituted into melody_instructions.txt:
-        - standard additional_rules: none
-        - complimentary additional_rules: * create a complimentary melody by inverting the weights, for example, (1.0-0.5,1.0-0.25,1.0-0.125,1.0-0.125) = (0.5, 0.75, 0.875, 0.857)
-        - reprise additional_rules: * Before following the above steps, adjust the musical edges by stretching them out by another measure, and adding appropriate additional notes to makes sense to fill out the new timing.
-    Music Constructions instructions (to be repeated for each type of melody):
-    - [ ] Construct a melody by prompting the LLM with the melody_instructions.txt template.
-    - [ ] Save off the melody artifact from the output of the prompt and save it in a file: melody.csv (or complimentary_melody.csv or reprise_melody.csv)
-    - [ ] Generate the measures.csv from the melody artifact (Hopefully this can be done in Python without LLM in the loop).
-    - [ ] For each voice in the music touch-point, do the following:
-        - [ ] Modify first_score_suggesions.txt to focus on exactly the voice to be generated
-        - [ ] For the melody voice, substitute the melody artifact into the first_score_suggestions.txt, instructing the LLM to convert the given melody into a track (all syntax for the output artifact of the track should remain as before), and save as melody.musiccsv
-        - [ ] For the other voices, substitute the melody track AND any other already generated tracks into the first_score_suggesstions.txt, instructing the LLM to build the given harmony, beat, base, or other track to match and harmonize with the given music so far.
-        - [ ] NO LONGER ask the first_score_suggestions.txt to generate the metadata.json, tracks.csv, measures.csv.
-    - [ ] Combine the outputs of all the voices with the metadata.json, tracks.csv, and measures.csv to form the <title>.musiccsv and the <title>.mid (or <title>.complimentary.musiccsv and <title>.complimentary.mid or <title>.reprise.musiccsv and <title>.reprise.mid)
-    - [ ] When the pipeline_vN is complete, similiar to how final.txt is collated and regenerated, create a sound_track directory. Copy each of the <title>.mid files from the vN pipeline music touch_points, using the normalized title from the music touch-point as the file name.
+    The music previously generated was naive and kind of random. We can do better by focusing on building more thought out and recursive melodies. Overall, the algorithm for a `music` touch-point breaks down like this:
+    - [x] Prompt the LLM with the previous paragraph, story-relative summary, and factoids, and ask it to generate `metadata.json` and `tracks.csv` using `music_metadata_tracks_prompt.md`. These artifacts are stored alongside the prompt + response log (`metadatatracks.txt`).
+    - [x] Prompt the LLM with `music_melody_edges_prompt.md`, which includes the previous paragraph, story-relative and factoids blocks, `metadata.json`, and the `melody_elements_instructions.txt` template. Write the raw dwell-notes + melodic-edges description to `melody_edges.txt` and pause for human editing before continuing.
+    - [x] Construct a melody using `music_melody_prompt.md`. This prompt includes context (previous paragraph, story-relative, factoids, touch-point title/description, metadata JSON) and an expanded `melody_instructions.txt` where `[dwell_notes]`, `[melodic_edges]`, and `[additional_rules]` have been substituted.
+    - [x] Repeat the melody construction three times by calling `run_melody_construction_step` with variants:
+        - `standard` — no extra variant rules.
+        - `complimentary` — injects `additional_rules` that describe inverting dwell weights to create a complimentary line.
+        - `reprise` — injects `additional_rules` that describe stretching edges by another measure and filling with additional notes.
+      Each run writes `melody_{variant}.txt` (prompt + response log) and `melody_{variant}.csv`.
+    Music construction instructions (to be repeated for each type of melody):
+    - [x] Construct a melody by prompting the LLM with the `melody_instructions.txt` template (after substituting dwell notes, melodic edges, and any variant-specific `additional_rules`).
+    - [x] Save the melody artifact from the output of the prompt as `melody_standard.csv`, `melody_complimentary.csv`, or `melody_reprise.csv` under the touch-point directory.
+    - [X] Generate `measures.csv` from the melody artifact (ideally in Python without an LLM in the loop). The `measures.csv` is the summary csv of measures that is needed to complete the musiccsv format.
+    - [ ] For each voice in the music touch-point, implement a multi-voice first-score pipeline without extra user feedback:
+        - [ ] **Prompt design** (moved to Task 11)
+            - [X] Modify `music_first_score_prompt.md` and its builder so each call focuses on exactly one voice track to be generated.
+            - [X] Add support for passing full, reduced-note grids (measure, beat, pitch, duration) for melody and already-scored voices into the prompt.
+            - [X] Extend the prompt instructions so the model:
+                - [X] Treats the reduced-note grids as the authoritative “music so far” timeline.
+                - [X] Writes only the current voice’s `notes.csv` rows, assuming shared `metadata.json` and `measures.csv`.
+        - [ ] **Pipeline flow from an empty music directory (v1)** (moved to Task 12)
+            - [ ] Ensure `run_pipelines_for_chapter` performs the following for a fresh music touch-point:
+                - [X] Step 1: generate `metadata.json`, `tracks.csv`, `metadatatracks.txt`, and `music_touch_point.json`.
+                - [X] Step 2: generate `melodyelements.txt` and `melody_edges.txt`, then pause for user review/edit of `melody_edges.txt`.
+                - [X] Step 3: on restart, generate all `melody_*.csv` and `measures_*.csv` without a pause.
+                - [ ] Step 4: immediately call a per-voice first-score pipeline (no user feedback at this stage) that:
+                    - [ ] For the melody voice, uses the standard melody variant and produces a complete `notes_melody_standard.csv`.
+                    - [ ] For other voices, uses the full reduced melody grid and any existing reduced-note grids to write harmonized parts, each to its own `notes_<voice>_<variant>.csv` .
+                    - [ ] Accumulates “music so far” by including all previously generated voices in later prompts.
+        - [ ] **Aggregation and exports** (moved to Task 13)
+            - [ ] Combine the `metadata.json`, `tracks.csv`, the appropriate `measures_*.csv`, and all `notes_<voice>_<variant>.csv` merged to form `first_<title>_<variant>.musiccsv` and `first_monitor_<title>_<variant>.mid` for:
+                - [ ] Standard melody variant.
+                - [ ] Complimentary melody variant.
+                - [ ] Reprise melody variant.
+            - [ ] Ensure `finalize_music_exports` (or a new helper) writes `first_monitor_<title>_<variant>.mid` for each `first_<title>_<variant>.musiccsv`.
+        - [ ] **Check and feedback loop** (moved to Tasks 14–15)
+            - [ ] Automatically run `music_check_prompt.md` against each `first_<title>_<variant>.musiccsv`, writing variant-specific suggestions files (e.g., `first_score_suggestions_standard.txt`).
+            - [ ] Do **not** pause for user input at this stage; allow v1 to complete with first-pass scores and suggestions.
+            - [ ] On the next run (final v1), detect the presence of first score suggestions and:
+                - [ ] Re-use per-voice first-score pipeline to re-generate all voices for each variant, but this time including and incorporating user-edited suggestions.
+                - [ ] Outputs of this loop should be `<title>_<variant>.musiccsv` and `monitor_<title>_<variant>.mid` completion as the final artifact for that chapter version.
+    - [ ] When the `pipeline_vN` run is complete, similar to how `final.txt` is collated and regenerated, create a `sound_track` directory. Copy each of the `<title>.mid` (or `<title>_<variant>.mid`) files from the `pipeline_vN` music touch-points, using the normalized title from the music touch-point as the file name.
+
+11. **Per-voice / per-variant prompt and artifact model**
+    - [ ] Define the canonical artifact naming for the refactored pipeline:
+        - [ ] Per-voice, per-variant note CSVs: `notes_<voice_token>_<variant>.csv`.
+        - [ ] Per-variant assembled first-pass scores: `first_<title>_<variant>.musiccsv`.
+        - [ ] Per-variant monitor MIDIs: `first_monitor_<title>_<variant>.mid`.
+        - [ ] Final refined scores: `<title>_<variant>.musiccsv`.
+        - [ ] Final monitor MIDIs: `monitor_<title>_<variant>.mid`.
+    - [ ] Update `music_design.md` and any inline comments to reflect the per-voice/per-variant artifact layout.
+    - [ ] Confirm that the prompt-level requirements in Task 10 (**Prompt design** subtasks) are satisfied and reference this artifact model. (Task 10 prompt-design subtasks moved here.)
+
+12. **Multi-voice, multi-variant first-pass composer (Step 4)**
+    - [ ] Introduce a new helper in `ghostwriter/music/pipeline.py` that:
+        - [ ] Takes `VoiceContext`, `prompt_payload`, and a target variant (standard/complimentary/reprise).
+        - [ ] Iterates over `voice_context.voices` in a stable order.
+        - [ ] For each voice, builds music-so-far reduced-note grids from any previously written `notes_<voice_token>_<variant>.csv` (and/or normalized MusicCSV) and calls the per-voice first-pass prompt.
+        - [ ] Writes `notes_<voice_token>_<variant>.csv` for the new voice and keeps the shared `metadata.json` + `measures_*.csv` untouched.
+    - [ ] Refactor or wrap `ensure_first_score_gate` so that it becomes an internal per-voice composer used by this new helper, rather than writing a single `touch_point_first_score.musiccsv`.
+    - [ ] Ensure the helper can be called three times (for standard/complimentary/reprise) without clobbering per-voice artifacts.
+    - [ ] Update Task 10 “Pipeline flow from an empty music directory (v1)” subtasks to reference this helper instead of the legacy monolithic gate. (Subtasks moved conceptually here.)
+
+13. **Aggregation and exports for first-pass per variant**
+    - [ ] Implement a helper (or extend `finalize_music_exports`) to:
+        - [ ] Load `metadata.json`, `tracks.csv`, and `measures_<variant>.csv`.
+        - [ ] Merge all `notes_<voice_token>_<variant>.csv` into a single in-memory `MusicCSV` object per variant.
+        - [ ] Write `first_<title>_<variant>.musiccsv` for each of standard, complimentary, and reprise.
+        - [ ] Render `first_monitor_<title>_<variant>.mid` via `MusicCSV.to_midi`.
+    - [ ] Ensure this aggregation step does not require additional LLM calls and can be repeated idempotently.
+    - [ ] Mark Task 10 “Aggregation and exports” subtasks as implemented via this helper. (Task 10 aggregation subtasks moved here.)
+    - [ ] Note: this helper should **not** be used as the primary location for applying LLM-driven musical suggestions; it is a pure assembly/export step.
+
+14. **Chapter pipeline integration: non-pausing v1 flow**
+    - [ ] Update the music branch in `run_pipelines_for_chapter` so that, after all `melody_*.csv` and `measures_*.csv` are present:
+        - [ ] It calls the multi-voice first-pass composer (Task 12) for each variant **without** incorporating suggestion text yet.
+        - [ ] It invokes the aggregation/export helper (Task 13) to produce `first_<title>_<variant>.musiccsv` and `first_monitor_<title>_<variant>.mid`.
+    - [ ] Remove the legacy `ensure_first_score_gate`-driven “Music touch-point still awaiting refinement…” pause from the v1 path.
+    - [ ] Ensure that v1 runs to completion for a music touch-point, leaving all first-pass per-variant artifacts and suggestions in place without HIL pauses.
+    - [ ] Keep subtle-edit/v2 integration stubs in place but no longer block v1 on them.
+    - [ ] Mark Task 10 “Pipeline flow from an empty music directory (v1) Step 4” as implemented here. (Subtasks moved.)
+
+15. **Variant checks and v2 refinement loop**
+    - [ ] Extend `music_check_prompt.md` usage so that:
+        - [ ] It runs against each `first_<title>_<variant>.musiccsv`.
+        - [ ] Writes variant-specific suggestion files (e.g., `first_score_suggestions_standard.txt`).
+    - [ ] Ensure these checks are invoked from the chapter pipeline after first-pass aggregation, but do **not** raise `UserActionRequired` for v1; they should be best-effort diagnostics.
+    - [ ] Design the v2 subtle-edit flow for music so that:
+        - [ ] The presence of first-pass suggestions triggers a **second-pass** call to the multi-voice, multi-variant composer (Task 12), running at the per-voice, per-variant level rather than at the aggregated full-score level.
+        - [ ] Feed suggestion text into these second-pass prompts as additional conditioning, alongside the existing reduced-note grids and context.
+        - [ ] The outputs of this second pass are `<title>_<variant>.musiccsv` and `monitor_<title>_<variant>.mid` per variant, assembled via the same aggregation/export helper as first-pass.
+    - [ ] Mark Task 10 “Check and feedback loop” subtasks as implemented via this v2 flow. (Subtasks moved here.)
 
 ## Session Summary (Oct 24, 2025)
 

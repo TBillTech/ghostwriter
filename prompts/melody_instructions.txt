@@ -10,10 +10,12 @@ I chose these notes motivated by the key signature, style of music, and feeling 
 * A rest
 
 Here are the edges I have constructed to be used the next step for creating the melody:
-[music_edges]
+[melodic_edges]
 
 Craft the melody according to the following rules:
+* Add 2 rests at the beginning, and 2 rests at the end to help the melody stand out and finish. 
 * Build the melody from a sequence of the edges you invented earlier.
+* Try not to use the same edge twice in a row.  Try very hard never to repeat the same edge 4 times or more.
 * You start the song at A and so will start by choosing an edge that includes A.
 * After following an edge, you "arrive" at the next dwell note, and then choose the next edge begging at that note.
 * If you need to follow an edge backwards, simply reverse the order of the notes in the edge (and optionally reverse rapid passages). 

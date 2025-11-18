@@ -1226,13 +1226,52 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 _log_warning(f"MUSIC: melody construction step failed ({exc})", tp_log_dir)
                 raise UserActionRequired("Music melody construction step failed; inspect the melody log and retry.") from exc
 
+            # Step 3b: construct complimentary and reprise melodies unconditionally.
+            try:
+                if gw_music_melody_construct is not None:
+                    try:
+                        _breadcrumb(f"music:melody_complimentary:start:i={i}")
+                    except Exception:
+                        pass
+                    gw_music_melody_construct(
+                        tp_dir=tp_log_dir or base_log_dir,
+                        tp_index=i,
+                        tp_type=tp_type,
+                        prompt_payload=music_tp_prompt_payload,
+                        variant="complimentary",
+                    )
+                    try:
+                        _breadcrumb(f"music:melody_complimentary:done:i={i}")
+                    except Exception:
+                        pass
+                    try:
+                        _breadcrumb(f"music:melody_reprise:start:i={i}")
+                    except Exception:
+                        pass
+                    gw_music_melody_construct(
+                        tp_dir=tp_log_dir or base_log_dir,
+                        tp_index=i,
+                        tp_type=tp_type,
+                        prompt_payload=music_tp_prompt_payload,
+                        variant="reprise",
+                    )
+                    try:
+                        _breadcrumb(f"music:melody_reprise:done:i={i}")
+                    except Exception:
+                        pass
+            except UserActionRequired:
+                raise
+            except Exception as exc:
+                _log_warning(f"MUSIC: complimentary/reprise melody construction failed ({exc})", tp_log_dir)
+                raise UserActionRequired("Music complimentary/reprise melody construction failed; inspect the melody logs and retry.") from exc
+
             first_score_file = (tp_log_dir / "touch_point_first_score.musiccsv") if tp_log_dir else None
             first_suggestions_file = (tp_log_dir / "first_score_suggestions.txt") if tp_log_dir else None
             final_score_file = (tp_log_dir / "touch_point_score.musiccsv") if tp_log_dir else None
             final_feedback_file = (tp_log_dir / "score_suggestions.txt") if tp_log_dir else None
             # monitor.mid will be produced by the subtle pass when finalizing the score
 
-            # Step 4: ensure first-score artifacts
+            # Step 4: ensure first-score artifacts (no extra pause in v1).
             need_first = True
             if first_score_file is not None and first_suggestions_file is not None:
                 need_first = not (first_score_file.exists() and first_suggestions_file.exists())
@@ -1247,14 +1286,13 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                         prompt_payload=music_tp_prompt_payload,
                     ) if gw_music_first_gate is not None else False
                 except UserActionRequired:
+                    # Do not pause here; treat failures as errors that require inspection.
                     raise
                 except Exception as exc:
                     _log_warning(f"MUSIC: first-score generation failed ({exc})", tp_log_dir)
                     raise UserActionRequired("Music first-score generation failed; inspect logs before retrying.") from exc
-                if created:
-                    raise UserActionRequired("Music first-score artifacts generated; review before continuing.")
 
-            # Step 2: ensure final score via subtle pass
+            # Step 5: ensure final score via subtle pass
             final_ready = bool(final_score_file and final_score_file.exists())
             if not final_ready and first_score_file is not None and first_score_file.exists():
                 try:

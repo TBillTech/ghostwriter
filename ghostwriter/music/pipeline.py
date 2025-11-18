@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Dict, Any, Optional, Tuple
+from typing import Dict, Any, Optional, Tuple, List
 import logging
 
 from ..env import env_for_prompt
@@ -22,7 +22,7 @@ from ..musiccsv import (
     write_musiccsv,
 )
 
-from .context import VoiceContext
+from .context import VoiceContext, reduced_notes_csv
 from .prompts import (
     build_first_score_prompt,
     build_music_check_prompt,
@@ -368,6 +368,38 @@ def _render_monitor_midi(music: MusicCSV, midi_path: Path, log_dir: Optional[Pat
         ) from exc
 
 
+def _measures_from_melody_csv(melody_csv_text: str) -> List[Dict[str, Any]]:
+    """Return the sorted list of measure numbers present in a melody CSV.
+
+    The melody CSV is expected to have columns (measure, element, duration).
+    We ignore the element and duration here and simply discover which
+    measures exist so that we can emit a measures.csv that matches the
+    MusicCSV schema using metadata for tempo, time signature, and key.
+    """
+
+    lines = [ln.strip() for ln in (melody_csv_text or "").splitlines() if ln.strip()]
+    if not lines:
+        return []
+    header = lines[0].lower()
+    start_idx = 1 if "measure" in header else 0
+
+    measure_set: set[int] = set()
+    for line in lines[start_idx:]:
+        parts = [p.strip() for p in line.split(",")]
+        if not parts:
+            continue
+        try:
+            measure_no = int(parts[0])
+        except Exception:
+            continue
+        measure_set.add(measure_no)
+
+    rows: List[Dict[str, Any]] = []
+    for m in sorted(measure_set):
+        rows.append({"measure": m})
+    return rows
+
+
 def ensure_first_score_gate(
     *,
     tp_dir: Path,
@@ -425,12 +457,66 @@ def ensure_first_score_gate(
             pass
         existing_scores[spec.token] = info
 
+    # For now, target the first declared voice token when building the
+    # per-voice first score. Future revisions may iterate per voice.
+    first_voice = voice_context.voices[0]
+
+    # Load shared metadata and measures artifacts (standard melody variant).
+    metadata_text = ""
+    measures_text = ""
+    try:
+        meta_path = tp_dir / "metadata.json"
+        if meta_path.exists():
+            metadata_text = meta_path.read_text(encoding="utf-8").strip()
+    except Exception:
+        metadata_text = ""
+    try:
+        measures_path = tp_dir / "measures_standard.csv"
+        if measures_path.exists():
+            measures_text = measures_path.read_text(encoding="utf-8").strip()
+    except Exception:
+        measures_text = ""
+
+    # Build reduced-note grids for alignment. For now we only pass through
+    # summaries for any existing scores that have already been imported.
+    melody_reduced = ""
+    other_reduced_blocks: List[str] = []
+    for token, summary in existing_scores.items():
+        score_path_str = summary.get("score_path")
+        if not score_path_str:
+            continue
+        try:
+            score_path = Path(score_path_str)
+            if not score_path.exists():
+                continue
+            music = read_musiccsv(score_path)
+            reduced = reduced_notes_csv(music)
+        except Exception:
+            continue
+        label = f"# voice: {token}\n{reduced.strip()}" if reduced.strip() else f"# voice: {token} (no notes)"
+        if token == first_voice.token:
+            melody_reduced = reduced.strip()
+        else:
+            other_reduced_blocks.append(label)
+
+    other_reduced = "\n\n".join(other_reduced_blocks).strip()
+
     prompt = build_first_score_prompt(
         prompt_payload=prompt_payload,
         existing_scores=existing_scores,
         tp_index=tp_index,
         tp_type=tp_type,
         tp_text=tp_text,
+        voice_token=first_voice.token,
+        voice_chord=first_voice.chord,
+        voice_register=first_voice.register,
+        voice_instrument=first_voice.instrument,
+        voice_idea=first_voice.idea,
+        voice_role=first_voice.role or "",
+        metadata_json=metadata_text,
+        measures_csv=measures_text,
+        melody_reduced_csv=melody_reduced,
+        other_voices_reduced_csv=other_reduced,
     )
     model, temp, max_tokens = env_for_prompt(
         "music_first_score_prompt.md",
@@ -592,6 +678,27 @@ def run_melody_construction_step(
             f"Unable to read melody_edges.txt for melody construction: {exc}"
         ) from exc
 
+    # Split dwell notes vs melodic edges. By convention, the line that
+    # begins with "A-A" marks the first edge; everything above it is the
+    # dwell-notes description block.
+    dwell_block = edges_text.strip()
+    edges_block = edges_text.strip()
+    try:
+        lines = edges_text.splitlines()
+        split_index = None
+        for idx, line in enumerate(lines):
+            if line.strip().startswith("A-A"):
+                split_index = idx
+                break
+        if split_index is not None:
+            dwell_block = "\n".join(lines[:split_index]).strip()
+            edges_block = "\n".join(lines[split_index:]).strip()
+    except Exception:
+        # On any parsing failure, fall back to treating the whole text
+        # as both dwell and edge context so the prompt still has data.
+        dwell_block = edges_text.strip()
+        edges_block = edges_text.strip()
+
     # Load melody_instructions template text for inclusion.
     from pathlib import Path as _P
     base_root = _P(__file__).resolve().parents[2]
@@ -603,18 +710,49 @@ def run_melody_construction_step(
             f"Unable to read melody_instructions.txt: {exc}"
         ) from exc
 
-    # Future work: inject variant-specific additional_rules into the
-    # MELODY_INSTRUCTIONS template before applying it.
+    # First, apply dwell notes, melodic edges, and additional_rules into
+    # the melody_instructions template itself.
+    variant_safe = (variant or "standard").strip().lower()
+    additional_rules = ""
+    if variant_safe == "complimentary":
+        additional_rules = (
+            "* Create a complimentary melody line by inverting the dwell-weight "
+            "emphasis across the four dwell notes. For example, if the "
+            "standard melody uses dwell weights (1.0, 0.5, 0.25, 0.125), then "
+            "a complimentary line might approximate (0.5, 0.75, 0.875, 0.875). "
+            "Keep the rhythm structure compatible with the standard melody, "
+            "but let the complimentary line weave around it rather than sit "
+            "directly on top of the same pitches."
+        )
+    elif variant_safe == "reprise":
+        additional_rules = (
+            "* Treat this as a reprise of the standard melody. Before "
+            "constructing the final line, conceptually stretch each edge of "
+            "the melodic graph by roughly one additional measure, adding "
+            "connecting notes that make musical sense so that the total "
+            "duration expands while preserving the recognizable contour of "
+            "the original melody."
+        )
 
+    instr_replacements: Dict[str, Any] = {
+        "[dwell_notes]": dwell_block,
+        "[melodic_edges]": edges_block,
+        "[additional_rules]": additional_rules.strip(),
+    }
+    rendered_instructions = _apply_template(
+        "prompts/melody_instructions.txt",
+        {k: str(v) for k, v in instr_replacements.items()},
+    )
+
+    # Now build the outer melody prompt using the fully rendered
+    # instructions block.
     replacements: Dict[str, Any] = {
         "[PREVIOUS_PARAGRAPH]": prior_paragraph or "",
         "[STORY_RELATIVE]": story_relative or "",
         "[FACTOIDS]": factoids_block or "",
         "[MUSIC_TOUCH_POINT]": (f"Title: {title}\nDescription: {description}".strip()),
         "[METADATA_JSON]": metadata_text.strip(),
-        "[DWELL_NOTES]": edges_text.strip(),
-        "[MELODIC_EDGES]": edges_text.strip(),
-        "[MELODY_INSTRUCTIONS]": melody_instructions.strip(),
+        "[MELODY_INSTRUCTIONS]": rendered_instructions.strip(),
     }
 
     try:
@@ -701,8 +839,69 @@ def run_melody_construction_step(
             "Melody construction step produced an empty response. Edit the melody log and retry."
         )
 
-    # For now, accept the raw response as the melody CSV artifact.
+    # Save the raw response as the melody CSV artifact.
     save_text(melody_csv_path, text + "\n")
+
+    # Best-effort: derive measures_{variant}.csv files from each melody
+    # variant using the MusicCSV measures schema and metadata-derived
+    # tempo/time_signature/key_signature. This avoids additional LLM calls.
+    try:
+        measures_rows = _measures_from_melody_csv(text)
+        if measures_rows:
+            import csv
+            import json
+
+            # Pull defaults from metadata.json when available
+            time_sig = ""
+            key_sig = ""
+            tempo_val: Optional[float] = None
+            try:
+                meta_obj = json.loads(metadata_text)
+                if isinstance(meta_obj, dict):
+                    ts = meta_obj.get("time_signature")
+                    ks = meta_obj.get("key_signature")
+                    tp = meta_obj.get("tempo")
+                    if isinstance(ts, str):
+                        time_sig = ts
+                    if isinstance(ks, str):
+                        key_sig = ks
+                    try:
+                        if tp is not None:
+                            tempo_val = float(tp)
+                    except Exception:
+                        tempo_val = None
+            except Exception:
+                # If metadata is not valid JSON, fall back to empty/defaults
+                pass
+
+            if not time_sig:
+                time_sig = "4/4"
+            if not key_sig:
+                key_sig = "C"
+            if tempo_val is None:
+                tempo_val = 120.0
+
+            measures_path = tp_dir / f"measures_{variant_safe}.csv"
+            with measures_path.open("w", encoding="utf-8", newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow([
+                    "measure",
+                    "time_signature",
+                    "key_signature",
+                    "tempo",
+                    "start_beat",
+                    "pickup",
+                ])
+                for row in measures_rows:
+                    mnum = int(row.get("measure", 0) or 0)
+                    writer.writerow([mnum, time_sig, key_sig, tempo_val, 1, "false"])
+    except Exception as exc:
+        # Log to run.log via warning hook but do not fail the melody step;
+        # measures can be regenerated or edited later.
+        _log_warning(
+            f"MUSIC: failed to synthesize measures_{variant_safe}.csv from melody CSV: {exc}",
+            tp_dir,
+        )
 
     try:
         _log_info(
