@@ -9,7 +9,7 @@ import os
 import re
 import random
 import time
-from typing import Optional, List
+from typing import Optional, List, Union
 from .logging import breadcrumb as _breadcrumb, log_run as _log_run
 from .tokenizer import count_chat_tokens as _count_chat_tokens
 
@@ -84,6 +84,7 @@ def complete(
     max_tokens: int = 800,
     model: Optional[str] = None,
     reasoning_effort: Optional[str] = None,
+    log_file: Optional[Union[str, "os.PathLike[str]"]] = None,
 ) -> str:
     """Chat-completion with graceful mock fallback if no API key/client.
     """
@@ -91,7 +92,7 @@ def complete(
     if os.getenv("GW_USE_MOCK_LLM", "0") == "1":
         # When explicitly using MockLLM, let its errors propagate to surface mismatches in tests.
         from .mock_llm import complete as _mock_complete  # type: ignore
-        return _mock_complete(
+        out: str = _mock_complete(
             prompt,
             system=system,
             temperature=temperature,
@@ -99,6 +100,19 @@ def complete(
             model=model,
             reasoning_effort=reasoning_effort,
         )
+        # Centralised prompt+response artifact for MockLLM when requested
+        if log_file:
+            try:
+                import pathlib
+                p = pathlib.Path(log_file)
+                p.parent.mkdir(parents=True, exist_ok=True)
+                with p.open("w", encoding="utf-8") as f:
+                    f.write("=== SYSTEM ===\n" + (system or "") + "\n\n")
+                    f.write("=== USER ===\n" + prompt + "\n\n")
+                    f.write("=== RESPONSE ===\n" + (out or "") + "\n")
+            except Exception:
+                pass
+        return out
 
     client = get_client()
     if client is None:
@@ -107,7 +121,7 @@ def complete(
 
     model_name = model or get_model()
 
-    def _do_call():
+    def _do_call() -> str:
         messages = [
             {"role": "system", "content": system or "You are a helpful assistant."},
             {"role": "user", "content": prompt},
@@ -143,7 +157,20 @@ def complete(
             pass
         try:
             resp = client.chat.completions.create(**kwargs)
-            return resp.choices[0].message.content or ""
+            out = resp.choices[0].message.content or ""
+            # Centralised prompt+response artifact when requested
+            if log_file:
+                try:
+                    import pathlib
+                    p = pathlib.Path(log_file)
+                    p.parent.mkdir(parents=True, exist_ok=True)
+                    with p.open("w", encoding="utf-8") as f:
+                        f.write("=== SYSTEM ===\n" + (system or "") + "\n\n")
+                        f.write("=== USER ===\n" + prompt + "\n\n")
+                        f.write("=== RESPONSE ===\n" + (out or "") + "\n")
+                except Exception:
+                    pass
+            return out
         except Exception as e:
             msg = str(e)
             if "Unsupported parameter" in msg and "max_tokens" in msg:
@@ -161,6 +188,23 @@ def complete(
                         _log_run(f"LLM response | usage prompt={pt} completion={ct} reasoning={rt} total={tt}")
                 except Exception:
                     pass
+                if log_file:
+                    try:
+                        import pathlib
+                        p = pathlib.Path(log_file)
+                        p.parent.mkdir(parents=True, exist_ok=True)
+                        with p.open("w", encoding="utf-8") as f:
+                            f.write("=== SYSTEM ===\n" + (system or "") + "\n\n")
+                            f.write("=== USER ===\n" + prompt + "\n\n")
+                            f.write("=== RESPONSE ===\n" + (out or "") + "\n")
+                    except Exception:
+                        pass
                 return out
             raise
-    return _with_backoff(_do_call)
+    result = _with_backoff(_do_call)
+    # _with_backoff will either return the inner result or raise; if it
+    # somehow yields a falsey/None value, normalise to an empty string so
+    # callers always receive a str.
+    if result is None:
+        return ""
+    return result

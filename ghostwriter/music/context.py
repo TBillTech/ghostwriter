@@ -15,7 +15,7 @@ from typing import Any, Dict, Iterable, List, Optional
 
 import logging
 
-from ..context import RunContext
+from ..context import RunContext, UserActionRequired
 from ..templates import iter_dir_for
 from ..utils import _norm_token
 from ..musiccsv import read_musiccsv, validate_musiccsv, resolve_derived_fields, MusicCSV
@@ -288,14 +288,33 @@ def build_voice_context(
     else:
         voice_entries = _extract_voice_entries(ctx.chapter)
 
+    if not voice_entries:
+        raise UserActionRequired(
+            "No valid music voices could be extracted from the chapter. "
+            "Ensure your CHAPTER_XXX.yaml provides a 'voices' entry either at "
+            "the top level or inside the music touch-point."
+        )
+
     seen_tokens: set[str] = set()
-    voice_specs: List[VoiceSpec] = []
+    raw_specs: List[VoiceSpec] = []
     for token, meta in voice_entries:
         norm = _normalize_lookup(token)
         if norm in seen_tokens:
             continue
         seen_tokens.add(norm)
-        voice_specs.append(parse_voice_token(token, metadata=meta))
+        raw_specs.append(parse_voice_token(token, metadata=meta))
+
+    # Reorder voices so that melodic lines are composed first.
+    # Heuristic: prefer ideas containing "melody" or roles containing
+    # "melody"/"lead", then fall back to the original order.
+    def _is_melody(spec: VoiceSpec) -> bool:
+        idea = (spec.idea or "").lower()
+        role = (spec.role or "").lower()
+        return ("melody" in idea) or ("melody" in role) or ("lead" in role)
+
+    melody_specs = [s for s in raw_specs if _is_melody(s)]
+    non_melody_specs = [s for s in raw_specs if not _is_melody(s)]
+    voice_specs: List[VoiceSpec] = melody_specs + non_melody_specs
     _attach_entity_links(voice_specs, ctx)
 
     version = pipeline_version if pipeline_version is not None else ctx.version

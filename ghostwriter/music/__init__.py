@@ -21,8 +21,10 @@ from .pipeline import (
     run_melody_edges_step,
     ensure_first_score_gate,
     run_subtle_score_pass,
+    run_melody_construction_step,
+    run_multi_voice_first_pass,
+    assemble_first_pass_variant,
 )
-from .pipeline import run_melody_construction_step
 from .exporter import finalize_music_exports
 
 __all__ = [
@@ -42,5 +44,7 @@ __all__ = [
     "run_melody_construction_step",
     "ensure_first_score_gate",
     "run_subtle_score_pass",
+    "run_multi_voice_first_pass",
+    "assemble_first_pass_variant",
     "finalize_music_exports",
 ]

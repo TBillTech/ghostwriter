@@ -14,6 +14,8 @@ _TEMPLATE_SUBTLE_EDIT = "prompts/music_subtle_edit_prompt.md"
 _TEMPLATE_CSV_FORMAT = "prompts/musiccsv_format_prompt.txt"
 
 
+# NOTE: The detailed MusicCSV format reference is no longer injected into the
+# first-score prompt. It is still used for subtle-edit and check prompts.
 _FORMAT_REFERENCE = apply_template(_TEMPLATE_CSV_FORMAT, {})
 
 
@@ -38,7 +40,7 @@ def build_first_score_prompt(
     voice_idea: str,
     voice_role: str,
     metadata_json: str,
-    measures_csv: str,
+    melody_csv: str,
     melody_reduced_csv: str,
     other_voices_reduced_csv: str,
 ) -> str:
@@ -58,10 +60,9 @@ def build_first_score_prompt(
         "[VOICE_IDEA]": voice_idea,
         "[VOICE_ROLE]": voice_role,
         "[METADATA_JSON]": metadata_json,
-        "[MEASURES_CSV]": measures_csv,
+        "[MELODY_CSV]": melody_csv,
         "[MELODY_REDUCED_CSV]": melody_reduced_csv,
         "[OTHER_VOICES_REDUCED_CSV]": other_voices_reduced_csv,
-        "[MUSICCSV_FORMAT_PROMPT]": _FORMAT_REFERENCE,
     }
     return apply_template(_TEMPLATE_FIRST_SCORE, replacements)
 

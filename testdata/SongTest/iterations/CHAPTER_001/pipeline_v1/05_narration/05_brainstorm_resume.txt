@@ -197,47 +197,26 @@ Please sample at random from the tails of the distribution, such that the probab
 
 
 === RESPONSE ===
-* red steps along the narrow dirt path, her shoes scuffing soft grooves in the packed earth.
-* The red hood swings lightly at her shoulders, catching stray beams of sunlight that slip between the pines.
-* She carries the basket crook-armed against her side, the wicker creaking faintly with each bounce.
-* Humming a simple village tune, she keeps time with the rhythm of her footsteps and the sway of her cloak.
-* Pine needles stir and whisper underfoot when her steps stray near the edge of the path.
-* Overhead, branches knit a patchwork roof, letting small squares of gold light fall across her hood and hands.
-* The smell of bread and sweet jam drifts out of the basket and lingers in the cool forest air behind her.
-* <probability> 0.07
+* Red moves along the winding dirt trail, her red hood a bright mark amid the dark pines, while the basket swings in a small, steady arc from her arm. <0.08>
+* Her quiet humming threads between the trees, rising and falling with her steps, until distant birds pause their own songs and listen. <0.06>
+* Pine needles cushion each footfall, sending up a faint sharp scent that mingles with the warm smell of fresh bread and sweet jam from the basket. <0.07>
+* Shafts of pale sunlight slip through the high branches and pass over her cloak, so that her hood flashes and dims like a moving ember. <0.09>
+* Around her, the forest path narrows and bends, its edges blurred by ferns and bramble, while, somewhere unseen, Wolf watches the bright figure advance. <0.08>
 
-* red follows the winding path as it bends between the trunks, her figure a bright stroke of color in the shadows.
-* The basket rests against her hip, light enough to swing, heavy enough to tug her arm in a steady rhythm.
-* Her humming threads through the trees, rising and falling as the path climbs small roots and dips into shallow hollows.
-* Loose stones crunch and roll aside under her soles, then settle again as the forest closes behind her.
-* Shafts of light cross her face and hood as she passes, painting quick stripes of brightness on the red cloth.
-* A jay falls silent on a high branch as she approaches, tilts its head, then flies deeper into the gloom.
-* From somewhere off the path, unseen by red, a wolf matches his pace to her sound, keeping to the darker thickets.
-* <probability> 0.06
+* Red keeps to the center of the worn trail, her humming keeping time with the soft creak of wicker as the basket’s weight shifts against her wrist. <0.09>
+* A small breeze stirs her cloak, lifting the red hem so that it flutters against her ankles and briefly exposes dusty shoes and pale stockings. <0.07>
+* The smell of jam trails behind her like an invisible ribbon, drawing the attention of hidden creatures that rustle once, then fall still as she passes. <0.08>
+* Overhead, the tall pines lean together, their tops knitting a dark canopy that breaks only where a beam of light touches the glinting clasp of her hood. <0.06>
+* Not far from the path, Wolf sets his pace against hers, padding through shadowed undergrowth, ears pricked to the faint, tuneless hum that marks her place. <0.09>
 
-* red walks at an unhurried pace, keeping to the center of the path where the dirt is smoothest.
-* The red hood marks her from far off, a moving ember among the gray trunks and green undergrowth.
-* Each step sends a small swing through the basket handle, making the covered bread and jam thump lightly together.
-* Her tune drifts ahead of her, brushing the low ferns and roots before she reaches them.
-* A cool breeze moves down the trail, lifting the edge of her cloak and carrying the scent of jam forward through the trees.
-* Birds shift in the branches above, rustling needles and watching the lone bright figure pass beneath.
-* In the distance, hidden by hanging boughs and a twist in the trail, the wolf pauses to listen to the fading notes.
-* <probability> 0.09
+* Red’s humming ripples in front of her like a small banner of sound as she walks, the tune simple and repeating, unbroken by any pause. <0.07>
+* The basket, packed with bread and jars of jam, bumps lightly against her hip at each step, its lid tied down with a plain strip of cloth. <0.09>
+* Here the forest floor dips; she adjusts her grip on the handle, steadying the load before continuing down the shallow hollow of the path. <0.08>
+* On either side, tree trunks stand in close ranks, their rough bark marked by old claw-scratches and moss, none of which she studies as she passes. <0.06>
+* Wolf moves in a loose curve parallel to the track, slipping between saplings and rocks, careful to keep the girl’s red hood in sight and his own paws silent. <0.09>
 
-* red’s feet beat a small, regular pattern on the path, darkening the dust where each shoe lands.
-* The hood frames her face and falls down her back, the red cloth bright even where the forest grows dim.
-* She holds the basket close when the trail narrows, its woven side brushing against her skirt with a dry rasp.
-* Her humming turns the quiet path into a thin ribbon of sound, stretching from one bend in the trail to the next.
-* Fallen cones and needles scatter around her steps, some kicking aside, some crunching flat into the earth.
-* Ahead, the path curves out of sight, its edges blurred by ferns and tangled roots that creep inward.
-* Just off that curve, the wolf waits behind a screen of low branches, his eyes tracing the movement of hood and basket.
-* <probability> 0.08
-
-* red advances deeper along the forest path, leaving the last clear glimpse of the village behind a veil of trees.
-* The red hood catches on a stray twig as she passes, then slips free, leaving the branch trembling in her wake.
-* She adjusts her grip on the basket handle now and then, fingers tightening to steady the soft sway of its contents.
-* Her humming wavers when the path dips into a cooler hollow, then grows steady again as she climbs out into brighter patches.
-* Patches of sunlight move across the trail like slow islands, and she steps from one to the next without breaking her pace.
-* Small insects dance in the lit air over the path, rising in brief, glittering swirls around the trail of jam-scent she leaves.
-* Far back among the trunks, the wolf glides from shadow to shadow, never once allowing the sound of his paws to disturb her song.
-* <probability> 0.05
+* Red rounds a gentle bend in the trail, her hood catching a low-hanging branch and leaving a few red threads clinging to the bark as she walks on. <0.08>
+* Her humming falters only long enough for her to shift the basket from one arm to the other, then resumes, softer now, almost lost beneath the sighing of the pines. <0.07>
+* A squirrel freezes on a nearby root as she nears, nose testing the sweet air, then darts away when her shadow touches it and her cloak brushes the undergrowth. <0.09>
+* The forest light grows patchy; bright pools and sudden dark patches dapple her path, so that her steps alternate between clear ground and muted shadow. <0.06>
+* From a deeper pocket of shade, Wolf edges closer to the margin of the trail, close enough for the jam’s scent to reach him fully, yet far enough to remain unseen by the passing red hood. <0.09>

@@ -14,29 +14,18 @@ except Exception:
     gw_run_mixed_pipeline = None  # type: ignore
     gw_run_subtle_edit_pipeline = None  # type: ignore
 
-try:
-    from .music import (
-        build_voice_context as gw_music_build_voice_context,
-        ensure_first_score_gate as gw_music_first_gate,
-        run_subtle_score_pass as gw_music_subtle_pass,
-        finalize_music_exports as gw_music_finalize_exports,
-        # New metadata/tracks helper is exported via music.__all__
-        run_metadata_tracks_step as gw_music_metadata_tracks,
-        run_melody_edges_step as gw_music_melody_edges,
-        run_melody_construction_step as gw_music_melody_construct,
-        run_multi_voice_first_pass as gw_music_multi_voice_first_pass,
-        assemble_first_pass_variant as gw_music_assemble_first_variant,
-    )
-except Exception:
-    gw_music_build_voice_context = None  # type: ignore
-    gw_music_first_gate = None  # type: ignore
-    gw_music_subtle_pass = None  # type: ignore
-    gw_music_finalize_exports = None  # type: ignore
-    gw_music_metadata_tracks = None  # type: ignore
-    gw_music_melody_edges = None  # type: ignore
-    gw_music_melody_construct = None  # type: ignore
-    gw_music_multi_voice_first_pass = None  # type: ignore
-    gw_music_assemble_first_variant = None  # type: ignore
+from .music import (
+    build_voice_context as gw_music_build_voice_context,
+    ensure_first_score_gate as gw_music_first_gate,
+    run_subtle_score_pass as gw_music_subtle_pass,
+    finalize_music_exports as gw_music_finalize_exports,
+    # New metadata/tracks helper is exported via music.__all__
+    run_metadata_tracks_step as gw_music_metadata_tracks,
+    run_melody_edges_step as gw_music_melody_edges,
+    run_melody_construction_step as gw_music_melody_construct,
+    run_multi_voice_first_pass as gw_music_multi_voice_first_pass,
+    assemble_first_pass_variant as gw_music_assemble_first_variant,
+)
 
 # Standard library imports
 import os
@@ -527,6 +516,14 @@ def _build_music_prompt_payload_for_tp(
     if voice_input is None:
         voice_input = voice_tokens_flat
 
+    # Basic validation: music touch-points must provide title, description, and voices.
+    if not title or not description or not voices_source:
+        raise UserActionRequired(
+            "Music touch-point payload is missing required fields. "
+            "Expected mapping form with 'title', 'description', and 'voices'. "
+            "Example:\n  - music:\n      title: The Forest Path\n      description: ...\n      voices: [voice.one, voice.two]"
+        )
+
     voice_context = None
     prompt_payload: Dict[str, Any] = {}
     if gw_music_build_voice_context is not None:
@@ -537,10 +534,21 @@ def _build_music_prompt_payload_for_tp(
                 voice_tokens=voice_input,
                 directive=directive_override or title,
             )
-        except TypeError:
-            voice_context = gw_music_build_voice_context(ctx, pipeline_version=version_num)
-        except Exception:
-            voice_context = None
+        except TypeError as exc:
+            raise UserActionRequired(
+                f"Music voice-context builder received unexpected arguments: {exc}. "
+                "Check your CHAPTER_XXX.yaml music 'voices' entry."
+            ) from exc
+        except UserActionRequired:
+            # Bubble up structured validation errors from the music context layer unchanged
+            raise
+        except Exception as exc:
+            # Any unexpected failure in voice context construction should halt the run
+            # with a clear, actionable message instead of silently skipping music.
+            raise UserActionRequired(
+                f"Music voice-context construction failed: {exc}. "
+                "Verify the music 'voices' section and any related character/factoid references."
+            ) from exc
 
     if voice_context is not None:
         prompt_payload = copy.deepcopy(voice_context.as_prompt_payload())
@@ -1009,6 +1017,10 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                     tp,
                     prior_paragraph,
                 )
+            except UserActionRequired:
+                # Never swallow explicit human-in-the-loop pauses; let them
+                # propagate so the CLI can present the exact message.
+                raise
             except Exception as exc:
                 _log_warning(f"MUSIC: failed to build per-touch-point payload ({exc})", tp_log_dir)
                 music_tp_voice_context = None
@@ -1152,8 +1164,13 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 continue
 
             if music_tp_voice_context is None or music_tp_prompt_payload is None:
+                msg = "Music touch-point is missing required voice context. Update the YAML and retry."
                 _log_warning("MUSIC: Missing voice context or payload; cannot proceed with music touch-point.", tp_log_dir)
-                raise UserActionRequired("Music touch-point is missing required voice context. Update the YAML and retry.")
+                try:
+                    _log_run(f"[MUSIC ERROR] tp={i:02d} {tp_type}: {msg}")
+                except Exception:
+                    pass
+                raise UserActionRequired(msg)
 
             # Step 1: metadata + tracks layout
             try:

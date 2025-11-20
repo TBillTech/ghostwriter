@@ -178,21 +178,17 @@ Red, Wolf
 3. **Just Bullets Output**: Strip off, ignore, and do not output any markdown or other formatting, other than just only '*' character at line start.
 
 Now, Here are the Bullets to be ordered in as logical a way as possible:
-* red follows the winding path as it bends between the trunks, her figure a bright stroke of color in the shadows.
-* The basket rests against her hip, light enough to swing, heavy enough to tug her arm in a steady rhythm.
-* Her humming threads through the trees, rising and falling as the path climbs small roots and dips into shallow hollows.
-* Loose stones crunch and roll aside under her soles, then settle again as the forest closes behind her.
-* Shafts of light cross her face and hood as she passes, painting quick stripes of brightness on the red cloth.
-* A jay falls silent on a high branch as she approaches, tilts its head, then flies deeper into the gloom.
-* From somewhere off the path, unseen by red, a wolf matches his pace to her sound, keeping to the darker thickets.
+* Red moves along the winding dirt trail, her red hood a bright mark amid the dark pines, while the basket swings in a small, steady arc from her arm. <0.08>
+* Her quiet humming threads between the trees, rising and falling with her steps, until distant birds pause their own songs and listen. <0.06>
+* Pine needles cushion each footfall, sending up a faint sharp scent that mingles with the warm smell of fresh bread and sweet jam from the basket. <0.07>
+* Shafts of pale sunlight slip through the high branches and pass over her cloak, so that her hood flashes and dims like a moving ember. <0.09>
+* Around her, the forest path narrows and bends, its edges blurred by ferns and bramble, while, somewhere unseen, Wolf watches the bright figure advance. <0.08>
 
 
 === RESPONSE ===
-* red follows the winding path as it bends between the trunks, her figure a bright stroke of color in the shadows.
-* Shafts of light cross her face and hood as she passes, painting quick stripes of brightness on the red cloth.
-* Her humming threads through the trees, rising and falling as the path climbs small roots and dips into shallow hollows.
-* The basket rests against her hip, light enough to swing, heavy enough to tug her arm in a steady rhythm.
-* Loose stones crunch and roll aside under her soles, then settle again as the forest closes behind her.
-* A jay falls silent on a high branch as she approaches, tilts its head, then flies deeper into the gloom.
-* From somewhere off the path, unseen by red, a wolf matches his pace to her sound, keeping to the darker thickets.
-* He stays just where the shadows thicken, listening to her footsteps and the soft clink of the basket, waiting for a moment to step closer.
+* Red moves along the winding dirt trail, her red hood a bright mark amid the dark pines, while the basket swings in a small, steady arc from her arm. <0.08>
+* Pine needles cushion each footfall, sending up a faint sharp scent that mingles with the warm smell of fresh bread and sweet jam from the basket. <0.07>
+* Shafts of pale sunlight slip through the high branches and pass over her cloak, so that her hood flashes and dims like a moving ember. <0.09>
+* Her quiet humming threads between the trees, rising and falling with her steps, until distant birds pause their own songs and listen. <0.06>
+* Small sounds—an anxious snap of twig, the soft shift of a sleeve—tint the hush and make a pattern in the undergrowth, unnoticed by Red but noticed elsewhere. 
+* Around her, the forest path narrows and bends, its edges blurred by ferns and bramble, while, somewhere unseen, Wolf watches the bright figure advance. <0.08>

@@ -105,23 +105,8 @@ def run_metadata_tracks_step(
         temperature=temp,
         max_tokens=max_tokens,
         model=model,
+        log_file=str(log_path),
     )
-
-    try:
-        log_content = [
-            "=== SYSTEM ===",
-            "Design score metadata.json and tracks.csv only; do not generate measures or notes.",
-            "",
-            "=== USER ===",
-            prompt,
-            "",
-            "=== RESPONSE ===",
-            response,
-            "",
-        ]
-        save_text(log_path, "\n".join(log_content))
-    except Exception:
-        pass
 
     text = response or ""
     lower = text.lower()
@@ -289,24 +274,8 @@ def run_melody_edges_step(
         temperature=temp,
         max_tokens=max_tokens,
         model=model,
+        log_file=str(log_path),
     )
-
-    # Always log full context for debugging and human editing.
-    try:
-        log_lines = [
-            "=== SYSTEM ===",
-            "Use the provided context and metadata to choose four dwell notes (A, B1/B2, C1, C2) and construct the nine melodic edges as described.",
-            "",
-            "=== USER ===",
-            user_prompt,
-            "",
-            "=== RESPONSE ===",
-            response or "",
-            "",
-        ]
-        save_text(log_path, "\n".join(log_lines))
-    except Exception:
-        pass
 
     text = (response or "").strip()
     if not text:
@@ -429,9 +398,9 @@ def _compose_first_pass_for_voice(
     if target_voice_index < 0 or target_voice_index >= len(voice_context.voices):
         raise UserActionRequired("Requested target_voice_index is out of range for VoiceContext.voices.")
 
-    # Load shared metadata and variant-specific measures.
+    # Load shared metadata and variant-specific melody CSV.
     metadata_text = ""
-    measures_text = ""
+    melody_text = ""
     try:
         meta_path = tp_dir / "metadata.json"
         if meta_path.exists():
@@ -440,11 +409,11 @@ def _compose_first_pass_for_voice(
         metadata_text = ""
     try:
         safe_variant = (variant or "standard").strip().lower()
-        measures_path = tp_dir / f"measures_{safe_variant}.csv"
-        if measures_path.exists():
-            measures_text = measures_path.read_text(encoding="utf-8").strip()
+        melody_path = tp_dir / f"melody_{safe_variant}.csv"
+        if melody_path.exists():
+            melody_text = melody_path.read_text(encoding="utf-8").strip()
     except Exception:
-        measures_text = ""
+        melody_text = ""
 
     # Build reduced-note grids from any existing scores referenced in the voice context.
     existing_scores: Dict[str, Dict[str, Any]] = {}
@@ -493,6 +462,12 @@ def _compose_first_pass_for_voice(
 
     other_reduced = "\n\n".join(other_reduced_blocks).strip()
 
+    # If there is no reduced melody grid yet for the canonical
+    # melodic line, fall back to using the raw melody CSV text for
+    # alignment so the model still sees a complete spine.
+    if not melody_reduced and melody_text.strip():
+        melody_reduced = melody_text.strip()
+
     # Include suggestion text for this pass if provided; callers are
     # responsible for scoping it by variant.
     payload_with_suggestions = dict(prompt_payload or {})
@@ -513,7 +488,7 @@ def _compose_first_pass_for_voice(
         voice_idea=target_voice.idea,
         voice_role=target_voice.role or "",
         metadata_json=metadata_text,
-        measures_csv=measures_text,
+        melody_csv=melody_text,
         melody_reduced_csv=melody_reduced,
         other_voices_reduced_csv=other_reduced,
     )
@@ -526,29 +501,111 @@ def _compose_first_pass_for_voice(
     reasoning = reasoning_for_prompt("music_first_score_prompt.md", "MUSIC_FIRST_SCORE")
 
     def _log_path_for_attempt(attempt: int) -> Optional[Path]:
-        # Persist prompt/response pairs even when validation fails so authors can debug.
-        return tp_dir / f"first_score_attempt_{attempt}.txt"
+        # Persist prompt/response pairs per voice/variant/attempt for debugging.
+        safe_variant = (variant or "standard").strip().lower()
+        token_safe = (target_voice.token or "voice").replace(".", "_")
+        return tp_dir / f"notes_{token_safe}_{safe_variant}.first_score_attempt_{attempt}.txt"
 
+    # Let the compact CSV contract drive validation; we no longer
+    # require the model to emit a full MusicCSV text blob here.
     try:
-        response = llm_call_with_validation(
-            "Compose a valid MusicCSV score that fits the touch-point context.",
+        response = llm_complete(
             prompt,
-            model=model,
+            system=(
+                "Compose a valid notes CSV for this single voice using "
+                "the specified header: measure,beat,pitch,duration,velocity,articulation."
+            ),
             temperature=temp,
             max_tokens=max_tokens,
-            validator=_validate_musiccsv,
-            reasoning_effort=reasoning,
-            log_maker=_log_path_for_attempt,
-            context_tag=f"music_first_score tp={tp_index:02d}",
+            model=model,
+            log_file=str(_log_path_for_attempt(1)),
         )
     except Exception as exc:  # pragma: no cover - defensive logging
         _log_warning(f"MUSIC first-score generation failed: {exc}", tp_dir)
         raise
 
-    ok, message, music = _try_parse_musiccsv(response)
-    if not ok or music is None:  # pragma: no cover - defensive
+    # Response is expected to be a bare CSV table with columns:
+    # measure,beat,pitch,duration,velocity,tie,articulation
+    text = (response or "").strip()
+    if not text:
         raise UserActionRequired(
-            "Generated score failed validation after LLM call. Inspect the response and try again."
+            "First-pass music step produced an empty response. Edit the first_score_attempt log and retry."
+        )
+
+    import csv
+    from io import StringIO
+
+    reader = csv.DictReader(StringIO(text))
+    required_cols = ["measure", "beat", "pitch", "duration", "velocity", "tie", "articulation"]
+    missing = [c for c in required_cols if c not in (reader.fieldnames or [])]
+    if missing:
+        raise UserActionRequired(
+            f"First-pass music CSV is missing required columns: {', '.join(missing)}. "
+            "Edit the first_score_attempt log to match the expected header."
+        )
+
+    # Build a MusicCSV using existing metadata/measures and a single notes track.
+    music = MusicCSV(metadata={}, measures=[], tracks=[], notes=[])
+
+    # Reuse metadata/measures already loaded above where possible.
+    try:
+        import json as _json
+        if metadata_text.strip():
+            meta_obj = _json.loads(metadata_text)
+            if isinstance(meta_obj, dict):
+                music.metadata = meta_obj
+    except Exception:
+        music.metadata = {}
+
+    # Measures are derived separately from the melody CSV; they should
+    # already exist as measures_<variant>.csv for downstream assembly.
+
+    # Single track entry for this voice; further refinement can add more metadata later.
+    music.tracks = [
+        {
+            "track": 1,
+            "label": target_voice.token,
+            "part": target_voice.role or target_voice.idea or "voice",
+            "instrument": target_voice.instrument,
+            "channel": 1,
+            "program": 1,
+            "volume": 100,
+        }
+    ]
+
+    # Map compact CSV rows into MusicCSV note dicts.
+    for row in reader:
+        try:
+            measure = int(row.get("measure", 0) or 0)
+            beat = float(row.get("beat", 0) or 0)
+            pitch = str(row.get("pitch", "") or "").strip()
+            duration = float(row.get("duration", 0) or 0)
+            velocity = int(row.get("velocity", 0) or 0)
+            tie = str(row.get("tie", "") or "").strip()
+            articulation = str(row.get("articulation", "") or "").strip()
+        except Exception:
+            continue
+        if not (measure and beat and pitch and duration):
+            continue
+        note = {
+            "track": 1,
+            "measure": measure,
+            "beat": beat,
+            "pitch": pitch,
+            "duration": duration,
+            "velocity": velocity,
+            "tie": tie,
+            "articulation": articulation,
+            "pedal": "",
+            "lyric": "",
+            "ornament": "",
+            "comment": "",
+        }
+        music.notes.append(note)
+
+    if not music.notes:
+        raise UserActionRequired(
+            "First-pass music CSV contained no valid note rows. Edit the first_score_attempt log and retry."
         )
 
     return music
@@ -630,24 +687,9 @@ def ensure_first_score_gate(
         temperature=check_temp,
         max_tokens=check_max,
         model=check_model,
+        log_file=str(score_check_trace),
     )
     save_text(first_suggestions_path, suggestions)
-    try:
-        if not score_check_trace.exists():
-            trace_content = [
-                "=== SYSTEM ===",
-                "Provide concise, actionable feedback on the score.",
-                "",
-                "=== USER ===",
-                check_prompt,
-                "",
-                "=== RESPONSE ===",
-                suggestions,
-                "",
-            ]
-            save_text(score_check_trace, "\n".join(trace_content))
-    except Exception:
-        pass
 
     try:
         _log_info(
@@ -710,15 +752,28 @@ def run_multi_voice_first_pass(
 
             output = StringIO()
             writer = csv.writer(output)
-            writer.writerow(["measure", "beat", "pitch", "duration"])
+            # Preserve all compact-note columns so that assembly can
+            # reconstruct a valid MusicCSV without guessing defaults.
+            writer.writerow([
+                "measure",
+                "beat",
+                "pitch",
+                "duration",
+                "velocity",
+                "tie",
+                "articulation",
+            ])
             for note in music.notes:
                 measure = note.get("measure")
                 beat = note.get("beat")
                 pitch = note.get("pitch")
                 duration = note.get("duration")
+                velocity = note.get("velocity")
+                tie = note.get("tie", "")
+                articulation = note.get("articulation", "")
                 if measure is None or beat is None or pitch is None or duration is None:
                     continue
-                writer.writerow([measure, beat, pitch, duration])
+                writer.writerow([measure, beat, pitch, duration, velocity, tie, articulation])
             notes_path.write_text(output.getvalue(), encoding="utf-8")
         except Exception as exc:
             _log_warning(f"MUSIC: failed to write notes CSV for {voice.token}: {exc}", tp_dir)
@@ -937,24 +992,8 @@ def run_melody_construction_step(
         temperature=temp,
         max_tokens=max_tokens,
         model=model,
+        log_file=str(log_path),
     )
-
-    # Log the full context and response for human inspection.
-    try:
-        log_lines = [
-            "=== SYSTEM ===",
-            "Using the dwell notes, melodic edges, and instructions, construct a single coherent melody as a CSV table.",
-            "",
-            "=== USER ===",
-            user_prompt,
-            "",
-            "=== RESPONSE ===",
-            response or "",
-            "",
-        ]
-        save_text(log_path, "\n".join(log_lines))
-    except Exception:
-        pass
 
     text = (response or "").strip()
     if not text:
@@ -1099,22 +1138,8 @@ def run_subtle_score_pass(
         temperature=temp,
         max_tokens=max_tokens,
         model=model,
+        log_file=str(attempt_log_path),
     )
-    try:
-        trace_content = [
-            "=== SYSTEM ===",
-            "Refine the MusicCSV score according to feedback while keeping it valid.",
-            "",
-            "=== USER ===",
-            prompt,
-            "",
-            "=== RESPONSE ===",
-            response,
-            "",
-        ]
-        save_text(attempt_log_path, "\n".join(trace_content))
-    except Exception:
-        pass
     ok, message, music = _try_parse_musiccsv(response)
     if not ok or music is None:
         raise UserActionRequired(
@@ -1144,23 +1169,9 @@ def run_subtle_score_pass(
         temperature=check_temp,
         max_tokens=check_max,
         model=check_model,
+        log_file=str(subtle_check_trace),
     )
     save_text(final_feedback_path, suggestions)
-    try:
-        trace_content = [
-            "=== SYSTEM ===",
-            "Provide concise, actionable feedback on the score.",
-            "",
-            "=== USER ===",
-            check_prompt,
-            "",
-            "=== RESPONSE ===",
-            suggestions,
-            "",
-        ]
-        save_text(subtle_check_trace, "\n".join(trace_content))
-    except Exception:
-        pass
 
     try:
         _log_info(

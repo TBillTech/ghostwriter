@@ -1,17 +1,21 @@
-- Replace the pronoun "his" in "Wolf matches his steps to her humming" with "the Wolf" (or "Wolf") to avoid any ambiguity.
+- Convert the passage to present tense so it matches the touch-point (e.g., "Red walks the winding dirt trail... She hums..."). Update all verbs accordingly.
 
-- Cut or condense one of the two similar humming/basket lines to tighten pacing. For example, merge "Her humming threads..." and "She fingers the basket handle as she hums, thinking of Grandmother." into one sentence that keeps the image and Red’s thought.
+- Open with Red's name instead of a pronoun to avoid ambiguity. Example: change "Red moved along..." to "Red walks along the winding dirt trail..."
 
-- Remove or tighten "The basket rests against Red's hip, light enough to swing, heavy enough to tug her arm in a steady rhythm." (felt redundant). If you want the rhythm image, shorten to "The basket rests at her hip, tugging her arm in a steady rhythm."
+- Make "basket in hand" explicit and tactile early. Replace or augment "the basket swinging..." with a short phrase like "basket in hand, swinging in a small, steady arc" or "keeps a light grip on the basket's handle as it swings."
 
-- Add a brief, concrete sensory detail about the basket contents (bread and jam) to anchor the "Basket of Goodies" factoid—e.g., a short clause: "the scent of warm bread and sweet jam tucked inside."
+- Break the long opening sentence into two for clearer cadence and to preserve Red’s light, earnest voice. (Keep one lyrical image per sentence.)
 
-- Soften the explicitness of the Wolf's intent. Replace "waiting for the right moment to close the distance" with subtler phrasing such as "patiently timing his steps to hers" or "biding his time in shadow" to preserve menace without overstatement.
+- Prune redundant hood imagery: remove or rework one of the two metaphors ("a beacon among the dark pines" vs. "flashed and dimmed like a moving ember"). Keep the stronger image and simplify the other.
 
-- Vary sentence openings to avoid repeating "She"/"Red" three times in a row—start one sentence with a setting detail (e.g., "Shafts of light..." already works) and reorder so the flow alternates between Red's motion and the forest's reaction.
+- Simplify ornate lines to match Red's simple lexicon and cadence. For example, replace "Shafts of pale sunlight slipped..." with a shorter line such as "Sunlight flickers through the branches, making her hood glow and fade."
 
-- Change "From somewhere off the path" to a tighter locative phrase like "Hidden off the path" or "In a thicket off the path" if you want clearer imagery; otherwise drop "somewhere" for stronger prose.
+- Make Red's mannerism explicit and small (not fearful): add a tiny physical detail tied to her character — e.g., "she hums under her breath" or "she hums and glances at a patch of flowers," rather than heavy atmospheric description.
 
-- Keep the jay detail but consider making its reaction mirror Red's calm (e.g., "A jay falls silent...tilts its head" is good). If you want to heighten contrast, make the bird's flight a sharper punctuation: shorten to "A jay falls silent and slips deeper into the gloom."
+- Clarify the perception contrast in a plain sentence: change "unnoticed by her but not by Wolf" to "Red doesn't notice; the Wolf does." Use "Wolf" consistently (capitalized) when referring to the creature.
 
-- Ensure Red's voice/cadence remains light and earnest by avoiding any adult or ironic phrasing; maintain simple, tactile verbs and the small, literal observations already present.
+- Soften or rephrase "careful, calculating attention" to reflect Wolf's sly cadences without explicit predatory language. Suggested phrasing: "Wolf watches with slow, appraising eyes, taking in the basket and the timing of her steps."
+
+- Tighten the last paragraph by splitting into two sentences: one focused on how the path narrows and one on Wolf's observation. This preserves pacing and avoids crowding images.
+
+- Preserve the writer's lyrical quirks but remove one or two overlapping sensory images per sentence so the prose stays vivid without becoming busy.

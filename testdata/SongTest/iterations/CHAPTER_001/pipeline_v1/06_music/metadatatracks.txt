@@ -1,0 +1,290 @@
+=== SYSTEM ===
+Design score metadata.json and tracks.csv only; do not generate measures or notes.
+
+=== USER ===
+You are designing the high-level structure of a single song for a story touch-point.
+
+Context (JSON, sanitized for length):
+{
+  "directive": "a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.",
+  "tempo_summary": "",
+  "time_signature_summary": "",
+  "key_summary": "",
+  "voices": [
+    {
+      "token": "major.tenor.base.wolf.harmony",
+      "chord": "major",
+      "register": "tenor",
+      "instrument": "base",
+      "idea": "wolf",
+      "role": "harmony",
+      "characters": [
+        "wolf"
+      ],
+      "character_names": [
+        "The Wolf"
+      ],
+      "factoids": [],
+      "issues": [],
+      "metadata": {}
+    },
+    {
+      "token": "major.alto.flute.red.melody",
+      "chord": "major",
+      "register": "alto",
+      "instrument": "flute",
+      "idea": "red",
+      "role": "melody",
+      "characters": [
+        "red"
+      ],
+      "character_names": [
+        "Little Red Riding Hood"
+      ],
+      "factoids": [],
+      "issues": [],
+      "metadata": {}
+    },
+    {
+      "token": "major.beat.drum.axe",
+      "chord": "major",
+      "register": "beat",
+      "instrument": "drum",
+      "idea": "axe",
+      "role": "",
+      "characters": [],
+      "character_names": [],
+      "factoids": [],
+      "issues": [],
+      "metadata": {}
+    },
+    {
+      "token": "major.bass.soundscape.forest_path",
+      "chord": "major",
+      "register": "bass",
+      "instrument": "soundscape",
+      "idea": "forest_path",
+      "role": "",
+      "characters": [],
+      "character_names": [],
+      "factoids": [
+        "Forest Path"
+      ],
+      "issues": [],
+      "metadata": {}
+    }
+  ],
+  "score_summaries": [],
+  "character_outlines": [
+    {
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "id": "wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "name": "The Wolf",
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace"
+    },
+    {
+      "lexicon": "simple words, fairy-tale tone; polite forms like \"please\" and \"thank you\"",
+      "rare_lines": [
+        "I’m frightened, but I won’t run.",
+        "I did wrong to wander. I’ll make it right."
+      ],
+      "mannerisms": [
+        "Clutches her basket when nervous; relaxes as soon as she can offer help.",
+        "Answers questions plainly; takes idioms literally before catching on.",
+        "Soft little gasps of wonder at woodland sights; quiet hums of nursery tunes.",
+        "Uses simple, sincere phrases over fancy words; sprinkles in ‘please’ and ‘thank you.’",
+        "When scolded, lowers her eyes and apologizes, then tries to fix things at once."
+      ],
+      "id": "red",
+      "background": "A bright, tender-hearted village girl sent to bring food and comfort to her\nailing grandmother. She’s been warned to keep to the path and not speak to\nstrangers, but curiosity and kindness tug at her feet. She loves flowers,\nbirdsong, and the way sunlight freckles through the trees. Her iconic red\nhood and basket are more than props—they’re little anchors of bravery when\nthe woods press close. She’s polite by upbringing, literal in her\nunderstanding, and brave in small, practical ways.\n",
+      "prefer": [
+        "flowers",
+        "Grandmother",
+        "safe path",
+        "helpfulness",
+        "honesty"
+      ],
+      "sample_lines": [
+        "I'm bringing goodies to Grandmother.",
+        "I promised to stay on the path—well, mostly.",
+        "These flowers will cheer her right up, don’t you think?",
+        "Mama says it’s safest if I hurry, but I can help for just a minute.",
+        "If you know a shorter way, I suppose that would be kind…"
+      ],
+      "avoid": [
+        "lying",
+        "strangers' tricks",
+        "dark thickets",
+        "leaving the path"
+      ],
+      "name": "Little Red Riding Hood",
+      "forbidden": [
+        "Does not use modern slang or technical jargon.",
+        "Will not be cruel, lewd, or cynical; no scheming language."
+      ],
+      "common_lines": [
+        "Grandmother’s waiting; I mustn’t dawdle.",
+        "Oh! I didn’t mean to be rude.",
+        "Thank you, but I should be on my way."
+      ],
+      "traits": [
+        "curious",
+        "kind",
+        "naive",
+        "brave",
+        "easily-distracted",
+        "polite"
+      ],
+      "cadence": "light, earnest"
+    }
+  ],
+  "touch_point_title": "The Forest Path",
+  "touch_point_description": "a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.",
+  "touch_point_prior_paragraph": "Red moved along the winding dirt trail, her bright hood a beacon among the dark pines, the basket swinging in a small, steady arc from her arm. Pine needles cushioned each step, their sharp scent mingling with the warm bread and jam in the basket. Shafts of pale sunlight slipped through the high branches, crossing her cloak so her hood flashed and dimmed like a moving ember. She hummed as she walked, the tune threading between the trees, rising and falling with each step until distant birds paused their own songs and listened.\n\nSmall sounds—the anxious snap of a twig, the soft shift of her sleeve—tinted the hush, unnoticed by her but not by Wolf. Around her, the forest path narrowed and bent, its edges blurred by ferns and bramble, while, somewhere unseen, Wolf watched the bright figure advance. Wolf's eyes tracked her and the basket with a careful, calculating attention.",
+  "touch_point_voices": [
+    "major.tenor.base.wolf.harmony",
+    "major.alto.flute.red.melody",
+    "major.beat.drum.axe",
+    "major.bass.soundscape.forest_path"
+  ],
+  "touch_point_metadata": {
+    "title": "The Forest Path",
+    "description": "a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.",
+    "voices": [
+      "major.tenor.base.wolf.harmony",
+      "major.alto.flute.red.melody",
+      "major.beat.drum.axe",
+      "major.bass.soundscape.forest_path"
+    ]
+  }
+}
+
+Touch-point info:
+- index: 6
+- type: music
+- title: The Forest Path
+- description:
+a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.
+- prior paragraph (most recent polished prose for context):
+Red moved along the winding dirt trail, her bright hood a beacon among the dark pines, the basket swinging in a small, steady arc from her arm. Pine needles cushioned each step, their sharp scent mingling with the warm bread and jam in the basket. Shafts of pale sunlight slipped through the high branches, crossing her cloak so her hood flashed and dimmed like a moving ember. She hummed as she walked, the tune threading between the trees, rising and falling with each step until distant birds paused their own songs and listened.
+
+Small sounds—the anxious snap of a twig, the soft shift of her sleeve—tinted the hush, unnoticed by her but not by Wolf. Around her, the forest path narrowed and bent, its edges blurred by ferns and bramble, while, somewhere unseen, Wolf watched the bright figure advance. Wolf's eyes tracked her and the basket with a careful, calculating attention.
+
+Instructions:
+1. First, decide on global score metadata: tempo, time signature, key signature, divisions_per_quarter, and any brief freeform tags or notes.
+2. Then, design the tracks: one row per musical voice or part. For each track, specify at least: track id, label, part, instrument, MIDI channel, MIDI program, and an optional short role description.
+3. Keep channel assignments consistent with these rules:
+   - Use channel 10 for percussion / drum kit tracks only.
+   - Use channels 1 for all pitched instruments (melody, harmony, bass, pads, etc.).
+   - Reserve program 0 for unspecified / generic, otherwise choose a reasonable General MIDI program.
+4. Ensure every voice token mentioned in the context is mapped to exactly one track.
+5. Do not generate any measures or notes yet; this step is for metadata and track layout only.
+
+Output format:
+- First, a `metadata.json` block in pretty-printed JSON that includes at minimum: title, tempo, time_signature, key_signature, divisions_per_quarter, and optional descriptive fields.
+- Second, a `tracks.csv` block with a header row and one row per track, with columns: track,label,part,instrument,channel,program,role,voice_token.
+
+Example skeleton (illustrative only):
+
+metadata.json
+{
+  "title": "Example Song",
+  "tempo": 96,
+  "time_signature": "4/4",
+  "key_signature": "D minor",
+  "divisions_per_quarter": 480,
+  "tags": ["brooding", "cinematic"]
+}
+
+tracks.csv
+track,label,part,instrument,channel,program,role,voice_token
+1,Red Melody,Melody,Flute,1,73,lead,major.alto.flute.red.melody
+2,Wolf Harmony,Harmony,French Horn,3,61,inner-voice,major.tenor.bass.wolf.harmony
+3,Drums,Drums,Standard Kit,10,1,groove,major.beat.drum.axe
+
+Return exactly two blocks in this order:
+1) The `metadata.json` block
+2) The `tracks.csv` block
+
+Do not include commentary or any other text outside those two blocks.
+
+
+=== RESPONSE ===
+metadata.json
+{
+  "title": "The Forest Path",
+  "tempo": 150,
+  "time_signature": "4/4",
+  "key_signature": "C major",
+  "divisions_per_quarter": 480,
+  "duration_seconds": 180,
+  "tags": [
+    "cinematic",
+    "haunting",
+    "fast",
+    "steady-bass",
+    "rapid-percussion",
+    "narrative",
+    "suspense"
+  ],
+  "notes": "Fast, driving cinematic piece with a haunting flute melody (Red) and a sly, tenor harmony motif (Wolf). Percussion is rapid and propulsive on channel 10; bass provides a steady pulse and ambient forest texture."
+}
+
+tracks.csv
+track,label,part,instrument,channel,program,role,voice_token
+1,Wolf Harmony,Harmony,French Horn,1,61,harmony/character-motif,major.tenor.base.wolf.harmony
+2,Red Melody,Melody,Flute,1,74,lead-melody/character-theme,major.alto.flute.red.melody
+3,Drums,Drums,Standard Kit,10,0,rapid-percussion/groove,major.beat.drum.axe
+4,Forest Bass,Bass/Soundscape,Synth Bass/Pad,1,33,steady-bass/atmosphere,major.bass.soundscape.forest_path
