@@ -8,6 +8,7 @@ Watch for the following:
 * Redundancy and repetition—call out lines that repeat the same idea and should be trimmed.
 * Wrong balance—if there are long prose sections crowding out dialog, recommend shortening; if dialog lacks needed action context, recommend inserting brief narrative beats.
 * Weird constructions—e.g., characters describing their own actions in first person instead of letting narration carry it; overly literal symbols (“symbolizing …”). Prefer subtlety and implication.
+* NEVER suggest something that is _either_ do this or that.  Always choose the easier option, and suggest that only.
 
 # Setting in general 
 [SETTING]

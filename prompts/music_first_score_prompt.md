@@ -34,12 +34,12 @@ Reduced notes for alignment (complete, not truncated):
 [OTHER_VOICES_REDUCED_CSV]
 
 Instructions:
-1. For this single voice only, output a **CSV table of notes** that covers **every measure** listed in the shared `measures.csv` block above.
-2. Use the global directive and context to keep the voice aligned with the chapter, but focus the actual notes and phrasing on the target voice above.
-3. Treat the full reduced melody grid as the **primary structural spine** of the piece. Your new notes must align rhythmically and harmonically to this melody unless a brief, clearly-motivated divergence is musically necessary.
-4. When reduced-note grids for other voices are present, treat them as fixed reference parts. Write the new voice so that it complements these parts (e.g., avoiding collisions, reinforcing cadences, or providing counter-melody), but never assumes they can be changed.
-5. Respect the tempo, key, and time signature from metadata/measures unless there is a strong musical reason to diverge.
-6. Ensure that **every measure listed in the shared measures.csv** has at least one note row for this voice. Measures may contain multiple notes; do not skip measures entirely.
+1. For this single voice only, output a **CSV table of notes** that sounds good with **every note** listed in the shared **main melodic line** block above.
+2. If this voice is the melody, be sure to use each note from the **main melodic line** exactly. If it is another voice, be sure each note you compose will sound good together with it.
+3. Use the global directive and context to keep the voice aligned with the chapter, but focus the actual notes and phrasing on the target voice above.
+4. Treat the full reduced melody grid as the **primary structural spine** of the piece. Your new notes must align rhythmically and harmonically to this melody unless a brief, clearly-motivated divergence is musically necessary.
+5. When reduced-note grids for other voices are present, treat them as fixed reference parts. Write the new voice so that it complements these parts (e.g., avoiding collisions, reinforcing cadences, or providing counter-melody), but never assumes they can be changed.
+6. Respect the tempo, key, and time signature from metadata/measures unless there is a strong musical reason to diverge.
 7. Use only the following columns in your CSV output, in this exact order:
 	`measure,beat,pitch,duration,velocity,tie,articulation`
 8. `measure` must be an integer matching one of the measures listed in the shared measures.csv block.

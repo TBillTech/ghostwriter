@@ -18,5 +18,8 @@ Instructions:
 2. Note any MusicCSV structural problems (missing tracks, inconsistent durations, invalid note values, etc.).
 3. Respond with a concise bullet list of actionable suggestions, each starting with a verb.
 4. If the score is ready to proceed, return a single bullet beginning with "OK:" and a short justification.
+5. Note that it is _correct_ for all tracks to use channel 1 except drum kit.  This is because we will assign VST voices later, and Native sound instruments use channel 1 on input (except drum kits).
+6. NEVER suggest reducing the measure count. The measure count comes from an earlier stage and needs to be rigid so that the tracks can all be handled correctly.
+7. NEVER suggest something that is _either_ do this or that.  Always choose the easier option, and suggest that only.
 
 Return only the bullet list.

@@ -10,6 +10,7 @@ Things to look for also include weird constructions, and overly literal similies
 * It is weird for a character to describe their own actions.  For example, if a character says "I nod, and I agree with you" that is weird. Better would be: Henry nodded, "I agree with you".
 * It is weird to slap the reader in the when something is a symbol.  For example, "The ball, symbolizing fun, was thrown".  Better would be "The ball, like an atom of entertainment, was thrown".
 * It is weird for a character to simply describe what they see.  For example, if a character says "I see the ball bouncing on the court." better would be "Oh! Did somebody drop the ball?"
+* NEVER suggest something that is _either_ do this or that.  Always choose the easier option, and suggest that only.
 
 # Setting in general 
 [SETTING]

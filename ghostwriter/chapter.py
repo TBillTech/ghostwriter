@@ -25,6 +25,7 @@ from .music import (
     run_melody_construction_step as gw_music_melody_construct,
     run_multi_voice_first_pass as gw_music_multi_voice_first_pass,
     assemble_first_pass_variant as gw_music_assemble_first_variant,
+    run_first_pass_checks as gw_music_first_pass_checks,
 )
 
 # Standard library imports
@@ -1333,52 +1334,19 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
 
             # Step 6: run per-variant first-pass checks and write suggestions files.
             try:
-                from .music import assemble_first_pass_variant as _gw_music_assemble_first_variant  # re-import for type checkers
-                from .music import MusicCSV as _MusicCSV
-                from .music import musiccsv_to_text as _musiccsv_to_text
-                if gw_music_assemble_first_variant is not None:
+                if gw_music_first_pass_checks is not None:
                     title = str(music_tp_meta.get("title") or "").strip() or "untitled"
-                    for variant in ("standard", "complimentary", "reprise"):
-                        variant_safe = variant.strip().lower()
-                        first_score_path = (tp_log_dir or base_log_dir) / f"first_{title.replace(' ', '_')}_{variant_safe}.musiccsv"
-                        if not first_score_path.exists():
-                            continue
-                        try:
-                            from .musiccsv import read_musiccsv as _read_musiccsv
-                        except Exception:
-                            _read_musiccsv = read_musiccsv  # type: ignore[name-defined]
-                        try:
-                            music_obj = _read_musiccsv(first_score_path)
-                            snippet_text = _truncate_musiccsv_text(_musiccsv_to_text(music_obj), None)
-                        except Exception:
-                            continue
-                        try:
-                            check_prompt = build_music_check_prompt(
-                                prompt_payload=music_tp_prompt_payload,
-                                tp_index=i,
-                                tp_type=tp_type,
-                                tp_text=tp_text,
-                                musiccsv_snippet=snippet_text,
-                            )
-                            check_model, check_temp, check_max = _env_for_prompt(
-                                "music_check_prompt.md",
-                                "MUSIC_SCORE_CHECK",
-                                default_temp=0.0,
-                                default_max_tokens=800,
-                            )
-                            suggestions = llm_complete(
-                                check_prompt,
-                                system="Provide concise, actionable feedback on the score.",
-                                temperature=check_temp,
-                                max_tokens=check_max,
-                                model=check_model,
-                            )
-                            sugg_name = f"first_score_suggestions_{variant_safe}.txt"
-                            if tp_log_dir is not None:
-                                save_text(tp_log_dir / sugg_name, suggestions)
-                        except Exception:
-                            # Best-effort diagnostics only; do not fail v1 on check errors.
-                            continue
+                    gw_music_first_pass_checks(
+                        tp_dir=tp_log_dir or base_log_dir,
+                        tp_index=i,
+                        tp_type=tp_type,
+                        tp_text=tp_text,
+                        prompt_payload=music_tp_prompt_payload,
+                        title=title,
+                        variants=("standard", "complimentary", "reprise"),
+                    )
+            except UserActionRequired:
+                raise
             except Exception as exc:
                 _log_warning(f"MUSIC: first-pass per-variant checks encountered an error ({exc})", tp_log_dir)
 

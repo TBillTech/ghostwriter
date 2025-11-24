@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Dict, Any, Optional, Tuple, List
+from typing import Dict, Any, Optional, Tuple, List, Iterable
 import logging
 
 from ..env import env_for_prompt
@@ -306,6 +306,38 @@ def _next_attempt_path(tp_dir: Path, prefix: str) -> Path:
         attempt += 1
 
 
+def _write_llm_trace(log_path: Path, *, system: str = "", user: str = "", response: str = "") -> None:
+    try:
+        log_path = Path(log_path)
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        with log_path.open("w", encoding="utf-8") as handle:
+            handle.write("=== SYSTEM ===\n" + (system or "") + "\n\n")
+            handle.write("=== USER ===\n" + (user or "") + "\n\n")
+            handle.write("=== RESPONSE ===\n" + (response or "") + "\n")
+    except Exception:
+        pass
+
+
+def _mirror_first_score_attempt_logs(tp_dir: Path, *, voice_token: str, variant: str) -> None:
+    tp_dir = Path(tp_dir)
+    token_safe = (voice_token or "voice").replace(".", "_")
+    variant_safe = (variant or "standard").strip().lower()
+    pattern = f"notes_{token_safe}_{variant_safe}.first_score_attempt_*.txt"
+    for src in sorted(tp_dir.glob(pattern)):
+        stem = src.stem
+        marker = ".first_score_attempt_"
+        if marker not in stem:
+            continue
+        attempt = stem.split(marker)[-1]
+        if not attempt.isdigit():
+            continue
+        dest = tp_dir / f"first_score_attempt_{attempt}.txt"
+        try:
+            dest.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+        except Exception:
+            pass
+
+
 def _try_parse_musiccsv(text: str) -> Tuple[bool, str, Optional[MusicCSV]]:
     stripped = (text or "").strip()
     if not stripped:
@@ -323,6 +355,40 @@ def _try_parse_musiccsv(text: str) -> Tuple[bool, str, Optional[MusicCSV]]:
 def _validate_musiccsv(text: str) -> Tuple[bool, str]:
     ok, message, _ = _try_parse_musiccsv(text)
     return ok, message
+
+
+def _validate_first_pass_response(text: str) -> Tuple[bool, str]:
+    stripped = (text or "").strip()
+    if not stripped:
+        return False, "empty response"
+
+    import csv
+    from io import StringIO
+
+    try:
+        reader = csv.DictReader(StringIO(stripped))
+        fieldnames_raw = reader.fieldnames or []
+        fieldnames = [fn.strip().lower() for fn in fieldnames_raw if isinstance(fn, str)]
+    except Exception:
+        fieldnames = []
+        reader = None
+
+    required = {"measure", "beat", "pitch", "duration", "velocity"}
+    if fieldnames and required.issubset(set(fieldnames)):
+        has_row = False
+        if reader is not None:
+            for row in reader:
+                if any((row or {}).values()):
+                    has_row = True
+                    break
+        if has_row:
+            return True, ""
+        return False, "compact CSV contained no note rows"
+
+    ok, message = _validate_musiccsv(stripped)
+    if ok:
+        return True, ""
+    return False, message or "invalid first-pass response"
 
 
 def _render_monitor_midi(music: MusicCSV, midi_path: Path, log_dir: Optional[Path]) -> bool:
@@ -506,28 +572,24 @@ def _compose_first_pass_for_voice(
         token_safe = (target_voice.token or "voice").replace(".", "_")
         return tp_dir / f"notes_{token_safe}_{safe_variant}.first_score_attempt_{attempt}.txt"
 
-    # Let the compact CSV contract drive validation; we no longer
-    # require the model to emit a full MusicCSV text blob here.
-    try:
-        response = llm_complete(
-            prompt,
-            system=(
-                "Compose a valid notes CSV for this single voice using "
-                "the specified header: measure,beat,pitch,duration,velocity,articulation."
-            ),
-            temperature=temp,
-            max_tokens=max_tokens,
-            model=model,
-            log_file=str(_log_path_for_attempt(1)),
-        )
-    except Exception as exc:  # pragma: no cover - defensive logging
-        _log_warning(f"MUSIC first-score generation failed: {exc}", tp_dir)
-        raise
+    # Let the validator drive retries so empty/invalid tables are retried automatically.
+    response = llm_call_with_validation(
+        (
+            "Compose a valid notes CSV for this single voice using "
+            "the specified header: measure,beat,pitch,duration,velocity,tie,articulation."
+        ),
+        prompt,
+        model=model,
+        temperature=temp,
+        max_tokens=max_tokens,
+        validator=_validate_first_pass_response,
+        reasoning_effort=reasoning,
+        log_maker=_log_path_for_attempt,
+        context_tag=f"music-first-score-{target_voice.token}-{variant}",
+    )
 
-    # Response is expected to be a bare CSV table with columns:
-    # measure,beat,pitch,duration,velocity,tie,articulation
     text = (response or "").strip()
-    if not text:
+    if not text:  # pragma: no cover - defensive safeguard
         raise UserActionRequired(
             "First-pass music step produced an empty response. Edit the first_score_attempt log and retry."
         )
@@ -535,13 +597,28 @@ def _compose_first_pass_for_voice(
     import csv
     from io import StringIO
 
-    reader = csv.DictReader(StringIO(text))
-    required_cols = ["measure", "beat", "pitch", "duration", "velocity", "tie", "articulation"]
-    missing = [c for c in required_cols if c not in (reader.fieldnames or [])]
-    if missing:
+    compact_rows: List[Dict[str, Any]] = []
+    header_lookup: Dict[str, str] = {}
+    try:
+        reader = csv.DictReader(StringIO(text))
+        raw_fields = reader.fieldnames or []
+        header_lookup = {fn.strip().lower(): fn for fn in raw_fields if isinstance(fn, str) and fn.strip()}
+        required_cols = {"measure", "beat", "pitch", "duration", "velocity"}
+        has_compact_header = required_cols.issubset(header_lookup.keys())
+        if has_compact_header:
+            compact_rows = list(reader)
+    except Exception:
+        compact_rows = []
+        header_lookup = {}
+
+    # If the response is not in compact CSV form, fall back to parsing a full MusicCSV blob.
+    if not compact_rows:
+        ok, message, music = _try_parse_musiccsv(text)
+        if ok and music is not None:
+            return music
         raise UserActionRequired(
-            f"First-pass music CSV is missing required columns: {', '.join(missing)}. "
-            "Edit the first_score_attempt log to match the expected header."
+            "Unable to parse the first-pass response as compact CSV or MusicCSV. "
+            + (message or "Edit the attempt log and retry.")
         )
 
     # Build a MusicCSV using existing metadata/measures and a single notes track.
@@ -574,15 +651,17 @@ def _compose_first_pass_for_voice(
     ]
 
     # Map compact CSV rows into MusicCSV note dicts.
-    for row in reader:
+    tie_key = header_lookup.get("tie")
+    art_key = header_lookup.get("articulation")
+    for row in compact_rows:
         try:
-            measure = int(row.get("measure", 0) or 0)
-            beat = float(row.get("beat", 0) or 0)
-            pitch = str(row.get("pitch", "") or "").strip()
-            duration = float(row.get("duration", 0) or 0)
-            velocity = int(row.get("velocity", 0) or 0)
-            tie = str(row.get("tie", "") or "").strip()
-            articulation = str(row.get("articulation", "") or "").strip()
+            measure = int(row.get(header_lookup.get("measure", ""), 0) or 0)
+            beat = float(row.get(header_lookup.get("beat", ""), 0) or 0)
+            pitch = str(row.get(header_lookup.get("pitch", ""), "") or "").strip()
+            duration = float(row.get(header_lookup.get("duration", ""), 0) or 0)
+            velocity = int(row.get(header_lookup.get("velocity", ""), 0) or 0)
+            tie = str(row.get(tie_key, "") or "").strip() if tie_key else ""
+            articulation = str(row.get(art_key, "") or "").strip() if art_key else ""
         except Exception:
             continue
         if not (measure and beat and pitch and duration):
@@ -663,6 +742,15 @@ def ensure_first_score_gate(
         variant="standard",
     )
 
+    try:
+        _mirror_first_score_attempt_logs(
+            tp_dir,
+            voice_token=voice_context.voices[0].token,
+            variant="standard",
+        )
+    except Exception:
+        pass
+
     write_musiccsv(first_score_path, music)
     _render_monitor_midi(music, first_monitor_path, tp_dir)
 
@@ -688,6 +776,12 @@ def ensure_first_score_gate(
         max_tokens=check_max,
         model=check_model,
         log_file=str(score_check_trace),
+    )
+    _write_llm_trace(
+        score_check_trace,
+        system="Provide concise, actionable feedback on the score.",
+        user=check_prompt,
+        response=suggestions or "",
     )
     save_text(first_suggestions_path, suggestions)
 
@@ -1140,6 +1234,12 @@ def run_subtle_score_pass(
         model=model,
         log_file=str(attempt_log_path),
     )
+    _write_llm_trace(
+        attempt_log_path,
+        system="Refine the MusicCSV score according to feedback while keeping it valid.",
+        user=prompt,
+        response=response or "",
+    )
     ok, message, music = _try_parse_musiccsv(response)
     if not ok or music is None:
         raise UserActionRequired(
@@ -1171,6 +1271,12 @@ def run_subtle_score_pass(
         model=check_model,
         log_file=str(subtle_check_trace),
     )
+    _write_llm_trace(
+        subtle_check_trace,
+        system="Provide concise, actionable feedback on the score.",
+        user=check_prompt,
+        response=suggestions or "",
+    )
     save_text(final_feedback_path, suggestions)
 
     try:
@@ -1182,17 +1288,6 @@ def run_subtle_score_pass(
         pass
 
     return True
-
-
-__all__ = [
-    "run_metadata_tracks_step",
-    "run_melody_edges_step",
-    "run_melody_construction_step",
-    "ensure_first_score_gate",
-    "run_subtle_score_pass",
-    "run_multi_voice_first_pass",
-    "assemble_first_pass_variant",
-]
 
 
 def assemble_first_pass_variant(
@@ -1220,6 +1315,7 @@ def assemble_first_pass_variant(
     metadata_path = tp_dir / "metadata.json"
     tracks_path = tp_dir / "tracks.csv"
     measures_path = tp_dir / f"measures_{safe_variant}.csv"
+    touch_point_path = tp_dir / "music_touch_point.json"
     if not (metadata_path.exists() and tracks_path.exists() and measures_path.exists()):
         return None
 
@@ -1253,6 +1349,19 @@ def assemble_first_pass_variant(
         _log_warning(f"MUSIC: failed to read tracks.csv for first-pass assembly: {exc}", tp_dir)
         return None
 
+    # Load touch-point manifest for voice ordering if present.
+    voice_tokens: List[str] = []
+    if touch_point_path.exists():
+        try:
+            import json as _json
+
+            tp_data = _json.loads(touch_point_path.read_text(encoding="utf-8"))
+            raw_tokens = tp_data.get("voice_tokens") or tp_data.get("raw_payload", {}).get("voices")
+            if isinstance(raw_tokens, list):
+                voice_tokens = [str(tok) for tok in raw_tokens if isinstance(tok, str) and tok.strip()]
+        except Exception:
+            voice_tokens = []
+
     # Load measures_<variant>.csv verbatim.
     try:
         with measures_path.open("r", encoding="utf-8", newline="") as f:
@@ -1261,6 +1370,30 @@ def assemble_first_pass_variant(
     except Exception as exc:
         _log_warning(f"MUSIC: failed to read measures_{safe_variant}.csv for first-pass assembly: {exc}", tp_dir)
         return None
+
+    # Build a simple lookup from track label to numeric track index so we
+    # can assign the correct track value to each note row. We treat the
+    # ``label`` column in tracks.csv as the canonical voice token.
+    label_to_track: Dict[str, int] = {}
+    track_order: List[Tuple[int, Dict[str, Any]]] = []
+    for tr in music.tracks:
+        try:
+            label = str(tr.get("label", "") or "").strip()
+            tval = tr.get("track")
+            track_num = int(tval) if tval is not None and str(tval) != "" else None
+        except Exception:
+            label = ""
+            track_num = None
+        if label and track_num is not None:
+            label_to_track[label] = track_num
+        if track_num is not None:
+            track_order.append((track_num, tr))
+
+    track_order.sort(key=lambda item: item[0])
+    voice_token_to_track: Dict[str, int] = {}
+    if voice_tokens and len(voice_tokens) == len(track_order):
+        for idx, token in enumerate(voice_tokens):
+            voice_token_to_track[token] = track_order[idx][0]
 
     # Collect all notes_<voice_token>_<variant>.csv files under tp_dir.
     notes_files: List[Path] = []
@@ -1275,9 +1408,9 @@ def assemble_first_pass_variant(
         # Nothing to assemble for this variant.
         return None
 
-    # Append note rows from each notes CSV. At this stage we treat all
-    # notes as belonging to a single logical score; track assignment is
-    # left to the LLM and metadata/tracks.csv.
+    # Append note rows from each notes CSV. Track assignment is derived
+    # from the voice token encoded in the file name and mapped through
+    # tracks.csv so that the assembled MusicCSV satisfies the schema.
     for path in sorted(notes_files):
         try:
             with path.open("r", encoding="utf-8", newline="") as f:
@@ -1286,7 +1419,35 @@ def assemble_first_pass_variant(
                     # Ensure minimal required columns exist.
                     if not row.get("measure") or not row.get("beat") or not row.get("pitch"):
                         continue
-                    music.notes.append(dict(row))
+                    note = dict(row)
+                    # Derive track from file name: notes_<voice_token>_<variant>.csv
+                    # We strip the leading 'notes_' prefix and trailing '_<variant>.csv'.
+                    name = path.name
+                    try:
+                        core = name[len("notes_") : -len(suffix)] if name.startswith("notes_") and name.endswith(suffix) else ""
+                    except Exception:
+                        core = ""
+                    track_num: Optional[int] = None
+                    if core and core in label_to_track:
+                        track_num = label_to_track[core]
+                    # Fallback: if no direct label match, attempt a loose match
+                    # by splitting on '.' and matching the longest prefix.
+                    if track_num is None and core:
+                        parts = [p for p in core.split(".") if p]
+                        for k, v in label_to_track.items():
+                            if not k:
+                                continue
+                            if k == core:
+                                track_num = v
+                                break
+                            if parts and k.lower().endswith(parts[-1].lower()):
+                                track_num = v
+                                break
+                    if track_num is None and core and voice_token_to_track:
+                        track_num = voice_token_to_track.get(core)
+                    if track_num is not None:
+                        note["track"] = track_num
+                    music.notes.append(note)
         except Exception as exc:
             _log_warning(f"MUSIC: failed to merge notes from {path}: {exc}", tp_dir)
 
@@ -1314,3 +1475,97 @@ def assemble_first_pass_variant(
         pass
 
     return first_score_path
+
+
+def run_first_pass_checks(
+    *,
+    tp_dir: Path,
+    tp_index: int,
+    tp_type: str,
+    tp_text: str,
+    prompt_payload: Optional[Dict[str, Any]],
+    title: str,
+    variants: Optional[Iterable[str]] = None,
+) -> bool:
+    """Run the music_check prompt over each assembled first-pass variant.
+
+    Writes ``first_score_check_<variant>.txt`` (prompt + response) and
+    ``first_score_suggestions_<variant>.txt`` beside the assembled
+    ``first_<title>_<variant>.musiccsv`` artifacts. Returns True if at least
+    one variant produced suggestions.
+    """
+
+    if not prompt_payload:
+        return False
+
+    tp_dir = Path(tp_dir)
+    tp_dir.mkdir(parents=True, exist_ok=True)
+
+    title_safe = str(title or prompt_payload.get("touch_point_title") or "untitled").strip()
+    if not title_safe:
+        title_safe = "untitled"
+    score_title = title_safe.replace(" ", "_")
+
+    variant_list = list(variants or ("standard",))
+    wrote_any = False
+
+    for variant in variant_list:
+        variant_safe = (variant or "standard").strip().lower()
+        score_path = tp_dir / f"first_{score_title}_{variant_safe}.musiccsv"
+        if not score_path.exists():
+            continue
+        try:
+            music_obj = read_musiccsv(score_path)
+            snippet_text = _truncate_musiccsv_text(musiccsv_to_text(music_obj), None)
+        except Exception as exc:
+            _log_warning(
+                f"MUSIC: unable to prepare first-pass variant '{variant_safe}' for checks: {exc}",
+                tp_dir,
+            )
+            continue
+
+        check_prompt = build_music_check_prompt(
+            prompt_payload=prompt_payload,
+            tp_index=tp_index,
+            tp_type=tp_type,
+            tp_text=tp_text,
+            musiccsv_snippet=snippet_text,
+        )
+        model, temp, max_tokens = env_for_prompt(
+            "music_check_prompt.md",
+            "MUSIC_SCORE_CHECK",
+            default_temp=0.0,
+            default_max_tokens=800,
+        )
+        log_path = tp_dir / f"first_score_check_{variant_safe}.txt"
+        try:
+            suggestions = llm_complete(
+                check_prompt,
+                system="Provide concise, actionable feedback on the score.",
+                temperature=temp,
+                max_tokens=max_tokens,
+                model=model,
+                log_file=str(log_path),
+            )
+        except Exception as exc:
+            raise UserActionRequired(
+                f"First-pass music check failed for variant '{variant_safe}'. Inspect {log_path.name} and retry."
+            ) from exc
+
+        sugg_path = tp_dir / f"first_score_suggestions_{variant_safe}.txt"
+        save_text(sugg_path, (suggestions or "").strip() + ("\n" if suggestions and not suggestions.endswith("\n") else ""))
+        wrote_any = True
+
+    return wrote_any
+
+
+__all__ = [
+    "run_metadata_tracks_step",
+    "run_melody_edges_step",
+    "run_melody_construction_step",
+    "ensure_first_score_gate",
+    "run_subtle_score_pass",
+    "run_multi_voice_first_pass",
+    "assemble_first_pass_variant",
+    "run_first_pass_checks",
+]
