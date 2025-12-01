@@ -4,7 +4,7 @@ Use this document to guide your work in this repository. Keep your responses sho
 
 ## Next steps
 
-Work on task 9, move music generation into the music touchpoint.
+Work on TODO item 2: implement the 10-measure grouped first-score flow (starting with the prompt/context changes, then the pipeline loop, resume/export glue, and tests).
 
 Relevant `music_design.md` is in the project root
 Relevant `TODO.md` is in the project root

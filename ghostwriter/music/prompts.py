@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from ..templates import apply_template
 
@@ -43,9 +43,41 @@ def build_first_score_prompt(
     melody_csv: str,
     melody_reduced_csv: str,
     other_voices_reduced_csv: str,
+    measure_start: Optional[int] = None,
+    measure_end: Optional[int] = None,
+    block_index: Optional[int] = None,
+    block_count: Optional[int] = None,
+    measure_window_description: str = "",
+    melody_block_csv: str = "",
+    melody_previous_block_csv: str = "",
+    voice_previous_block_csv: str = "",
+    other_voices_block_csv: str = "",
+    other_voices_previous_block_csv: str = "",
 ) -> str:
     payload_for_json = dict(prompt_payload)
     character_context = payload_for_json.pop("character_outlines", None)
+
+    if measure_start is not None and measure_end is not None and not measure_window_description:
+        if measure_start == measure_end:
+            measure_window_description = f"Measure {measure_start}"
+        else:
+            measure_window_description = f"Measures {measure_start}-{measure_end}"
+        if block_index is not None:
+            if block_count is not None and block_count > 0:
+                measure_window_description += f" (block {block_index} of {block_count})"
+            else:
+                measure_window_description += f" (block {block_index})"
+        elif block_count is not None and block_count > 0:
+            measure_window_description += f" (total blocks: {block_count})"
+
+    block_index_str = str(block_index) if block_index is not None else ""
+    block_count_str = str(block_count) if block_count is not None else ""
+
+    if melody_block_csv.strip():
+        melody_reduced_for_prompt = ""
+    else:
+        melody_reduced_for_prompt = melody_reduced_csv
+
     replacements = {
         "[VOICE_CONTEXT_JSON]": _json_block(payload_for_json),
         "[CHARACTER_CONTEXT_JSON]": _json_block(character_context or []),
@@ -61,8 +93,16 @@ def build_first_score_prompt(
         "[VOICE_ROLE]": voice_role,
         "[METADATA_JSON]": metadata_json,
         "[MELODY_CSV]": melody_csv,
-        "[MELODY_REDUCED_CSV]": melody_reduced_csv,
+        "[MELODY_REDUCED_CSV]": melody_reduced_for_prompt,
         "[OTHER_VOICES_REDUCED_CSV]": other_voices_reduced_csv,
+        "[MEASURE_WINDOW_DESCRIPTION]": measure_window_description,
+        "[BLOCK_INDEX]": block_index_str,
+        "[BLOCK_COUNT]": block_count_str,
+        "[MELODY_BLOCK_CSV]": melody_block_csv,
+        "[MELODY_PREVIOUS_BLOCK_CSV]": melody_previous_block_csv,
+        "[VOICE_PREVIOUS_BLOCK_CSV]": voice_previous_block_csv,
+        "[OTHER_VOICES_BLOCK_CSV]": other_voices_block_csv,
+        "[OTHER_VOICES_PREVIOUS_BLOCK_CSV]": other_voices_previous_block_csv,
     }
     return apply_template(_TEMPLATE_FIRST_SCORE, replacements)
 

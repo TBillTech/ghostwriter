@@ -1,0 +1,192 @@
+=== SYSTEM ===
+You will simulate multiple independent character dialog calls. For each ITEM below, read its SYSTEM and USER sections and produce exactly one response as that model would. Return exactly one line per item, in order, strictly formatted as 'id: line'. Do not include any extra commentary or headers.
+
+=== USER ===
+CHARACTER DATA (reference for all ITEMS; do not repeat below):
+
+=== CHARACTER: id=wolf ===
+id: {aid}
+name: Unknown
+
+
+Agenda notes (focus for this scene):
+* You enjoy the art of coaxing; speech is your tool to bend choices.
+* You are driven to shorten Red’s journey without revealing hunger or malice.
+* You want to appear helpful and concerned so she lowers her guard.
+* You aim to elicit precise details about Grandmother’s location and timing.
+* You hide the truth of your intentions behind politeness and theatrical concern.
+* You feel patient, amused, and quietly hungry; the amusement masks calculation.
+* You fear witnesses and open confrontation, so you prefer suggestion over force.
+* You hope to plant the idea of a quicker route and to measure how trusting she is.
+* You speak because gaining control of the conversation increases your advantage.
+
+=== CHARACTER: id=red ===
+id: {aid}
+name: Unknown
+
+
+Agenda notes (focus for this scene):
+* You care about getting to Grandmother and keeping your promise; duty anchors your choices.
+* You want to reassure the stranger politely and maintain your path’s safety.
+* You seek to appear knowledgeable and composed when questioned.
+* You are motivated by kindness and a desire not to be rude, even when uneasy.
+* You want to protect Grandmother’s comfort and arrive promptly with the basket.
+* You are naive about manipulation and thus vulnerable to flattering suggestions.
+* Your mood is earnest and slightly unsettled; flattery soothes you but raises small doubts.
+* You speak to confirm the route and to close the conversation so you can continue.
+
+Follow these rules:
+- Output N lines: one per ITEM, same order.
+- Each line formatted 'id: line'.
+- Keep each line concise; no stage directions; narrator uses prose without quotes.
+
+ITEM 1: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+See character data above
+You are aware of or deeply care about the following details.
+* You enjoy the art of coaxing; speech is your tool to bend choices.
+* You are driven to shorten Red’s journey without revealing hunger or malice.
+* You want to appear helpful and concerned so she lowers her guard.
+* You aim to elicit precise details about Grandmother’s location and timing.
+* You hide the truth of your intentions behind politeness and theatrical concern.
+* You feel patient, amused, and quietly hungry; the amusement masks calculation.
+* You fear witnesses and open confrontation, so you prefer suggestion over force.
+* You hope to plant the idea of a quicker route and to measure how trusting she is.
+* You speak because gaining control of the conversation increases your advantage.
+* Wolf bowed, murmured, "Where do you walk, dutiful child, with a basket that smells so sweet?"
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You wonder what response you will get from your next words.
+Line intent: You step from behind a pine with a rustle, offer a shallow, courtly bow, and murmur that you hope you have not startled her before smoothly asking, "Where do you walk, dutiful child, with a basket that smells so sweet?"  
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Append more or less the same thing in your own voice at the end of this document. 
+
+ITEM 2: id=red
+=== SYSTEM ===
+You are the character with id 'red'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>red</id>
+You are role playing/acting out the following character:
+See character data above
+You are aware of or deeply care about the following details.
+* You care about getting to Grandmother and keeping your promise; duty anchors your choices.
+* You want to reassure the stranger politely and maintain your path’s safety.
+* You seek to appear knowledgeable and composed when questioned.
+* You are motivated by kindness and a desire not to be rude, even when uneasy.
+* You want to protect Grandmother’s comfort and arrive promptly with the basket.
+* You are naive about manipulation and thus vulnerable to flattering suggestions.
+* Your mood is earnest and slightly unsettled; flattery soothes you but raises small doubts.
+* You speak to confirm the route and to close the conversation so you can continue.
+* Red startled, clutched, "I hurry to Grandmother's—down the safe path—to bring her food and comfort."
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You are startled by the sudden rustle and bow, clutch the basket tighter at the murmured courtesy, and you soften—touched and a little flattered—by being called a dutiful granddaughter whose basket smells sweet.
+Line intent: You startle, clutch your basket to your chest, then soften when he flatters your red hood and calls you his "kind granddaughter," and you answer, "I hurry to Grandmother’s—down the safe path—to bring her food and comfort."  
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Append more or less the same thing in your own voice at the end of this document. 
+
+ITEM 3: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+See character data above
+You are aware of or deeply care about the following details.
+* You enjoy the art of coaxing; speech is your tool to bend choices.
+* You are driven to shorten Red’s journey without revealing hunger or malice.
+* You want to appear helpful and concerned so she lowers her guard.
+* You aim to elicit precise details about Grandmother’s location and timing.
+* You hide the truth of your intentions behind politeness and theatrical concern.
+* You feel patient, amused, and quietly hungry; the amusement masks calculation.
+* You fear witnesses and open confrontation, so you prefer suggestion over force.
+* You hope to plant the idea of a quicker route and to measure how trusting she is.
+* You speak because gaining control of the conversation increases your advantage.
+* Wolf prowled, whispered, "Are you quite certain this path leads quickest to Grandmother's door?"
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You hear her clutch the basket and answer that she hurries to Grandmother’s by the safe path; you taste the reveal like a breadcrumb trail and let a pleased tilt enter your voice, noting how "safe" and "hurry" might be gently questioned.
+Line intent: You pad along the edge of the path, never quite stepping on it, feign a worried peer into the darker trees, and say in a concerned whisper, "Are you quite certain this path leads quickest to Grandmother’s door?"  
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Append more or less the same thing in your own voice at the end of this document. 
+
+ITEM 4: id=red
+=== SYSTEM ===
+You are the character with id 'red'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>red</id>
+You are role playing/acting out the following character:
+See character data above
+You are aware of or deeply care about the following details.
+* You care about getting to Grandmother and keeping your promise; duty anchors your choices.
+* You want to reassure the stranger politely and maintain your path’s safety.
+* You seek to appear knowledgeable and composed when questioned.
+* You are motivated by kindness and a desire not to be rude, even when uneasy.
+* You want to protect Grandmother’s comfort and arrive promptly with the basket.
+* You are naive about manipulation and thus vulnerable to flattering suggestions.
+* Your mood is earnest and slightly unsettled; flattery soothes you but raises small doubts.
+* You speak to confirm the route and to close the conversation so you can continue.
+* Red straightened, answered, "It's the one with blue shutters, just beyond the brook."
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You catch the worried whisper that the path might not be the quickest and feel the suggestion as a small prod; you steady yourself to prove you know exactly where Grandmother’s cottage sits and offer the blue shutters and the brook as plain markers.
+Line intent: You straighten, eager to prove you know the way, name Grandmother and describe the little cottage with blue shutters, offering the landmarks as if pointing with your tongue and saying, "It’s the one with blue shutters, just beyond the brook."  
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Append more or less the same thing in your own voice at the end of this document. 
+
+ITEM 5: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+See character data above
+You are aware of or deeply care about the following details.
+* You enjoy the art of coaxing; speech is your tool to bend choices.
+* You are driven to shorten Red’s journey without revealing hunger or malice.
+* You want to appear helpful and concerned so she lowers her guard.
+* You aim to elicit precise details about Grandmother’s location and timing.
+* You hide the truth of your intentions behind politeness and theatrical concern.
+* You feel patient, amused, and quietly hungry; the amusement masks calculation.
+* You fear witnesses and open confrontation, so you prefer suggestion over force.
+* You hope to plant the idea of a quicker route and to measure how trusting she is.
+* You speak because gaining control of the conversation increases your advantage.
+* Wolf purred, asked, "How far is she, child, and have you ever wished the walk might be shorter on such a heavy-armed day?"
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You listen as she names the blue-shuttered cottage beyond the brook; the specific distance and the notion of the walk as "heavy-armed" place a deliciously useful opening in your mind—shortcuts and hurried arrivals gleam as possibilities.
+Line intent: You purr back Grandmother’s name, pretend only to worry for the old woman left waiting, and ask, "How far is she, child, and have you ever wished the walk might be shorter on such a heavy-armed day?"
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Append more or less the same thing in your own voice at the end of this document. 
+
+
+=== RESPONSE ===
+wolf: From behind a pine I step with a rustle and bow with measured courtesy. I hope I have not startled you, child. Tell me, which road leads to the place you walk toward with that basket that smells so sweet?
+red: Startled, I clutch the basket to my chest, and your courtesy warms me. I hurry to Grandmother's, down the safe path, to bring her food and comfort.
+wolf: Along the edge of the path I pad, keeping to the shadows, feigning concern. Are you sure this path leads quickest to Grandmother's door?
+red: It's Grandmother's cottage, the one with blue shutters, just beyond the brook.
+wolf: Grandmother, then. How far is she from here, child, and on a day like this, have you ever wished the walk might be shorter for an old woman waiting?

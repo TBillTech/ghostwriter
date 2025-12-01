@@ -941,6 +941,8 @@ def _write_instrument_track(
         pitch_name = note.get("pitch")
         if not pitch_name:
             continue
+        if isinstance(pitch_name, str) and pitch_name.strip().lower() == "rest":
+            continue
         midi_note = _pitch_to_midi(str(pitch_name))
         velocity = int(note.get("velocity") or 64)
         events.append((start_tick, "on", midi_note, velocity))
@@ -1146,10 +1148,11 @@ def validate_musiccsv(data: MusicCSV | Dict[str, Any]) -> None:
         if not isinstance(pitch, str) or not pitch.strip():
             errors.append(f"{note_prefix}.pitch must be a non-empty string")
         else:
-            try:
-                _pitch_to_midi(pitch)
-            except ValueError:
-                errors.append(f"{note_prefix}.pitch value {pitch!r} is invalid")
+            if pitch.strip().lower() != "rest":
+                try:
+                    _pitch_to_midi(pitch)
+                except ValueError:
+                    errors.append(f"{note_prefix}.pitch value {pitch!r} is invalid")
 
         velocity = note.get("velocity")
         if velocity is not None and (not isinstance(velocity, int) or not 0 <= velocity <= 127):
@@ -1240,7 +1243,7 @@ def resolve_derived_fields(data: MusicCSV | Dict[str, Any]) -> MusicCSV:
         duration_beats = float(note.get("duration", 0.0))
         note["duration_ticks"] = max(1, int(round(duration_beats * divisions)))
         pitch = note.get("pitch")
-        if isinstance(pitch, str) and pitch.strip():
+        if isinstance(pitch, str) and pitch.strip() and pitch.strip().lower() != "rest":
             try:
                 note["midi_note"] = _pitch_to_midi(pitch)
             except ValueError:

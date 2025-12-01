@@ -2,17 +2,17 @@
   "title": "The Forest Path",
   "tempo": 150,
   "time_signature": "4/4",
-  "key_signature": "C major",
+  "key_signature": "D major",
   "divisions_per_quarter": 480,
   "duration_seconds": 180,
   "tags": [
     "cinematic",
-    "haunting",
     "fast",
+    "haunting",
     "steady-bass",
     "rapid-percussion",
     "narrative",
-    "suspense"
+    "character-themes"
   ],
-  "notes": "Fast, driving cinematic piece with a haunting flute melody (Red) and a sly, tenor harmony motif (Wolf). Percussion is rapid and propulsive on channel 10; bass provides a steady pulse and ambient forest texture."
+  "description": "A cinematic, fast-tempo piece (≈3:00) with a haunting flute melody for Red, a persuasive tenor/harmony voice for the Wolf, steady bass soundscape, and rapid percussion (drum kit). Designed for clear character motifs and driving, rhythmic forward motion."
 }

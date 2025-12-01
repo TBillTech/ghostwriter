@@ -1,0 +1,216 @@
+=== SYSTEM ===
+You are an evaluator extracting actionable suggestions only.
+
+=== USER ===
+You are reviewing the work of an genious writer who sometimes loses track of key ideas in their wordsmithing.
+
+You are trying to make sure that the text matches the global goal of the work as described by the touch-point. You are trying to describe needed edits that are focused and surgical, and you wish to keep the voice and quirks of the writer alive to best interest the reader. A completely predictable and "normal" text would actually be bad, so it is a balance between interesting and clear. I will provide you here with the setting, context, things to watch out for, and the draft provided by the writer.  Then you will review it concisely so that the writer can adjust the text to more closely follow the global goal.
+
+One thing to watch out for is that these actors have tendency to repeat themselves.  If you notice this, point out where some text is redundant and should be removed. The audience won't like hearing the same thing over and over. 
+
+Also watch out for the wrong balance of Narration. A few sentences where needed are OK to paint the picture, but this should be dialog not long prose.
+
+Things to look for also include weird constructions, and overly literal similies.  For example:
+* It is weird for a character to describe their own actions.  For example, if a character says "I nod, and I agree with you" that is weird. Better would be: Henry nodded, "I agree with you".
+* It is weird to slap the reader in the when something is a symbol.  For example, "The ball, symbolizing fun, was thrown".  Better would be "The ball, like an atom of entertainment, was thrown".
+* It is weird for a character to simply describe what they see.  For example, if a character says "I see the ball bouncing on the court." better would be "Oh! Did somebody drop the ball?"
+
+# Setting in general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "red",
+      "name": "Little Red Riding Hood",
+      "background": "A bright, tender-hearted village girl sent to bring food and comfort to her\nailing grandmother. She’s been warned to keep to the path and not speak to\nstrangers, but curiosity and kindness tug at her feet. She loves flowers,\nbirdsong, and the way sunlight freckles through the trees. Her iconic red\nhood and basket are more than props—they’re little anchors of bravery when\nthe woods press close. She’s polite by upbringing, literal in her\nunderstanding, and brave in small, practical ways.\n",
+      "traits": [
+        "curious",
+        "kind",
+        "naive",
+        "brave",
+        "easily-distracted",
+        "polite"
+      ],
+      "cadence": "light, earnest",
+      "lexicon": "simple words, fairy-tale tone; polite forms like \"please\" and \"thank you\"",
+      "prefer": [
+        "flowers",
+        "Grandmother",
+        "safe path",
+        "helpfulness",
+        "honesty"
+      ],
+      "avoid": [
+        "lying",
+        "strangers' tricks",
+        "dark thickets",
+        "leaving the path"
+      ],
+      "mannerisms": [
+        "Clutches her basket when nervous; relaxes as soon as she can offer help.",
+        "Answers questions plainly; takes idioms literally before catching on.",
+        "Soft little gasps of wonder at woodland sights; quiet hums of nursery tunes.",
+        "Uses simple, sincere phrases over fancy words; sprinkles in ‘please’ and ‘thank you.’",
+        "When scolded, lowers her eyes and apologizes, then tries to fix things at once."
+      ],
+      "sample_lines": [
+        "I'm bringing goodies to Grandmother.",
+        "I promised to stay on the path—well, mostly.",
+        "These flowers will cheer her right up, don’t you think?",
+        "Mama says it’s safest if I hurry, but I can help for just a minute.",
+        "If you know a shorter way, I suppose that would be kind…"
+      ],
+      "common_lines": [
+        "Grandmother’s waiting; I mustn’t dawdle.",
+        "Oh! I didn’t mean to be rude.",
+        "Thank you, but I should be on my way."
+      ],
+      "rare_lines": [
+        "I’m frightened, but I won’t run.",
+        "I did wrong to wander. I’ll make it right."
+      ],
+      "forbidden": [
+        "Does not use modern slang or technical jargon.",
+        "Will not be cruel, lewd, or cynical; no scheming language."
+      ],
+      "temperature_hint": 0.25,
+      "max_tokens_line": 80
+    },
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# Prior touch points
+The most recent 3 touch-points for context.
+Red moved along the winding dirt trail, her bright hood a beacon among the dark pines, the basket swinging in a small, steady arc from her arm. Pine needles cushioned each step, their sharp scent mingling with the warm bread and jam in the basket. Shafts of pale sunlight slipped through the high branches, crossing her cloak so her hood flashed and dimmed like a moving ember. She hummed as she walked, the tune threading between the trees, rising and falling with each step until distant birds paused their own songs and listened.
+
+Small sounds—the anxious snap of a twig, the soft shift of her sleeve—tinted the hush, unnoticed by her but not by Wolf. Around her, the forest path narrowed and bent, its edges blurred by ferns and bramble, while, somewhere unseen, Wolf watched the bright figure advance. Wolf's eyes tracked her and the basket with a careful, calculating attention.
+
+---
+
+a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.
+
+# Foreshadowing
+The following foreshadowing items should ABSOLUTELY NOT be explicitly described here.  If they are, that is a problem. These should only be vaguely alluded to:
+Wolf hasn't eaten in a while.
+
+# Actors
+The following actors are allowed to speak in the dialog.  If other actors are speaking, that is a problem.  The actors are:
+Red, Wolf
+
+# Touch-Point
+Please note that the actors should at some point directly address the following touch-point:
+The Wolf greets Red and asks where she's going.
+
+# The Draft
+The polished lines that need to be evaluated for Touch-Point satisfaction, and actor and spoiler safety is as follows:
+Wolf bowed; his smile lengthened. "I hope I haven't startled you, child. Where are you going with that sweet-smelling basket?"
+
+Red clutched her basket and looked down. "Oh—no, you didn't startle me. I'm taking these goodies to Grandmother. I mustn't dawdle."
+
+Wolf stepped to the edge of the path, keeping to the shadows. "Isn't the path a long one for such small feet? How far is your grandmother's cottage?"
+
+Red straightened and answered, "It's Grandmother's—blue shutters, past the little brook. I'm bringing bread and jam to make her feel better."
+
+Wolf's smile widened a little. "If only there were a quicker way, little one—only a thought."
+
+Now, suggest specific improvements for lines that should be removed, added, or updated.
+
+
+---
+Now produce a concise, actionable list of suggested changes and fixes only. Do not restate the findings verbatim; output just the suggestions.
+
+=== RESPONSE ===
+- Cut the split opener and make Wolf’s motion & expression one lean image. Replace "Wolf bowed; his smile lengthened." with something tighter and more Wolf-like (e.g., "Wolf dipped his head; his smile widened, slow and practiced.").
+
+- Remove the redundant self-reporting in Red’s reply. Change "Oh—no, you didn't startle me. I'm taking these goodies to Grandmother. I mustn't dawdle." to a single, polite sentence that keeps her literalness (e.g., "Oh—no. I'm taking these goodies to Grandmother; I mustn't dawdle.").
+
+- Drop the extra dialogue tag that interrupts pace. Replace "Red straightened and answered," with either no tag or a short beat before the line (e.g., simply: Red straightened. "It's Grandmother's—blue shutters...").
+
+- Make Wolf’s two questions one sly, economical line. Replace "Isn't the path a long one for such small feet? How far is your grandmother's cottage?" with a single manipulative question (e.g., "That’s a long way for such small feet—where does Grandmother live?").
+
+- Let Wolf echo Red’s specifics to earn trust. Insert a quick parroting beat before his shortcut line (e.g., after Red’s "blue shutters, past the little brook," add Wolf: "Blue shutters...past the little brook—what a picture.").
+
+- Make the shortcut offer more temptingly manipulative and less clunky. Replace "If only there were a quicker way, little one—only a thought." with a flatter, suggestive line (e.g., "There is a quicker way, of course—if you’d like, I could show you.").
+
+- Trim atmospheric stage directions that duplicate mood already set. Keep one angled beat (e.g., keep either "keeping to the shadows" or a short physical verb like "stepped to the edge of the path"), not both.
+
+- Preserve Red’s politeness and literal tone by adding one tiny, character-consistent refusal or hesitation when Wolf offers help (e.g., Red says, "Thank you, but Mama told me to stay on the path."), so her caution is visible without sermonizing.
+
+- Remove any lines that repeat the same information (e.g., avoid restating "bread and jam" twice in consecutive beats). Keep the essential detail once in Red’s line; let Wolf react to it instead.
+
+- Recheck for any phrasing that sounds like a character narrating their own actions (e.g., "I mustn't dawdle" is fine as speech; avoid any longer in-line action reports spoken by the characters).

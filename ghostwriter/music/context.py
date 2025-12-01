@@ -11,7 +11,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import os
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, Iterable, List, Optional, Tuple
+import csv
+from io import StringIO
 
 import logging
 
@@ -682,6 +684,102 @@ def _gather_touchpoint_values(chapter: Dict[str, Any], key: str) -> List[Any]:
     return values
 
 
+def block_measure_range(
+    block_index: int,
+    *,
+    block_size: int = 10,
+    total_measures: Optional[int] = None,
+) -> Tuple[int, int]:
+    """Return the inclusive (start, end) measure numbers for ``block_index``.
+
+    The helper clamps ``end`` to ``total_measures`` when provided and keeps
+    ``start`` within valid bounds so callers can safely reference blocks that
+    extend past the final measure (common when ``total_measures`` is not a
+    multiple of ``block_size``).
+    """
+
+    if block_index < 1:
+        raise ValueError("block_index must be >= 1")
+    if block_size <= 0:
+        raise ValueError("block_size must be > 0")
+
+    start = (block_index - 1) * block_size + 1
+    end = block_index * block_size
+
+    if total_measures is not None:
+        if total_measures <= 0:
+            total_measures = 0
+        if start > total_measures:
+            start = total_measures
+        end = min(end, total_measures if total_measures else end)
+    if start < 1:
+        start = 1
+    if end < start:
+        end = start
+    return start, end
+
+
+def describe_measure_window(
+    start_measure: int,
+    end_measure: int,
+    *,
+    block_index: Optional[int] = None,
+    block_count: Optional[int] = None,
+) -> str:
+    """Return a human-readable description for a measure window."""
+
+    if start_measure <= 0:
+        start_measure = 1
+    if end_measure < start_measure:
+        end_measure = start_measure
+
+    range_text = f"Measures {start_measure}-{end_measure}" if start_measure != end_measure else f"Measure {start_measure}"
+    if block_index is not None:
+        if block_count is not None and block_count > 0:
+            return f"{range_text} (block {block_index} of {block_count})"
+        return f"{range_text} (block {block_index})"
+    if block_count is not None and block_count > 0:
+        return f"{range_text} (total blocks: {block_count})"
+    return range_text
+
+
+def slice_csv_by_measure(csv_text: str, start_measure: int, end_measure: int) -> str:
+    """Return a CSV subset containing only rows whose measure falls in range."""
+
+    stripped = (csv_text or "").strip()
+    if not stripped:
+        return ""
+
+    try:
+        reader = csv.DictReader(StringIO(stripped))
+    except Exception:
+        return ""
+    fieldnames = reader.fieldnames or []
+    if not fieldnames:
+        return ""
+
+    output = StringIO()
+    writer = csv.DictWriter(output, fieldnames=fieldnames)
+    writer.writeheader()
+    wrote = False
+
+    for row in reader:
+        value = row.get("measure")
+        if value is None:
+            continue
+        try:
+            measure = int(float(value))
+        except Exception:
+            continue
+        if start_measure <= measure <= end_measure:
+            writer.writerow({fn: row.get(fn, "") for fn in fieldnames})
+            wrote = True
+
+    if not wrote:
+        return ""
+    return output.getvalue().strip()
+
+
 __all__ = [
     "VoiceSpec",
     "ScoreSummary",
@@ -690,6 +788,9 @@ __all__ = [
     "build_voice_context",
     "build_music_prompt_context",
     "write_voice_token",
+    "block_measure_range",
+    "describe_measure_window",
+    "slice_csv_by_measure",
 ]
 
 

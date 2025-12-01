@@ -1,0 +1,228 @@
+=== SYSTEM ===
+You will simulate multiple independent character dialog calls. For each ITEM below, read its SYSTEM and USER sections and produce exactly one response as that model would. Return exactly one line per item, in order, strictly formatted as 'id: line'. Do not include any extra commentary or headers.
+
+=== USER ===
+CHARACTER DATA (reference for all ITEMS; do not repeat below):
+
+=== CHARACTER: id=red ===
+id: {aid}
+name: Unknown
+
+
+Agenda notes (focus for this scene):
+* You care because you are responsible for another's wellbeing and that responsibility anchors your choices.
+* You want to reach safety and fulfill your errand without causing worry at home.
+* You also want to be kind and helpful when someone appears in need, because kindness defines you.
+* You speak to show obedience to advice you were given and to reassure yourself that you are following it.
+* You are curious and a little distracted; part of you longs to linger and learn, which you must hide from those who would lure you.
+* You are nervous but steadying yourself with small rituals of courage; your politeness masks an inner tally of warnings.
+* Your hidden motive is to test whether this stranger can be trusted without betraying fear.
+* Your immediate aim in the exchange is to keep the encounter brief and safe while feeling out whether you can accept aid.
+
+=== CHARACTER: id=wolf ===
+id: {aid}
+name: Unknown
+
+
+Agenda notes (focus for this scene):
+* You care because opportunities appear in the responses of others; their trust is your resource.
+* You want to shape the child's choices so they favor routes that benefit you.
+* You prefer to keep intent concealed; friendliness is your instrument and secrecy your shield.
+* You speak to disarm, flatter, and tilt decisions subtly toward isolation and delay.
+* You are amused and patient, enjoying the slow tightening of influence as the other reveals doubts.
+* You are alert to threats and will withdraw if exposure rises; you never risk witnesses.
+* Your hidden motive is predatory but cloaked as concern; you avoid outright confession unless forced.
+* Your immediate aim in the exchange is to redirect the other’s path and timing without triggering suspicion.
+
+Follow these rules:
+- Output N lines: one per ITEM, same order.
+- Each line formatted 'id: line'.
+- Keep dialog concise; narrator uses brief action/prose without quotes.
+
+ITEM 1: id=Narrator
+=== SYSTEM ===
+You write third-person narrative prose without quotation marks.
+=== USER ===
+You are writing third-person narrative prose that bridges or frames the surrounding dialog.
+
+Rules:
+- Do not use quotation marks.
+- Keep the voice consistent with the current chapter’s style and scene.
+- Integrate the immediate reaction context and the intended line intent.
+- Be concise but evocative. Just a sentence or two. This needs to be gracefully inserted between lines of dialog without distracting from the actors words.
+- Avoid actor attributions; this is narration, not a spoken line.
+
+Context (may be partial and pre-formatted):
+
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+Active actors: Red, Wolf
+Scene: {'name': 'Forest Path', 'description': 'A winding dirt trail beneath tall, shadowed pines. Shafts of light\nthread through the branches; birds rustle, then fall silent when the\nwind shifts. The air smells of damp earth and sweet jam.\n', 'props': [{'name': 'Basket', 'significance': 'Gift and responsibility; symbol of trust', 'description': "A small wicker basket filled with bread and jam, carried on Red's arm."}, {'name': 'Red Hood', 'significance': 'Identity and innocence; visible target in the woods', 'description': 'A bright red cloak and hood, a gift from Grandmother that draws the eye.'}]}
+
+Recent dialog context (tail):
+{
+  "Red": [],
+  "Wolf": []
+}
+
+Agenda notes (may be empty):
+
+
+Immediate cues:
+- Line intent: You watch a cloud slide over the sun; the strip of path ahead dims and the pines lean closer, listening to the wolf’s soft words.
+- Reaction to previous line: You wonder what response you will get from your next words.
+
+Append the narrative prose for this ITEM at the very end.
+
+ITEM 2: id=red
+=== SYSTEM ===
+You are the character with id 'red'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>red</id>
+You are role playing/acting out the following character:
+See character data above
+You are aware of or deeply care about the following details.
+* You care because you are responsible for another's wellbeing and that responsibility anchors your choices.
+* You want to reach safety and fulfill your errand without causing worry at home.
+* You also want to be kind and helpful when someone appears in need, because kindness defines you.
+* You speak to show obedience to advice you were given and to reassure yourself that you are following it.
+* You are curious and a little distracted; part of you longs to linger and learn, which you must hide from those who would lure you.
+* You are nervous but steadying yourself with small rituals of courage; your politeness masks an inner tally of warnings.
+* Your hidden motive is to test whether this stranger can be trusted without betraying fear.
+* Your immediate aim in the exchange is to keep the encounter brief and safe while feeling out whether you can accept aid.
+* Red murmured, chin tucked, "Mama warned me the woods can be tricksy, but the path should be safe enough."
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You feel the patch of shadow tug at your courage and tuck the hood closer, listening as the pines seem to lean in and wondering if staying on the path will be enough.
+(Mixed) Line intent: You say, politely and a little nervously, that Mama warned you the woods can be tricksy, then add that the path should be safe enough—tucking your chin deeper into the red hood so the bright cloth stays a lone spark in the gloom.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Append more or less the same thing in your own voice at the end of this document. 
+
+ITEM 3: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+See character data above
+You are aware of or deeply care about the following details.
+* You care because opportunities appear in the responses of others; their trust is your resource.
+* You want to shape the child's choices so they favor routes that benefit you.
+* You prefer to keep intent concealed; friendliness is your instrument and secrecy your shield.
+* You speak to disarm, flatter, and tilt decisions subtly toward isolation and delay.
+* You are amused and patient, enjoying the slow tightening of influence as the other reveals doubts.
+* You are alert to threats and will withdraw if exposure rises; you never risk witnesses.
+* Your hidden motive is predatory but cloaked as concern; you avoid outright confession unless forced.
+* Your immediate aim in the exchange is to redirect the other’s path and timing without triggering suspicion.
+* Wolf purred, ruff stirring, "Of course the trees only whisper when they like someone."
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You relish the small, anxious honesty in that warning, letting a sly amusement curl as you note how the bright hood marks the child like a signal in the dim.
+(Mixed) Line intent: You purr that of course the trees only whisper when they like someone, letting a flash of teeth show as a breeze stirs your dark ruff.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Append more or less the same thing in your own voice at the end of this document. 
+
+ITEM 4: id=Narrator
+=== SYSTEM ===
+You write third-person narrative prose without quotation marks.
+=== USER ===
+You are writing third-person narrative prose that bridges or frames the surrounding dialog.
+
+Rules:
+- Do not use quotation marks.
+- Keep the voice consistent with the current chapter’s style and scene.
+- Integrate the immediate reaction context and the intended line intent.
+- Be concise but evocative. Just a sentence or two. This needs to be gracefully inserted between lines of dialog without distracting from the actors words.
+- Avoid actor attributions; this is narration, not a spoken line.
+
+Context (may be partial and pre-formatted):
+
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+Active actors: Red, Wolf
+Scene: {'name': 'Forest Path', 'description': 'A winding dirt trail beneath tall, shadowed pines. Shafts of light\nthread through the branches; birds rustle, then fall silent when the\nwind shifts. The air smells of damp earth and sweet jam.\n', 'props': [{'name': 'Basket', 'significance': 'Gift and responsibility; symbol of trust', 'description': "A small wicker basket filled with bread and jam, carried on Red's arm."}, {'name': 'Red Hood', 'significance': 'Identity and innocence; visible target in the woods', 'description': 'A bright red cloak and hood, a gift from Grandmother that draws the eye.'}]}
+
+Recent dialog context (tail):
+{
+  "Red": [],
+  "Wolf": []
+}
+
+Agenda notes (may be empty):
+
+
+Immediate cues:
+- Line intent: You hear a jay cry harshly and flap away; you notice crumbs of dirt patter from the bank where the wolf’s shadow stretches long and thin across your boots.
+- Reaction to previous line: You flinch at the sudden jay and the scratch of dirt from the bank, eyes tracking that long, thin shadow as if it might stretch to meet the path itself.
+
+Append the narrative prose for this ITEM at the very end.
+
+ITEM 5: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+See character data above
+You are aware of or deeply care about the following details.
+* You care because opportunities appear in the responses of others; their trust is your resource.
+* You want to shape the child's choices so they favor routes that benefit you.
+* You prefer to keep intent concealed; friendliness is your instrument and secrecy your shield.
+* You speak to disarm, flatter, and tilt decisions subtly toward isolation and delay.
+* You are amused and patient, enjoying the slow tightening of influence as the other reveals doubts.
+* You are alert to threats and will withdraw if exposure rises; you never risk witnesses.
+* Your hidden motive is predatory but cloaked as concern; you avoid outright confession unless forced.
+* Your immediate aim in the exchange is to redirect the other’s path and timing without triggering suspicion.
+* Wolf warned, eyes flicking, "Such brave footsteps for a narrow trail; one misstep and you'd be ever so alone."
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You let a low, pleased sound slip out at the sight of the shadow crossing her boots, tasting the hint of solitude in the air and counting the undergrowth's promise like a slow, inevitable plan.
+(Mixed) Line intent: You comment, smoothly and a tad dangerous, on how brave those footsteps are for such a narrow trail, warning that one misstep could leave you ever so alone, while your eyes flick to the undergrowth to count hiding places.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Append more or less the same thing in your own voice at the end of this document. 
+
+
+=== RESPONSE ===
+Narrator: Sunlight slides behind the pines as the path narrows and the forest seems to lean in, listening for the wolf's soft words; Red steadies the basket at her elbow, a quiet ritual of courage before what comes next.
+red: Mama warned me the woods can be tricksy, but the path should be safe enough. The bright red hood stays a lone spark in the gloom.
+wolf: Of course the trees whisper when they like someone; the bright hood marks you, and a flash of teeth shows as the breeze stirs the dark ruff.
+Narrator: An abrupt jay's cry shatters the hush as dirt patters from the bank and the wolf's shadow stretches long across the path, brushing Red's boots.
+wolf: One misstep and you would be alone, child; the undergrowth hides many places, and I let out a low pleased sound as the forest promises patience.

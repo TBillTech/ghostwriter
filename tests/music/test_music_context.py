@@ -10,9 +10,12 @@ mido = pytest.importorskip("mido")
 from ghostwriter.context import RunContext
 from ghostwriter.templates import iter_dir_for
 from ghostwriter.music.context import (
+    block_measure_range,
     build_music_prompt_context,
     build_voice_context,
+    describe_measure_window,
     parse_voice_token,
+    slice_csv_by_measure,
     write_voice_token,
 )
 from ghostwriter.musiccsv import MusicCSV, write_musiccsv
@@ -179,3 +182,26 @@ def test_build_voice_context_collects_metadata(use_lr_book_env, lr_book_dir: Pat
 
     assert "missing_assets" not in payload
     assert any(entry["voice_token"] == red_spec.token for entry in payload["score_summaries"])
+
+
+def test_block_measure_range_and_description() -> None:
+    start, end = block_measure_range(3, block_size=10, total_measures=27)
+    assert (start, end) == (21, 27)
+
+    start2, end2 = block_measure_range(1)
+    assert (start2, end2) == (1, 10)
+
+    description = describe_measure_window(start, end, block_index=3, block_count=12)
+    assert description.startswith("Measures 21-27")
+    assert "block 3 of 12" in description
+
+
+def test_slice_csv_by_measure_filters_rows() -> None:
+    csv_text = """measure,beat,pitch\n1,1,C4\n5,1,E4\n12,1,G4\n"""
+    subset = slice_csv_by_measure(csv_text, 4, 10)
+    assert "E4" in subset
+    assert "C4" not in subset
+    assert "G4" not in subset
+
+    empty = slice_csv_by_measure(csv_text, 20, 30)
+    assert empty == ""

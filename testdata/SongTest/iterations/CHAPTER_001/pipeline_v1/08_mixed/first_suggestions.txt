@@ -1,0 +1,39 @@
+1. Fix punctuation and tags: replace every “..” with a single period or an ellipsis where intended; make dialogue follow standard tag flow (e.g., Wolf said, Red murmured). Example: change "The bright red hood stays a lone spark in the gloom.." → "The bright red hood stays a lone spark in the gloom."
+
+2. Tighten opening sentence into two clearer beats. Suggested split:
+   - Sentence A: "Sunlight slides behind the pines as the path narrows and the forest seems to lean in."
+   - Sentence B (action beat): "Red steadies the basket at her elbow, a quiet ritual of courage."
+   This preserves lyricism but removes the awkward "listening for the wolf's soft words" double-metaphor.
+
+3. Trim Red's dialogue to sound briefer and more childlike; remove repeated safety phrasing. Suggested replacement:
+   - Replace: "Mama warned me the woods can be tricksy, but the path should be safe enough. The bright red hood stays a lone spark in the gloom."
+   - With: "Mama said the woods are tricksy. But the path is safe—I'm taking these to Grandmother."
+   Keep her politeness; add a tiny action beat (she clutches the basket).
+
+4. Remove the narrator-level forest-listening line from Wolf's speech to avoid repeating the same metaphor. Rewrite Wolf's line so it’s sly and suggestive rather than literal. Suggested replacement:
+   - Replace: "Of course the trees whisper when they like someone; the bright hood marks you, and a flash of teeth shows as the breeze stirs the dark ruff."
+   - With: "The trees notice what they like. That bright hood makes you easy to keep an eye on." (Then show the flash of teeth in narration: "A flash of white as a breeze ruffled his ruff.")
+
+5. Make the jay's interruption sharper and fix "dirt patters." Suggested rewrite:
+   - Replace: "An abrupt jay's cry shatters the hush as dirt patters from the bank and the wolf's shadow stretches long across the path, brushing Red's boots."
+   - With: "A jay cries; pebbles and loose dirt slip from the bank. The wolf's shadow stretches across the path and brushes her boots." (Keeps motion but uses clearer verbs.)
+
+6. Remove self-referential phrasing inside Wolf's dialogue. Do not have the wolf say "I let out a low pleased sound." Put that in narration and make his speech quieter and more coaxing. Suggested rewrite:
+   - Replace the final quoted sentence with a sleeker line: "One misstep and the undergrowth swallows you, child—don't you know how many corners hide?" 
+   - Narration after: "Wolf let out a low, pleased sound; his eyes lingered on the bread in her basket."
+
+7. Add a brief physical beat after Red's reply to ground her reaction and emphasize naivety. Example insertion: "She glances toward the path, fingers tightening on the basket handle, and forces a small, polite smile."
+
+8. Reduce repeated "bright hood" phrasing—vary the wording once. Suggestions: use "scarlet cloak," "lone spark," or just "her hood" in subsequent mentions to avoid repetition.
+
+9. Soften explicit threat—hint rather than state danger. Replace blunt lines like "One misstep and you would be alone" with insinuation or rhetorical question to maintain Wolf's manipulative veneer. Example: "Imagine arriving sooner—Grandmother grateful, and no one to ask questions. A small detour, for a large kindness, perhaps?"
+
+10. Introduce a subtle hunger hint without stating it plainly. Add one small sensory detail in narration: "He sniffed the warm scent of jam and bread as if testing the air." Keep this a single line and slight.
+
+11. Use action beats as dialogue tags instead of adverbial tags. Replace "Wolf warned, eyes flicking," with "Wolf's eyes flicked; his voice smoothed." Use the same approach for Red (e.g., "Red murmured, chin tucked" → "Red murmured and tucked her chin").
+
+12. Ensure cadence matches each character: shorten Wolf's sentences slightly to let the oily charm breathe; keep Red's lines short, earnest, and literal. When suggesting rewrites, prefer shorter clauses and one clear image per line.
+
+13. Small language polish: replace awkward words ("tricksy" if it feels off) only if it jars the fairy-tale voice — otherwise keep it for charm. If you keep it, make sure it appears consistent with her naïveté.
+
+Apply these edits in place rather than expanding the scene; they tighten tension, remove redundancy, preserve the writer's voice, and keep danger suggested in the trees rather than spelled out.

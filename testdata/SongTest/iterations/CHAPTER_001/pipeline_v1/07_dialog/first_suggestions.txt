@@ -1,0 +1,25 @@
+1. Remove verbatim stage-direction phrases from inside quotes. Move physical actions out of speech and keep spoken lines natural.
+   - Change: Wolf’s first spoken line to: "I hope I haven't startled you, child. Where are you going with that sweet-smelling basket?"
+   - Change: Red’s first spoken line to: "Oh—no, you didn't startle me. I'm taking these goodies to Grandmother. I mustn't dawdle."
+
+2. Cut redundant questioning from Wolf. He currently repeats the same probing about the path/quickness; tighten to one sly question and one follow-up that changes the angle (distance or urgency).
+   - Replace Wolf's second question with a single, leading probe: "Isn't the path a long one for such small feet? How far is your grandmother's cottage?"
+   - Remove the near-duplicate "Are you sure this path leads quickest..." line entirely.
+
+3. Eliminate characters describing their own reflexes/feelings in dialogue. Convert those to brief stage beats if needed.
+   - Remove "Startled, clutched," and similar phrasing inside Red's quotes. Instead: stage beat: Red clutched her basket. Then: Red speaks: "Grandmother's cottage—blue shutters, just beyond the brook."
+
+4. Keep Wolf’s voice sly and flattery-driven; drop overtly theatrical narration in his lines.
+   - Replace the theatrical "From behind a pine I step..." and "Along the edge of the path I pad..." with speech that uses compliment + question: e.g., "Such a bright hood—how lucky Grandmother will be. Tell me, how far is she? Wouldn't you like to arrive sooner?"
+
+5. Simplify Red’s responses to be literal, polite, and concise. Combine details naturally.
+   - Suggested Red line: "It's Grandmother's—blue shutters, past the little brook. I'm bringing bread and jam to make her feel better."
+
+6. Fix punctuation and tone: remove double question marks, unnecessary ellipses, and overwrought commas inside speech. Use single punctuation and short sentences consistent with each character’s cadence.
+
+7. If you want a brief non-verbal beat to preserve the writer's voice, add short stage directions (outside quotes) that show Red's mannerisms and Wolf's mannerisms rather than embedding them in dialogue.
+   - Example beats: Wolf bowed; his smile lengthened. Red clutched the basket and lowered her eyes.
+
+8. Optional sharpening: End the exchange with a small Wolf push—one last leading suggestion that hints at consequence without explicit foreshadowing, e.g.: "If only there were a quicker way, little one—only a thought."
+
+Apply these swaps so dialogue reads as spoken lines, keeps each character's cadence and intent, avoids self-described actions in speech, and eliminates repetitive questioning.

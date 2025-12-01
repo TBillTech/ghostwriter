@@ -1,5 +1,5 @@
 track,label,part,instrument,channel,program,role,voice_token
-1,Wolf Harmony,Harmony,French Horn,1,61,harmony/character-motif,major.tenor.base.wolf.harmony
-2,Red Melody,Melody,Flute,1,74,lead-melody/character-theme,major.alto.flute.red.melody
-3,Drums,Drums,Standard Kit,10,0,rapid-percussion/groove,major.beat.drum.axe
-4,Forest Bass,Bass/Soundscape,Synth Bass/Pad,1,33,steady-bass/atmosphere,major.bass.soundscape.forest_path
+1,Red Melody,Melody,Flute,1,74,lead melodic theme,major.alto.flute.red.melody
+2,Wolf Harmony,Harmony,French Horn,1,61,harmonic/character counterline,major.tenor.base.wolf.harmony
+3,Forest Soundscape,Bass,Soft Pad / Soundscape,1,89,sub-bass atmosphere & bed,major.bass.soundscape.forest_path
+4,Drums (Axe),Drums,Standard Kit,10,1,rhythm / rapid percussion,major.beat.drum.axe

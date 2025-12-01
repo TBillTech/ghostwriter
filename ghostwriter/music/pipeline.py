@@ -3,7 +3,11 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Dict, Any, Optional, Tuple, List, Iterable
+import json
+import math
+import shutil
 import logging
+import re
 
 from ..env import env_for_prompt
 from ..llm import complete as llm_complete
@@ -22,7 +26,13 @@ from ..musiccsv import (
     write_musiccsv,
 )
 
-from .context import VoiceContext, reduced_notes_csv
+from .context import (
+    VoiceContext,
+    reduced_notes_csv,
+    block_measure_range,
+    describe_measure_window,
+    slice_csv_by_measure,
+)
 from .prompts import (
     build_first_score_prompt,
     build_music_check_prompt,
@@ -33,6 +43,519 @@ from .prompts import (
 logger = logging.getLogger(__name__)
 
 _MAX_MUSICCSV_SNIPPET = 4000
+_NOTE_HEADER = [
+    "measure",
+    "beat",
+    "pitch",
+    "duration",
+    "velocity",
+    "tie",
+    "articulation",
+]
+_BLOCK_SIZE = 10
+_SCIENTIFIC_PITCH_RE = re.compile(r"^[A-Ga-g](?:[#b])?\d+$")
+_ALLOWED_TIES = {"start", "continue", "stop"}
+
+
+def _coerce_int(value: Any) -> Optional[int]:
+    try:
+        if value is None:
+            return None
+        text = str(value).strip()
+        if not text:
+            return None
+        if "." in text:
+            return int(float(text))
+        return int(text)
+    except Exception:
+        return None
+
+
+def _coerce_float(value: Any) -> Optional[float]:
+    try:
+        if value is None:
+            return None
+        text = str(value).strip()
+        if not text:
+            return None
+        return float(text)
+    except Exception:
+        return None
+
+
+def _coerce_bool(value: Any) -> Optional[bool]:
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return value
+    text = str(value).strip().lower()
+    if not text:
+        return None
+    if text in {"1", "true", "yes", "y", "t"}:
+        return True
+    if text in {"0", "false", "no", "n", "f"}:
+        return False
+    return None
+
+
+def _format_number(value: float) -> str:
+    if int(value) == value:
+        return str(int(value))
+    return f"{value:.4f}".rstrip("0").rstrip(".")
+
+
+def _parse_time_signature(signature: str) -> Tuple[int, int]:
+    try:
+        parts = signature.split("/")
+        numerator = int(parts[0]) if parts and parts[0] else 4
+        denominator = int(parts[1]) if len(parts) > 1 and parts[1] else 4
+        if denominator <= 0:
+            denominator = 4
+        return numerator, denominator
+    except Exception:
+        return (4, 4)
+
+
+def _beats_per_measure_from_signature(signature: str) -> float:
+    numerator, denominator = _parse_time_signature(signature)
+    if denominator == 0:
+        return float(numerator)
+    return numerator * (4.0 / denominator)
+
+
+def _notes_csv_path(tp_dir: Path, voice_token: str, variant: str) -> Path:
+    safe_variant = (variant or "standard").strip().lower()
+    return Path(tp_dir) / f"notes_{voice_token}_{safe_variant}.csv"
+
+
+def _block_csv_path(tp_dir: Path, voice_token: str, variant: str, block_index: int) -> Path:
+    safe_variant = (variant or "standard").strip().lower()
+    return Path(tp_dir) / f"notes_{voice_token}_{safe_variant}_block{block_index:02d}.csv"
+
+
+def _measure_count_for_variant(tp_dir: Path, variant: str) -> int:
+    tp_dir = Path(tp_dir)
+    safe_variant = (variant or "standard").strip().lower()
+    measures_path = tp_dir / f"measures_{safe_variant}.csv"
+    max_measure = 0
+    if measures_path.exists():
+        try:
+            import csv
+
+            with measures_path.open("r", encoding="utf-8", newline="") as handle:
+                reader = csv.DictReader(handle)
+                for row in reader:
+                    value = row.get("measure")
+                    if value is None:
+                        continue
+                    try:
+                        mnum = int(float(value))
+                    except Exception:
+                        continue
+                    max_measure = max(max_measure, mnum)
+        except Exception:
+            max_measure = 0
+    if max_measure:
+        return max_measure
+
+    melody_path = tp_dir / f"melody_{safe_variant}.csv"
+    if melody_path.exists():
+        try:
+            text = melody_path.read_text(encoding="utf-8")
+            rows = _measures_from_melody_csv(text)
+            if rows:
+                return max(int(row.get("measure", 0) or 0) for row in rows)
+        except Exception:
+            return 0
+    return 0
+
+
+def _progress_path(tp_dir: Path, variant: str) -> Path:
+    safe_variant = (variant or "standard").strip().lower()
+    return Path(tp_dir) / f"music_progress_{safe_variant}.json"
+
+
+def _load_music_progress(tp_dir: Path, variant: str) -> Dict[str, Any]:
+    path = _progress_path(tp_dir, variant)
+    if not path.exists():
+        return {"voices": {}}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {"voices": {}}
+
+
+def _save_music_progress(tp_dir: Path, variant: str, data: Dict[str, Any]) -> None:
+    path = _progress_path(tp_dir, variant)
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(data, indent=2), encoding="utf-8")
+    except Exception:
+        pass
+
+
+def _read_note_rows(path: Path) -> List[Dict[str, Any]]:
+    if not path.exists():
+        return []
+    try:
+        import csv
+
+        with path.open("r", encoding="utf-8", newline="") as handle:
+            reader = csv.DictReader(handle)
+            rows: List[Dict[str, Any]] = []
+            for row in reader:
+                entry = {key: row.get(key, "") for key in _NOTE_HEADER}
+                rows.append(entry)
+            return rows
+    except Exception:
+        return []
+
+
+def _write_note_rows(path: Path, rows: List[Dict[str, Any]]) -> None:
+    import csv
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=_NOTE_HEADER)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({key: row.get(key, "") for key in _NOTE_HEADER})
+
+
+def _replace_rows_in_range(
+    path: Path,
+    new_rows: List[Dict[str, Any]],
+    *,
+    measure_start: int,
+    measure_end: int,
+) -> None:
+    existing = _read_note_rows(path)
+
+    def _measure_value(entry: Dict[str, Any]) -> int:
+        try:
+            return int(float(entry.get("measure", 0) or 0))
+        except Exception:
+            return 0
+
+    kept = [row for row in existing if not (measure_start <= _measure_value(row) <= measure_end)]
+    merged = kept + new_rows
+
+    def _sort_key(entry: Dict[str, Any]) -> Tuple[int, float, str]:
+        try:
+            measure = int(float(entry.get("measure", 0) or 0))
+        except Exception:
+            measure = 0
+        try:
+            beat = float(entry.get("beat", 0) or 0)
+        except Exception:
+            beat = 0.0
+        pitch = str(entry.get("pitch", ""))
+        return (measure, beat, pitch)
+
+    merged.sort(key=_sort_key)
+    _write_note_rows(path, merged)
+
+
+def _note_dicts_from_music(music: MusicCSV) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for note in music.notes:
+        try:
+            row = {
+                "measure": str(int(note.get("measure", 0) or 0)),
+                "beat": str(note.get("beat", "")),
+                "pitch": str(note.get("pitch", "")),
+                "duration": str(note.get("duration", "")),
+                "velocity": str(note.get("velocity", "")),
+                "tie": str(note.get("tie", "")),
+                "articulation": str(note.get("articulation", "")),
+            }
+        except Exception:
+            continue
+        rows.append(row)
+    return rows
+
+
+def _filter_rows_by_measure(
+    rows: List[Dict[str, Any]],
+    *,
+    measure_start: int,
+    measure_end: int,
+) -> List[Dict[str, Any]]:
+    filtered: List[Dict[str, Any]] = []
+    for row in rows:
+        try:
+            measure = int(float(row.get("measure", 0) or 0))
+        except Exception:
+            continue
+        if measure_start <= measure <= measure_end:
+            filtered.append(row)
+    return filtered
+
+
+def _slice_notes_file(path: Path, *, measure_start: int, measure_end: int) -> str:
+    if not path.exists():
+        return ""
+    try:
+        text = path.read_text(encoding="utf-8")
+    except Exception:
+        return ""
+    return slice_csv_by_measure(text, measure_start, measure_end)
+
+
+def _collect_other_voice_blocks(
+    *,
+    tp_dir: Path,
+    variant: str,
+    voice_context: VoiceContext,
+    exclude_token: str,
+    measure_start: int,
+    measure_end: int,
+) -> str:
+    blocks: List[str] = []
+    for spec in voice_context.voices:
+        token = spec.token
+        if token == exclude_token:
+            continue
+        notes_path = _notes_csv_path(tp_dir, token, variant)
+        block_text = _slice_notes_file(notes_path, measure_start=measure_start, measure_end=measure_end)
+        if block_text.strip():
+            blocks.append(f"# voice: {token}\n{block_text.strip()}")
+    return "\n\n".join(blocks).strip()
+
+
+def _sanitize_block_note_rows(
+    rows: List[Dict[str, Any]],
+    *,
+    measure_start: int,
+    measure_end: int,
+    beats_per_measure: float,
+) -> List[Dict[str, Any]]:
+    if beats_per_measure <= 0:
+        beats_per_measure = 4.0
+
+    sanitized: List[Dict[str, Any]] = []
+    valid_velocities: List[int] = []
+
+    for row in rows:
+        measure = _coerce_int(row.get("measure"))
+        if measure is None:
+            measure = measure_start
+        measure = max(measure_start, min(measure, measure_end))
+
+        beat = _coerce_float(row.get("beat")) or 1.0
+        if beat < 1:
+            beat = 1.0
+        max_beat = beats_per_measure
+        if beat > max_beat:
+            beat = max_beat
+
+        duration = _coerce_float(row.get("duration")) or 1.0
+        if duration <= 0:
+            duration = 0.25
+
+        raw_pitch = str(row.get("pitch", "") or "").strip()
+        if not raw_pitch:
+            pitch = "rest"
+        elif raw_pitch.lower() == "rest":
+            pitch = "rest"
+        elif _SCIENTIFIC_PITCH_RE.match(raw_pitch):
+            pitch = raw_pitch[0].upper() + raw_pitch[1:]
+        else:
+            pitch = "rest"
+
+        velocity = _coerce_int(row.get("velocity"))
+        if velocity is not None and 0 <= velocity <= 127:
+            valid_velocities.append(velocity)
+        else:
+            velocity = None
+
+        tie = str(row.get("tie", "") or "").strip().lower()
+        if tie not in _ALLOWED_TIES:
+            tie = ""
+
+        articulation = str(row.get("articulation", "") or "").strip()
+
+        sanitized.append(
+            {
+                "measure": measure,
+                "beat": beat,
+                "duration": duration,
+                "pitch": pitch,
+                "velocity": velocity,
+                "tie": tie,
+                "articulation": articulation,
+            }
+        )
+
+    avg_velocity = valid_velocities and sum(valid_velocities) // len(valid_velocities) or 90
+    for item in sanitized:
+        if item["velocity"] is None or not (0 <= int(item["velocity"]) <= 127):
+            item["velocity"] = avg_velocity
+
+    def _abs_position(entry: Dict[str, Any]) -> float:
+        return (entry["measure"] - 1) * beats_per_measure + (entry["beat"] - 1)
+
+    sanitized.sort(key=lambda item: (_abs_position(item), item["pitch"]))
+
+    # Deduplicate overlapping identical pitch+velocity notes
+    deduped: List[Dict[str, Any]] = []
+    active: Dict[Tuple[str, int], Tuple[Dict[str, Any], float, float]] = {}
+    for item in sanitized:
+        key = (item["pitch"], int(item["velocity"]))
+        start = _abs_position(item)
+        end = start + item["duration"]
+        tracked = active.get(key)
+        if tracked and start < tracked[2]:
+            tracked_item, tracked_start, tracked_end = tracked
+            new_end = max(tracked_end, end)
+            tracked_item["duration"] = max(0.01, new_end - tracked_start)
+            active[key] = (tracked_item, tracked_start, new_end)
+            continue
+        active[key] = (item, start, end)
+        deduped.append(item)
+
+    deduped.sort(key=lambda item: _abs_position(item))
+    for idx, item in enumerate(deduped[:-1]):
+        start = _abs_position(item)
+        end = start + item["duration"]
+        next_item = deduped[idx + 1]
+        next_start = _abs_position(next_item)
+        if end > next_start:
+            item["duration"] = max(0.01, next_start - start)
+
+    deduped = [item for item in deduped if item["duration"] > 0.0]
+
+    split_rows: List[Dict[str, Any]] = []
+    for item in deduped:
+        remaining = item["duration"]
+        current_measure = item["measure"]
+        current_beat = item["beat"]
+        segments: List[Dict[str, Any]] = []
+        while remaining > 1e-6 and current_measure <= measure_end:
+            room = beats_per_measure - (current_beat - 1)
+            if room <= 1e-6:
+                current_measure += 1
+                current_beat = 1.0
+                continue
+            take = min(remaining, room)
+            segments.append(
+                {
+                    "measure": current_measure,
+                    "beat": current_beat,
+                    "duration": take,
+                    "pitch": item["pitch"],
+                    "velocity": item["velocity"],
+                    "tie": item["tie"],
+                    "articulation": item["articulation"],
+                }
+            )
+            remaining -= take
+            current_measure += 1
+            current_beat = 1.0
+
+        if not segments:
+            continue
+        if len(segments) > 1:
+            for seg_idx, segment in enumerate(segments):
+                if seg_idx == 0:
+                    segment["tie"] = "start"
+                elif seg_idx == len(segments) - 1:
+                    segment["tie"] = "stop"
+                else:
+                    segment["tie"] = "continue"
+        split_rows.extend(segments)
+
+    if not split_rows:
+        split_rows = [
+            {
+                "measure": measure_start,
+                "beat": 1.0,
+                "duration": beats_per_measure,
+                "pitch": "rest",
+                "velocity": avg_velocity,
+                "tie": "",
+                "articulation": "",
+            }
+        ]
+
+    present_measures = {item["measure"] for item in split_rows}
+    for measure in range(measure_start, measure_end + 1):
+        if measure in present_measures:
+            continue
+        split_rows.append(
+            {
+                "measure": measure,
+                "beat": 1.0,
+                "duration": beats_per_measure,
+                "pitch": "rest",
+                "velocity": avg_velocity,
+                "tie": "",
+                "articulation": "",
+            }
+        )
+
+    split_rows.sort(key=lambda item: (_abs_position(item), item["pitch"]))
+
+    formatted: List[Dict[str, Any]] = []
+    for item in split_rows:
+        formatted.append(
+            {
+                "measure": str(int(item["measure"])),
+                "beat": _format_number(float(item["beat"])),
+                "pitch": item["pitch"],
+                "duration": _format_number(float(item["duration"])),
+                "velocity": str(int(item["velocity"])),
+                "tie": item["tie"],
+                "articulation": item["articulation"],
+            }
+        )
+
+    return formatted
+
+
+def _latest_attempt_log(tp_dir: Path, prefix: str) -> Optional[Path]:
+    try:
+        candidates = list(Path(tp_dir).glob(f"{prefix}_attempt_*.txt"))
+    except Exception:
+        return None
+    best: Optional[Path] = None
+    best_attempt = -1
+    for path in candidates:
+        match = re.search(r"_attempt_(\d+)\.txt$", path.name)
+        if not match:
+            continue
+        try:
+            attempt_no = int(match.group(1))
+        except Exception:
+            continue
+        if attempt_no >= best_attempt:
+            best_attempt = attempt_no
+            best = path
+    return best
+
+
+def _mirror_block_attempt_logs(
+    *,
+    tp_dir: Path,
+    voice_token: str,
+    variant: str,
+    block_index: int,
+    block_count: int,
+    source_prefix: str,
+) -> None:
+    if block_count <= 0 or block_index not in {1, block_count}:
+        return
+    latest = _latest_attempt_log(tp_dir, source_prefix)
+    if latest is None or not latest.exists():
+        return
+    safe_variant = (variant or "standard").strip().lower()
+    token_safe = (voice_token or "voice").replace(".", "_")
+    dest_attempt = 1 if block_index == 1 else max(block_count, 1)
+    dest_path = Path(tp_dir) / f"notes_{token_safe}_{safe_variant}.first_score_attempt_{dest_attempt}.txt"
+    try:
+        shutil.copy2(latest, dest_path)
+    except Exception:
+        pass
 
 
 def _truncate_musiccsv_text(text: str, limit: Optional[int]) -> str:
@@ -446,7 +969,17 @@ def _compose_first_pass_for_voice(
     target_voice_index: int,
     variant: str = "standard",
     suggestions_text: str = "",
-) -> MusicCSV:
+    measure_start: Optional[int] = None,
+    measure_end: Optional[int] = None,
+    block_index: Optional[int] = None,
+    block_count: Optional[int] = None,
+    melody_block_csv: str = "",
+    melody_previous_block_csv: str = "",
+    voice_previous_block_csv: str = "",
+    other_voices_block_csv: str = "",
+    other_voices_previous_block_csv: str = "",
+    attempt_log_prefix: Optional[str] = None,
+) -> Tuple[MusicCSV, List[Dict[str, Any]]]:
     """Compose a first-pass MusicCSV score for a single voice.
 
     This helper is the internal building block for the multi-voice,
@@ -557,6 +1090,23 @@ def _compose_first_pass_for_voice(
         melody_csv=melody_text,
         melody_reduced_csv=melody_reduced,
         other_voices_reduced_csv=other_reduced,
+        measure_start=measure_start,
+        measure_end=measure_end,
+        block_index=block_index,
+        block_count=block_count,
+        measure_window_description=describe_measure_window(
+            measure_start or 1,
+            measure_end or (measure_start or 1),
+            block_index=block_index,
+            block_count=block_count,
+        )
+        if measure_start is not None
+        else "",
+        melody_block_csv=melody_block_csv,
+        melody_previous_block_csv=melody_previous_block_csv,
+        voice_previous_block_csv=voice_previous_block_csv,
+        other_voices_block_csv=other_voices_block_csv,
+        other_voices_previous_block_csv=other_voices_previous_block_csv,
     )
     model, temp, max_tokens = env_for_prompt(
         "music_first_score_prompt.md",
@@ -570,7 +1120,8 @@ def _compose_first_pass_for_voice(
         # Persist prompt/response pairs per voice/variant/attempt for debugging.
         safe_variant = (variant or "standard").strip().lower()
         token_safe = (target_voice.token or "voice").replace(".", "_")
-        return tp_dir / f"notes_{token_safe}_{safe_variant}.first_score_attempt_{attempt}.txt"
+        prefix = attempt_log_prefix or f"notes_{token_safe}_{safe_variant}.first_score_attempt"
+        return tp_dir / f"{prefix}_{attempt}.txt"
 
     # Let the validator drive retries so empty/invalid tables are retried automatically.
     response = llm_call_with_validation(
@@ -615,7 +1166,7 @@ def _compose_first_pass_for_voice(
     if not compact_rows:
         ok, message, music = _try_parse_musiccsv(text)
         if ok and music is not None:
-            return music
+            return music, _note_dicts_from_music(music)
         raise UserActionRequired(
             "Unable to parse the first-pass response as compact CSV or MusicCSV. "
             + (message or "Edit the attempt log and retry.")
@@ -687,7 +1238,10 @@ def _compose_first_pass_for_voice(
             "First-pass music CSV contained no valid note rows. Edit the first_score_attempt log and retry."
         )
 
-    return music
+    rows = _note_dicts_from_music(music)
+    if measure_start is not None and measure_end is not None:
+        rows = _filter_rows_by_measure(rows, measure_start=measure_start, measure_end=measure_end)
+    return music, rows
 
 
 def ensure_first_score_gate(
@@ -731,7 +1285,7 @@ def ensure_first_score_gate(
         _render_monitor_midi(music, first_monitor_path, tp_dir)
         return True
 
-    music = _compose_first_pass_for_voice(
+    music, _ = _compose_first_pass_for_voice(
         tp_dir=tp_dir,
         tp_index=tp_index,
         tp_type=tp_type,
@@ -807,11 +1361,10 @@ def run_multi_voice_first_pass(
     variant: str = "standard",
     suggestions_text: str = "",
 ) -> List[Path]:
-    """Compose first-pass per-voice scores for a single variant.
+    """Compose first-pass per-voice scores for a single variant using block windows.
 
-    Iterates ``voice_context.voices`` in order, calling the internal
-    per-voice composer for each, and writes ``notes_<voice_token>_<variant>.csv``
-    files beneath ``tp_dir``. Returns the list of note CSV paths.
+    Each voice is composed in 10-measure blocks, persisting block CSVs,
+    per-voice progress JSON, and merged ``notes_<voice>_<variant>.csv`` files.
     """
 
     tp_dir = Path(tp_dir)
@@ -820,61 +1373,155 @@ def run_multi_voice_first_pass(
     written: List[Path] = []
     safe_variant = (variant or "standard").strip().lower()
 
+    total_measures = _measure_count_for_variant(tp_dir, safe_variant)
+    if total_measures <= 0:
+        total_measures = _BLOCK_SIZE
+    block_count = max(1, math.ceil(total_measures / _BLOCK_SIZE))
+
+    melody_text = ""
+    melody_path = tp_dir / f"melody_{safe_variant}.csv"
+    if melody_path.exists():
+        try:
+            melody_text = melody_path.read_text(encoding="utf-8")
+        except Exception:
+            melody_text = ""
+
+    metadata_dict: Dict[str, Any] = {}
+    metadata_path = tp_dir / "metadata.json"
+    if metadata_path.exists():
+        try:
+            metadata_dict = json.loads(metadata_path.read_text(encoding="utf-8"))
+        except Exception:
+            metadata_dict = {}
+    time_signature = str(metadata_dict.get("time_signature") or "4/4")
+    beats_per_measure = _beats_per_measure_from_signature(time_signature)
+
+    progress = _load_music_progress(tp_dir, safe_variant)
+    voices_state: Dict[str, Dict[str, Any]] = progress.setdefault("voices", {})
+
     for idx, voice in enumerate(voice_context.voices):
-        notes_path = tp_dir / f"notes_{voice.token}_{safe_variant}.csv"
-        if notes_path.exists():
-            written.append(notes_path)
+        token_safe = (voice.token or "voice").replace(".", "_")
+        notes_path = _notes_csv_path(tp_dir, voice.token, safe_variant)
+
+        state = voices_state.get(voice.token)
+        if state is None:
+            if notes_path.exists():
+                # Assume legacy runs completed; mark as done so we do not clobber edited files.
+                voices_state[voice.token] = {"next_block": block_count + 1}
+                written.append(notes_path)
+                continue
+            state = {"next_block": 1}
+            voices_state[voice.token] = state
+
+        next_block = int(state.get("next_block", 1) or 1)
+        if next_block > block_count:
+            if notes_path.exists():
+                written.append(notes_path)
             continue
 
-        music = _compose_first_pass_for_voice(
-            tp_dir=tp_dir,
-            tp_index=tp_index,
-            tp_type=tp_type,
-            tp_text=tp_text,
-            voice_context=voice_context,
-            prompt_payload=prompt_payload,
-            target_voice_index=idx,
-            variant=safe_variant,
-            suggestions_text=suggestions_text,
-        )
+        while next_block <= block_count:
+            measure_start, measure_end = block_measure_range(
+                next_block,
+                block_size=_BLOCK_SIZE,
+                total_measures=total_measures,
+            )
+            prev_start = prev_end = None
+            if next_block > 1:
+                prev_start, prev_end = block_measure_range(
+                    next_block - 1,
+                    block_size=_BLOCK_SIZE,
+                    total_measures=total_measures,
+                )
 
-        # Extract notes for the target voice's track index if present; for
-        # now, write the entire notes table as a CSV view for that voice.
-        try:
-            from io import StringIO
-            import csv
+            melody_block_csv = slice_csv_by_measure(melody_text, measure_start, measure_end)
+            melody_prev_csv = (
+                slice_csv_by_measure(melody_text, prev_start, prev_end)
+                if prev_start is not None and prev_end is not None
+                else ""
+            )
+            voice_prev_block_csv = (
+                _slice_notes_file(notes_path, measure_start=prev_start, measure_end=prev_end)
+                if prev_start is not None and prev_end is not None
+                else ""
+            )
+            other_block_csv = _collect_other_voice_blocks(
+                tp_dir=tp_dir,
+                variant=safe_variant,
+                voice_context=voice_context,
+                exclude_token=voice.token,
+                measure_start=measure_start,
+                measure_end=measure_end,
+            )
+            other_prev_csv = (
+                _collect_other_voice_blocks(
+                    tp_dir=tp_dir,
+                    variant=safe_variant,
+                    voice_context=voice_context,
+                    exclude_token=voice.token,
+                    measure_start=prev_start,
+                    measure_end=prev_end,
+                )
+                if prev_start is not None and prev_end is not None
+                else ""
+            )
 
-            output = StringIO()
-            writer = csv.writer(output)
-            # Preserve all compact-note columns so that assembly can
-            # reconstruct a valid MusicCSV without guessing defaults.
-            writer.writerow([
-                "measure",
-                "beat",
-                "pitch",
-                "duration",
-                "velocity",
-                "tie",
-                "articulation",
-            ])
-            for note in music.notes:
-                measure = note.get("measure")
-                beat = note.get("beat")
-                pitch = note.get("pitch")
-                duration = note.get("duration")
-                velocity = note.get("velocity")
-                tie = note.get("tie", "")
-                articulation = note.get("articulation", "")
-                if measure is None or beat is None or pitch is None or duration is None:
-                    continue
-                writer.writerow([measure, beat, pitch, duration, velocity, tie, articulation])
-            notes_path.write_text(output.getvalue(), encoding="utf-8")
-        except Exception as exc:
-            _log_warning(f"MUSIC: failed to write notes CSV for {voice.token}: {exc}", tp_dir)
-            raise
+            block_log_prefix = f"notes_{token_safe}_{safe_variant}.block{next_block:02d}"
+
+            music, block_rows = _compose_first_pass_for_voice(
+                tp_dir=tp_dir,
+                tp_index=tp_index,
+                tp_type=tp_type,
+                tp_text=tp_text,
+                voice_context=voice_context,
+                prompt_payload=prompt_payload,
+                target_voice_index=idx,
+                variant=safe_variant,
+                suggestions_text=suggestions_text,
+                measure_start=measure_start,
+                measure_end=measure_end,
+                block_index=next_block,
+                block_count=block_count,
+                melody_block_csv=melody_block_csv,
+                melody_previous_block_csv=melody_prev_csv,
+                voice_previous_block_csv=voice_prev_block_csv,
+                other_voices_block_csv=other_block_csv,
+                other_voices_previous_block_csv=other_prev_csv,
+                attempt_log_prefix=block_log_prefix,
+            )
+
+            block_rows = _sanitize_block_note_rows(
+                block_rows,
+                measure_start=measure_start,
+                measure_end=measure_end,
+                beats_per_measure=beats_per_measure,
+            )
+
+            block_csv_path = _block_csv_path(tp_dir, voice.token, safe_variant, next_block)
+            _write_note_rows(block_csv_path, block_rows)
+            _replace_rows_in_range(
+                notes_path,
+                block_rows,
+                measure_start=measure_start,
+                measure_end=measure_end,
+            )
+
+            _mirror_block_attempt_logs(
+                tp_dir=tp_dir,
+                voice_token=voice.token,
+                variant=safe_variant,
+                block_index=next_block,
+                block_count=block_count,
+                source_prefix=block_log_prefix,
+            )
+
+            state["next_block"] = next_block + 1
+            progress["voices"] = voices_state
+            _save_music_progress(tp_dir, safe_variant, progress)
+            next_block = state["next_block"]
 
         written.append(notes_path)
 
+    _save_music_progress(tp_dir, safe_variant, progress)
     return written
 
 
@@ -1340,11 +1987,30 @@ def assemble_first_pass_variant(
         except Exception:
             music.metadata = {}
 
-    # Load tracks.csv verbatim.
+    if isinstance(music.metadata, dict) and not str(music.metadata.get("version", "")).strip():
+        music.metadata["version"] = "1.0"
+
+    # Load tracks.csv with basic type coercion.
     try:
         with tracks_path.open("r", encoding="utf-8", newline="") as f:
             reader = csv.DictReader(f)
-            music.tracks = [dict(row) for row in reader]
+            cleaned: List[Dict[str, Any]] = []
+            for row in reader:
+                entry = dict(row)
+                track_id = _coerce_int(entry.get("track"))
+                if track_id is not None:
+                    entry["track"] = track_id
+                channel = _coerce_int(entry.get("channel"))
+                if channel is not None:
+                    entry["channel"] = channel
+                program = _coerce_int(entry.get("program"))
+                if program is not None:
+                    entry["program"] = program
+                volume = _coerce_int(entry.get("volume"))
+                if volume is not None:
+                    entry["volume"] = volume
+                cleaned.append(entry)
+            music.tracks = cleaned
     except Exception as exc:
         _log_warning(f"MUSIC: failed to read tracks.csv for first-pass assembly: {exc}", tp_dir)
         return None
@@ -1362,11 +2028,27 @@ def assemble_first_pass_variant(
         except Exception:
             voice_tokens = []
 
-    # Load measures_<variant>.csv verbatim.
+    # Load measures_<variant>.csv with type coercion.
     try:
         with measures_path.open("r", encoding="utf-8", newline="") as f:
             reader = csv.DictReader(f)
-            music.measures = [dict(row) for row in reader]
+            cleaned_measures: List[Dict[str, Any]] = []
+            for row in reader:
+                entry = dict(row)
+                measure_no = _coerce_int(entry.get("measure"))
+                if measure_no is not None:
+                    entry["measure"] = measure_no
+                start_beat = _coerce_float(entry.get("start_beat"))
+                if start_beat is not None:
+                    entry["start_beat"] = start_beat
+                tempo_value = _coerce_float(entry.get("tempo"))
+                if tempo_value is not None:
+                    entry["tempo"] = tempo_value
+                pickup_value = _coerce_bool(entry.get("pickup"))
+                if pickup_value is not None:
+                    entry["pickup"] = pickup_value
+                cleaned_measures.append(entry)
+            music.measures = cleaned_measures
     except Exception as exc:
         _log_warning(f"MUSIC: failed to read measures_{safe_variant}.csv for first-pass assembly: {exc}", tp_dir)
         return None
@@ -1386,6 +2068,9 @@ def assemble_first_pass_variant(
             track_num = None
         if label and track_num is not None:
             label_to_track[label] = track_num
+        token_label = str(tr.get("voice_token", "") or "").strip()
+        if token_label and track_num is not None:
+            label_to_track[token_label] = track_num
         if track_num is not None:
             track_order.append((track_num, tr))
 
@@ -1417,9 +2102,35 @@ def assemble_first_pass_variant(
                 reader = csv.DictReader(f)
                 for row in reader:
                     # Ensure minimal required columns exist.
-                    if not row.get("measure") or not row.get("beat") or not row.get("pitch"):
+                    measure_val = _coerce_int(row.get("measure"))
+                    beat_val = _coerce_float(row.get("beat"))
+                    duration_val = _coerce_float(row.get("duration"))
+                    pitch_val = str(row.get("pitch", "") or "").strip()
+                    velocity_val = _coerce_int(row.get("velocity"))
+                    if measure_val is None or measure_val <= 0:
                         continue
-                    note = dict(row)
+                    if beat_val is None or beat_val <= 0:
+                        continue
+                    if duration_val is None or duration_val <= 0:
+                        continue
+                    if not pitch_val:
+                        pitch_val = "rest"
+                    tie_val = str(row.get("tie", "") or "").strip()
+                    if tie_val.lower() not in _ALLOWED_TIES:
+                        tie_val = ""
+                    articulation_val = str(row.get("articulation", "") or "").strip()
+                    if velocity_val is None or not (0 <= velocity_val <= 127):
+                        velocity_val = None
+
+                    note = {
+                        "measure": measure_val,
+                        "beat": beat_val,
+                        "pitch": pitch_val,
+                        "duration": duration_val,
+                        "velocity": velocity_val,
+                        "tie": tie_val,
+                        "articulation": articulation_val,
+                    }
                     # Derive track from file name: notes_<voice_token>_<variant>.csv
                     # We strip the leading 'notes_' prefix and trailing '_<variant>.csv'.
                     name = path.name
@@ -1445,8 +2156,9 @@ def assemble_first_pass_variant(
                                 break
                     if track_num is None and core and voice_token_to_track:
                         track_num = voice_token_to_track.get(core)
-                    if track_num is not None:
-                        note["track"] = track_num
+                    if track_num is None:
+                        continue
+                    note["track"] = track_num
                     music.notes.append(note)
         except Exception as exc:
             _log_warning(f"MUSIC: failed to merge notes from {path}: {exc}", tp_dir)
@@ -1455,7 +2167,10 @@ def assemble_first_pass_variant(
     try:
         validate_musiccsv(music)
     except Exception as exc:
-        _log_warning(f"MUSIC: assembled first-pass variant failed validation: {exc}", tp_dir)
+        _log_warning(
+            f"MUSIC: assembled first-pass variant '{safe_variant}' failed validation at {tp_dir}: {exc}",
+            tp_dir,
+        )
         # Continue anyway; caller can inspect the artifact.
 
     safe_title = str(title or "untitled").strip().replace(" ", "_")

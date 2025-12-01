@@ -1,0 +1,6 @@
+* Narrator: A cloud slides over the sun; the strip of path ahead dims, and the pines lean closer as if listening to wolf’s soft words. <0.08>
+* red: "Mama did say the woods can be...tricksy. But the path is safe enough, isn’t it?" She tucks her chin deeper into the red hood, the bright cloth a lone spark in the gloom. <0.09>
+* wolf: "Why, of course, little one. The trees only whisper when they like someone," he purrs, teeth just showing as a breeze stirs his dark ruff. <0.07>
+* Narrator: A jay gives a harsh cry and flaps away; crumbs of dirt patter from the bank where wolf’s shadow stretches long and thin across red’s boots. <0.06>
+* wolf: "Such brave footsteps for such a narrow trail. One misstep and you’d be ever so alone out here." His smile never falters, but his eyes flick to the undergrowth, measuring the hiding places. <0.05>
+DONE

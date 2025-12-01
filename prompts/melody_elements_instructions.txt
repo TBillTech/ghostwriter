@@ -1,10 +1,13 @@
 I need help to invent a melody, and we need to start with some music theory. We approach the problem like this:
 First imagine 4 notes, labelled A, B1, C1 and C2. Define B2 equal to B1, labelling the same note, to simplify the discussion of the edges. Your choices for reasonable notes should be motivated by the key signature, style of music, and feeling of the piece. These 4 dwell notes may be part of a dissonant chord, that is fine, because they will usually not be played simultaneously. In addition, imagine the following connections between notes: A-A, A-B1, B1-B2, A-B2, A-C1, C1-C2, A-C2, B1-C1, B2-C2. Each of these "edges" should be computed using the same algorithm (with different outcomes of course since they are intended to form varied and interesting music). Using X and Y variables to represent the edge X-Y do the following:
-1. Starting at X, and using the key signature, imagine the scale going either from X to the octave above, or the octave below.
-2. From the octave above, or the octave below, whichever you chose, imagine the scale going the opposite direction back and stopping at Y.
-3. Collect the notes from 1 and 2 in order, and now you have a list of mayabe a dozen or so notes, which should resemble an arpeggio and its reverse. Assign each note a proportional length of 1.
-4. Now creatively remove notes from this list, or even occasionally alter them with flats, sharps, or naturals to match the musical theme. Consider also replacing a note with a rest. When you remove notes (except rests), usually increase the proportional length of a neighboring note. If two consecutive notes form a 3rd or 5th according to the key signature, you may optionally combine them into a chord. If it suits the music, you may also combine notes into a rapid passage (dramatically reducing their proportional length). Considering that a proportional length of one defines one beat according to the time signature, try to keep the musical phrase less or equal to 4 measures.
-5. Normalize the proportional length to be a multiple of the piece time signature, and you have created the desired musical "edge".
+1. Choose a sign, plus or minus, either positive (up) or negative (down). Try to use a different sign from the last edge each time.
+2. Starting at X, and using the key signature, depending on the sign you just chose, imagine the scale going from X to the octave + sign. (if the sign is positive, the octave would go up first, if negative the octave would go down first)
+3. From the octave + sign, whichever you chose, imagine the scale going the opposite direction back and stopping at Y.
+4. Collect the notes from 1 and 2 in order, and duplicate it twice so you have the sequence [1,2,1,2,1,2], and now you have a list of many notes, which should resemble a repeated arpeggio scales. Assign each note a proportional length of 0.25.
+5. Now creatively remove notes from this list, or even occasionally alter them with flats, sharps, or naturals to match the musical theme. Consider also replacing the rare note with a rest. When you remove notes (or rests), usually increase the proportional length of another note. Use rests sparingly. If two consecutive notes form a 3rd or 5th according to the key signature, you may optionally combine them into a chord. If it suits the music, you may also combine notes into a rapid passage (dramatically reducing their proportional length), but avoid more than 2 rapid passages per edge. Instead of rapid passages, consider harmonics to dwell notes or chords if they work. Considering that a proportional length of one defines one beat according to the time signature, try to keep the musical phrase less or equal to 4 measures. You can tell you are done with this step when roughly half the notes have been adjusted.
+6. As a final step, be sure to sum to total of the note durations, and if it is not exactly a multiple of the time signature (for example 4/4 time means the sum should be 0 mod 4), then create a normalization factor.  The normalization factor should be such that when you multiply all the durations by the normalization factor, the sum of durations is exactly a multiple of the time signature. Sue this normalization factor to proportionally modify all the durations, and use the time signature to deduce the measure number for each note/chord/rest/fast passage. This creates the desired musical "edge".
+7. Favor giving the dwell notes longer durations. Keep the durations interesting and variable. Do not just make the first several notes of the edge the same length and then the last notes of the edge faster.
+8. Try hard not to end the edge in the middle of a measure. Favor filling the measures completely.
 
 When you are done creating the edges, output each edge using entirely scientific note notation and the lengths of the notes per measure an integer fraction with the time signature controlling what the unit means. Each edge should be output as a concise csv file with the columns (measure, element, duration). "measure" is the measure number starting at 1, and counting up as needed. "element" should be a concise description of the musical element, either a scientific note number like `C4`, `F#3`, or `Bb2`, multiple scientific note numbers in a chord like `C4;F#3`, a rapid passage like `C4>Db4>E4>F#4`, or simply the term `rest`. Duration should depend on the time signature and be the length of the note. For example, 4/4 time means each using of proportional length of 1 is a quarter note, and 1.25 is a quarter tied with a sixteenth. 
 
@@ -18,11 +21,11 @@ Here is an example edge.  These dwell notes are just an example, and should not 
 
 C1-C2
 measure,element,duration
-1,F4,1
-1,A4,1
 1,C5,1
+1,F4,0.5
+1,A4;C5,2.5
 2,C5>Bb4>G4>C5,0.5
-2,rest,0.5
-2,C5,2
+2,rest,0.25
+2,C5,3.25
 
 Now, output first the 4 dwell notes, then output the csv for each edge adding just the edge title followed by the column names and then the csv as in the example above. Output nothing else.

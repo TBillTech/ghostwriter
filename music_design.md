@@ -14,7 +14,7 @@
 2. Optional: Author drops raw MIDI assets into `iterations/CHAPTER_xxx/pipeline_vN/NN_<type>/NN_track_<voice>_import/`.
 3. When raw assets are present, the importer converts them into normalized `import.musiccsv`; the sanitizer validates user edits and maintains `score.musiccsv` plus `monitor.mid`.
 4. If an import directory is absent, or after a sanitized score exists, GhostWriter runs the content pipelines using a **per-voice / per-variant** model:
-  - Uses prose context (touch-point text, brainstorm bullets) and voice metadata to prompt the LLM for **per-voice, per-variant note CSVs** named `notes_<voice_token>_<variant>.csv` (e.g., `notes_major.tenor.flute.red.melody_standard.csv`).
+  - Uses prose context (touch-point text, brainstorm bullets) and voice metadata to prompt the LLM for **per-voice, per-variant note CSVs** named `notes_<voice_token>_<variant>.csv` (e.g., `notes_major.tenor.flute.red.melody_standard.csv`). These prompts now run in 10-measure groups rather than asking for the entire 120+ measures at once (see Section 11).
   - These calls are made via a multi-voice first-pass composer that iterates voices in a stable order, passing reduced-note grids for the melody and already-scored voices.
   - A helper then assembles **per-variant first-pass scores** `first_<title>_<variant>.musiccsv` and per-variant monitor MIDIs `first_monitor_<title>_<variant>.mid` from shared `metadata.json`, `tracks.csv`, `measures_<variant>.csv`, and all `notes_<voice_token>_<variant>.csv`.
   - A second-pass composer reuses the same per-voice/per-variant flow but includes suggestion text as additional context, producing final `<title>_<variant>.musiccsv` and `monitor_<title>_<variant>.mid`.
@@ -153,3 +153,52 @@ For each content touch-point that generates music:
 4. Implement subtle-score refinements and suggestion regeneration.
 5. Finish exporter + packaging bundle.
 6. Final polish: documentation, CLI options, env toggles, golden refresh.
+
+## 11. Ten-Measure Grouped Composition Feature
+
+### 11.1 Motivation
+- Whole-score prompts (120–180 measures) routinely stall because the LLM prunes repetitive rows once the token budget gets large.
+- Narrowing the ask to 10-measure windows keeps requests under 300 rows, improves determinism, and lets us detect/repair gaps before assembling the full score.
+- Grouping also gives us natural checkpoints for resume, human edits, and quality gates without rewriting entire note tables.
+
+### 11.2 Prompt Window & Melody Injection Rules
+- `prompts/music_first_score_prompt.md` gains placeholders for `MELODY_BLOCK`, `MELODY_PREVIOUS_BLOCK`, `VOICE_BLOCK_SO_FAR`, and `VOICE_PREVIOUS_BLOCK`.
+- When composing measures **1–10**, inject:
+  - Measures 1–10 from `melody_<variant>.csv`.
+  - Measures 1–10 from every already-locked voice (music-so-far) so the target voice can align entrances.
+- For block **n > 1** (measures `(n-1)*10+1` … `n*10`):
+  - Inject measures `(n-1)` and `n` from the melody CSV (20-measure context).
+  - Inject the prior block (measures `(n-2)*10+1` … `(n-1)*10`) plus the in-progress target block for each other voice so the LLM can see continuations.
+  - Include the prior block of the current voice so the model “completes” the set rather than rewriting from scratch.
+- Melody CSV slices are computed in `ghostwriter.music.context` to avoid recomputing per prompt; slices are cached in a `MelodyWindow` helper returned with the `VoiceContext` payload.
+
+### 11.3 Block Loop Execution
+1. Determine the total measure count from `measures_<variant>.csv` and derive `block_count = ceil(total_measures / 10)`.
+2. For each voice/variant pair, run `_compose_first_pass_for_voice` in a loop:
+   - Load (or initialize) `music_progress_<variant>.json`, which stores `{voice_token: {next_block: int, committed_measures: int}}`.
+   - For block `b`, build the prompt using the slicing rules above and set `expected_measure_range` so validators enforce correct numbering.
+   - Append successful rows to an in-memory buffer and write them to `notes_<voice_token>_<variant>_block{b:02d}.csv`.
+   - After the block validates, merge it into the cumulative `notes_<voice_token>_<variant>.csv` and update `music_progress_<variant>.json`.
+3. Resume support: when the pipeline restarts, read `music_progress_<variant>.json` to skip completed blocks and continue at the next block per voice.
+4. Once all blocks finish, continue with assembly and subtle-pass logic unchanged, using the full `notes_<voice_token>_<variant>.csv` artifacts.
+
+### 11.4 Modules to Update
+- `ghostwriter/music/pipeline.py`
+  - Add block-loop orchestration, progress tracking, and per-block validators.
+  - Update `_compose_first_pass_for_voice` to accept `measure_start`, `measure_end`, and to emit only rows inside that window.
+  - Teach resume/ensure gate helpers to look at `music_progress_<variant>.json` when deciding idempotency.
+- `ghostwriter/music/context.py`
+  - Provide `slice_melody(measure_start, measure_end)` helpers and expose the last committed measures for every voice.
+- `ghostwriter/music/prompts.py` & `prompts/music_first_score_prompt.md`
+  - Define new template replacements for block slices and instructions explaining the incremental process to the LLM.
+- `ghostwriter/music/resume.py` (or equivalent checkpoint scanner)
+  - Include block artifacts in resume detection so partially completed voices resume instead of restarting.
+- `ghostwriter/music/exporter.py`
+  - No functional change, but ensure it tolerates the new block scratch files so packaging only grabs the merged note CSVs.
+
+### 11.5 Artifact & Debug Strategy
+- Keep the existing `notes_<voice_token>_<variant>.first_score_attempt_X.txt` naming, but scope them per block:
+  - Persist the logs for block 01 (measures 1–10) and block `block_count` (last 10 measures) so humans can review both the opening and closing prompts.
+  - Intermediate block attempt logs stay under `notes_<voice_token>_<variant>.block{nn}.attempt_{mm}.txt` and may be auto-cleaned once the block commits to avoid clutter.
+- Store per-block CSVs (`notes_<voice_token>_<variant>_block{nn}.csv`) until assembly succeeds; afterward they can remain as optional debug artifacts.
+- `music_progress_<variant>.json` plus `first_score_group_index.txt` provide lightweight, resume-friendly state without recomputing earlier groups.

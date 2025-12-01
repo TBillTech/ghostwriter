@@ -1,0 +1,232 @@
+=== SYSTEM ===
+Brainstorm dialog beats as bullet points.
+
+=== USER ===
+You are a creative writer working from structured YAML notes.  
+Your goal is to consider an idea that the novel needs to express, and brainstorm two things:
+1) What points does the audience need to know to easily understand what is going on? This adds clarity.
+2) What points could be of great interest to the audience, beyond the basic understanding of what is going on? This adds flavor.
+
+# Setting in general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "red",
+      "name": "Little Red Riding Hood",
+      "background": "A bright, tender-hearted village girl sent to bring food and comfort to her\nailing grandmother. She’s been warned to keep to the path and not speak to\nstrangers, but curiosity and kindness tug at her feet. She loves flowers,\nbirdsong, and the way sunlight freckles through the trees. Her iconic red\nhood and basket are more than props—they’re little anchors of bravery when\nthe woods press close. She’s polite by upbringing, literal in her\nunderstanding, and brave in small, practical ways.\n",
+      "traits": [
+        "curious",
+        "kind",
+        "naive",
+        "brave",
+        "easily-distracted",
+        "polite"
+      ],
+      "cadence": "light, earnest",
+      "lexicon": "simple words, fairy-tale tone; polite forms like \"please\" and \"thank you\"",
+      "prefer": [
+        "flowers",
+        "Grandmother",
+        "safe path",
+        "helpfulness",
+        "honesty"
+      ],
+      "avoid": [
+        "lying",
+        "strangers' tricks",
+        "dark thickets",
+        "leaving the path"
+      ],
+      "mannerisms": [
+        "Clutches her basket when nervous; relaxes as soon as she can offer help.",
+        "Answers questions plainly; takes idioms literally before catching on.",
+        "Soft little gasps of wonder at woodland sights; quiet hums of nursery tunes.",
+        "Uses simple, sincere phrases over fancy words; sprinkles in ‘please’ and ‘thank you.’",
+        "When scolded, lowers her eyes and apologizes, then tries to fix things at once."
+      ],
+      "sample_lines": [
+        "I'm bringing goodies to Grandmother.",
+        "I promised to stay on the path—well, mostly.",
+        "These flowers will cheer her right up, don’t you think?",
+        "Mama says it’s safest if I hurry, but I can help for just a minute.",
+        "If you know a shorter way, I suppose that would be kind…"
+      ],
+      "common_lines": [
+        "Grandmother’s waiting; I mustn’t dawdle.",
+        "Oh! I didn’t mean to be rude.",
+        "Thank you, but I should be on my way."
+      ],
+      "rare_lines": [
+        "I’m frightened, but I won’t run.",
+        "I did wrong to wander. I’ll make it right."
+      ],
+      "forbidden": [
+        "Does not use modern slang or technical jargon.",
+        "Will not be cruel, lewd, or cynical; no scheming language."
+      ],
+      "temperature_hint": 0.25,
+      "max_tokens_line": 80
+    },
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red promised to bring goodies to her ailing grandmother.
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+{
+  "Story-Relative-To": {
+    "Red": "Eager to help, trusts strangers.",
+    "Wolf": "Hungry, looking for an opportunity.",
+    "Forest Path": "Quiet, but shadows watch."
+  }
+}
+
+# Prior paragraph
+This is only for context. Do NOT repeat this:
+Red moved along the winding dirt trail, her bright hood a beacon among the dark pines, the basket swinging in a small, steady arc from her arm. Pine needles cushioned each step, their sharp scent mingling with the warm bread and jam in the basket. Shafts of pale sunlight slipped through the high branches, crossing her cloak so her hood flashed and dimmed like a moving ember. She hummed as she walked, the tune threading between the trees, rising and falling with each step until distant birds paused their own songs and listened.
+
+Small sounds—the anxious snap of a twig, the soft shift of her sleeve—tinted the hush, unnoticed by her but not by Wolf. Around her, the forest path narrowed and bent, its edges blurred by ferns and bramble, while, somewhere unseen, Wolf watched the bright figure advance. Wolf's eyes tracked her and the basket with a careful, calculating attention.
+
+# Scene
+Here is the scene they actors are placed in:
+{'name': 'Forest Path', 'description': 'A winding dirt trail beneath tall, shadowed pines. Shafts of light\nthread through the branches; birds rustle, then fall silent when the\nwind shifts. The air smells of damp earth and sweet jam.\n', 'props': [{'name': 'Basket', 'significance': 'Gift and responsibility; symbol of trust', 'description': "A small wicker basket filled with bread and jam, carried on Red's arm."}, {'name': 'Red Hood', 'significance': 'Identity and innocence; visible target in the woods', 'description': 'A bright red cloak and hood, a gift from Grandmother that draws the eye.'}]}
+
+# Actors
+Here are the actors in the scene:
+Red, Wolf
+
+# The Touch-Point
+Please carefully read and understand this Touch-Point; This is the core idea that needs to be expounded upon:
+The Wolf greets Red and asks where she's going.
+
+
+# Rules for generation:
+1. **Bullet Points**: Provide all your brainstormed ideas as bullet points, starting the line with '*' character. Use only simple statements, NOT additional markdown.  Do NOT put dashes at the front of the lines.
+2. **Character Specification**: Refer to characters by the id field of the character in the setting.  
+3. **Touch-Point**: Expressing this touch point creatively IS YOUR GOAL.  
+4. **Continuity**: Respect "Story-So-Far" and "Story-Relative-To".  
+5. **Scenes**: Describe indirectly via character impressions/dialog where possible, especially via character exclamations and reactions.
+
+Now, provide groups of bullet points creatively. Please generate a set of five possible responses, several times, following the format given. Each round of responses, try to generate responses not in the prior reported distribution.
+Responses should each include a numeric <probability>.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.
+
+
+=== RESPONSE ===
+* wolf steps from behind a pine with a rustle, offers a shallow, courtly bow, and says he hopes he has not startled red before smoothly asking where such a dutiful girl walks alone with a basket that smells so sweet <0.09>  
+* red startles, clutching her basket to her chest, then relaxes when wolf compliments her red hood and calls her “kind granddaughter,” prompting her to explain she is hurrying to grandmother’s cottage along the safe path <0.08>  
+* wolf pads along beside the edge of the path, never quite stepping onto it, pretending to peer anxiously into the darker trees as he wonders aloud if red is quite certain this path leads most quickly to grandmother’s door <0.08>  
+* red, eager to prove she knows what she’s doing, names grandmother and mentions the little cottage with blue shutters, giving wolf landmark details without realizing she has drawn a map with her tongue <0.07>  
+* wolf repeats grandmother’s name back to red in a purring tone, assures her he only worries for an old woman left waiting, and inquires how far the cottage is and whether red has ever wished the walk might be shorter on such a heavy-armed day <0.06>  
+
+
+
+* wolf appears first as a shadow that lengthens across the path, then resolves into his sleek form, remarking how the forest itself seems to lean toward red and wondering aloud if the trees know where she is headed before asking her the same question with feigned curiosity <0.09>  
+* red, thinking the question about the trees is a riddle, answers earnestly that trees can’t know things, but she does: she’s going to grandmother, who is poorly and needs bread and jam, then asks wolf if he ever gets sick in the cold woods <0.08>  
+* wolf’s eyes flick briefly to the basket each time red mentions “goodies,” and he laughs softly, saying he could follow that smell for miles, then asks how many miles it is to grandmother’s bed from this very spot <0.07>  
+* red apologizes for not being able to share because “it’s for grandmother,” which pleases wolf, since it confirms the meal is all in one place, and he assures her he would never dream of taking what belongs to a sick old lady—he only wishes to know which way to send his “kind thoughts” <0.08>  
+* wolf tilts his head as if listening for distant coughs and suggests that he once passed a cottage deeper in the woods where an old woman lived alone, asking whether grandmother’s door has a squeaky hinge or a garden gate so he can picture it properly in his mind <0.06>  
+
+
+
+* wolf steps onto the path as though he has every right to walk there, greeting red as “little traveler” and admiring how her hood “lights up the gloom,” then gently wonders what such a bright spark is doing so far from village chimneys <0.09>  
+* red explains that her mother trusts her now to go to grandmother’s all by herself, taking the path and not talking to strangers, then falters and blushes as she realizes she is, in fact, talking to one <0.08>  
+* wolf catches the hesitation, gives a wounded little laugh, and insists he is no stranger at all—only a neighbor of the forest—then softens his voice and asks if he may know her name and her errand, since neighbors should watch out for one another <0.08>  
+* red offers her name and says grandmother lives “just a bit farther on” where “the path bends twice,” unconsciously tracing the bends in the air with her finger while wolf’s gaze follows the motion like a hunter tracking a hare <0.07>  
+* wolf repeats “just a bit farther” with a thoughtful hum, calculating how long it would take him at a run, and asks politely whether grandmother is alone today, or if perhaps a hunter-father or stout uncle is sitting by her bedside <0.06>  
+
+
+
+* wolf’s voice comes first from behind a fern, commenting that such a fine smell of bread and jam must be flying ahead of red like a little banner, then he steps out, nose lifted theatrically, and asks whose table is so lucky as to be waiting for it <0.09>  
+* red giggles at the image of smells flying, relaxes, and proudly tells him the basket is for grandmother because she has been coughing at night, confiding that the bread crusts are her favorite part and hoping they will help <0.08>  
+* wolf nods gravely, as if the matter of crusts and coughs is deep business, and remarks that an ailing grandmother should not be kept waiting, then inquires how many songs red must hum before she reaches the cottage door from here <0.07>  
+* red, taking the question literally, counts on her fingers and answers that it is “only two songs and a half if I don’t stop for flowers,” accidentally revealing her tendency to dawdle and how long wolf has to overtake her <0.08>  
+* wolf chuckles at the mention of flowers, planting the idea by suggesting that grandmother would surely be even more cheered by a bright bouquet, then casually asks where the nicest flowers grow off this path, as though seeking to help make the gift more perfect <0.06>  
+
+
+
+* wolf calls out from a low branch above the path, pretending surprise that such a small figure bears such a large responsibility, and drops down lightly to ask whether red is sure her arms won’t grow tired before she reaches wherever she’s going <0.09>  
+* red steadies herself after his sudden appearance, then insists she can manage because grandmother needs her, revealing how seriously she takes the task and that turning back is unthinkable to her <0.08>  
+* wolf circles once at a respectful distance, eyes never leaving the basket, and guesses aloud that someone so careful must be bringing food to “an old one who cannot walk the path herself,” then asks if he is right, as though playing a guessing game <0.08>  
+* red, pleased that he guessed correctly, confirms that grandmother is “too weak to visit,” describing the little bed by the window and the way she will set the basket on the stool beside it, painting a picture vivid enough for wolf to step into later <0.07>  
+* wolf, now certain of both destination and vulnerability, lowers his voice to a confiding murmur, saying he knows a turn in the forest that makes journeys shorter, and asks exactly which side of the path red’s grandmother’s cottage stands on, “so I can imagine you arriving safe and sound” <0.06>

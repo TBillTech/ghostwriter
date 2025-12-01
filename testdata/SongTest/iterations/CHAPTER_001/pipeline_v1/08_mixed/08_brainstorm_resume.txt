@@ -1,0 +1,229 @@
+=== SYSTEM ===
+Brainstorm mixed dialog + brief narrative/action beats as bullet points.
+
+=== USER ===
+You are a creative writer working from structured YAML notes.
+Your goal is to brainstorm a sequence that blends dialog with narration to creation motion, mood, and reaction between characters, and also how the environment is conditioning their actions. We want to highlight dynamics, feeling, and challenge.
+The output of this brainstorm will guide a mixed touch-point: roughly half dialog and half narration (especially brief action or reaction lines) that together realize the touch-point.
+
+# Setting in general 
+{'factoids': ['Basket of Goodies', 'Red Hood'], 'actors': ['Red', 'Wolf']}
+
+{
+  "Factoids": [
+    {
+      "name": "Basket of Goodies",
+      "description": "A small wicker basket filled with bread and jam."
+    },
+    {
+      "name": "Red Hood",
+      "description": "A bright red cloak and hood, a gift from Grandmother."
+    }
+  ]
+}
+
+# Characters
+{
+  "Selected-Characters": [
+    {
+      "id": "red",
+      "name": "Little Red Riding Hood",
+      "background": "A bright, tender-hearted village girl sent to bring food and comfort to her\nailing grandmother. She’s been warned to keep to the path and not speak to\nstrangers, but curiosity and kindness tug at her feet. She loves flowers,\nbirdsong, and the way sunlight freckles through the trees. Her iconic red\nhood and basket are more than props—they’re little anchors of bravery when\nthe woods press close. She’s polite by upbringing, literal in her\nunderstanding, and brave in small, practical ways.\n",
+      "traits": [
+        "curious",
+        "kind",
+        "naive",
+        "brave",
+        "easily-distracted",
+        "polite"
+      ],
+      "cadence": "light, earnest",
+      "lexicon": "simple words, fairy-tale tone; polite forms like \"please\" and \"thank you\"",
+      "prefer": [
+        "flowers",
+        "Grandmother",
+        "safe path",
+        "helpfulness",
+        "honesty"
+      ],
+      "avoid": [
+        "lying",
+        "strangers' tricks",
+        "dark thickets",
+        "leaving the path"
+      ],
+      "mannerisms": [
+        "Clutches her basket when nervous; relaxes as soon as she can offer help.",
+        "Answers questions plainly; takes idioms literally before catching on.",
+        "Soft little gasps of wonder at woodland sights; quiet hums of nursery tunes.",
+        "Uses simple, sincere phrases over fancy words; sprinkles in ‘please’ and ‘thank you.’",
+        "When scolded, lowers her eyes and apologizes, then tries to fix things at once."
+      ],
+      "sample_lines": [
+        "I'm bringing goodies to Grandmother.",
+        "I promised to stay on the path—well, mostly.",
+        "These flowers will cheer her right up, don’t you think?",
+        "Mama says it’s safest if I hurry, but I can help for just a minute.",
+        "If you know a shorter way, I suppose that would be kind…"
+      ],
+      "common_lines": [
+        "Grandmother’s waiting; I mustn’t dawdle.",
+        "Oh! I didn’t mean to be rude.",
+        "Thank you, but I should be on my way."
+      ],
+      "rare_lines": [
+        "I’m frightened, but I won’t run.",
+        "I did wrong to wander. I’ll make it right."
+      ],
+      "forbidden": [
+        "Does not use modern slang or technical jargon.",
+        "Will not be cruel, lewd, or cynical; no scheming language."
+      ],
+      "temperature_hint": 0.25,
+      "max_tokens_line": 80
+    },
+    {
+      "id": "wolf",
+      "name": "The Wolf",
+      "background": "A sleek, hungry trickster who prefers a silver tongue to a swift pounce.\nHe prowls the liminal places—where path meets bramble, where caution meets\ncuriosity. Flattery is his bait; suggestion, his snare. He can mimic concern\nand play at civility, but his eyes count footsteps and timings. Disguises and\nshortcuts are his trade. He fears hunters and witnesses, and he thrives when\nthe woods grow quiet and a young traveler forgets good advice.\n",
+      "traits": [
+        "cunning",
+        "hungry",
+        "deceptive",
+        "manipulative",
+        "theatrical",
+        "patient"
+      ],
+      "cadence": "smooth, persuasive; oily charm with playful menace",
+      "lexicon": "sly flattery; leading questions; feigned concern and polite veneer",
+      "prefer": [
+        "deception",
+        "shortcuts",
+        "disguises",
+        "seclusion",
+        "unguarded doors"
+      ],
+      "avoid": [
+        "hunters",
+        "honest confrontation",
+        "witnesses",
+        "hounds",
+        "bright crowds",
+        "secret"
+      ],
+      "mannerisms": [
+        "Elongates sibilants; purrs words like a lullaby turned sideways.",
+        "Repeats the child’s phrases back at her, softened, to earn trust.",
+        "Sprinkles compliments between questions that narrow choices.",
+        "Lets a low chuckle ride on the end of a sentence when a plan clicks.",
+        "Feigns mild offense if suspected, then overcompensates with concern."
+      ],
+      "sample_lines": [
+        "Where might you be going, little one?",
+        "Such a charming hood—why, it brightens the whole forest.",
+        "The path is safe enough, but I know a quicker way for dutiful girls.",
+        "And what big basket you have—surely too heavy for such small arms.",
+        "Grandmother will be ever so grateful if you don’t keep her waiting."
+      ],
+      "common_lines": [
+        "Only a suggestion, of course. Your mother needn’t know.",
+        "I worry for you; let me help.",
+        "Think how proud they’ll be when you arrive sooner."
+      ],
+      "rare_lines": [
+        "Tsk—such sharp eyes. Perhaps sharper than mine.",
+        "I’m disappointed, child. I offered kindness."
+      ],
+      "forbidden": [
+        "Does not confess predatory intent plainly unless unmasked.",
+        "No modern slang or technical jargon; avoids out-of-era references.",
+        "Apologies only as manipulation, not genuine remorse."
+      ],
+      "temperature_hint": 0.35,
+      "max_tokens_line": 80
+    }
+  ]
+}
+
+# The Story so Far
+This is the synopsis of the book up to the current chapter:
+Red promised to bring goodies to her ailing grandmother.
+
+
+# Points of View
+These are the stories so far for each individual character for context of their point of view:
+{
+  "Story-Relative-To": {
+    "Red": "Eager to help, trusts strangers.",
+    "Wolf": "Hungry, looking for an opportunity.",
+    "Forest Path": "Quiet, but shadows watch."
+  }
+}
+
+# Prior paragraph
+This is only for context. Do NOT repeat this verbatim:
+Wolf bowed; his smile lengthened. "I hope I haven't startled you, child. Where are you going with that sweet-smelling basket?"
+
+Red clutched her basket and looked down. "Oh—no, you didn't startle me. I'm taking these goodies to Grandmother. I mustn't dawdle."
+
+Wolf stepped to the edge of the path, keeping to the shadows. "Isn't the path a long one for such small feet? How far is your grandmother's cottage?"
+
+Red straightened and answered, "It's Grandmother's—blue shutters, past the little brook. I'm bringing bread and jam to make her feel better."
+
+Wolf's smile widened a little. "If only there were a quicker way, little one—only a thought."
+
+# Scene
+Here is the scene the actors are placed in:
+{'name': 'Forest Path', 'description': 'A winding dirt trail beneath tall, shadowed pines. Shafts of light\nthread through the branches; birds rustle, then fall silent when the\nwind shifts. The air smells of damp earth and sweet jam.\n', 'props': [{'name': 'Basket', 'significance': 'Gift and responsibility; symbol of trust', 'description': "A small wicker basket filled with bread and jam, carried on Red's arm."}, {'name': 'Red Hood', 'significance': 'Identity and innocence; visible target in the woods', 'description': 'A bright red cloak and hood, a gift from Grandmother that draws the eye.'}]}
+
+# Actors
+Here are the actors in the scene:
+Red, Wolf
+
+# The Touch-Point
+Please carefully read and understand this Touch-Point; This is the core idea to realize through a mix of dialog and narrative action:
+Danger hinted at in the dark trees and Wolf's smile.
+
+
+# Rules for generation:
+1. Bullet Points: Provide all brainstormed ideas as bullet points, starting each line with '*'. Keep statements simple; no extra markdown.
+2. Character Specification: Refer to characters by their 'id' from the setting. Use quotes for dialog ideas.
+3. Narrator: For narration, for example action beats or extended body language, feel free to use "* Narrator:" at the beginning of the idea line.
+4. Continuity: Respect Story-So-Far and Story-Relative-To.
+5. Scene Awareness: Use the scene and actors to ground both dialog and action.
+
+Now, brainstorm creative ideas that, when realized, may be either dialog or narrative depending on what is most natural. The touch-point itself needs to be vivid and clear in the readers mind. Provide groups of bullet points creatively. Please generate a set of five possible responses, several times, following the format given. Each round of responses, try to generate responses not in the prior reported distribution.
+Responses should each include a numeric <probability>.
+Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.
+
+
+=== RESPONSE ===
+* Narrator: A cloud slides over the sun; the strip of path ahead dims, and the pines lean closer as if listening to wolf’s soft words. <0.08>
+* red: "Mama did say the woods can be...tricksy. But the path is safe enough, isn’t it?" She tucks her chin deeper into the red hood, the bright cloth a lone spark in the gloom. <0.09>
+* wolf: "Why, of course, little one. The trees only whisper when they like someone," he purrs, teeth just showing as a breeze stirs his dark ruff. <0.07>
+* Narrator: A jay gives a harsh cry and flaps away; crumbs of dirt patter from the bank where wolf’s shadow stretches long and thin across red’s boots. <0.06>
+* wolf: "Such brave footsteps for such a narrow trail. One misstep and you’d be ever so alone out here." His smile never falters, but his eyes flick to the undergrowth, measuring the hiding places. <0.05>
+
+* Narrator: The forest holds its breath; birdsong cuts off mid-trill, leaving only the faint drip of yesterday’s rain from black needles above red’s head. <0.09>
+* red: "It does feel quieter, all of a sudden," she whispers, fingers tightening on the basket’s handle until the wicker creaks. "Grandmother won’t like it if I’m late." <0.08>
+* wolf: "Then we mustn’t keep her waiting," he says, stepping just far enough from the briars that the light slicks along one gleaming eye. "The sooner you’re through these…deep, dark trees, the better." <0.07>
+* Narrator: A gust bends the tall pines; shadows crawl over wolf’s muzzle, carving his smile into something sharper before the light softens it again. <0.06>
+* red: "You look different when the shade moves," she blurts, then colors. "Oh! I didn’t mean to be rude." She lowers her gaze, missing the quick flash of annoyance that cuts through his charm. <0.05>
+
+* wolf: "Not rude at all," he croons. "Shadows play tricks. They can make even a friend seem fearsome…or a danger look quite harmless." His tail sweeps the needles, erasing his tracks beside the path. <0.09>
+* Narrator: The scent of damp earth thickens; beneath it, a faint musk of wild animal curls through the sweet jam smell, so soft that red’s nose wrinkles without her knowing why. <0.08>
+* red: "I was told not to stray," she says, peering past wolf’s shoulder where the undergrowth knots itself into a thorny black wall. "The path looks safest, don’t you think?" <0.07>
+* wolf: "Safest, yes…though not always kindest to tired feet," he replies, the tip of his tongue just visible between his teeth as he smiles wider. "Sometimes the forest offers…shorter kindnesses, if you trust it." <0.06>
+* Narrator: A low branch snags at red’s hood as she shifts; for a heartbeat it pulls the red cloth back, baring her throat to the cool air and the way wolf’s gaze lingers there before flicking politely away. <0.05>
+
+* Narrator: A pinecone drops somewhere behind them with a dull thud; red jumps, but wolf does not, his ears barely twitching as though the forest’s sudden noises are an old conversation. <0.09>
+* red: "Did you hear that?" Her voice comes out smaller than she means, and the basket bumps against her knee, a reminder of why she cannot turn back. <0.08>
+* wolf: "Only the forest saying hello," he murmurs. "It knows when someone…fresh has come along." His chuckle ripples low, not loud enough to scare, just enough to raise the fine hairs on her arms. <0.07>
+* Narrator: Between the trees, gaps open like dark doorways; in each, wolf could vanish with a single bound, yet he lingers on the edge of the path, polite as a courtier with a knife behind his back. <0.06>
+* wolf: "If you like, I could walk beside you a little way. Two travelers are less…tempting to anything that might be watching." His eyes gleam as he glances toward the deeper shade. <0.05>
+
+* wolf: "What a brave little flame you are," he says, nodding at the red hood. "Why, I saw your cloak from far among the trunks. Every eye in the wood must have." <0.09>
+* Narrator: The words make red aware of her color for the first time; the cloak that felt like a hug from Grandmother now burns against the green-black press of trees, a bright mark in a hunter’s sight. <0.08>
+* red: "Mama said it would help folk see me and keep me safe," she replies, but the certainty wobbles at the edges, like light on a puddle. She draws the hood closer, as if she could hide inside its scarlet. <0.07>
+* wolf: "Oh, indeed," he agrees smoothly. "Nothing could miss you now. Not friend, not…anyone." The pause is so slight she might take it for kindness instead of hunger. <0.06>
+* Narrator: Far ahead, the path curls out of sight, swallowed by bars of shadow; behind her, it does the same. For a moment red understands she is in the middle of something’s long, dark throat, with wolf’s smile the only gleam of teeth. <0.05>
