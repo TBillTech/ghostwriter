@@ -53,11 +53,11 @@ Reduced notes for alignment (complete, not truncated):
 [OTHER_VOICES_REDUCED_CSV]
 
 Instructions:
-1. For this single voice only, output a **CSV table of notes** that sounds good with **every note** listed in the melody guidance above (either the block slice or the full reduced grid, when present).
+1. For this single voice only, output a **CSV table of notes** that copies the provided melody guidance exactly when this voice is the melody, and otherwise meshes cleanly with it when this voice is an accompaniment.
 2. When a measure window is provided, **emit notes only for that window** and leave prior windows untouched. Extend ties with new rows instead of rewriting earlier measures.
-3. If this voice is the melody, be sure to use each note from the melody guidance exactly. If it is another voice, be sure each note you compose will sound good together with it.
-4. Use the global directive and context to keep the voice aligned with the chapter, but focus the actual notes and phrasing on the target voice above.
-5. Treat the provided melody guidance (block slice or full reduced grid when supplied) as the **primary structural spine** of the piece. Your new notes must align rhythmically and harmonically to this melody unless a brief, clearly-motivated divergence is musically necessary.
+3. If this voice is the melody, do **not** invent or rephrase the line: for every row in the melody guidance, emit a matching note with the identical measure, beat, pitch, and duration. No substitutions, omissions, or reordering are allowed.
+4. When this voice is not the melody, compose material that sounds good with the guided melody, but still treat the guidance as fixed.
+5. Never split a guided note into multiple notes, tie it across a new boundary, or alter its duration unless the guidance itself already does so. Each provided row should map to one output row starting at the exact beat and lasting the exact duration.
 6. When reduced-note grids for other voices are present, treat them as fixed reference parts. Write the new voice so that it complements these parts (e.g., avoiding collisions, reinforcing cadences, or providing counter-melody), but never assumes they can be changed.
 7. Respect the tempo, key, and time signature from metadata/measures unless there is a strong musical reason to diverge.
 8. Use only the following columns in your CSV output, in this exact order:

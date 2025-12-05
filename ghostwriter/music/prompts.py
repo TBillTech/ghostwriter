@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Iterable, Tuple
 
 from ..templates import apply_template
 
@@ -11,7 +11,11 @@ _TEMPLATE_FIRST_SCORE = "prompts/music_first_score_prompt.md"
 _TEMPLATE_METADATA_TRACKS = "prompts/music_metadata_tracks_prompt.md"
 _TEMPLATE_CHECK = "prompts/music_check_prompt.md"
 _TEMPLATE_SUBTLE_EDIT = "prompts/music_subtle_edit_prompt.md"
+_TEMPLATE_MELODY_EMOTION = "prompts/music_melody_emotion_prompt.md"
+_TEMPLATE_EMOTION_CHORD = "prompts/music_emotion_chord_prompt.md"
 _TEMPLATE_CSV_FORMAT = "prompts/musiccsv_format_prompt.txt"
+_INSTRUCTIONS_MELODY_EMOTION = "prompts/melody_emotion_instructions.txt"
+_INSTRUCTIONS_EMOTION_CHORD = "prompts/emotion_chord_instructions.txt"
 
 
 # NOTE: The detailed MusicCSV format reference is no longer injected into the
@@ -24,6 +28,23 @@ def _json_block(data: Any) -> str:
         return json.dumps(data, ensure_ascii=False, indent=2)
     except Exception:
         return str(data)
+
+
+def _coerce_unique_strings(items: Iterable[str]) -> list[str]:
+    seen: set[str] = set()
+    ordered: list[str] = []
+    for raw in items:
+        if raw is None:
+            continue
+        text = str(raw).strip()
+        if not text:
+            continue
+        key = text.lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        ordered.append(text)
+    return ordered
 
 
 def build_first_score_prompt(
@@ -107,6 +128,88 @@ def build_first_score_prompt(
     return apply_template(_TEMPLATE_FIRST_SCORE, replacements)
 
 
+def build_melody_emotion_prompt(
+    *,
+    prompt_payload: Dict[str, Any],
+    tp_index: int,
+    tp_type: str,
+    tp_title: str,
+    tp_description: str,
+    tp_prior_paragraph: str,
+) -> str:
+    payload_for_json = dict(prompt_payload or {})
+    character_context = payload_for_json.pop("character_outlines", None)
+
+    instructions = apply_template(_INSTRUCTIONS_MELODY_EMOTION, {})
+
+    replacements = {
+        "[VOICE_CONTEXT_JSON]": _json_block(payload_for_json),
+        "[CHARACTER_CONTEXT_JSON]": _json_block(character_context or []),
+        "[TOUCH_POINT_INDEX]": str(tp_index),
+        "[TOUCH_POINT_TYPE]": tp_type,
+        "[TOUCH_POINT_TITLE]": tp_title,
+        "[TOUCH_POINT_DESCRIPTION]": tp_description,
+        "[TOUCH_POINT_PRIOR_PARAGRAPH]": tp_prior_paragraph,
+        "[MUSIC_MELODY_EMOTION_INSTRUCTIONS]": instructions,
+    }
+    return apply_template(_TEMPLATE_MELODY_EMOTION, replacements)
+
+
+def build_emotion_chord_prompt(
+    *,
+    prompt_payload: Dict[str, Any],
+    tp_index: int,
+    tp_type: str,
+    tp_title: str,
+    tp_description: str,
+    tp_prior_paragraph: str,
+    feelings: Iterable[str],
+    transitions: Iterable[Tuple[str, str]],
+) -> str:
+    payload_for_json = dict(prompt_payload or {})
+    character_context = payload_for_json.pop("character_outlines", None)
+
+    unique_feelings = _coerce_unique_strings(feelings)
+    feelings_block = ", ".join(unique_feelings) if unique_feelings else "(none)"
+
+    unique_pairs: list[Tuple[str, str]] = []
+    seen_pairs: set[Tuple[str, str]] = set()
+    for a, b in transitions:
+        a_text = (a or "").strip()
+        b_text = (b or "").strip()
+        if not a_text or not b_text:
+            continue
+        key = (a_text.lower(), b_text.lower())
+        if key in seen_pairs:
+            continue
+        seen_pairs.add(key)
+        unique_pairs.append((a_text, b_text))
+
+    transitions_block = (
+        "\n".join(f"{a} -> {b}" for a, b in unique_pairs) if unique_pairs else "(none)"
+    )
+
+    instructions = apply_template(
+        _INSTRUCTIONS_EMOTION_CHORD,
+        {
+            "[FEELINGS]": feelings_block,
+            "[TRANSITIONS]": transitions_block,
+        },
+    )
+
+    replacements = {
+        "[VOICE_CONTEXT_JSON]": _json_block(payload_for_json),
+        "[CHARACTER_CONTEXT_JSON]": _json_block(character_context or []),
+        "[TOUCH_POINT_INDEX]": str(tp_index),
+        "[TOUCH_POINT_TYPE]": tp_type,
+        "[TOUCH_POINT_TITLE]": tp_title,
+        "[TOUCH_POINT_DESCRIPTION]": tp_description,
+        "[TOUCH_POINT_PRIOR_PARAGRAPH]": tp_prior_paragraph,
+        "[EMOTION_CHORD_INSTRUCTIONS]": instructions,
+    }
+    return apply_template(_TEMPLATE_EMOTION_CHORD, replacements)
+
+
 def build_music_check_prompt(
     *,
     prompt_payload: Dict[str, Any],
@@ -169,6 +272,8 @@ def build_metadata_tracks_prompt(
 
 __all__ = [
     "build_first_score_prompt",
+    "build_melody_emotion_prompt",
+    "build_emotion_chord_prompt",
     "build_music_check_prompt",
     "build_subtle_edit_prompt",
     "build_metadata_tracks_prompt",

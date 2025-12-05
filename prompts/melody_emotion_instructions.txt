@@ -1,0 +1,30 @@
+I need help to invent a melody, and we need to start with story theory. We approach the problem like this:
+First summarize the protagonists's current predicament, and what they want to complain to the world about in one or two sentences.  Next, summarize the antagonist's reply to the protagonist's complaint.  These statements should be dramatic, rythmic, expansive, and even transcendent. Call these words respectively the `PRO` and the `ANTI`. The statements don't need to be overly long, since this is how we will develop a musical melody, and it doesn't need to be too complicated.
+
+Then output the PRO and the ANTI sentences.
+
+Next annotate each phrase in the sentences with a single emotional word (or word pair). The annotations should apply anywhere from 1 to 10 words or so. Output this.
+
+Next, annotate each word in the PRO and the ANTI with the emotion from the phrase + emotional word annotation you just provided. Next, add to these annotations per word a duration, with the longest duration on the most important words to the meaning of the sentence. Imagine if the characters were speaking, and they had strong emotions, whether they would talk fast or slow. Use a duration of 1 to be neither slow nor fast. Generally, choose durations from the set: [0.0625, 0.125, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4], but don't use the extremes often. Use 1 the most.
+
+When you are done with the first stage, you should have a list of tuples of (word, emotion, duration) for both the PRO and the ANTI. DO NOT include punctuation in the csv blocks.
+
+At the end of your output, put the list of tuples for PRO and the list of tuples for ANTI as two csv blocks, exactly in the same format as this example:
+
+PRO.csv
+word, emotion, duration
+The, amazement, 0.25
+quick, shock, 0.5
+brown, amazement, 0.25
+fox, fear, 2
+leaped, amazement, 2
+free, freedom, 2 
+
+ANTI.csv
+word, emotion, duration
+The, danger, 0.25
+angry, danger, 0.5
+hunter, threat, 1
+yelled, triumph, 2
+
+Now, follow the instructions above and create the requested outputs:

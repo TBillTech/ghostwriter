@@ -7,7 +7,11 @@ import pytest
 
 from ghostwriter.context import UserActionRequired
 from ghostwriter.music.context import ScoreSummary, VoiceContext, VoiceSpec
-from ghostwriter.music.pipeline import ensure_first_score_gate, run_subtle_score_pass
+from ghostwriter.music.pipeline import (
+    ensure_first_score_gate,
+    run_subtle_score_pass,
+    _edge_rows_with_measures,
+)
 from ghostwriter.musiccsv import MusicCSV, musiccsv_to_text, read_musiccsv, write_musiccsv
 
 
@@ -116,6 +120,42 @@ def _patch_monitor_renderer(monkeypatch: pytest.MonkeyPatch) -> None:
         return True
 
     monkeypatch.setattr("ghostwriter.music.pipeline._render_monitor_midi", _stub)
+
+
+def test_edge_rows_require_measure_column():
+    header = "root,element,duration"
+    data_lines = ["F4,C5,1"]
+
+    with pytest.raises(UserActionRequired, match="measure"):
+        _edge_rows_with_measures("A-B", header, data_lines, 4.0)
+
+
+def test_edge_rows_detect_measure_mismatch():
+    header = "measure,root,element,duration"
+    data_lines = [
+        "1,F4,C5,4",
+        "3,F4,A4,1",
+    ]
+
+    with pytest.raises(UserActionRequired, match="measure 3"):
+        _edge_rows_with_measures("A-B", header, data_lines, 4.0)
+
+
+def test_edge_rows_keep_validated_measures():
+    header = "measure,root,element,duration"
+    data_lines = [
+        "1,F4,C5,2",
+        "1,F4,E4,2",
+        "2,F4,G4,1",
+    ]
+
+    rows = _edge_rows_with_measures("A-B", header, data_lines, 4.0)
+
+    assert rows == [
+        "1,C5,2",
+        "1,E4,2",
+        "2,G4,1",
+    ]
 
 
 def test_ensure_first_score_gate_creates_artifacts(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, voice_context_payload):

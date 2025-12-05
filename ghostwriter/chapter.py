@@ -21,6 +21,9 @@ from .music import (
     finalize_music_exports as gw_music_finalize_exports,
     # New metadata/tracks helper is exported via music.__all__
     run_metadata_tracks_step as gw_music_metadata_tracks,
+    run_melody_emotion_step as gw_music_melody_emotion,
+    run_emotion_chord_step as gw_music_emotion_chord,
+    ensure_core_melody_csv as gw_music_core_melody,
     run_melody_edges_step as gw_music_melody_edges,
     run_melody_construction_step as gw_music_melody_construct,
     run_multi_voice_first_pass as gw_music_multi_voice_first_pass,
@@ -1196,7 +1199,58 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 _log_warning(f"MUSIC: metadata/tracks step failed ({exc})", tp_log_dir)
                 raise UserActionRequired("Music metadata/tracks step failed; inspect metadatatracks.txt and retry.") from exc
 
-            # Step 2: melody dwell notes and edges (user-in-the-loop after success)
+            # Step 2: core melody prompts and deterministic CSV builder
+            try:
+                tp_target_dir = tp_log_dir or base_log_dir
+                if gw_music_melody_emotion is not None:
+                    try:
+                        _breadcrumb(f"music:coremelody_emotion:start:i={i}")
+                    except Exception:
+                        pass
+                    gw_music_melody_emotion(
+                        tp_dir=tp_target_dir,
+                        tp_index=i,
+                        tp_type=tp_type,
+                        prompt_payload=music_tp_prompt_payload,
+                    )
+                    try:
+                        _breadcrumb(f"music:coremelody_emotion:done:i={i}")
+                    except Exception:
+                        pass
+                if gw_music_emotion_chord is not None:
+                    try:
+                        _breadcrumb(f"music:coremelody_chord:start:i={i}")
+                    except Exception:
+                        pass
+                    gw_music_emotion_chord(
+                        tp_dir=tp_target_dir,
+                        tp_index=i,
+                        tp_type=tp_type,
+                        prompt_payload=music_tp_prompt_payload,
+                    )
+                    try:
+                        _breadcrumb(f"music:coremelody_chord:done:i={i}")
+                    except Exception:
+                        pass
+                if gw_music_core_melody is not None:
+                    try:
+                        _breadcrumb(f"music:coremelody_build:start:i={i}")
+                    except Exception:
+                        pass
+                    gw_music_core_melody(tp_dir=tp_target_dir)
+                    try:
+                        _breadcrumb(f"music:coremelody_build:done:i={i}")
+                    except Exception:
+                        pass
+            except UserActionRequired:
+                raise
+            except Exception as exc:
+                _log_warning(f"MUSIC: core melody step failed ({exc})", tp_log_dir)
+                raise UserActionRequired(
+                    "Core melody pipeline failed; inspect music_melody_emotion.txt or music_emotion_chord.txt and retry."
+                ) from exc
+
+            # Step 3: melody dwell notes and edges (user-in-the-loop after success)
             try:
                 if gw_music_melody_edges is not None:
                     try:
@@ -1224,7 +1278,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 _log_warning(f"MUSIC: melody edges step failed ({exc})", tp_log_dir)
                 raise UserActionRequired("Music melody edges step failed; inspect melodyelements.txt and retry.") from exc
 
-            # Step 3: construct the standard melody from dwell/edge elements.
+            # Step 4: construct the standard melody from dwell/edge elements.
             try:
                 if gw_music_melody_construct is not None:
                     try:
@@ -1248,7 +1302,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 _log_warning(f"MUSIC: melody construction step failed ({exc})", tp_log_dir)
                 raise UserActionRequired("Music melody construction step failed; inspect the melody log and retry.") from exc
 
-            # Step 3b: construct complimentary and reprise melodies unconditionally.
+            # Step 4b: construct complimentary and reprise melodies unconditionally.
             try:
                 if gw_music_melody_construct is not None:
                     try:
@@ -1287,7 +1341,7 @@ def run_pipelines_for_chapter(chapter_path: str, version_num: int, *, log_llm: b
                 _log_warning(f"MUSIC: complimentary/reprise melody construction failed ({exc})", tp_log_dir)
                 raise UserActionRequired("Music complimentary/reprise melody construction failed; inspect the melody logs and retry.") from exc
 
-            # Step 4: per-voice first-pass composition (no user feedback in v1).
+            # Step 5: per-voice first-pass composition (no user feedback in v1).
             try:
                 if gw_music_multi_voice_first_pass is not None:
                     for variant in ("standard", "complimentary", "reprise"):

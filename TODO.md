@@ -4,20 +4,8 @@ This document outlines the tasks currently being worked for this project for new
 
 ## High Level Tasks
 
-1. [x] Update the music_design.md and TODO.md for 10-measure group feature
-    The current implementation tries to prompt the LLM to do the entire 120 (or 150 or 180) measures in one music_first_score_prompt.md request. The LLM seems to be resistant to this request, possibly due to internal anti-repetition utility in training. There is a way we can work around this though: We can do the music_first_score_prompt.md in groups of 10 measures.
-    - [x] Rewrite `music_design.md` to reflect the current code base and introduce the grouped flow.
-    - [x] Document how successive 10-measure prompts work (motivation, melody slicing, nth block rules, prior-block injection, module updates, artifact/debug plan).
-    - [x] Update this TODO with the implementation plan below.
 
-2. Implement the 10-measure grouped first-score flow end to end
-    - [ ] Update `prompts/music_first_score_prompt.md` and `ghostwriter.music.prompts` with block-aware placeholders and guidance.
-    - [ ] Teach `ghostwriter.music.context` & pipeline helpers to slice melody CSVs, surface prior blocks, and expose progress metadata.
-    - [ ] Extend `ghostwriter.music.pipeline` to iterate per voice/variant in 10-measure blocks, manage `music_progress_<variant>.json`, and emit per-block note CSVs.
-    - [ ] Persist the required first/last block attempt logs plus per-block scratch artifacts while keeping resume idempotent.
-    - [ ] Update resume/export glue, README, and tests (unit + integration) to cover the new grouped behavior.
-
-
+    
 ## Session Summary (Oct 24, 2025)
 
 - Implemented Previous Task: pre-draft user-in-the-loop across narration, dialog, and implicit.

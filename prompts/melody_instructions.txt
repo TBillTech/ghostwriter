@@ -15,12 +15,9 @@ Here are the edges I have constructed to be used the next step for creating the 
 Craft the melody according to the following rules:
 * Add 2 whole measures of rests at the beginning, and 2 whole measures of rests at the end to help the melody stand out and finish. 
 * Build the melody from a sequence of the edges you invented earlier.
-* Try not to use the same edge twice in a row.  Try very hard never to repeat the same edge 4 times or more.
-* You start the song at A and so will start by choosing an edge that includes A.
 * After following an edge, you "arrive" at the next dwell note, and then choose the next edge begging at that note.
 * If you need to follow an edge backwards, simply reverse the order of the notes in the edge (and optionally reverse rapid passages). 
 * You can follow any edge in either direction, for example, if you follow edge A-C1, you can then follow edge C1-B1 (but in reverse).
-* When choosing which edge to follow next, the weights should be honored.  For example, if you compare edge A-A with A-C1, prefer A-A to A-C1 with weight 0.5 to 0.125.
 * The count of measures should be between 120 and 150. Try to touch each edge once, even if some of the edges have low weight. 
 [additional_rules]
 

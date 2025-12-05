@@ -1,0 +1,32 @@
+I need help to invent a core melody, and we need to start with some music theory. We approach the problem like this:
+From a previous step, we generated a list of emotional feelings, and a list of emotion transitions.
+Emotions:
+[FEELINGS]
+
+Transitions:
+[TRANSITIONS]
+
+Now, for each emotion in the Emotions list, imagine a chord that corresponds best with the emotion, between 2 and 8 notes, and then output the number of semi-tones between each successive note in the chord. For example, a major C chord (C2, E2, G2, C3) would have semi-tones: (4, 3, 5)
+
+Then, for each emotion pair in the transitions, imagine how many semi-tones up or down would makes sense for that emotional transition. Think about it like if second emotion is positive, use a semitone from a major scale. If second emotion is negative, use a semitone from a minor or diminished scale. Also, note that the same emotion A equal to emotion B should have a semi-tone shift of 0, by definition.
+
+The output should be formatted exactly like this example:
+
+Emotions.csv
+emotion, semi-tones
+amazement, (4, 3, 5)
+shock, (3, 4)
+fear, (3, 3, 6)
+freedom, (7, 5, 4)
+danger, (3, 9, 3)
+
+Transitions.csv
+emotion A, emotion B, semi-tone
+amazement, amazement, 0
+amazement, shock, 6
+shock, shock, 0
+shock, amazement, 7
+amazement, fear, 3
+amazement, freedom, 4
+
+Now, follow the instructions above and create the requested outputs:

@@ -202,3 +202,59 @@ For each content touch-point that generates music:
   - Intermediate block attempt logs stay under `notes_<voice_token>_<variant>.block{nn}.attempt_{mm}.txt` and may be auto-cleaned once the block commits to avoid clutter.
 - Store per-block CSVs (`notes_<voice_token>_<variant>_block{nn}.csv`) until assembly succeeds; afterward they can remain as optional debug artifacts.
 - `music_progress_<variant>.json` plus `first_score_group_index.txt` provide lightweight, resume-friendly state without recomputing earlier groups.
+
+## 12. Core Melody Emotion Seeding (New Feature)
+
+### 12.1 Motivation
+- First-pass melodies often meander because we only provide structural metadata (tempo/key) plus prose tone. The **Core Melody** feature injects an emotion-driven motif skeleton before the existing `melody_edges` + `melody` prompts run, giving the LLM concrete hook intervals and durations to elaborate on.
+- The core motif must be deterministic, resume-friendly, and computed without additional LLM calls beyond two concise emotion prompts. We therefore split the work into discrete artifacts that can be parsed, inspected, and recomposed if edits are needed.
+
+### 12.2 Prompt & Artifact Pipeline
+1. **Emotion Survey Prompt** — `prompts/music_melody_emotion_prompt.md`
+   - Inputs: vanilla touch-point payload + `melody_emotion_instructions.txt` template.
+   - Output file: `music_melody_emotion.txt` under the touch-point music directory.
+   - Response parsing: ignore any header text, then extract two CSV blocks named `PRO.csv` and `ANTI.csv` (headers `emotion,duration`). Each row describes an emotion keyword and a nominal duration multiplier for the ensuing motif slice.
+2. **Emotion Chord Prompt** — `prompts/music_emotion_chord_prompt.md`
+   - Inputs: same base payload plus `emotion_chord_instructions.txt`, with two substitutions: `FEELING` (unique emotion words from both PRO/ANTI tables) and `TRANSITIONS` (ordered pairs of successive emotions; include wrap-around pair connecting the final PRO emotion to the first ANTI emotion).
+   - Output: `music_emotion_chord.txt` containing two CSV blocks `Feelings.csv` (`emotion,semi_tones`) and `Transitions.csv` (`emotion_a,emotion_b,semi_tones`).
+   - Parser requirements: tolerate optional commentary before/after the CSV blocks; extraction should be line-oriented like the existing metadata/tracks parser.
+3. **Derived Core Melody CSV** — `CORE_MELODY.csv`
+   - Constructed entirely in code after both prompt responses succeed.
+   - Steps:
+     1. Concatenate `PRO.csv` followed by `ANTI.csv`, preserving original order and durations.
+     2. Build adjacency pairs by zipping the concatenated list with itself offset by one row (wrap the final row to `None` to avoid spurious pair unless the user explicitly wants a loop). These pairs form the join key for `Transitions.csv`.
+     3. Join each row with `Feelings.csv` on the current emotion to pull its `semi_tones` tuple.
+     4. Join each pair with `Transitions.csv` on `(emotion, next_emotion)` to find transition intervals.
+     5. Emit rows with columns `emotion`, `duration`, `semi_tones`, `transition` (semi-tone tuple describing how to move to the next emotion). Default to `(0)` when no transition mapping exists so the downstream instructions stay consistent.
+
+### 12.3 Template Integration
+- `melody_elements_instructions.txt` already has placeholders for the core motif; the pipeline must substitute `[CORE_MELODY_CSV]` (or equivalent token) before injecting the instructions into `music_melody_edges_prompt.md`.
+- The resulting `CORE_MELODY.csv` should live beside the other melody artifacts (`iterations/.../06_music/CORE_MELODY.csv`) so humans can edit it in between runs. On resume, check for an edited file before recomputing.
+- During the melody edges prompt, include both the textual instructions and the CSV so the model can reuse specific semi-tone tuples when sketching the dwell notes.
+
+### 12.4 Implementation Hooks
+- **New prompts**: add two template files plus builder helpers in `ghostwriter.music.prompts` mirroring the existing pattern (payload JSON, character context, etc.). Each builder should expose substitution knobs for `FEELING`, `TRANSITIONS`, and the raw instruction text.
+- **Pipeline orchestration** (`ghostwriter.music.pipeline`):
+  1. After `metadata/tracks` and before `melody_edges`, run `run_melody_emotion_step` (new helper) to produce `music_melody_emotion.txt`, parse `PRO.csv`/`ANTI.csv`, and persist them individually.
+  2. Feed the parsed emotion set into `run_emotion_chord_step` to write `music_emotion_chord.txt`, `Feelings.csv`, and `Transitions.csv`.
+  3. Call a pure-Python `_build_core_melody_csv` that loads the four CSVs, applies the algorithm above, and writes/updates `CORE_MELODY.csv` (with overwrite guard unless `--force` is supplied).
+  4. Pass the final CSV contents into the template substitution when building `melody_elements_instructions.txt` for the edges prompt.
+- **Parsing utilities**: add shared CSV readers to `ghostwriter.music.context` (or a new `core_melody` module) to avoid duplicating logic. Each parser should raise `UserActionRequired` with actionable messages when blocks are missing.
+- **Resume semantics**: store a `core_melody_state.json` enumerating the timestamps and hashes of each CSV; skip re-running prompts if the artifacts already exist and no `--force` flag is provided.
+- **Testing**:
+  - Unit tests covering CSV parsing (malformed headers, missing blocks).
+  - Deterministic test for `_build_core_melody_csv` using fixed PRO/ANTI/Feeling/Transitions fixtures.
+  - Integration test ensuring the core melody is injected into the melody edges template and survives end-to-end generation.
+
+### 12.5 Artifacts Summary
+```
+iterations/CHAPTER_xxx/pipeline_vN/06_music/
+  music_melody_emotion.txt    # prompt/response log
+  PRO.csv                     # parsed from emotion prompt
+  ANTI.csv                    # parsed from emotion prompt
+  music_emotion_chord.txt     # prompt/response log
+  Feelings.csv                # parsed from chord prompt
+  Transitions.csv             # parsed from chord prompt
+  CORE_MELODY.csv             # synthesized deterministic motif
+```
+- Downstream steps treat `CORE_MELODY.csv` as read-only input for melody edges and eventual melody construction. If humans edit any of the CSVs, rerun only the deterministic build step (skip prompts) so manual tweaks propagate.

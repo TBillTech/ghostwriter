@@ -3,6 +3,9 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Dict, Any, Optional, Tuple, List, Iterable
+from io import StringIO
+import csv
+import hashlib
 import json
 import math
 import shutil
@@ -38,6 +41,17 @@ from .prompts import (
     build_music_check_prompt,
     build_subtle_edit_prompt,
     build_metadata_tracks_prompt,
+    build_melody_emotion_prompt,
+    build_emotion_chord_prompt,
+)
+from .core_melody import (
+    EmotionWordRow,
+    FeelingRow,
+    TransitionRow,
+    parse_emotion_prompt_response,
+    parse_emotion_chord_response,
+    load_emotion_rows,
+    build_core_melody_csv,
 )
 
 logger = logging.getLogger(__name__)
@@ -55,6 +69,75 @@ _NOTE_HEADER = [
 _BLOCK_SIZE = 10
 _SCIENTIFIC_PITCH_RE = re.compile(r"^[A-Ga-g](?:[#b])?\d+$")
 _ALLOWED_TIES = {"start", "continue", "stop"}
+
+_STATE_FILE_NAME = "core_melody_state.json"
+_EMOTION_HEADER = ["word", "emotion", "duration"]
+_FEELINGS_HEADER = ["emotion", "semi-tones"]
+_TRANSITIONS_HEADER = ["emotion A", "emotion B", "semi-tone"]
+
+
+def _core_melody_state_path(tp_dir: Path) -> Path:
+    return Path(tp_dir) / _STATE_FILE_NAME
+
+
+def _load_core_melody_state(tp_dir: Path) -> Dict[str, Any]:
+    path = _core_melody_state_path(tp_dir)
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def _save_core_melody_state(tp_dir: Path, state: Dict[str, Any]) -> None:
+    path = _core_melody_state_path(tp_dir)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    try:
+        path.write_text(json.dumps(state, indent=2, sort_keys=True), encoding="utf-8")
+    except Exception:
+        pass
+
+
+def _hash_text(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def _hash_file(path: Path) -> str:
+    try:
+        return _hash_text(Path(path).read_text(encoding="utf-8"))
+    except Exception:
+        return ""
+
+
+def _write_emotion_rows_csv(path: Path, rows: Iterable[EmotionWordRow]) -> None:
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(_EMOTION_HEADER)
+        for row in rows:
+            writer.writerow([row.word, row.emotion, _format_number(row.duration)])
+
+
+def _write_feelings_rows_csv(path: Path, rows: Iterable[FeelingRow]) -> None:
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(_FEELINGS_HEADER)
+        for row in rows:
+            writer.writerow([row.emotion, "(" + ", ".join(str(int(val)) for val in row.semitones) + ")"])
+
+
+def _write_transitions_rows_csv(path: Path, rows: Iterable[TransitionRow]) -> None:
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(_TRANSITIONS_HEADER)
+        for row in rows:
+            writer.writerow([row.emotion_a, row.emotion_b, str(row.semitone)])
 
 
 def _coerce_int(value: Any) -> Optional[int]:
@@ -121,6 +204,24 @@ def _beats_per_measure_from_signature(signature: str) -> float:
     if denominator == 0:
         return float(numerator)
     return numerator * (4.0 / denominator)
+
+
+def _beats_per_measure_from_metadata(metadata_text: str) -> float:
+    try:
+        metadata = json.loads(metadata_text)
+    except Exception:
+        metadata = {}
+    signature = str(metadata.get("time_signature") or "4/4")
+    signature = signature.strip() or "4/4"
+    return _beats_per_measure_from_signature(signature)
+
+
+def _voice_is_melody(spec: Any) -> bool:
+    token = str(getattr(spec, "token", "") or "").lower()
+    idea = str(getattr(spec, "idea", "") or "").lower()
+    role = str(getattr(spec, "role", "") or "").lower()
+    joined = " ".join(part for part in (token, idea, role) if part)
+    return any(keyword in joined for keyword in ("melody", "lead"))
 
 
 def _notes_csv_path(tp_dir: Path, voice_token: str, variant: str) -> Path:
@@ -323,12 +424,53 @@ def _collect_other_voice_blocks(
     return "\n\n".join(blocks).strip()
 
 
+def _order_tracks_csv(csv_text: str, voice_tokens: Iterable[str]) -> str:
+    tokens = [str(tok).strip() for tok in voice_tokens if isinstance(tok, str) and tok.strip()]
+    if not tokens:
+        return csv_text
+    text = csv_text.strip()
+    if not text:
+        return csv_text
+    import csv
+    from io import StringIO
+
+    reader = csv.DictReader(StringIO(text))
+    header = reader.fieldnames
+    if not header or "voice_token" not in header:
+        return csv_text
+    rows = list(reader)
+    if not rows:
+        return csv_text
+
+    order = {token: idx for idx, token in enumerate(tokens)}
+    indexed_rows = list(enumerate(rows))
+
+    def _sort_key(item: Tuple[int, Dict[str, Any]]) -> Tuple[int, int]:
+        original_idx, row = item
+        token = str(row.get("voice_token", "") or "").strip()
+        if token in order:
+            return (0, order[token])
+        return (1, original_idx)
+
+    sorted_rows = [row for _, row in sorted(indexed_rows, key=_sort_key)]
+    for idx, row in enumerate(sorted_rows, start=1):
+        row["track"] = str(idx)
+
+    output = StringIO()
+    writer = csv.DictWriter(output, fieldnames=header)
+    writer.writeheader()
+    for row in sorted_rows:
+        writer.writerow(row)
+    return output.getvalue().strip() + "\n"
+
+
 def _sanitize_block_note_rows(
     rows: List[Dict[str, Any]],
     *,
     measure_start: int,
     measure_end: int,
     beats_per_measure: float,
+    preserve_input_order: bool = False,
 ) -> List[Dict[str, Any]]:
     if beats_per_measure <= 0:
         beats_per_measure = 4.0
@@ -336,18 +478,21 @@ def _sanitize_block_note_rows(
     sanitized: List[Dict[str, Any]] = []
     valid_velocities: List[int] = []
 
-    for row in rows:
+    for order_idx, row in enumerate(rows):
         measure = _coerce_int(row.get("measure"))
         if measure is None:
             measure = measure_start
         measure = max(measure_start, min(measure, measure_end))
 
-        beat = _coerce_float(row.get("beat")) or 1.0
-        if beat < 1:
-            beat = 1.0
-        max_beat = beats_per_measure
-        if beat > max_beat:
-            beat = max_beat
+        beat_value = _coerce_float(row.get("beat"))
+        if beat_value is None:
+            beat_value = 1.0
+        beat = max(1.0, beat_value)
+        start_offset = beat - 1.0
+        while start_offset >= beats_per_measure - 1e-6:
+            start_offset -= beats_per_measure
+            measure += 1
+        beat = start_offset + 1.0
 
         duration = _coerce_float(row.get("duration")) or 1.0
         if duration <= 0:
@@ -369,20 +514,17 @@ def _sanitize_block_note_rows(
         else:
             velocity = None
 
-        tie = str(row.get("tie", "") or "").strip().lower()
-        if tie not in _ALLOWED_TIES:
-            tie = ""
-
         articulation = str(row.get("articulation", "") or "").strip()
 
         sanitized.append(
             {
+                "_order": order_idx,
                 "measure": measure,
                 "beat": beat,
                 "duration": duration,
                 "pitch": pitch,
                 "velocity": velocity,
-                "tie": tie,
+                "tie": "",
                 "articulation": articulation,
             }
         )
@@ -395,42 +537,19 @@ def _sanitize_block_note_rows(
     def _abs_position(entry: Dict[str, Any]) -> float:
         return (entry["measure"] - 1) * beats_per_measure + (entry["beat"] - 1)
 
-    sanitized.sort(key=lambda item: (_abs_position(item), item["pitch"]))
-
-    # Deduplicate overlapping identical pitch+velocity notes
-    deduped: List[Dict[str, Any]] = []
-    active: Dict[Tuple[str, int], Tuple[Dict[str, Any], float, float]] = {}
-    for item in sanitized:
-        key = (item["pitch"], int(item["velocity"]))
-        start = _abs_position(item)
-        end = start + item["duration"]
-        tracked = active.get(key)
-        if tracked and start < tracked[2]:
-            tracked_item, tracked_start, tracked_end = tracked
-            new_end = max(tracked_end, end)
-            tracked_item["duration"] = max(0.01, new_end - tracked_start)
-            active[key] = (tracked_item, tracked_start, new_end)
-            continue
-        active[key] = (item, start, end)
-        deduped.append(item)
-
-    deduped.sort(key=lambda item: _abs_position(item))
-    for idx, item in enumerate(deduped[:-1]):
-        start = _abs_position(item)
-        end = start + item["duration"]
-        next_item = deduped[idx + 1]
-        next_start = _abs_position(next_item)
-        if end > next_start:
-            item["duration"] = max(0.01, next_start - start)
-
-    deduped = [item for item in deduped if item["duration"] > 0.0]
+    if preserve_input_order:
+        sanitized.sort(key=lambda item: item["_order"])  # keep LLM ordering for melody lines
+    else:
+        sanitized.sort(key=lambda item: (_abs_position(item), item["_order"]))
+    ordered_rows = [item for item in sanitized if item["duration"] > 0.0]
 
     split_rows: List[Dict[str, Any]] = []
-    for item in deduped:
+    for item in ordered_rows:
         remaining = item["duration"]
         current_measure = item["measure"]
         current_beat = item["beat"]
         segments: List[Dict[str, Any]] = []
+        seg_idx = 0
         while remaining > 1e-6 and current_measure <= measure_end:
             room = beats_per_measure - (current_beat - 1)
             if room <= 1e-6:
@@ -447,11 +566,13 @@ def _sanitize_block_note_rows(
                     "velocity": item["velocity"],
                     "tie": item["tie"],
                     "articulation": item["articulation"],
+                    "_order": item["_order"] + seg_idx * 0.001,
                 }
             )
             remaining -= take
             current_measure += 1
             current_beat = 1.0
+            seg_idx += 1
 
         if not segments:
             continue
@@ -475,11 +596,13 @@ def _sanitize_block_note_rows(
                 "velocity": avg_velocity,
                 "tie": "",
                 "articulation": "",
+                "_order": 1e6,
             }
         ]
 
     present_measures = {item["measure"] for item in split_rows}
-    for measure in range(measure_start, measure_end + 1):
+    max_order = max((item.get("_order", 0.0) for item in split_rows), default=0.0)
+    for offset, measure in enumerate(range(measure_start, measure_end + 1), start=1):
         if measure in present_measures:
             continue
         split_rows.append(
@@ -491,10 +614,14 @@ def _sanitize_block_note_rows(
                 "velocity": avg_velocity,
                 "tie": "",
                 "articulation": "",
+                "_order": max_order + offset,
             }
         )
 
-    split_rows.sort(key=lambda item: (_abs_position(item), item["pitch"]))
+    if preserve_input_order:
+        split_rows.sort(key=lambda item: item.get("_order", 0.0))
+    else:
+        split_rows.sort(key=lambda item: (_abs_position(item), item["pitch"]))
 
     formatted: List[Dict[str, Any]] = []
     for item in split_rows:
@@ -657,7 +784,14 @@ def run_metadata_tracks_step(
         )
 
     save_text(metadata_path, meta_text + "\n")
-    save_text(tracks_path, tracks_text + "\n")
+
+    voice_tokens = prompt_payload.get("touch_point_voices") or []
+    if not voice_tokens:
+        meta_voices = (prompt_payload.get("touch_point_metadata") or {}).get("voices")
+        if isinstance(meta_voices, list):
+            voice_tokens = meta_voices
+    ordered_tracks = _order_tracks_csv(tracks_text, voice_tokens)
+    save_text(tracks_path, ordered_tracks)
 
     try:
         _log_info(
@@ -668,6 +802,307 @@ def run_metadata_tracks_step(
         pass
 
     return True
+
+
+def run_melody_emotion_step(
+    *,
+    tp_dir: Path,
+    tp_index: int,
+    tp_type: str,
+    prompt_payload: Optional[Dict[str, Any]],
+    force: bool = False,
+) -> bool:
+    """Run the melody emotion prompt and persist PRO/ANTI CSVs."""
+
+    if not prompt_payload:
+        return False
+
+    tp_dir = Path(tp_dir)
+    tp_dir.mkdir(parents=True, exist_ok=True)
+
+    pro_path = tp_dir / "PRO.csv"
+    anti_path = tp_dir / "ANTI.csv"
+    log_path = tp_dir / "music_melody_emotion.txt"
+
+    state = _load_core_melody_state(tp_dir)
+    state.setdefault("version", 1)
+
+    existing_pro_hash = _hash_file(pro_path)
+    existing_anti_hash = _hash_file(anti_path)
+
+    if not force and pro_path.exists() and anti_path.exists():
+        state["pro_hash"] = existing_pro_hash
+        state["anti_hash"] = existing_anti_hash
+        _save_core_melody_state(tp_dir, state)
+        return False
+
+    title = str(prompt_payload.get("touch_point_title", "") or "")
+    description = str(prompt_payload.get("touch_point_description", "") or "")
+    prior_paragraph = str(prompt_payload.get("touch_point_prior_paragraph", "") or "")
+
+    prompt = build_melody_emotion_prompt(
+        prompt_payload=prompt_payload,
+        tp_index=tp_index,
+        tp_type=tp_type,
+        tp_title=title,
+        tp_description=description,
+        tp_prior_paragraph=prior_paragraph,
+    )
+
+    model, temp, max_tokens = env_for_prompt(
+        "music_melody_emotion_prompt.md",
+        "MUSIC_MELODY_EMOTION",
+        default_temp=0.4,
+        default_max_tokens=2200,
+    )
+
+    response = llm_complete(
+        prompt,
+        system=(
+            "Generate the requested PRO and ANTI statements, then emit the PRO.csv and ANTI.csv blocks "
+            "exactly as specified."
+        ),
+        temperature=temp,
+        max_tokens=max_tokens,
+        model=model,
+        log_file=str(log_path),
+    )
+
+    text = (response or "").strip()
+    if not text:
+        raise UserActionRequired(
+            "Melody emotion step produced an empty response. Inspect music_melody_emotion.txt and retry."
+        )
+
+    pro_rows, anti_rows = parse_emotion_prompt_response(text)
+    _write_emotion_rows_csv(pro_path, pro_rows)
+    _write_emotion_rows_csv(anti_path, anti_rows)
+
+    state["pro_hash"] = _hash_file(pro_path)
+    state["anti_hash"] = _hash_file(anti_path)
+    _save_core_melody_state(tp_dir, state)
+
+    try:
+        _log_info(
+            f"MUSIC: wrote melody emotion artifacts for tp={tp_index:02d} at {tp_dir}",
+            tp_dir,
+        )
+    except Exception:
+        pass
+
+    return True
+
+
+def run_emotion_chord_step(
+    *,
+    tp_dir: Path,
+    tp_index: int,
+    tp_type: str,
+    prompt_payload: Optional[Dict[str, Any]],
+    force: bool = False,
+) -> bool:
+    """Run the emotion-chord prompt and persist Feelings/Transitions CSVs."""
+
+    if not prompt_payload:
+        return False
+
+    tp_dir = Path(tp_dir)
+    tp_dir.mkdir(parents=True, exist_ok=True)
+
+    pro_path = tp_dir / "PRO.csv"
+    anti_path = tp_dir / "ANTI.csv"
+    if not pro_path.exists() or not anti_path.exists():
+        raise UserActionRequired(
+            "Emotion chord step requires PRO.csv and ANTI.csv. Run melody emotion step first."
+        )
+
+    pro_rows = load_emotion_rows(pro_path, block_name="PRO.csv")
+    anti_rows = load_emotion_rows(anti_path, block_name="ANTI.csv")
+    ordered_emotions = [row.emotion for row in (pro_rows + anti_rows) if row.emotion]
+    if not ordered_emotions:
+        raise UserActionRequired("Emotion chord step requires at least one emotion entry.")
+
+    unique_emotions: List[str] = []
+    seen: set[str] = set()
+    for emotion in ordered_emotions:
+        key = emotion.strip().lower()
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        unique_emotions.append(emotion)
+
+    transition_pairs: List[Tuple[str, str]] = []
+    for idx in range(len(ordered_emotions) - 1):
+        transition_pairs.append((ordered_emotions[idx], ordered_emotions[idx + 1]))
+
+    sequence_hash = _hash_text("|".join(val.strip().lower() for val in ordered_emotions))
+
+    feelings_path = tp_dir / "Feelings.csv"
+    transitions_path = tp_dir / "Transitions.csv"
+    log_path = tp_dir / "music_emotion_chord.txt"
+
+    state = _load_core_melody_state(tp_dir)
+    state.setdefault("version", 1)
+
+    existing_feelings_hash = _hash_file(feelings_path)
+    existing_transitions_hash = _hash_file(transitions_path)
+
+    if not force and feelings_path.exists() and transitions_path.exists():
+        state["feelings_hash"] = existing_feelings_hash
+        state["transitions_hash"] = existing_transitions_hash
+        state["emotion_sequence_hash"] = sequence_hash
+        _save_core_melody_state(tp_dir, state)
+        return False
+
+    title = str(prompt_payload.get("touch_point_title", "") or "")
+    description = str(prompt_payload.get("touch_point_description", "") or "")
+    prior_paragraph = str(prompt_payload.get("touch_point_prior_paragraph", "") or "")
+
+    prompt = build_emotion_chord_prompt(
+        prompt_payload=prompt_payload,
+        tp_index=tp_index,
+        tp_type=tp_type,
+        tp_title=title,
+        tp_description=description,
+        tp_prior_paragraph=prior_paragraph,
+        feelings=unique_emotions,
+        transitions=transition_pairs,
+    )
+
+    model, temp, max_tokens = env_for_prompt(
+        "music_emotion_chord_prompt.md",
+        "MUSIC_EMOTION_CHORD",
+        default_temp=0.35,
+        default_max_tokens=2200,
+    )
+
+    response = llm_complete(
+        prompt,
+        system="Produce Emotions.csv and Transitions.csv blocks using the provided feelings and adjacency pairs.",
+        temperature=temp,
+        max_tokens=max_tokens,
+        model=model,
+        log_file=str(log_path),
+    )
+
+    text = (response or "").strip()
+    if not text:
+        raise UserActionRequired(
+            "Emotion chord step produced an empty response. Inspect music_emotion_chord.txt and retry."
+        )
+
+    feelings_rows, transition_rows = parse_emotion_chord_response(text)
+    _write_feelings_rows_csv(feelings_path, feelings_rows)
+    _write_transitions_rows_csv(transitions_path, transition_rows)
+
+    state["feelings_hash"] = _hash_file(feelings_path)
+    state["transitions_hash"] = _hash_file(transitions_path)
+    state["emotion_sequence_hash"] = sequence_hash
+    _save_core_melody_state(tp_dir, state)
+
+    try:
+        _log_info(
+            f"MUSIC: wrote emotion chord artifacts for tp={tp_index:02d} at {tp_dir}",
+            tp_dir,
+        )
+    except Exception:
+        pass
+
+    return True
+
+
+def ensure_core_melody_csv(
+    *,
+    tp_dir: Path,
+    wrap_last_to_first: bool = False,
+    force: bool = False,
+) -> bool:
+    """Build CORE_MELODY.csv if needed, respecting user edits unless forced."""
+
+    tp_dir = Path(tp_dir)
+    tp_dir.mkdir(parents=True, exist_ok=True)
+
+    pro_path = tp_dir / "PRO.csv"
+    anti_path = tp_dir / "ANTI.csv"
+    feelings_path = tp_dir / "Feelings.csv"
+    transitions_path = tp_dir / "Transitions.csv"
+    core_path = tp_dir / "CORE_MELODY.csv"
+
+    for path, label in (
+        (pro_path, "PRO.csv"),
+        (anti_path, "ANTI.csv"),
+        (feelings_path, "Feelings.csv"),
+        (transitions_path, "Transitions.csv"),
+    ):
+        if not path.exists():
+            raise UserActionRequired(
+                f"CORE MELODY build requires {label}. Run earlier melody steps first."
+            )
+
+    state = _load_core_melody_state(tp_dir)
+    state.setdefault("version", 1)
+
+    pro_hash = _hash_file(pro_path)
+    anti_hash = _hash_file(anti_path)
+    feelings_hash = _hash_file(feelings_path)
+    transitions_hash = _hash_file(transitions_path)
+    source_hash = _hash_text("|".join([pro_hash, anti_hash, feelings_hash, transitions_hash]))
+
+    core_exists = core_path.exists()
+    current_core_hash = _hash_file(core_path) if core_exists else ""
+    stored_core_hash = state.get("core_melody_hash", "")
+    stored_source_hash = state.get("core_source_hash", "")
+    user_modified = bool(core_exists and stored_core_hash and current_core_hash and stored_core_hash != current_core_hash)
+
+    needs_build = False
+    if force or not core_exists:
+        needs_build = True
+    elif not user_modified and stored_source_hash and stored_source_hash != source_hash:
+        needs_build = True
+    elif not user_modified and not stored_source_hash:
+        needs_build = True
+
+    if needs_build:
+        if user_modified and not force:
+            raise UserActionRequired(
+                "CORE_MELODY.csv was edited manually. Rerun with --force to overwrite or delete the file."
+            )
+        build_core_melody_csv(
+            pro_csv_path=pro_path,
+            anti_csv_path=anti_path,
+            feelings_csv_path=feelings_path,
+            transitions_csv_path=transitions_path,
+            output_csv_path=core_path,
+            overwrite=True,
+            wrap_last_to_first=wrap_last_to_first,
+        )
+        current_core_hash = _hash_file(core_path)
+        state["core_source_hash"] = source_hash
+        state["core_melody_hash"] = current_core_hash
+        state["pro_hash"] = pro_hash
+        state["anti_hash"] = anti_hash
+        state["feelings_hash"] = feelings_hash
+        state["transitions_hash"] = transitions_hash
+        _save_core_melody_state(tp_dir, state)
+        try:
+            _log_info(
+                f"MUSIC: built CORE_MELODY.csv at {core_path}",
+                tp_dir,
+            )
+        except Exception:
+            pass
+        return True
+
+    if not user_modified:
+        state["core_source_hash"] = source_hash
+        if current_core_hash:
+            state["core_melody_hash"] = current_core_hash
+    state["pro_hash"] = pro_hash
+    state["anti_hash"] = anti_hash
+    state["feelings_hash"] = feelings_hash
+    state["transitions_hash"] = transitions_hash
+    _save_core_melody_state(tp_dir, state)
+    return False
 
 
 def run_melody_edges_step(
@@ -724,6 +1159,7 @@ def run_melody_edges_step(
         raise UserActionRequired(
             f"Unable to read metadata.json for melody edges step: {exc}"
         ) from exc
+    beats_per_measure = _beats_per_measure_from_metadata(metadata_text)
 
     # Load the static melody-elements instructions from prompts
     from pathlib import Path as _P
@@ -735,6 +1171,23 @@ def run_melody_edges_step(
         raise UserActionRequired(
             f"Unable to read melody_elements_instructions.txt: {exc}"
         ) from exc
+
+    core_melody_path = tp_dir / "CORE_MELODY.csv"
+    if not core_melody_path.exists():
+        raise UserActionRequired(
+            "Melody edges step requires CORE_MELODY.csv. Run the core melody builder first."
+        )
+    try:
+        core_melody_text = core_melody_path.read_text(encoding="utf-8").strip()
+    except Exception as exc:
+        raise UserActionRequired(
+            f"Unable to read CORE_MELODY.csv: {exc}"
+        ) from exc
+    if not core_melody_text:
+        raise UserActionRequired(
+            "CORE_MELODY.csv is empty. Rebuild the core melody before running edges."
+        )
+    instructions_text = instructions_text.replace("[CORE_MELODY]", core_melody_text)
 
     model, temp, max_tokens = env_for_prompt(
         "music_melody_edges_prompt.md",
@@ -806,8 +1259,10 @@ def run_melody_edges_step(
             "Melody edges step produced an empty response. Edit melodyelements.txt or retry."
         )
 
-    # For now, store the raw dwell + edge description for human editing.
-    save_text(edges_path, text + "\n")
+    processed_text = _reformat_melody_edges_response(text, beats_per_measure)
+
+    # Store the dwell + edge description with validated measure numbers for human editing.
+    save_text(edges_path, processed_text + ("" if processed_text.endswith("\n") else "\n"))
 
     try:
         _log_info(
@@ -818,6 +1273,186 @@ def run_melody_edges_step(
         pass
 
     return True
+
+
+def _reformat_melody_edges_response(text: str, beats_per_measure: float) -> str:
+    """Parse the LLM response and validate the provided measure numbers."""
+
+    lines = [ln.rstrip() for ln in (text or "").splitlines()]
+    if not lines:
+        raise UserActionRequired("Melody edges response was empty after stripping whitespace.")
+
+    idx = 0
+    total = len(lines)
+
+    # Gather dwell-note lines until a blank separator is encountered.
+    dwell_lines: List[str] = []
+    while idx < total:
+        current = lines[idx]
+        if not current.strip():
+            idx += 1
+            break
+        dwell_lines.append(current)
+        idx += 1
+
+    # Skip any additional blank lines before the edge sections.
+    while idx < total and not lines[idx].strip():
+        idx += 1
+
+    if not dwell_lines:
+        raise UserActionRequired(
+            "Melody edges response did not include dwell notes before the edge sections."
+        )
+
+    beats_per_measure = beats_per_measure or 4.0
+    edge_blocks: List[str] = []
+
+    while idx < total:
+        # Skip stray blank lines between edge sections.
+        while idx < total and not lines[idx].strip():
+            idx += 1
+        if idx >= total:
+            break
+
+        edge_name = lines[idx].strip()
+        idx += 1
+
+        while idx < total and not lines[idx].strip():
+            idx += 1
+        if idx >= total:
+            raise UserActionRequired(
+                f"Melody edge '{edge_name}' is missing its CSV header."
+            )
+
+        header_line = lines[idx].strip()
+        idx += 1
+
+        data_lines: List[str] = []
+        while idx < total and lines[idx].strip():
+            data_lines.append(lines[idx].strip())
+            idx += 1
+
+        # Prepare the normalized CSV rows and verify measure alignment.
+        csv_rows = _edge_rows_with_measures(edge_name, header_line, data_lines, beats_per_measure)
+
+        if edge_blocks:
+            edge_blocks.append("")
+        edge_blocks.append(edge_name)
+        edge_blocks.append("measure,element,duration")
+        edge_blocks.extend(csv_rows)
+
+    if not edge_blocks:
+        raise UserActionRequired(
+            "Melody edges response did not contain any edge CSV sections."
+        )
+
+    output_lines: List[str] = []
+    output_lines.extend(dwell_lines)
+    output_lines.append("")
+    output_lines.extend(edge_blocks)
+
+    return "\n".join(line for line in output_lines).strip()
+
+
+def _edge_rows_with_measures(
+    edge_name: str,
+    header_line: str,
+    data_lines: List[str],
+    beats_per_measure: float,
+) -> List[str]:
+    if not header_line.strip():
+        raise UserActionRequired(f"Melody edge '{edge_name}' is missing a CSV header.")
+    if not data_lines:
+        raise UserActionRequired(f"Melody edge '{edge_name}' did not include any rows to parse.")
+
+    csv_text = "\n".join([header_line] + data_lines)
+    try:
+        reader = csv.DictReader(StringIO(csv_text))
+    except Exception as exc:  # pragma: no cover - defensive
+        raise UserActionRequired(
+            f"Unable to parse CSV for melody edge '{edge_name}': {exc}"
+        ) from exc
+
+    fieldnames = [fn.strip().lower() for fn in (reader.fieldnames or []) if isinstance(fn, str)]
+    if "measure" not in fieldnames:
+        raise UserActionRequired(
+            f"Melody edge '{edge_name}' must include a 'measure' column copied from the CORE_MELODY rows."
+        )
+    if "root" not in fieldnames:
+        raise UserActionRequired(
+            f"Melody edge '{edge_name}' must include a 'root' column so the dwell reference can be validated."
+        )
+    if "duration" not in fieldnames or ("element" not in fieldnames and "note" not in fieldnames):
+        raise UserActionRequired(
+            f"Melody edge '{edge_name}' must include 'element' (or 'note') and 'duration' columns."
+        )
+
+    beats_per_measure = beats_per_measure or 4.0
+    if beats_per_measure <= 0:
+        beats_per_measure = 4.0
+
+    rows: List[str] = []
+    beat_cursor = 0.0
+    row_index = 0
+    for raw_row in reader:
+        row_index += 1
+        normalized = {
+            (key or "").strip().lower(): (value or "").strip()
+            for key, value in (raw_row or {}).items()
+            if key is not None
+        }
+        measure_text = normalized.get("measure")
+        if not measure_text:
+            raise UserActionRequired(
+                f"Melody edge '{edge_name}' row {row_index} is missing a measure value."
+            )
+        try:
+            measure = int(float(measure_text))
+        except Exception as exc:  # pragma: no cover - defensive
+            raise UserActionRequired(
+                f"Melody edge '{edge_name}' row {row_index} has an invalid measure '{measure_text}'."
+            ) from exc
+
+        root = normalized.get("root")
+        if not root:
+            raise UserActionRequired(
+                f"Melody edge '{edge_name}' row {row_index} is missing a root value."
+            )
+
+        element = normalized.get("element") or normalized.get("note")
+        if not element:
+            raise UserActionRequired(
+                f"Melody edge '{edge_name}' row {row_index} is missing an element value."
+            )
+        duration_text = normalized.get("duration")
+        if not duration_text:
+            raise UserActionRequired(
+                f"Melody edge '{edge_name}' row {row_index} is missing a duration value."
+            )
+        try:
+            duration = float(duration_text)
+        except Exception as exc:  # pragma: no cover - defensive
+            raise UserActionRequired(
+                f"Melody edge '{edge_name}' row {row_index} has an invalid duration '{duration_text}'."
+            ) from exc
+
+        expected_measure = int(math.floor(beat_cursor / beats_per_measure)) + 1
+        if measure != expected_measure:
+            raise UserActionRequired(
+                "Melody edge '{edge}' row {row} has measure {reported} but the durations so far indicate measure {expected}. "
+                "Fix the CSV so measure numbers match the CORE_MELODY."
+                .format(edge=edge_name, row=row_index, reported=measure, expected=expected_measure)
+            )
+
+        rows.append(f"{measure},{element},{_format_number(duration)}")
+        beat_cursor += duration
+
+    if not rows:
+        raise UserActionRequired(
+            f"Melody edge '{edge_name}' CSV did not contain any parseable rows."
+        )
+
+    return rows
 
 
 def _next_attempt_path(tp_dir: Path, prefix: str) -> Path:
@@ -1419,6 +2054,8 @@ def run_multi_voice_first_pass(
                 written.append(notes_path)
             continue
 
+        is_melody_voice = _voice_is_melody(voice)
+
         while next_block <= block_count:
             measure_start, measure_end = block_measure_range(
                 next_block,
@@ -1494,6 +2131,7 @@ def run_multi_voice_first_pass(
                 measure_start=measure_start,
                 measure_end=measure_end,
                 beats_per_measure=beats_per_measure,
+                preserve_input_order=is_melody_voice,
             )
 
             block_csv_path = _block_csv_path(tp_dir, voice.token, safe_variant, next_block)
@@ -1633,6 +2271,14 @@ def run_melody_construction_step(
     # the melody_instructions template itself.
     variant_safe = (variant or "standard").strip().lower()
     additional_rules = ""
+    standard_sequence = (
+        "* Start with this sequence of edges: A-A, A-A, A-B1, B1-B2, B2-A, A-A. "
+        "Follow these edges in order before selecting additional paths to reach the target length."
+    )
+    complimentary_sequence = (
+        "* Start with this sequence of edges: A-B1, B1-B2, B2-B1, B1-B2, B2-A. "
+        "Use it as the opening gesture before weaving new material."
+    )
     if variant_safe == "complimentary":
         additional_rules = (
             "* Create a complimentary melody line by inverting the dwell-weight "
@@ -1643,6 +2289,7 @@ def run_melody_construction_step(
             "but let the complimentary line weave around it rather than sit "
             "directly on top of the same pitches."
         )
+        additional_rules += "\n" + complimentary_sequence
     elif variant_safe == "reprise":
         additional_rules = (
             "* Treat this as a reprise of the standard melody. Before "
@@ -1652,6 +2299,9 @@ def run_melody_construction_step(
             "duration expands while preserving the recognizable contour of "
             "the original melody."
         )
+        additional_rules += "\n" + standard_sequence
+    else:
+        additional_rules = standard_sequence
 
     instr_replacements: Dict[str, Any] = {
         "[dwell_notes]": dwell_block,
@@ -2276,6 +2926,9 @@ def run_first_pass_checks(
 
 __all__ = [
     "run_metadata_tracks_step",
+    "run_melody_emotion_step",
+    "run_emotion_chord_step",
+    "ensure_core_melody_csv",
     "run_melody_edges_step",
     "run_melody_construction_step",
     "ensure_first_score_gate",
