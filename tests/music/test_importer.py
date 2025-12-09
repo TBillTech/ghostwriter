@@ -9,6 +9,7 @@ mido = pytest.importorskip("mido")
 from ghostwriter.music import generate_import_musiccsv, process_import_directory
 from ghostwriter.music.sanitizer import ensure_sanitized
 from ghostwriter.musiccsv import read_musiccsv, validate_musiccsv
+from ghostwriter.music.importer import _find_importable_files
 
 
 def _make_test_midi(path: Path) -> None:
@@ -73,3 +74,17 @@ def test_generate_import_musiccsv_is_idempotent(tmp_path: Path) -> None:
     monitor.unlink()
     ensure_sanitized(import_dir)
     assert monitor.exists()
+
+
+def test_importer_ignores_zone_identifier_files(tmp_path: Path) -> None:
+    import_dir = tmp_path / "01_track_lead_import"
+    import_dir.mkdir()
+
+    valid = import_dir / "melody.mid"
+    valid.write_bytes(b"MThd\x00\x00\x00\x06\x00\x01\x00\x01\x01\xe0")
+
+    zone = import_dir / "melody.mid:Zone.Identifier"
+    zone.write_text("[ZoneTransfer]\nZoneId=3", encoding="utf-8")
+
+    files = _find_importable_files(import_dir)
+    assert files == [valid]

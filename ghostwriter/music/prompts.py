@@ -13,6 +13,7 @@ _TEMPLATE_CHECK = "prompts/music_check_prompt.md"
 _TEMPLATE_SUBTLE_EDIT = "prompts/music_subtle_edit_prompt.md"
 _TEMPLATE_MELODY_EMOTION = "prompts/music_melody_emotion_prompt.md"
 _TEMPLATE_EMOTION_CHORD = "prompts/music_emotion_chord_prompt.md"
+_TEMPLATE_IMPORT_SANITIZE = "prompts/music_import_sanitize_prompt.md"
 _TEMPLATE_CSV_FORMAT = "prompts/musiccsv_format_prompt.txt"
 _INSTRUCTIONS_MELODY_EMOTION = "prompts/melody_emotion_instructions.txt"
 _INSTRUCTIONS_EMOTION_CHORD = "prompts/emotion_chord_instructions.txt"
@@ -155,6 +156,34 @@ def build_melody_emotion_prompt(
     return apply_template(_TEMPLATE_MELODY_EMOTION, replacements)
 
 
+def build_import_sanitize_prompt(
+    *,
+    prompt_payload: Dict[str, Any],
+    tp_index: int,
+    tp_type: str,
+    tp_title: str,
+    tp_description: str,
+    tp_prior_paragraph: str,
+    melody_voice_token: str,
+    import_musiccsv: str,
+) -> str:
+    payload_for_json = dict(prompt_payload or {})
+    character_context = payload_for_json.pop("character_outlines", None)
+
+    replacements = {
+        "[VOICE_CONTEXT_JSON]": _json_block(payload_for_json),
+        "[CHARACTER_CONTEXT_JSON]": _json_block(character_context or []),
+        "[TOUCH_POINT_INDEX]": str(tp_index),
+        "[TOUCH_POINT_TYPE]": tp_type,
+        "[TOUCH_POINT_TITLE]": tp_title,
+        "[TOUCH_POINT_DESCRIPTION]": tp_description,
+        "[TOUCH_POINT_PRIOR_PARAGRAPH]": tp_prior_paragraph,
+        "[MELODY_VOICE_TOKEN]": melody_voice_token,
+        "[SANITIZED_IMPORT]": import_musiccsv.strip(),
+    }
+    return apply_template(_TEMPLATE_IMPORT_SANITIZE, replacements)
+
+
 def build_emotion_chord_prompt(
     *,
     prompt_payload: Dict[str, Any],
@@ -273,6 +302,7 @@ def build_metadata_tracks_prompt(
 __all__ = [
     "build_first_score_prompt",
     "build_melody_emotion_prompt",
+    "build_import_sanitize_prompt",
     "build_emotion_chord_prompt",
     "build_music_check_prompt",
     "build_subtle_edit_prompt",

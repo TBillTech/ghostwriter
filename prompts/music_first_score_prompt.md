@@ -20,7 +20,7 @@ Touch-point metadata:
 - text:
 [TOUCH_POINT_TEXT]
 
-Existing sanitized score material for this voice (if any):
+Existing sanitized score material for this voice (if any). Try to duplicate the feeling, texture, and loop structure (if given). You will need to adjust note lengths/measures, and possibly transpose notes to harmonize correctly:
 [EXISTING_VOICE_SCORE_JSON]
 
 Shared global music metadata (derived from earlier steps):

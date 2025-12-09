@@ -1,6 +1,7 @@
 """Music-specific pipeline helpers for touch-point gates."""
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Any, Optional, Tuple, List, Iterable
 from io import StringIO
@@ -35,6 +36,7 @@ from .context import (
     block_measure_range,
     describe_measure_window,
     slice_csv_by_measure,
+    summarize_musiccsv,
 )
 from .prompts import (
     build_first_score_prompt,
@@ -42,6 +44,7 @@ from .prompts import (
     build_subtle_edit_prompt,
     build_metadata_tracks_prompt,
     build_melody_emotion_prompt,
+    build_import_sanitize_prompt,
     build_emotion_chord_prompt,
 )
 from .core_melody import (
@@ -53,6 +56,7 @@ from .core_melody import (
     load_emotion_rows,
     build_core_melody_csv,
 )
+from .importer import process_import_directory
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +78,42 @@ _STATE_FILE_NAME = "core_melody_state.json"
 _EMOTION_HEADER = ["word", "emotion", "duration"]
 _FEELINGS_HEADER = ["emotion", "semi-tones"]
 _TRANSITIONS_HEADER = ["emotion A", "emotion B", "semi-tone"]
+_MIDI_NOTE_NAMES = [
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+    "A",
+    "A#",
+    "B",
+]
+_NOTE_BASE_OFFSETS = {
+    "C": 0,
+    "D": 2,
+    "E": 4,
+    "F": 5,
+    "G": 7,
+    "A": 9,
+    "B": 11,
+}
+
+
+@dataclass
+class MelodyImportPlan:
+    voice_token: str
+    import_dir: Path
+    score_path: Path
+
+
+@dataclass
+class ImportPromptData:
+    prompt_text: str
+    velocities: List[float]
 
 
 def _core_melody_state_path(tp_dir: Path) -> Path:
@@ -185,6 +225,542 @@ def _format_number(value: float) -> str:
     if int(value) == value:
         return str(int(value))
     return f"{value:.4f}".rstrip("0").rstrip(".")
+
+
+def _norm_token_text(value: Any) -> str:
+    return str(value or "").strip()
+
+
+def _normalize_voice_key(value: Any) -> str:
+    text = _norm_token_text(value).lower()
+    for char in (" ", "_", "-", "."):
+        text = text.replace(char, "")
+    return text
+
+
+def _discover_voice_token_from_dir(import_dir: Path) -> Optional[str]:
+    token_file = Path(import_dir) / "voice.token"
+    if token_file.exists():
+        text = token_file.read_text(encoding="utf-8").strip()
+        if text:
+            return text
+
+    name = Path(import_dir).name
+    stem = name[:-7] if name.endswith("_import") else name
+    if "_track_" in stem:
+        stem = stem.split("_track_", 1)[1]
+    candidate = stem.replace("__", ".").replace("_", ".").strip("._ ")
+    return candidate or None
+
+
+def _collect_voice_imports(tp_dir: Path) -> Dict[str, Path]:
+    tp_dir = Path(tp_dir)
+    imports: Dict[str, Path] = {}
+    try:
+        entries = list(tp_dir.iterdir())
+    except FileNotFoundError:
+        return {}
+    for entry in entries:
+        if not entry.is_dir() or not entry.name.endswith("_import"):
+            continue
+        token = _discover_voice_token_from_dir(entry)
+        key = _normalize_voice_key(token)
+        if not key:
+            continue
+        imports.setdefault(key, entry)
+    return imports
+
+
+def _payload_voice_is_melody(entry: Dict[str, Any]) -> bool:
+    if not isinstance(entry, dict):
+        return False
+    token = _norm_token_text(entry.get("token", "")).lower()
+    idea = _norm_token_text(entry.get("idea", "") or "").lower()
+    role = _norm_token_text(entry.get("role", "") or "").lower()
+    combined = " ".join(part for part in (token, idea, role) if part)
+    for keyword in ("melody", "lead"):
+        if keyword in combined:
+            return True
+    return False
+
+
+def _melody_voice_tokens_from_payload(payload: Optional[Dict[str, Any]]) -> List[str]:
+    tokens: List[str] = []
+    if not payload:
+        return tokens
+    voices = payload.get("voices")
+    if isinstance(voices, list):
+        for entry in voices:
+            if not isinstance(entry, dict):
+                continue
+            token = entry.get("token")
+            if token and _payload_voice_is_melody(entry):
+                tokens.append(str(token))
+    if tokens:
+        return tokens
+    fallback = payload.get("touch_point_voices") or []
+    for entry in fallback:
+        token = str(entry or "").strip()
+        if not token:
+            continue
+        lowered = token.lower()
+        if "melody" in lowered or lowered.endswith("lead"):
+            tokens.append(token)
+    return tokens
+
+
+def _resolve_import_score_path(import_dir: Path) -> Optional[Path]:
+    import_dir = Path(import_dir)
+    score_path = import_dir / "score.musiccsv"
+    if score_path.exists():
+        return score_path
+    import_path = import_dir / "import.musiccsv"
+    if import_path.exists():
+        return import_path
+    return None
+
+
+def _find_melody_import_plan(tp_dir: Path, payload: Optional[Dict[str, Any]]) -> Optional[MelodyImportPlan]:
+    voice_tokens = _melody_voice_tokens_from_payload(payload)
+    if not voice_tokens:
+        return None
+    import_lookup = _collect_voice_imports(tp_dir)
+    if not import_lookup:
+        return None
+    for token in voice_tokens:
+        key = _normalize_voice_key(token)
+        import_dir = import_lookup.get(key)
+        if not import_dir:
+            continue
+        process_import_directory(import_dir)
+        score_path = _resolve_import_score_path(import_dir)
+        if not score_path:
+            continue
+        return MelodyImportPlan(voice_token=token, import_dir=import_dir, score_path=score_path)
+    return None
+
+
+def _build_import_prompt_data(score_path: Path) -> ImportPromptData:
+    music = read_musiccsv(score_path)
+    lines = ["measure,pitch,duration"]
+    velocities: List[float] = []
+    note_count = 0
+    for note in music.notes:
+        measure = _coerce_int(note.get("measure")) or 0
+        pitch = str(note.get("pitch") or "rest").strip() or "rest"
+        duration = _coerce_float(note.get("duration")) or 0.0
+        velocity = _coerce_float(note.get("velocity"))
+        velocities.append(0.0 if velocity is None else float(velocity))
+        lines.append(f"{measure},{pitch},{_format_number(duration)}")
+        note_count += 1
+    if note_count == 0:
+        raise UserActionRequired(
+            f"Sanitized import at {score_path} does not contain any notes for the melody voice."
+        )
+    text = "\n".join(lines)
+    return ImportPromptData(prompt_text=text, velocities=velocities)
+
+
+def _parse_tuple_field(text: Any, *, default: Tuple[int, ...] = (0,)) -> Tuple[int, ...]:
+    raw = str(text or "").strip()
+    if not raw:
+        return default
+    raw = raw.strip("()[]{}")
+    if not raw:
+        return default
+    parts = [segment.strip() for segment in raw.split(",") if segment.strip()]
+    if not parts:
+        return default
+    values: List[int] = []
+    for part in parts:
+        try:
+            values.append(int(float(part)))
+        except Exception as exc:
+            raise ValueError(f"Unable to parse tuple value '{part}'") from exc
+    return tuple(values) if values else default
+
+
+def _extract_core_melody_csv_lines(text: str) -> List[str]:
+    lines = [ln.rstrip() for ln in (text or "").splitlines()]
+    marker_idx: Optional[int] = None
+    for idx, line in enumerate(lines):
+        if line.strip().lower().startswith("core_melody.csv"):
+            marker_idx = idx + 1
+            break
+    if marker_idx is None:
+        for idx, line in enumerate(lines):
+            header = line.strip().lower()
+            if header.startswith("measure,duration,semi_tones,transition") or header.startswith("measure,pitch,duration"):
+                marker_idx = idx
+                break
+    if marker_idx is None:
+        return []
+    total = len(lines)
+    while marker_idx < total and not lines[marker_idx].strip():
+        marker_idx += 1
+    csv_lines: List[str] = []
+    while marker_idx < total:
+        current = lines[marker_idx].strip()
+        if not current:
+            break
+        if "," not in current:
+            break
+        csv_lines.append(current)
+        marker_idx += 1
+    return csv_lines
+
+
+def _midi_to_scientific(note_value: int) -> str:
+    value = max(0, min(127, int(note_value)))
+    octave = value // 12 - 1
+    name = _MIDI_NOTE_NAMES[value % 12]
+    return f"{name}{octave}"
+
+
+def _pitch_to_midi_value(pitch: str, *, default: int = 60) -> int:
+    match = _SCIENTIFIC_PITCH_RE.match(pitch or "")
+    if not match:
+        return default
+    text = match.group(0)
+    base = text[0].upper()
+    idx = 1
+    accidental = ""
+    if len(text) > 2 and text[1] in {"#", "b"}:
+        accidental = text[1]
+        idx = 2
+    try:
+        octave = int(text[idx:]) if text[idx:] else 4
+    except ValueError:
+        octave = 4
+    semitone = _NOTE_BASE_OFFSETS.get(base, 0)
+    if accidental == "#":
+        semitone += 1
+    elif accidental == "b":
+        semitone -= 1
+    return (octave + 1) * 12 + semitone
+
+
+def _pitch_to_midi_optional(pitch: str) -> Optional[int]:
+    text = str(pitch or "").strip()
+    if not text or text.lower() == "rest":
+        return None
+    if not _SCIENTIFIC_PITCH_RE.match(text):
+        return None
+    return _pitch_to_midi_value(text)
+
+
+def _core_melody_note_sequence(core_csv_text: str, *, start_pitch: str = "C4") -> List[str]:
+    text = (core_csv_text or "").strip()
+    if not text:
+        return []
+    try:
+        reader = csv.DictReader(StringIO(text))
+    except Exception:
+        return []
+
+    current_midi = _pitch_to_midi_value(start_pitch)
+    sequence: List[str] = []
+    for row in reader:
+        sequence.append(_midi_to_scientific(current_midi))
+        transition = _parse_tuple_field(row.get("transition"), default=(0,))
+        step = transition[0] if transition else 0
+        current_midi = max(0, min(127, current_midi + int(step)))
+
+    return sequence
+
+
+def _format_core_melody_example_line(notes: List[str], *, start_pitch: str = "C4") -> str:
+    if not notes:
+        return f"Example Notes (start={start_pitch}): (none)"
+    joined = ", ".join(notes)
+    return f"Example Notes (start={start_pitch}): {joined}"
+
+
+def _core_melody_csv_with_root(core_csv_text: str, notes: List[str]) -> str:
+    text = (core_csv_text or "").strip()
+    if not text:
+        return text
+    try:
+        reader = csv.DictReader(StringIO(text))
+    except Exception:
+        return text
+
+    buffer = StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow(["measure", "duration", "semi_tones", "root"])
+    idx = 0
+    for row in reader:
+        root_note = notes[idx] if idx < len(notes) else ""
+        idx += 1
+        writer.writerow([
+            row.get("measure", ""),
+            row.get("duration", ""),
+            row.get("semi_tones", ""),
+            root_note,
+        ])
+    return buffer.getvalue().strip()
+
+
+def _parse_import_core_rows(response_text: str) -> List[Dict[str, Any]]:
+    csv_lines = _extract_core_melody_csv_lines(response_text)
+    if not csv_lines:
+        raise UserActionRequired(
+            "Melody import sanitize step did not include a CORE_MELODY.csv block. "
+            "Edit music_import_sanitize.txt and retry."
+        )
+    csv_text = "\n".join(csv_lines)
+    reader = csv.DictReader(StringIO(csv_text))
+    rows: List[Dict[str, Any]] = []
+    for idx, row in enumerate(reader):
+        measure = _coerce_int(row.get("measure"))
+        duration = _coerce_float(row.get("duration"))
+        if measure is None or measure <= 0:
+            raise UserActionRequired(f"Row {idx + 1} in CORE_MELODY.csv is missing a valid measure number.")
+        if duration is None or duration <= 0:
+            raise UserActionRequired(f"Row {idx + 1} in CORE_MELODY.csv is missing a valid duration.")
+        pitch = str(row.get("pitch", "") or "").strip() or "rest"
+        try:
+            semitones = _parse_tuple_field(row.get("semi_tones"), default=(0,))
+            transitions = _parse_tuple_field(row.get("transition"), default=(0,))
+        except ValueError as exc:
+            raise UserActionRequired(str(exc)) from exc
+        rows.append(
+            {
+                "measure": measure,
+                "duration": duration,
+                "semi_tones": semitones or (0,),
+                "transition": transitions or (0,),
+                "pitch": pitch,
+            }
+        )
+    if not rows:
+        raise UserActionRequired(
+            "Melody import sanitize step returned an empty CORE_MELODY.csv. Edit the response and retry."
+        )
+    return rows
+
+
+def _normalize_import_core_rows(rows: List[Dict[str, Any]], *, beats_per_measure: float) -> List[Dict[str, Any]]:
+    beats = beats_per_measure if beats_per_measure and beats_per_measure > 0 else 4.0
+    tolerance = 1e-6
+    measure = 1
+    beat_cursor = 0.0
+    normalized: List[Dict[str, Any]] = []
+    for idx, row in enumerate(rows):
+        duration = float(row.get("duration", 0.0) or 0.0)
+        if duration <= 0:
+            raise UserActionRequired(
+                f"Row {idx + 1} produced a non-positive duration after sanitize quantization."
+            )
+        entry = dict(row)
+        entry["duration"] = duration
+        entry["measure"] = measure
+        entry["semi_tones"] = (0,)
+        transition_tuple = row.get("transition") or (0,)
+        if isinstance(transition_tuple, (list, tuple)):
+            entry["transition"] = tuple(int(val) for val in transition_tuple) or (0,)
+        else:
+            entry["transition"] = (int(_coerce_int(transition_tuple) or 0),)
+        normalized.append(entry)
+        beat_cursor += duration
+        while beat_cursor >= beats - tolerance:
+            beat_cursor -= beats
+            measure += 1
+
+    if not normalized:
+        raise UserActionRequired("Melody import sanitize step produced no usable rows.")
+
+    return normalized
+
+
+def _assign_transitions_from_pitches(rows: List[Dict[str, Any]]) -> Optional[str]:
+    if not rows:
+        return None
+
+    effective: List[Optional[int]] = []
+    last_pitch: Optional[int] = None
+    first_pitch: Optional[int] = None
+
+    for row in rows:
+        midi = _pitch_to_midi_optional(row.get("pitch"))
+        if midi is not None:
+            last_pitch = midi
+            if first_pitch is None:
+                first_pitch = midi
+        effective.append(last_pitch)
+
+    for idx, row in enumerate(rows):
+        current = effective[idx]
+        next_val = effective[idx + 1] if idx + 1 < len(rows) else current
+        if current is None or next_val is None:
+            row["transition"] = (0,)
+        else:
+            row["transition"] = (next_val - current,)
+
+    if rows:
+        rows[-1]["transition"] = (0,)
+
+    for row in rows:
+        row.pop("pitch", None)
+
+    if first_pitch is None:
+        return None
+    return _midi_to_scientific(first_pitch)
+
+
+def _apply_relative_velocity(rows: List[Dict[str, Any]], velocities: List[float]) -> None:
+    if not rows:
+        return
+    numeric: List[float] = []
+    for value in velocities:
+        parsed = _coerce_float(value)
+        numeric.append(float(parsed) if parsed is not None else 0.0)
+
+    meaningful = [val for val in numeric if val > 0]
+    if not meaningful:
+        for row in rows:
+            row["relative_velocity"] = 1.0
+        return
+
+    average = sum(meaningful) / len(meaningful)
+    if average <= 0:
+        for row in rows:
+            row["relative_velocity"] = 1.0
+        return
+
+    total_rows = len(rows)
+    total_src = len(numeric)
+    mapped: List[float]
+    if total_src == 0:
+        mapped = [average] * total_rows
+    elif total_rows == total_src:
+        mapped = numeric[:total_rows]
+    elif total_src == 1:
+        mapped = [numeric[0]] * total_rows
+    else:
+        mapped = []
+        if total_rows == 1:
+            mapped = [numeric[0]]
+        else:
+            for idx in range(total_rows):
+                pos = idx / (total_rows - 1)
+                src_float = pos * (total_src - 1)
+                src_idx = min(int(src_float + 0.5), total_src - 1)
+                mapped.append(numeric[src_idx])
+
+    for row, velocity in zip(rows, mapped):
+        if velocity <= 0:
+            row["relative_velocity"] = 1.0
+            continue
+        ratio = velocity / average if average else 1.0
+        row["relative_velocity"] = ratio if ratio > 0 else 1.0
+
+
+def _write_core_melody_override(tp_dir: Path, rows: List[Dict[str, Any]]) -> Path:
+    core_path = Path(tp_dir) / "CORE_MELODY.csv"
+    core_path.parent.mkdir(parents=True, exist_ok=True)
+    with core_path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(["measure", "duration", "semi_tones", "transition", "relative_velocity"])
+        for row in rows:
+            measure = int(row["measure"])
+            duration = _format_number(float(row["duration"]))
+            semi_repr = "(" + ", ".join(str(int(val)) for val in row["semi_tones"]) + ")"
+            trans_repr = "(" + ", ".join(str(int(val)) for val in row["transition"]) + ")"
+            rel_vel = _format_number(float(row.get("relative_velocity", 1.0) or 1.0))
+            writer.writerow([measure, duration, semi_repr, trans_repr, rel_vel])
+    return core_path
+
+
+def _run_import_core_melody_flow(
+    *,
+    tp_dir: Path,
+    tp_index: int,
+    tp_type: str,
+    prompt_payload: Dict[str, Any],
+    plan: MelodyImportPlan,
+    state: Dict[str, Any],
+    score_hash: str,
+) -> bool:
+    title = str(prompt_payload.get("touch_point_title", "") or "")
+    description = str(prompt_payload.get("touch_point_description", "") or "")
+    prior_paragraph = str(prompt_payload.get("touch_point_prior_paragraph", "") or "")
+
+    import_prompt = _build_import_prompt_data(plan.score_path)
+
+    metadata_path = Path(tp_dir) / "metadata.json"
+    if metadata_path.exists():
+        metadata_text = metadata_path.read_text(encoding="utf-8")
+    else:
+        metadata_text = "{}"
+    beats_per_measure = _beats_per_measure_from_metadata(metadata_text)
+
+    prompt = build_import_sanitize_prompt(
+        prompt_payload=prompt_payload,
+        tp_index=tp_index,
+        tp_type=tp_type,
+        tp_title=title,
+        tp_description=description,
+        tp_prior_paragraph=prior_paragraph,
+        melody_voice_token=plan.voice_token,
+        import_musiccsv=import_prompt.prompt_text,
+    )
+
+    model, temp, max_tokens = env_for_prompt(
+        "music_import_sanitize_prompt.md",
+        "MUSIC_IMPORT_SANITIZE",
+        default_temp=0.25,
+        default_max_tokens=2200,
+    )
+
+    log_path = Path(tp_dir) / "music_import_sanitize.txt"
+    response = llm_complete(
+        prompt,
+        system=(
+            "Sanitize the imported melody and output a single CORE_MELODY.csv block with measure, pitch,"
+            " and duration columns."
+        ),
+        temperature=temp,
+        max_tokens=max_tokens,
+        model=model,
+        log_file=str(log_path),
+    )
+
+    text = (response or "").strip()
+    if not text:
+        raise UserActionRequired(
+            "Melody import sanitize step returned an empty response. Inspect music_import_sanitize.txt and retry."
+        )
+
+    raw_rows = _parse_import_core_rows(text)
+    normalized_rows = _normalize_import_core_rows(raw_rows, beats_per_measure=beats_per_measure)
+    start_pitch = _assign_transitions_from_pitches(normalized_rows)
+    _apply_relative_velocity(normalized_rows, import_prompt.velocities)
+    core_path = _write_core_melody_override(tp_dir, normalized_rows)
+
+    stored_score_hash = score_hash or _hash_file(plan.score_path)
+    state["import_core_melody"] = True
+    state["import_voice_token"] = plan.voice_token
+    state["import_score_hash"] = stored_score_hash
+    state["core_melody_hash"] = _hash_file(core_path)
+    state["core_source_hash"] = f"import:{stored_score_hash}"
+    if start_pitch:
+        state["core_start_pitch"] = start_pitch
+    else:
+        state.pop("core_start_pitch", None)
+    for key in ("pro_hash", "anti_hash", "feelings_hash", "transitions_hash", "emotion_sequence_hash"):
+        state.pop(key, None)
+    _save_core_melody_state(tp_dir, state)
+
+    try:
+        _log_info(
+            f"MUSIC: wrote CORE_MELODY.csv from import for tp={tp_index:02d} at {tp_dir}",
+            tp_dir,
+        )
+    except Exception:
+        pass
+
+    return True
 
 
 def _parse_time_signature(signature: str) -> Tuple[int, int]:
@@ -822,10 +1398,37 @@ def run_melody_emotion_step(
 
     pro_path = tp_dir / "PRO.csv"
     anti_path = tp_dir / "ANTI.csv"
+    core_path = tp_dir / "CORE_MELODY.csv"
     log_path = tp_dir / "music_melody_emotion.txt"
 
     state = _load_core_melody_state(tp_dir)
     state.setdefault("version", 1)
+
+    import_plan = _find_melody_import_plan(tp_dir, prompt_payload)
+    import_score_hash = _hash_file(import_plan.score_path) if import_plan else ""
+
+    if import_plan:
+        needs_rebuild = force or not state.get("import_core_melody")
+        if not core_path.exists():
+            needs_rebuild = True
+        if import_score_hash and import_score_hash != state.get("import_score_hash"):
+            needs_rebuild = True
+        if needs_rebuild:
+            return _run_import_core_melody_flow(
+                tp_dir=tp_dir,
+                tp_index=tp_index,
+                tp_type=tp_type,
+                prompt_payload=prompt_payload,
+                plan=import_plan,
+                state=state,
+                score_hash=import_score_hash,
+            )
+        return False
+
+    # No import plan detected; ensure legacy state is cleared before continuing.
+    state.pop("import_core_melody", None)
+    state.pop("import_score_hash", None)
+    state.pop("import_voice_token", None)
 
     existing_pro_hash = _hash_file(pro_path)
     existing_anti_hash = _hash_file(anti_path)
@@ -909,6 +1512,11 @@ def run_emotion_chord_step(
     tp_dir = Path(tp_dir)
     tp_dir.mkdir(parents=True, exist_ok=True)
 
+    state = _load_core_melody_state(tp_dir)
+    state.setdefault("version", 1)
+    if state.get("import_core_melody"):
+        return False
+
     pro_path = tp_dir / "PRO.csv"
     anti_path = tp_dir / "ANTI.csv"
     if not pro_path.exists() or not anti_path.exists():
@@ -940,9 +1548,6 @@ def run_emotion_chord_step(
     feelings_path = tp_dir / "Feelings.csv"
     transitions_path = tp_dir / "Transitions.csv"
     log_path = tp_dir / "music_emotion_chord.txt"
-
-    state = _load_core_melody_state(tp_dir)
-    state.setdefault("version", 1)
 
     existing_feelings_hash = _hash_file(feelings_path)
     existing_transitions_hash = _hash_file(transitions_path)
@@ -1028,6 +1633,22 @@ def ensure_core_melody_csv(
     transitions_path = tp_dir / "Transitions.csv"
     core_path = tp_dir / "CORE_MELODY.csv"
 
+    state = _load_core_melody_state(tp_dir)
+    state.setdefault("version", 1)
+
+    if state.get("import_core_melody"):
+        if not core_path.exists():
+            raise UserActionRequired(
+                "CORE_MELODY.csv is missing even though an import-based melody was recorded. "
+                "Rerun the melody import sanitize step."
+            )
+        current_core_hash = _hash_file(core_path)
+        state["core_melody_hash"] = current_core_hash
+        score_hash = state.get("import_score_hash", "")
+        state["core_source_hash"] = f"import:{score_hash}"
+        _save_core_melody_state(tp_dir, state)
+        return False
+
     for path, label in (
         (pro_path, "PRO.csv"),
         (anti_path, "ANTI.csv"),
@@ -1038,9 +1659,6 @@ def ensure_core_melody_csv(
             raise UserActionRequired(
                 f"CORE MELODY build requires {label}. Run earlier melody steps first."
             )
-
-    state = _load_core_melody_state(tp_dir)
-    state.setdefault("version", 1)
 
     pro_hash = _hash_file(pro_path)
     anti_hash = _hash_file(anti_path)
@@ -1145,6 +1763,8 @@ def run_melody_edges_step(
     if edges_path.exists():
         return False
 
+    state = _load_core_melody_state(tp_dir)
+
     title = str(prompt_payload.get("touch_point_title", "") or "")
     description = str(prompt_payload.get("touch_point_description", "") or "")
     prior_paragraph = str(prompt_payload.get("touch_point_prior_paragraph", "") or "")
@@ -1187,7 +1807,12 @@ def run_melody_edges_step(
         raise UserActionRequired(
             "CORE_MELODY.csv is empty. Rebuild the core melody before running edges."
         )
-    instructions_text = instructions_text.replace("[CORE_MELODY]", core_melody_text)
+    core_start_pitch = str(state.get("core_start_pitch") or "C4")
+    note_sequence = _core_melody_note_sequence(core_melody_text, start_pitch=core_start_pitch)
+    example_line = _format_core_melody_example_line(note_sequence, start_pitch=core_start_pitch)
+    core_with_root = _core_melody_csv_with_root(core_melody_text, note_sequence)
+    instructions_text = instructions_text.replace("[CORE_MELODY]", core_with_root or core_melody_text)
+    instructions_text = instructions_text.replace("[CORE_MELODY_EXAMPLE_NOTES]", example_line)
 
     model, temp, max_tokens = env_for_prompt(
         "music_melody_edges_prompt.md",
@@ -1632,6 +2257,26 @@ def _compose_first_pass_for_voice(
     if target_voice_index < 0 or target_voice_index >= len(voice_context.voices):
         raise UserActionRequired("Requested target_voice_index is out of range for VoiceContext.voices.")
 
+    target_voice = voice_context.voices[target_voice_index]
+
+    # Ensure the target voice import (if present) is sanitized so that score.musiccsv
+    # exists before we attempt to reference it in prompts.
+    import_lookup = _collect_voice_imports(tp_dir)
+    target_import_dir = import_lookup.get(_normalize_voice_key(target_voice.token))
+    if target_import_dir:
+        try:
+            process_import_directory(target_import_dir)
+        except Exception:
+            pass
+        if target_voice.token not in voice_context.score_summaries:
+            score_path = _resolve_import_score_path(target_import_dir)
+            if score_path:
+                try:
+                    summary = summarize_musiccsv(score_path, target_voice.token)
+                    voice_context.score_summaries[target_voice.token] = summary
+                except Exception:
+                    pass
+
     # Load shared metadata and variant-specific melody CSV.
     metadata_text = ""
     melody_text = ""
@@ -1672,7 +2317,9 @@ def _compose_first_pass_for_voice(
             pass
         existing_scores[spec.token] = info
 
-    target_voice = voice_context.voices[target_voice_index]
+    prompt_existing_scores: Dict[str, Dict[str, Any]] = {}
+    if target_voice.token in existing_scores:
+        prompt_existing_scores[target_voice.token] = existing_scores[target_voice.token]
 
     melody_reduced = ""
     other_reduced_blocks: List[str] = []
@@ -1711,7 +2358,7 @@ def _compose_first_pass_for_voice(
 
     prompt = build_first_score_prompt(
         prompt_payload=payload_with_suggestions,
-        existing_scores=existing_scores,
+        existing_scores=prompt_existing_scores,
         tp_index=tp_index,
         tp_type=tp_type,
         tp_text=tp_text,

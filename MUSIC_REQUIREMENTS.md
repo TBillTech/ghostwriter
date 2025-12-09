@@ -68,6 +68,13 @@ IF the output file (score.musiccsv) is absent, then sanitize and fix user-edited
 
 Also, anytime you write out score.musiccsv, overwrite the monitor.mid.  The monitor.mid file should be a reasonable approximation of the score which can be played by the user to hear the notes and/or beats. 
 
+### Melody import sanitization path (Dec 2025)
+
+- Ignore any `*.Zone.Identifier` companions that appear beside imported `.mid` files (e.g., Windows ADS metadata). Only the actual `.mid/.midi/.mid2` payloads should participate in normalization.
+- When the melody voice has an import folder, the pipeline must route through a dedicated `music_import_sanitize_prompt.md` instead of the `music_melody_emotion`/`music_emotion_chord` prompts. Provide that prompt with the sanitized `score.musiccsv` (or freshly generated `import.musiccsv`) for the voice, plus the surrounding metadata so it can quantize events and drop leading/trailing empty measures.
+- The prompt output should be a deterministic table supplying the simplified columns (`measure,pitch,duration`). Because the import contains single-note rows, mandate `semi_tones=(0)`; the pipeline converts the pitch column into `transition` intervals automatically when producing `CORE_MELODY.csv`, so no extra math is required in the prompt response.
+- Feed the resulting rows directly into the core-melody builder so subsequent steps (melody edges, reduced grids, voice prompts) treat the imported line as authoritative. Ensure this bypass honours any accompanying imports for bass/beat voices as well, wiring each `<tp_index>_track_<voice>_import/` folder to the matching track metadata.
+
 2️⃣ Internal Representation & Processing Layer
 Purpose:
 

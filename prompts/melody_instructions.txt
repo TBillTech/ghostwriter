@@ -12,10 +12,16 @@ I chose these notes motivated by the key signature, style of music, and feeling 
 Here are the edges I have constructed to be used the next step for creating the melody:
 [melodic_edges]
 
+Follow these execution steps exactly when building the final melody:
+1. Insert 2 whole measures of `rest` at the very beginning, then start copying edges.
+2. When you follow an edge, copy every row from that edge (element + duration) in order and without simplification. The only thing you are allowed to change is the `measure` number so the sequence stays continuous.
+3. Never collapse an edge into long sustained dwell notes, invent alternative notes, or skip rows. The melody should sound like the provided edges stitched together.
+4. After finishing one edge you "arrive" on that edge's destination dwell note. Choose the next edge that begins on that note (you may run the next edge forward or backward by reversing its order). Continue chaining edges until you reach the target length, touching every edge at least once overall.
+5. Only after the melody reaches the desired length (120-150 measures) append 2 whole measures of `rest` to end cleanly.
+
 Craft the melody according to the following rules:
-* Add 2 whole measures of rests at the beginning, and 2 whole measures of rests at the end to help the melody stand out and finish. 
-* Build the melody from a sequence of the edges you invented earlier.
-* After following an edge, you "arrive" at the next dwell note, and then choose the next edge begging at that note.
+* Do not add any new material besides the mandated rest measures; every musical note must come from the provided edges.
+* After following an edge, you "arrive" at the next dwell note, and then choose the next edge beginning at that note.
 * If you need to follow an edge backwards, simply reverse the order of the notes in the edge (and optionally reverse rapid passages). 
 * You can follow any edge in either direction, for example, if you follow edge A-C1, you can then follow edge C1-B1 (but in reverse).
 * The count of measures should be between 120 and 150. Try to touch each edge once, even if some of the edges have low weight. 

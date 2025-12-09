@@ -99,6 +99,11 @@ def _find_importable_files(directory: Path) -> List[Path]:
     # Filter only supported extensions (case-insensitive), excluding monitor.mid
     results: List[Path] = []
     for candidate in sorted(files):
+        name_lower = candidate.name.lower()
+        if "zone.identifier" in name_lower or ":" in candidate.name:
+            continue
+        if name_lower == "monitor.mid":
+            continue
         ext = candidate.suffix.lower()
         if ext in SUPPORTED_IMPORT_EXTENSIONS:
             results.append(candidate)

@@ -21,6 +21,7 @@ from ..context import RunContext, UserActionRequired
 from ..templates import iter_dir_for
 from ..utils import _norm_token
 from ..musiccsv import read_musiccsv, validate_musiccsv, resolve_derived_fields, MusicCSV
+from .importer import process_import_directory
 
 
 logger = logging.getLogger(__name__)
@@ -497,13 +498,17 @@ def _collect_score_summaries(ctx: RunContext, voice_specs: List[VoiceSpec], vers
         spec = index.get(_normalize_lookup(token))
         if spec is None:
             continue
+        try:
+            process_import_directory(import_dir)
+        except Exception as exc:  # pragma: no cover - defensive
+            logger.debug("Failed to process %s: %s", import_dir, exc)
         score_path = import_dir / "score.musiccsv"
         if not score_path.exists():
             score_path = import_dir / "import.musiccsv"
         if not score_path.exists():
             continue
         try:
-            summary = _summarize_musiccsv(score_path, spec.token)
+            summary = summarize_musiccsv(score_path, spec.token)
         except Exception as exc:  # pragma: no cover - defensive branch
             logger.debug("Failed to summarize %s: %s", score_path, exc)
             continue
@@ -511,7 +516,7 @@ def _collect_score_summaries(ctx: RunContext, voice_specs: List[VoiceSpec], vers
     return summaries
 
 
-def _summarize_musiccsv(path: Path, voice_token: str) -> ScoreSummary:
+def summarize_musiccsv(path: Path, voice_token: str) -> ScoreSummary:
     music = read_musiccsv(path)
     validate_musiccsv(music)
     derived = resolve_derived_fields(music)

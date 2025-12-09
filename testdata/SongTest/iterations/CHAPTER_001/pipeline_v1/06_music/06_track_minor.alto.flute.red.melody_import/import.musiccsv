@@ -1,0 +1,95 @@
+### metadata.json
+{
+  "divisions_per_quarter": 960,
+  "key_signature": "C",
+  "tempo": 120.0,
+  "time_signature": "4/4",
+  "title": "forest_melody",
+  "version": "0.1"
+}
+
+### tracks.csv
+track,label,part,instrument,channel,program,volume
+1,Track 1,Track 1,,1,,
+
+### measures.csv
+measure,time_signature,key_signature,tempo,start_beat,pickup
+1,4/4,C,120.0,0.0,false
+2,4/4,C,120.0,4.0,false
+3,4/4,C,120.0,8.0,false
+4,4/4,C,120.0,12.0,false
+5,4/4,C,120.0,16.0,false
+6,4/4,C,120.0,20.0,false
+7,4/4,C,120.0,24.0,false
+8,4/4,C,120.0,28.0,false
+9,4/4,C,120.0,32.0,false
+10,4/4,C,120.0,36.0,false
+11,4/4,C,120.0,40.0,false
+12,4/4,C,120.0,44.0,false
+13,4/4,C,120.0,48.0,false
+14,4/4,C,120.0,52.0,false
+15,4/4,C,120.0,56.0,false
+16,4/4,C,120.0,60.0,false
+17,4/4,C,120.0,64.0,false
+18,4/4,C,120.0,68.0,false
+
+### notes.csv
+track,measure,beat,pitch,duration,velocity,tie,articulation,pedal,lyric,ornament,comment,grace,repeat,tuplet
+1,2,4.986458,C4,0.528125,42,none,,false,,,,false,,
+1,3,1.971875,D#4,0.365625,51,none,,false,,,,false,,
+1,3,2.3375,D#4,0.020833,51,none,,false,,,,false,,
+1,3,2.894792,G4,1.2875,49,none,,false,,,,false,,
+1,3,4.89375,C4,0.477083,52,none,,false,,,,false,,
+1,4,1.791667,D#4,0.40625,52,none,,false,,,,false,,
+1,4,2.80625,D4,1.330208,57,none,,false,,,,false,,
+1,4,4.867708,C4,0.4875,56,none,,false,,,,false,,
+1,5,1.803125,D#4,0.469792,42,none,,false,,,,false,,
+1,5,2.865625,G4,0.345833,48,none,,false,,,,false,,
+1,5,3.765625,G4,0.366667,46,none,,false,,,,false,,
+1,5,4.730208,G4,0.513542,51,none,,false,,,,false,,
+1,6,1.744792,D#4,0.438542,40,none,,false,,,,false,,
+1,6,2.888542,D4,1.232292,52,none,,false,,,,false,,
+1,6,4.898958,C4,0.5125,55,none,,false,,,,false,,
+1,7,1.816667,D#4,0.39375,53,none,,false,,,,false,,
+1,7,2.73125,G4,0.371875,50,none,,false,,,,false,,
+1,7,3.683333,C5,0.610417,54,none,,false,,,,false,,
+1,7,4.859375,C5,0.597917,75,none,,false,,,,false,,
+1,8,1.93125,G4,0.447917,53,none,,false,,,,false,,
+1,8,2.914583,G4,0.397917,49,none,,false,,,,false,,
+1,8,3.928125,D#4,0.329167,39,none,,false,,,,false,,
+1,8,4.895833,D#4,0.464583,50,none,,false,,,,false,,
+1,9,1.898958,G4,0.332292,67,none,,false,,,,false,,
+1,9,2.845833,G4,0.438542,50,none,,false,,,,false,,
+1,9,3.85625,D#4,0.319792,57,none,,false,,,,false,,
+1,9,4.791667,D#4,0.5375,50,none,,false,,,,false,,
+1,10,1.882292,D4,0.4125,58,none,,false,,,,false,,
+1,10,3.014583,C4,0.975,68,none,,false,,,,false,,
+1,10,4.444792,C4,1.260417,67,none,,false,,,,false,,
+1,11,1.605208,D#4,1.313542,69,none,,false,,,,false,,
+1,11,2.98125,G4,0.398958,58,none,,false,,,,false,,
+1,11,3.380208,G4,0.8625,58,none,,false,,,,false,,
+1,11,4.978125,G4,1.10625,67,none,,false,,,,false,,
+1,12,1.91875,D#4,1.046875,57,none,,false,,,,false,,
+1,12,2.905208,D4,1.341667,60,none,,false,,,,false,,
+1,12,4.877083,C4,1.18125,58,none,,false,,,,false,,
+1,13,1.860417,D#4,1.158333,46,none,,false,,,,false,,
+1,13,2.848958,G4,0.654167,51,none,,false,,,,false,,
+1,13,3.845833,G4,0.344792,67,none,,false,,,,false,,
+1,13,4.827083,G4,1.178125,63,none,,false,,,,false,,
+1,14,1.820833,D#4,1.155208,65,none,,false,,,,false,,
+1,14,2.884375,D4,1.442708,67,none,,false,,,,false,,
+1,15,1.036458,C4,1.008333,66,none,,false,,,,false,,
+1,15,1.908333,D#4,1.136458,58,none,,false,,,,false,,
+1,15,2.904167,D4,0.441667,75,none,,false,,,,false,,
+1,15,3.803125,D4,1.121875,58,none,,false,,,,false,,
+1,15,4.785417,D#4,1.058333,64,none,,false,,,,false,,
+1,16,1.779167,D4,1.151042,60,none,,false,,,,false,,
+1,16,2.891667,C4,1.104167,71,none,,false,,,,false,,
+1,16,3.945833,B3,0.55625,62,none,,false,,,,false,,
+1,16,4.888542,B3,1.001042,76,none,,false,,,,false,,
+1,17,1.84375,C4,0.282292,76,none,,false,,,,false,,
+1,17,2.764583,C4,1.20625,74,none,,false,,,,false,,
+1,17,3.841667,B3,0.316667,56,none,,false,,,,false,,
+1,17,4.803125,B3,1.222917,57,none,,false,,,,false,,
+1,18,1.870833,C4,0.30625,68,none,,false,,,,false,,
+1,18,2.810417,C4,1.457292,61,none,,false,,,,false,,
