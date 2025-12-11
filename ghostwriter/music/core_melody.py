@@ -34,6 +34,7 @@ class TransitionRow:
 @dataclass(frozen=True)
 class CoreMelodyRow:
     measure: int
+    beat: float
     emotion: str
     duration: float
     semitones: Tuple[int, ...]
@@ -41,7 +42,7 @@ class CoreMelodyRow:
 
 
 _BLOCK_HEADER_RE = re.compile(r"^\s*[A-Za-z0-9 _.-]+\.csv\s*$")
-_CORE_MELODY_HEADER = ["measure", "duration", "semi_tones", "transition"]
+_CORE_MELODY_HEADER = ["measure", "beat", "duration", "semi_tones", "transition"]
 
 
 def _normalize_row(row: dict) -> dict:
@@ -370,9 +371,11 @@ def build_core_melody_rows(
                 transition_tuple = (value,)
 
         measure_num = int(beat_cursor // beats_per_measure) + 1
+        beat_value = (beat_cursor % beats_per_measure) + 1
         rows.append(
             CoreMelodyRow(
                 measure=measure_num,
+                beat=beat_value,
                 emotion=current.emotion,
                 duration=current.duration,
                 semitones=feeling,
@@ -393,6 +396,7 @@ def core_melody_rows_to_csv(rows: Sequence[CoreMelodyRow]) -> str:
         line = ",".join(
             [
                 str(int(row.measure)),
+                _format_number(row.beat),
                 _format_number(row.duration),
                 _format_tuple(row.semitones),
                 transition_text,

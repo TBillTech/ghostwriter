@@ -21,10 +21,12 @@ Instructions:
    - Reserve program 0 for unspecified / generic, otherwise choose a reasonable General MIDI program.
 4. Ensure every voice token mentioned in the context is mapped to exactly one track.
 5. Do not generate any measures or notes yet; this step is for metadata and track layout only.
+6. Avoid placing commas inside any individual CSV field (e.g., role descriptions); use spaces, semicolons, or dashes instead so the parser sees exactly eight columns per row.
 
 Output format:
 - First, a `metadata.json` block in pretty-printed JSON that includes at minimum: title, tempo, time_signature, key_signature, divisions_per_quarter, and optional descriptive fields.
 - Second, a `tracks.csv` block with a header row and one row per track, with columns: track,label,part,instrument,channel,program,role,voice_token.
+  - Each field must be comma-free so that every row has exactly eight comma-delimited columns without extra quoting.
 
 Example skeleton (illustrative only):
 

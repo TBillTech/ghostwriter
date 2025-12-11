@@ -57,17 +57,18 @@ Instructions:
 2. When a measure window is provided, **emit notes only for that window** and leave prior windows untouched. Extend ties with new rows instead of rewriting earlier measures.
 3. If this voice is the melody, do **not** invent or rephrase the line: for every row in the melody guidance, emit a matching note with the identical measure, beat, pitch, and duration. No substitutions, omissions, or reordering are allowed.
 4. When this voice is not the melody, compose material that sounds good with the guided melody, but still treat the guidance as fixed.
-5. Never split a guided note into multiple notes, tie it across a new boundary, or alter its duration unless the guidance itself already does so. Each provided row should map to one output row starting at the exact beat and lasting the exact duration.
-6. When reduced-note grids for other voices are present, treat them as fixed reference parts. Write the new voice so that it complements these parts (e.g., avoiding collisions, reinforcing cadences, or providing counter-melody), but never assumes they can be changed.
-7. Respect the tempo, key, and time signature from metadata/measures unless there is a strong musical reason to diverge.
-8. Use only the following columns in your CSV output, in this exact order:
+5. Police dissonance rigorously: never stack the chromatic neighbor of the same letter name against the melody at the same beat (e.g., avoid Ab against a held A natural unless explicitly requested). Default to consonant thirds, fifths, or octaves unless the prompt calls for deliberate tension.
+6. Never split a guided note into multiple notes, tie it across a new boundary, or alter its duration unless the guidance itself already does so. Each provided row should map to one output row starting at the exact beat and lasting the exact duration.
+7. When reduced-note grids for other voices are present, treat them as fixed reference parts. Write the new voice so that it complements these parts (e.g., avoiding collisions, reinforcing cadences, or providing counter-melody), but never assumes they can be changed.
+8. Respect the tempo, key, and time signature from metadata/measures unless there is a strong musical reason to diverge.
+9. Use only the following columns in your CSV output, in this exact order:
 	`measure,beat,pitch,duration,velocity,tie,articulation`
-9. `measure` must be an integer counting up like the measures listed in the shared **main melodic line** block, and it must land within the requested window when one is supplied.
-10. `beat` values are 1-based within each measure (use positive numbers such as 1, 1.5, 3.75, …; never greater than the upper value of the time signature's numerator).
-11. `pitch` must be a scientific pitch name like `C4`, `F#3`, or `Bb2`, or `rest` for no pitch.
-12. `duration` is the number of beats the note should continue for, starting at the `beat` point of the note.
-13. `velocity` must stay within the MIDI range 0–127.
-14. `tie` is either blank (no tie), `start`, `continue`, or `stop`, and is used to indicate notes that sustain across barlines.
-15. `articulation` is a short textual tag such as `legato`, `staccato`, `tenuto`, `accent`, or may be left blank.
+10. `measure` must be an integer counting up like the measures listed in the shared **main melodic line** block, and it must land within the requested window when one is supplied.
+11. `beat` values are 1-based within each measure (use positive numbers such as 1, 1.5, 3.75, …; never greater than the upper value of the time signature's numerator).
+12. `pitch` must be a scientific pitch name like `C4`, `F#3`, or `Bb2`, or `rest` for no pitch.
+13. `duration` is the number of beats the note should continue for, starting at the `beat` point of the note.
+14. `velocity` must stay within the MIDI range 0–127.
+15. `tie` is either blank (no tie), `start`, `continue`, or `stop`, and is used to indicate notes that sustain across barlines.
+16. `articulation` is a short textual tag such as `legato`, `staccato`, `tenuto`, `accent`, or may be left blank.
 
 Return only a single CSV table using these seven columns and **no other text or commentary**.

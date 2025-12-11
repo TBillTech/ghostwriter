@@ -49,10 +49,10 @@ def fake_llm(monkeypatch) -> List[str]:
         calls.append(prompt)
         return (
             "CORE_MELODY.csv\n"
-            "measure,pitch,duration\n"
-            "1,A3,0.25\n"
-            "1,C4,0.125\n"
-            "1,rest,0.25\n"
+            "measure,beat,pitch,duration\n"
+            "1,1,A3,0.25\n"
+            "1,1.25,C4,0.125\n"
+            "1,1.375,rest,0.25\n"
         )
 
     monkeypatch.setattr("ghostwriter.music.pipeline.llm_complete", _fake_llm)
@@ -105,13 +105,15 @@ def test_melody_import_flow_short_circuits(tmp_path: Path, prompt_payload: Dict[
     assert core_path.exists()
     core_text = core_path.read_text(encoding="utf-8")
     lines = [line for line in core_text.strip().splitlines() if line]
-    assert lines[0] == "measure,duration,semi_tones,transition,relative_velocity"
+    assert lines[0] == "measure,beat,duration,semi_tones,transition,relative_velocity"
     assert lines[1].endswith(",0.8")
     assert lines[2].endswith(",1.2")
     assert lines[3].endswith(",1.2")
 
     reader = csv.DictReader(StringIO(core_text))
     rows = list(reader)
+    assert rows[0]["beat"] == "1"
+    assert rows[1]["beat"] == "1.25"
     assert rows[0]["duration"] == "0.25"
     assert rows[1]["duration"] == "0.125"
     assert rows[0]["transition"] == "(3)"

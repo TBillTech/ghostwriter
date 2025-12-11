@@ -38,3 +38,30 @@ def test_melody_measure_three_respects_core_sequence():
         "Melody block ordering drifted from the CORE_MELODY sequence; "
         "see notes_major_alto_flute_red_melody_standard.block01_1.txt"
     )
+
+
+def test_sanitize_preserves_fractional_beats_in_extended_measures():
+    rows = [
+        {
+            "measure": "5",
+            "beat": "5.5",
+            "pitch": "E4",
+            "duration": "0.5",
+            "velocity": "96",
+            "tie": "",
+            "articulation": "staccato",
+        }
+    ]
+
+    sanitized = _sanitize_block_note_rows(
+        rows,
+        measure_start=5,
+        measure_end=6,
+        beats_per_measure=4,
+        preserve_input_order=False,
+        measure_beats={5: 6.0},
+    )
+
+    assert len(sanitized) == 1
+    assert sanitized[0]["measure"] == "5"
+    assert sanitized[0]["beat"] == "5.5", "Beats beyond 4 in a 6-count measure should not wrap to the next bar."

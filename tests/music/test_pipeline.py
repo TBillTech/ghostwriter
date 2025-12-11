@@ -130,23 +130,54 @@ def test_edge_rows_require_measure_column():
         _edge_rows_with_measures("A-B", header, data_lines, 4.0)
 
 
-def test_edge_rows_detect_measure_mismatch():
+def test_edge_rows_require_beat_column():
     header = "measure,root,element,duration"
     data_lines = [
-        "1,F4,C5,4",
-        "3,F4,A4,1",
+        "1,F4,C5,1",
     ]
 
-    with pytest.raises(UserActionRequired, match="measure 3"):
+    with pytest.raises(UserActionRequired, match="beat"):
+        _edge_rows_with_measures("A-B", header, data_lines, 4.0)
+
+
+def test_edge_rows_detect_non_monotonic_beats():
+    header = "measure,beat,root,element,duration"
+    data_lines = [
+        "1,1,F4,C5,1",
+        "1,0.5,F4,A4,1",
+    ]
+
+    with pytest.raises(UserActionRequired, match="backwards"):
+        _edge_rows_with_measures("A-B", header, data_lines, 4.0)
+
+
+def test_edge_rows_detect_duration_overflow():
+    header = "measure,beat,root,element,duration"
+    data_lines = [
+        "1,1,F4,C5,3",
+        "1,2,F4,A4,0.5",
+    ]
+
+    with pytest.raises(UserActionRequired, match="duration"):
+        _edge_rows_with_measures("A-B", header, data_lines, 4.0)
+
+
+def test_edge_rows_detect_beat_out_of_range():
+    header = "measure,beat,root,element,duration"
+    data_lines = [
+        "1,4.5,F4,C5,1",
+    ]
+
+    with pytest.raises(UserActionRequired, match="outside the 0-4"):
         _edge_rows_with_measures("A-B", header, data_lines, 4.0)
 
 
 def test_edge_rows_keep_validated_measures():
-    header = "measure,root,element,duration"
+    header = "measure,beat,root,element,duration"
     data_lines = [
-        "1,F4,C5,2",
-        "1,F4,E4,2",
-        "2,F4,G4,1",
+        "1,1,F4,C5,2",
+        "1,3,F4,E4,2",
+        "2,1,F4,G4,1",
     ]
 
     rows = _edge_rows_with_measures("A-B", header, data_lines, 4.0)

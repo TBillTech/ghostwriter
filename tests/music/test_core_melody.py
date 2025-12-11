@@ -104,10 +104,10 @@ def test_build_core_melody_rows_success():
     rows = build_core_melody_rows(pro, anti, feelings, transitions, beats_per_measure=4.0)
 
     assert rows == [
-        CoreMelodyRow(measure=1, emotion="awe", duration=1.0, semitones=(4, 3, 5), transition=(-1,)),
-        CoreMelodyRow(measure=1, emotion="fear", duration=0.5, semitones=(3, 2), transition=(-2,)),
-        CoreMelodyRow(measure=1, emotion="dread", duration=1.5, semitones=(3, 3, 6), transition=(5,)),
-        CoreMelodyRow(measure=1, emotion="anger", duration=0.75, semitones=(2, 2, 3), transition=(0,)),
+        CoreMelodyRow(measure=1, beat=1.0, emotion="awe", duration=1.0, semitones=(4, 3, 5), transition=(-1,)),
+        CoreMelodyRow(measure=1, beat=2.0, emotion="fear", duration=0.5, semitones=(3, 2), transition=(-2,)),
+        CoreMelodyRow(measure=1, beat=2.5, emotion="dread", duration=1.5, semitones=(3, 3, 6), transition=(5,)),
+        CoreMelodyRow(measure=1, beat=4.0, emotion="anger", duration=0.75, semitones=(2, 2, 3), transition=(0,)),
     ]
 
 
@@ -158,11 +158,11 @@ def test_build_core_melody_csv_writes_file(tmp_path):
     )
 
     expected_csv = (
-        "measure,duration,semi_tones,transition\n"
-        "1,1,(4, 3, 5),(0)\n"
-        "1,0.5,(3, 2),(0)\n"
-        "1,1.5,(3, 3, 6),(0)\n"
-        "1,0.75,(2, 2, 3),(0)\n"
+        "measure,beat,duration,semi_tones,transition\n"
+        "1,1,1,(4, 3, 5),(0)\n"
+        "1,2,0.5,(3, 2),(0)\n"
+        "1,2.5,1.5,(3, 3, 6),(0)\n"
+        "1,4,0.75,(2, 2, 3),(0)\n"
     )
     assert output_path.read_text(encoding="utf-8") == expected_csv
     assert core_melody_rows_to_csv(rows) == expected_csv

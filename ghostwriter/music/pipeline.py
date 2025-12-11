@@ -342,16 +342,17 @@ def _find_melody_import_plan(tp_dir: Path, payload: Optional[Dict[str, Any]]) ->
 
 def _build_import_prompt_data(score_path: Path) -> ImportPromptData:
     music = read_musiccsv(score_path)
-    lines = ["measure,pitch,duration"]
+    lines = ["measure,beat,pitch,duration"]
     velocities: List[float] = []
     note_count = 0
     for note in music.notes:
         measure = _coerce_int(note.get("measure")) or 0
+        beat = _coerce_float(note.get("beat")) or 1.0
         pitch = str(note.get("pitch") or "rest").strip() or "rest"
         duration = _coerce_float(note.get("duration")) or 0.0
         velocity = _coerce_float(note.get("velocity"))
         velocities.append(0.0 if velocity is None else float(velocity))
-        lines.append(f"{measure},{pitch},{_format_number(duration)}")
+        lines.append(f"{measure},{_format_number(beat)},{pitch},{_format_number(duration)}")
         note_count += 1
     if note_count == 0:
         raise UserActionRequired(
@@ -388,9 +389,15 @@ def _extract_core_melody_csv_lines(text: str) -> List[str]:
             marker_idx = idx + 1
             break
     if marker_idx is None:
+        prefixes = (
+            "measure,beat,pitch,duration",
+            "measure,pitch,duration",
+            "measure,beat,duration",
+            "measure,duration,semi_tones,transition",
+        )
         for idx, line in enumerate(lines):
             header = line.strip().lower()
-            if header.startswith("measure,duration,semi_tones,transition") or header.startswith("measure,pitch,duration"):
+            if any(header.startswith(prefix) for prefix in prefixes):
                 marker_idx = idx
                 break
     if marker_idx is None:
@@ -487,13 +494,14 @@ def _core_melody_csv_with_root(core_csv_text: str, notes: List[str]) -> str:
 
     buffer = StringIO()
     writer = csv.writer(buffer)
-    writer.writerow(["measure", "duration", "semi_tones", "root"])
+    writer.writerow(["measure", "beat", "duration", "semi_tones", "root"])
     idx = 0
     for row in reader:
         root_note = notes[idx] if idx < len(notes) else ""
         idx += 1
         writer.writerow([
             row.get("measure", ""),
+            row.get("beat", ""),
             row.get("duration", ""),
             row.get("semi_tones", ""),
             root_note,
@@ -513,9 +521,12 @@ def _parse_import_core_rows(response_text: str) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     for idx, row in enumerate(reader):
         measure = _coerce_int(row.get("measure"))
+        beat = _coerce_float(row.get("beat"))
         duration = _coerce_float(row.get("duration"))
         if measure is None or measure <= 0:
             raise UserActionRequired(f"Row {idx + 1} in CORE_MELODY.csv is missing a valid measure number.")
+        if beat is None or beat <= 0:
+            raise UserActionRequired(f"Row {idx + 1} in CORE_MELODY.csv is missing a valid beat value.")
         if duration is None or duration <= 0:
             raise UserActionRequired(f"Row {idx + 1} in CORE_MELODY.csv is missing a valid duration.")
         pitch = str(row.get("pitch", "") or "").strip() or "rest"
@@ -528,6 +539,7 @@ def _parse_import_core_rows(response_text: str) -> List[Dict[str, Any]]:
             {
                 "measure": measure,
                 "duration": duration,
+                "beat": beat,
                 "semi_tones": semitones or (0,),
                 "transition": transitions or (0,),
                 "pitch": pitch,
@@ -541,20 +553,32 @@ def _parse_import_core_rows(response_text: str) -> List[Dict[str, Any]]:
 
 
 def _normalize_import_core_rows(rows: List[Dict[str, Any]], *, beats_per_measure: float) -> List[Dict[str, Any]]:
-    beats = beats_per_measure if beats_per_measure and beats_per_measure > 0 else 4.0
     tolerance = 1e-6
-    measure = 1
-    beat_cursor = 0.0
     normalized: List[Dict[str, Any]] = []
-    for idx, row in enumerate(rows):
-        duration = float(row.get("duration", 0.0) or 0.0)
-        if duration <= 0:
+
+    def _sort_key(entry: Dict[str, Any]) -> Tuple[int, float]:
+        return (
+            _coerce_int(entry.get("measure")) or 0,
+            _coerce_float(entry.get("beat")) or 0.0,
+        )
+
+    for idx, row in enumerate(sorted(rows, key=_sort_key)):
+        measure = _coerce_int(row.get("measure"))
+        beat = _coerce_float(row.get("beat"))
+        duration = _coerce_float(row.get("duration"))
+        if measure is None or measure <= 0:
+            raise UserActionRequired(f"Row {idx + 1} produced an invalid measure after sanitize quantization.")
+        if beat is None or beat <= 0:
+            raise UserActionRequired(f"Row {idx + 1} produced an invalid beat after sanitize quantization.")
+        if duration is None or duration <= 0:
             raise UserActionRequired(
                 f"Row {idx + 1} produced a non-positive duration after sanitize quantization."
             )
+
         entry = dict(row)
-        entry["duration"] = duration
         entry["measure"] = measure
+        entry["beat"] = beat
+        entry["duration"] = duration
         entry["semi_tones"] = (0,)
         transition_tuple = row.get("transition") or (0,)
         if isinstance(transition_tuple, (list, tuple)):
@@ -562,13 +586,15 @@ def _normalize_import_core_rows(rows: List[Dict[str, Any]], *, beats_per_measure
         else:
             entry["transition"] = (int(_coerce_int(transition_tuple) or 0),)
         normalized.append(entry)
-        beat_cursor += duration
-        while beat_cursor >= beats - tolerance:
-            beat_cursor -= beats
-            measure += 1
 
     if not normalized:
         raise UserActionRequired("Melody import sanitize step produced no usable rows.")
+
+    # Preserve the declared beats-per-measure when the LLM omits ties by ensuring
+    # successive notes starting on the same measure advance monotonically.
+    for first, second in zip(normalized, normalized[1:]):
+        if first["measure"] == second["measure"] and second["beat"] < first["beat"] - tolerance:
+            second["beat"] = first["beat"]
 
     return normalized
 
@@ -661,14 +687,15 @@ def _write_core_melody_override(tp_dir: Path, rows: List[Dict[str, Any]]) -> Pat
     core_path.parent.mkdir(parents=True, exist_ok=True)
     with core_path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle)
-        writer.writerow(["measure", "duration", "semi_tones", "transition", "relative_velocity"])
+        writer.writerow(["measure", "beat", "duration", "semi_tones", "transition", "relative_velocity"])
         for row in rows:
             measure = int(row["measure"])
+            beat = _format_number(float(row.get("beat", 1.0) or 1.0))
             duration = _format_number(float(row["duration"]))
             semi_repr = "(" + ", ".join(str(int(val)) for val in row["semi_tones"]) + ")"
             trans_repr = "(" + ", ".join(str(int(val)) for val in row["transition"]) + ")"
             rel_vel = _format_number(float(row.get("relative_velocity", 1.0) or 1.0))
-            writer.writerow([measure, duration, semi_repr, trans_repr, rel_vel])
+            writer.writerow([measure, beat, duration, semi_repr, trans_repr, rel_vel])
     return core_path
 
 
@@ -717,7 +744,7 @@ def _run_import_core_melody_flow(
     response = llm_complete(
         prompt,
         system=(
-            "Sanitize the imported melody and output a single CORE_MELODY.csv block with measure, pitch,"
+            "Sanitize the imported melody and output a single CORE_MELODY.csv block with measure, beat, pitch,"
             " and duration columns."
         ),
         temperature=temp,
@@ -845,6 +872,32 @@ def _measure_count_for_variant(tp_dir: Path, variant: str) -> int:
         except Exception:
             return 0
     return 0
+
+
+def _measure_beats_lookup(tp_dir: Path, variant: str) -> Dict[int, float]:
+    tp_dir = Path(tp_dir)
+    safe_variant = (variant or "standard").strip().lower()
+    measures_path = tp_dir / f"measures_{safe_variant}.csv"
+    beats: Dict[int, float] = {}
+    if not measures_path.exists():
+        return beats
+    try:
+        import csv
+
+        with measures_path.open("r", encoding="utf-8", newline="") as handle:
+            reader = csv.DictReader(handle)
+            for row in reader:
+                measure_no = _coerce_int(row.get("measure"))
+                if measure_no is None or measure_no <= 0:
+                    continue
+                signature = str(row.get("time_signature", "") or "").strip()
+                beats_val = _beats_per_measure_from_signature(signature) if signature else None
+                if beats_val is None or beats_val <= 0:
+                    continue
+                beats[measure_no] = float(beats_val)
+    except Exception:
+        return beats
+    return beats
 
 
 def _progress_path(tp_dir: Path, variant: str) -> Path:
@@ -1047,9 +1100,18 @@ def _sanitize_block_note_rows(
     measure_end: int,
     beats_per_measure: float,
     preserve_input_order: bool = False,
+    measure_beats: Optional[Dict[int, float]] = None,
 ) -> List[Dict[str, Any]]:
     if beats_per_measure <= 0:
         beats_per_measure = 4.0
+    default_beats = beats_per_measure
+
+    def _beats_for_measure(measure: int) -> float:
+        if measure_beats:
+            mapped = measure_beats.get(measure)
+            if mapped is not None and mapped > 0:
+                return float(mapped)
+        return default_beats
 
     sanitized: List[Dict[str, Any]] = []
     valid_velocities: List[int] = []
@@ -1065,9 +1127,11 @@ def _sanitize_block_note_rows(
             beat_value = 1.0
         beat = max(1.0, beat_value)
         start_offset = beat - 1.0
-        while start_offset >= beats_per_measure - 1e-6:
-            start_offset -= beats_per_measure
+        measure_beats_val = _beats_for_measure(measure)
+        while start_offset >= measure_beats_val - 1e-6:
+            start_offset -= measure_beats_val
             measure += 1
+            measure_beats_val = _beats_for_measure(measure)
         beat = start_offset + 1.0
 
         duration = _coerce_float(row.get("duration")) or 1.0
@@ -1111,7 +1175,7 @@ def _sanitize_block_note_rows(
             item["velocity"] = avg_velocity
 
     def _abs_position(entry: Dict[str, Any]) -> float:
-        return (entry["measure"] - 1) * beats_per_measure + (entry["beat"] - 1)
+        return (entry["measure"] - 1) * default_beats + (entry["beat"] - 1)
 
     if preserve_input_order:
         sanitized.sort(key=lambda item: item["_order"])  # keep LLM ordering for melody lines
@@ -1127,7 +1191,8 @@ def _sanitize_block_note_rows(
         segments: List[Dict[str, Any]] = []
         seg_idx = 0
         while remaining > 1e-6 and current_measure <= measure_end:
-            room = beats_per_measure - (current_beat - 1)
+            beats_this_measure = _beats_for_measure(current_measure)
+            room = beats_this_measure - (current_beat - 1)
             if room <= 1e-6:
                 current_measure += 1
                 current_beat = 1.0
@@ -1146,8 +1211,11 @@ def _sanitize_block_note_rows(
                 }
             )
             remaining -= take
-            current_measure += 1
-            current_beat = 1.0
+            if remaining > 1e-6:
+                current_measure += 1
+                current_beat = 1.0
+            else:
+                current_beat += take
             seg_idx += 1
 
         if not segments:
@@ -1185,7 +1253,7 @@ def _sanitize_block_note_rows(
             {
                 "measure": measure,
                 "beat": 1.0,
-                "duration": beats_per_measure,
+                "duration": _beats_for_measure(measure),
                 "pitch": "rest",
                 "velocity": avg_velocity,
                 "tie": "",
@@ -2003,6 +2071,10 @@ def _edge_rows_with_measures(
         raise UserActionRequired(
             f"Melody edge '{edge_name}' must include a 'measure' column copied from the CORE_MELODY rows."
         )
+    if "beat" not in fieldnames:
+        raise UserActionRequired(
+            f"Melody edge '{edge_name}' must include a 'beat' column copied from the CORE_MELODY rows."
+        )
     if "root" not in fieldnames:
         raise UserActionRequired(
             f"Melody edge '{edge_name}' must include a 'root' column so the dwell reference can be validated."
@@ -2016,8 +2088,8 @@ def _edge_rows_with_measures(
     if beats_per_measure <= 0:
         beats_per_measure = 4.0
 
-    rows: List[str] = []
-    beat_cursor = 0.0
+    beat_tolerance = 1e-4
+    parsed_rows: List[Dict[str, Any]] = []
     row_index = 0
     for raw_row in reader:
         row_index += 1
@@ -2037,6 +2109,23 @@ def _edge_rows_with_measures(
             raise UserActionRequired(
                 f"Melody edge '{edge_name}' row {row_index} has an invalid measure '{measure_text}'."
             ) from exc
+
+        beat_text = normalized.get("beat")
+        if not beat_text:
+            raise UserActionRequired(
+                f"Melody edge '{edge_name}' row {row_index} is missing a beat value."
+            )
+        try:
+            beat = float(beat_text)
+        except Exception as exc:  # pragma: no cover - defensive
+            raise UserActionRequired(
+                f"Melody edge '{edge_name}' row {row_index} has an invalid beat '{beat_text}'."
+            ) from exc
+        if beat < -beat_tolerance or beat > beats_per_measure + beat_tolerance:
+            raise UserActionRequired(
+                "Melody edge '{edge}' row {row} has beat {beat_val} which is outside the 0-{beats} range for the time signature."
+                .format(edge=edge_name, row=row_index, beat_val=_format_number(beat), beats=_format_number(beats_per_measure))
+            )
 
         root = normalized.get("root")
         if not root:
@@ -2060,24 +2149,50 @@ def _edge_rows_with_measures(
             raise UserActionRequired(
                 f"Melody edge '{edge_name}' row {row_index} has an invalid duration '{duration_text}'."
             ) from exc
-
-        expected_measure = int(math.floor(beat_cursor / beats_per_measure)) + 1
-        if measure != expected_measure:
+        if duration <= 0:
             raise UserActionRequired(
-                "Melody edge '{edge}' row {row} has measure {reported} but the durations so far indicate measure {expected}. "
-                "Fix the CSV so measure numbers match the CORE_MELODY."
-                .format(edge=edge_name, row=row_index, reported=measure, expected=expected_measure)
+                f"Melody edge '{edge_name}' row {row_index} has a non-positive duration '{duration_text}'."
             )
 
-        rows.append(f"{measure},{element},{_format_number(duration)}")
-        beat_cursor += duration
+        absolute_beat = (measure - 1) * beats_per_measure + beat
+        if parsed_rows:
+            previous = parsed_rows[-1]
+            if absolute_beat + beat_tolerance < previous["absolute_beat"]:
+                raise UserActionRequired(
+                    "Melody edge '{edge}' row {row} goes backwards in time relative to the previous row."
+                    .format(edge=edge_name, row=row_index)
+                )
+            available = absolute_beat - previous["absolute_beat"]
+            if available + beat_tolerance < previous["duration"]:
+                raise UserActionRequired(
+                    "Melody edge '{edge}' row {prev_row} duration {duration} exceeds the time before the next note begins."
+                    .format(
+                        edge=edge_name,
+                        prev_row=previous["row_index"],
+                        duration=_format_number(previous["duration"]),
+                    )
+                )
 
-    if not rows:
+        parsed_rows.append(
+            {
+                "measure": measure,
+                "beat": beat,
+                "duration": duration,
+                "element": element,
+                "absolute_beat": absolute_beat,
+                "row_index": row_index,
+            }
+        )
+
+    if not parsed_rows:
         raise UserActionRequired(
             f"Melody edge '{edge_name}' CSV did not contain any parseable rows."
         )
 
-    return rows
+    return [
+        f"{row['measure']},{row['element']},{_format_number(row['duration'])}"
+        for row in parsed_rows
+    ]
 
 
 def _next_attempt_path(tp_dir: Path, prefix: str) -> Path:
@@ -2677,6 +2792,7 @@ def run_multi_voice_first_pass(
             metadata_dict = {}
     time_signature = str(metadata_dict.get("time_signature") or "4/4")
     beats_per_measure = _beats_per_measure_from_signature(time_signature)
+    measure_beats = _measure_beats_lookup(tp_dir, safe_variant)
 
     progress = _load_music_progress(tp_dir, safe_variant)
     voices_state: Dict[str, Dict[str, Any]] = progress.setdefault("voices", {})
@@ -2779,6 +2895,7 @@ def run_multi_voice_first_pass(
                 measure_end=measure_end,
                 beats_per_measure=beats_per_measure,
                 preserve_input_order=is_melody_voice,
+                measure_beats=measure_beats,
             )
 
             block_csv_path = _block_csv_path(tp_dir, voice.token, safe_variant, next_block)
