@@ -11,6 +11,7 @@ from ghostwriter.music.pipeline import (
     ensure_first_score_gate,
     run_subtle_score_pass,
     _edge_rows_with_measures,
+    _limit_reduced_grid_window,
 )
 from ghostwriter.musiccsv import MusicCSV, musiccsv_to_text, read_musiccsv, write_musiccsv
 
@@ -165,10 +166,10 @@ def test_edge_rows_detect_duration_overflow():
 def test_edge_rows_detect_beat_out_of_range():
     header = "measure,beat,root,element,duration"
     data_lines = [
-        "1,4.5,F4,C5,1",
+        "1,5.25,F4,C5,1",
     ]
 
-    with pytest.raises(UserActionRequired, match="outside the 0-4"):
+    with pytest.raises(UserActionRequired, match="outside the allowed range 0-5"):
         _edge_rows_with_measures("A-B", header, data_lines, 4.0)
 
 
@@ -183,9 +184,51 @@ def test_edge_rows_keep_validated_measures():
     rows = _edge_rows_with_measures("A-B", header, data_lines, 4.0)
 
     assert rows == [
-        "1,C5,2",
-        "1,E4,2",
-        "2,G4,1",
+        "1,1,C5,2",
+        "1,3,E4,2",
+        "2,1,G4,1",
+    ]
+
+
+def test_edge_rows_allow_subdivision_past_last_beat():
+    header = "measure,beat,root,element,duration"
+    data_lines = [
+        "1,4.5,F4,C5,0.5",
+        "2,1,F4,E4,0.5",
+    ]
+
+    rows = _edge_rows_with_measures("A-B", header, data_lines, 4.0)
+
+    assert rows == [
+        "1,4.5,C5,0.5",
+        "2,1,E4,0.5",
+    ]
+
+
+def test_limit_reduced_grid_window_without_window_returns_original():
+    sample = "measure,beat,pitch,duration\n1,1,C4,1"
+
+    result = _limit_reduced_grid_window(sample, window_start=None, window_end=None)
+
+    assert result == sample
+
+
+def test_limit_reduced_grid_window_trims_outside_rows():
+    sample = "\n".join(
+        [
+            "measure,beat,pitch,duration",
+            "1,1,C4,1",
+            "5,1,D4,1",
+            "25,1,E4,1",
+        ]
+    )
+
+    result = _limit_reduced_grid_window(sample, window_start=1, window_end=15)
+
+    assert result.splitlines() == [
+        "measure,beat,pitch,duration",
+        "1,1,C4,1",
+        "5,1,D4,1",
     ]
 
 

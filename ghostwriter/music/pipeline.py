@@ -456,6 +456,18 @@ def _pitch_to_midi_optional(pitch: str) -> Optional[int]:
     return _pitch_to_midi_value(text)
 
 
+def _strip_octave_suffix(pitch: str) -> str:
+    text = str(pitch or "").strip()
+    if not text or text.lower() == "rest":
+        return text
+    if not _SCIENTIFIC_PITCH_RE.match(text):
+        return text
+    idx = len(text) - 1
+    while idx >= 0 and text[idx].isdigit():
+        idx -= 1
+    return text[: idx + 1]
+
+
 def _core_melody_note_sequence(core_csv_text: str, *, start_pitch: str = "C4") -> List[str]:
     text = (core_csv_text or "").strip()
     if not text:
@@ -504,7 +516,7 @@ def _core_melody_csv_with_root(core_csv_text: str, notes: List[str]) -> str:
             row.get("beat", ""),
             row.get("duration", ""),
             row.get("semi_tones", ""),
-            root_note,
+            _strip_octave_suffix(root_note),
         ])
     return buffer.getvalue().strip()
 
@@ -1032,6 +1044,63 @@ def _slice_notes_file(path: Path, *, measure_start: int, measure_end: int) -> st
     return slice_csv_by_measure(text, measure_start, measure_end)
 
 
+def _reduced_from_notes_csv(path: Path) -> str:
+    if not path.exists():
+        return ""
+    try:
+        import csv
+        from io import StringIO
+
+        with path.open("r", encoding="utf-8", newline="") as handle:
+            reader = csv.DictReader(handle)
+            fieldnames = reader.fieldnames or []
+            lowered = [fn.strip().lower() for fn in fieldnames if isinstance(fn, str)]
+            if not {"measure", "beat", "pitch", "duration"}.issubset(lowered):
+                return ""
+
+            output = StringIO()
+            writer = csv.writer(output)
+            writer.writerow(["measure", "beat", "pitch", "duration"])
+
+            for row in reader:
+                if not row:
+                    continue
+                try:
+                    measure = row.get("measure") or row.get("Measure")
+                    beat = row.get("beat") or row.get("Beat")
+                    pitch = row.get("pitch") or row.get("Pitch")
+                    duration = row.get("duration") or row.get("Duration")
+                except Exception:
+                    continue
+                if measure in (None, "") or beat in (None, "") or pitch in (None, "") or duration in (None, ""):
+                    continue
+                writer.writerow([measure, beat, pitch, duration])
+
+            return output.getvalue().strip()
+    except Exception:
+        return ""
+
+
+def _limit_reduced_grid_window(
+    csv_text: str,
+    *,
+    window_start: Optional[int],
+    window_end: Optional[int],
+) -> str:
+    """Restrict a reduced-note CSV to a specific measure window."""
+
+    text = (csv_text or "").strip()
+    if not text:
+        return ""
+    if window_start is None or window_end is None:
+        return text
+
+    start = max(1, window_start)
+    end = max(start, window_end)
+    subset = slice_csv_by_measure(text, start, end)
+    return subset.strip()
+
+
 def _collect_other_voice_blocks(
     *,
     tp_dir: Path,
@@ -1341,6 +1410,28 @@ def _truncate_musiccsv_text(text: str, limit: Optional[int]) -> str:
 
     truncated = text[:cutoff].rstrip("\n")
     return truncated + "\n# truncated"
+
+
+def _extract_notes_csv_section(text: str) -> str:
+    marker = "### notes.csv"
+    if not text or marker.lower() not in text.lower():
+        return ""
+
+    lines = text.splitlines()
+    capture = False
+    collected: List[str] = []
+    marker_lower = marker.lower()
+    for line in lines:
+        normalized = line.strip().lower()
+        if not capture and normalized == marker_lower:
+            capture = True
+            continue
+        if capture and normalized.startswith("### "):
+            break
+        if capture:
+            collected.append(line)
+
+    return "\n".join(collected).strip()
 
 
 def run_metadata_tracks_step(
@@ -2031,7 +2122,7 @@ def _reformat_melody_edges_response(text: str, beats_per_measure: float) -> str:
         if edge_blocks:
             edge_blocks.append("")
         edge_blocks.append(edge_name)
-        edge_blocks.append("measure,element,duration")
+        edge_blocks.append("measure,beat,element,duration")
         edge_blocks.extend(csv_rows)
 
     if not edge_blocks:
@@ -2121,10 +2212,11 @@ def _edge_rows_with_measures(
             raise UserActionRequired(
                 f"Melody edge '{edge_name}' row {row_index} has an invalid beat '{beat_text}'."
             ) from exc
-        if beat < -beat_tolerance or beat > beats_per_measure + beat_tolerance:
+        max_beat = beats_per_measure + 1.0
+        if beat < -beat_tolerance or beat > max_beat + beat_tolerance:
             raise UserActionRequired(
-                "Melody edge '{edge}' row {row} has beat {beat_val} which is outside the 0-{beats} range for the time signature."
-                .format(edge=edge_name, row=row_index, beat_val=_format_number(beat), beats=_format_number(beats_per_measure))
+                "Melody edge '{edge}' row {row} has beat {beat_val} which is outside the allowed range 0-{beats}."
+                .format(edge=edge_name, row=row_index, beat_val=_format_number(beat), beats=_format_number(max_beat))
             )
 
         root = normalized.get("root")
@@ -2190,7 +2282,12 @@ def _edge_rows_with_measures(
         )
 
     return [
-        f"{row['measure']},{row['element']},{_format_number(row['duration'])}"
+        "{measure},{beat},{element},{duration}".format(
+            measure=row["measure"],
+            beat=_format_number(row["beat"]),
+            element=row["element"],
+            duration=_format_number(row["duration"]),
+        )
         for row in parsed_rows
     ]
 
@@ -2373,6 +2470,14 @@ def _compose_first_pass_for_voice(
         raise UserActionRequired("Requested target_voice_index is out of range for VoiceContext.voices.")
 
     target_voice = voice_context.voices[target_voice_index]
+    safe_variant = (variant or "standard").strip().lower()
+
+    window_start: Optional[int] = None
+    window_end: Optional[int] = None
+    if measure_start is not None:
+        base_end = measure_end if measure_end is not None else measure_start
+        window_start = max(1, measure_start - 10)
+        window_end = max(window_start, (base_end or measure_start) + 10)
 
     # Ensure the target voice import (if present) is sanitized so that score.musiccsv
     # exists before we attempt to reference it in prompts.
@@ -2402,7 +2507,6 @@ def _compose_first_pass_for_voice(
     except Exception:
         metadata_text = ""
     try:
-        safe_variant = (variant or "standard").strip().lower()
         melody_path = tp_dir / f"melody_{safe_variant}.csv"
         if melody_path.exists():
             melody_text = melody_path.read_text(encoding="utf-8").strip()
@@ -2422,37 +2526,35 @@ def _compose_first_pass_for_voice(
             "time_signatures": summary.time_signatures,
             "key_signatures": summary.key_signatures,
         }
+        notes_section = ""
         try:
             if summary.score_path.exists():
-                music_obj = read_musiccsv(summary.score_path)
-                text = musiccsv_to_text(music_obj)
-                text = _truncate_musiccsv_text(text, _MAX_MUSICCSV_SNIPPET)
-                info["musiccsv"] = text
+                text = summary.score_path.read_text(encoding="utf-8")
+                notes_section = _extract_notes_csv_section(text)
         except Exception:
-            pass
+            notes_section = ""
+        info["notes_csv"] = notes_section
         existing_scores[spec.token] = info
 
-    prompt_existing_scores: Dict[str, Dict[str, Any]] = {}
-    if target_voice.token in existing_scores:
-        prompt_existing_scores[target_voice.token] = existing_scores[target_voice.token]
+    prompt_existing_notes = existing_scores.get(target_voice.token, {}).get("notes_csv", "").strip()
+    role_lower = (target_voice.role or "").strip().lower()
+    if "melody" in role_lower:
+        prompt_existing_notes = ""
 
     melody_reduced = ""
     other_reduced_blocks: List[str] = []
-    for token, summary in existing_scores.items():
-        score_path_str = summary.get("score_path")
-        if not score_path_str:
+    for spec in voice_context.voices:
+        notes_path = _notes_csv_path(tp_dir, spec.token, safe_variant)
+        reduced = _limit_reduced_grid_window(
+            _reduced_from_notes_csv(notes_path),
+            window_start=window_start,
+            window_end=window_end,
+        )
+        if not reduced:
             continue
-        try:
-            score_path = Path(score_path_str)
-            if not score_path.exists():
-                continue
-            music_obj = read_musiccsv(score_path)
-            reduced = reduced_notes_csv(music_obj)
-        except Exception:
-            continue
-        label = f"# voice: {token}\n{reduced.strip()}" if reduced.strip() else f"# voice: {token} (no notes)"
-        if token == target_voice.token:
-            melody_reduced = reduced.strip()
+        label = f"# voice: {spec.token}\n{reduced}"
+        if spec.token == target_voice.token:
+            melody_reduced = reduced
         else:
             other_reduced_blocks.append(label)
 
@@ -2462,7 +2564,11 @@ def _compose_first_pass_for_voice(
     # melodic line, fall back to using the raw melody CSV text for
     # alignment so the model still sees a complete spine.
     if not melody_reduced and melody_text.strip():
-        melody_reduced = melody_text.strip()
+        melody_reduced = _limit_reduced_grid_window(
+            melody_text,
+            window_start=window_start,
+            window_end=window_end,
+        )
 
     # Include suggestion text for this pass if provided; callers are
     # responsible for scoping it by variant.
@@ -2473,7 +2579,7 @@ def _compose_first_pass_for_voice(
 
     prompt = build_first_score_prompt(
         prompt_payload=payload_with_suggestions,
-        existing_scores=prompt_existing_scores,
+        existing_voice_notes=prompt_existing_notes,
         tp_index=tp_index,
         tp_type=tp_type,
         tp_text=tp_text,

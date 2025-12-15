@@ -14,7 +14,7 @@ Here are the edges I have constructed to be used the next step for creating the 
 
 Follow these execution steps exactly when building the final melody:
 1. Insert 2 whole measures of `rest` at the very beginning, then start copying edges.
-2. When you follow an edge, copy every row from that edge (element + duration) in order and without simplification. The only thing you are allowed to change is the `measure` number so the sequence stays continuous.
+2. When you follow an edge, copy every row from that edge (beat + element + duration) in order and without simplification. The only thing you are allowed to change is the `measure` number so the sequence stays continuous.
 3. Never collapse an edge into long sustained dwell notes, invent alternative notes, or skip rows. The melody should sound like the provided edges stitched together.
 4. After finishing one edge you "arrive" on that edge's destination dwell note. Choose the next edge that begins on that note (you may run the next edge forward or backward by reversing its order). Continue chaining edges until you reach the target length, touching every edge at least once overall.
 5. Only after the melody reaches the desired length (120-150 measures) append 2 whole measures of `rest` to end cleanly.
@@ -27,20 +27,20 @@ Craft the melody according to the following rules:
 * The count of measures should be between 120 and 150. Try to touch each edge once, even if some of the edges have low weight. 
 [additional_rules]
 
-To output a melody use entirely scientific note note notation and the lengths of the notes per measure as an integer fraction with the time signature controlling what the unit means. The melody should be output as a concise csv file with the columns (measure, element, duration). "measure" is the measure number starting at 1, and counting up to the end measure of 120 to 150 or so. "element" should be a concise description of the musical element, either a scientific note number like `C4`, `F#3`, or `Bb2`, multiple scientific note numbers in a chord like `C4;F#3`, a rapid passage like `C4>Db4>E4>F#4`, or simply the term `rest`. Duration should depend on the time signature and be the length of the note. For example, 4/4 time means each using of proportional length of 1 is a quarter note, and 1.25 is a quarter tied with a sixteenth. 
+To output a melody use entirely scientific note note notation and the lengths of the notes per measure as an integer fraction with the time signature controlling what the unit means. The melody should be output as a concise csv file with the columns (measure, beat, element, duration). "measure" is the measure number starting at 1, and counting up to the end measure of 120 to 150 or so. "beat" is the starting beat offset (e.g., 1, 1.5, 3.75) inside the given measure. "element" should be a concise description of the musical element, either a scientific note number like `C4`, `F#3`, or `Bb2`, multiple scientific note numbers in a chord like `C4;F#3`, a rapid passage like `C4>Db4>E4>F#4`, or simply the term `rest`. "duration" should depend on the time signature and be the length of the note. For example, 4/4 time means each using of proportional length of 1 is a quarter note, and 1.25 is a quarter tied with a sixteenth. 
 
 Here is an example output including only 4 measures:
 
-measure,element,duration
-1,D4,1.5
-1,F#4,1.5
-2,D4,1
-2,E4,0.5
-2,F#4,1.5
-3,A4,1
-3,G4,1
-3,F#4,1
-4,D4,1.5
-4,rest,1.5
+measure,beat,element,duration
+1,1,D4,1.5
+1,2.5,F#4,1.5
+2,1,D4,1
+2,2,E4,0.5
+2,2.5,F#4,1.5
+3,1,A4,1
+3,2,G4,1
+3,3,F#4,1
+4,1,D4,1.5
+4,2.5,rest,1.5
 
 Now output the melody in the above format, including no other information.

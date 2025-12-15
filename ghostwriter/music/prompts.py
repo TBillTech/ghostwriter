@@ -51,7 +51,7 @@ def _coerce_unique_strings(items: Iterable[str]) -> list[str]:
 def build_first_score_prompt(
     *,
     prompt_payload: Dict[str, Any],
-    existing_scores: Dict[str, Any],
+    existing_voice_notes: str,
     tp_index: int,
     tp_type: str,
     tp_text: str,
@@ -103,7 +103,7 @@ def build_first_score_prompt(
     replacements = {
         "[VOICE_CONTEXT_JSON]": _json_block(payload_for_json),
         "[CHARACTER_CONTEXT_JSON]": _json_block(character_context or []),
-        "[EXISTING_VOICE_SCORE_JSON]": _json_block(existing_scores) or "{}",
+        "[EXISTING_VOICE_SCORE_JSON]": existing_voice_notes.strip(),
         "[TOUCH_POINT_INDEX]": str(tp_index),
         "[TOUCH_POINT_TYPE]": tp_type,
         "[TOUCH_POINT_TEXT]": tp_text.strip(),

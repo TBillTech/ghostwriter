@@ -29,6 +29,8 @@ Task
 4. Merge redundant rests, remove negative durations, and fix any misaligned tuplets so the rhythm flows cleanly from start to finish.
 5. If the row looks good, then preserve it completely. We are trying to fix errors and big problems, not change the melody idea.
 
+Beats inside a measure are **1-based**. In 4/4 time you count 1, 2, 3, 4, and fractional offsets such as 1.5, 2.25, or 4.5 are perfectly valid starting points. That means a note of duration 1.90 beginning on beat 3 is fine (it simply ties through beat 4), and a 0.40 note starting at beat 4.5 is also correct. The only forbidden positions are beat 0 or negative beat values, or beats beyond the time signature + 1 (like beat 5 for 4/4 time).
+
 Output
 ------
 Return exactly one CSV block titled `CORE_MELODY.csv` with the header `measure,beat,pitch,duration` followed by the cleaned rows. Do not include any other prose before or after the CSV block.

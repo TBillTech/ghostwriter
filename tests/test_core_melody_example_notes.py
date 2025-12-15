@@ -17,4 +17,5 @@ def test_core_melody_example_helpers() -> None:
     rooted_csv = _core_melody_csv_with_root(csv_text, sequence)
     lines = rooted_csv.splitlines()
     assert lines[0] == "measure,beat,duration,semi_tones,root"
-    assert lines[1].endswith(",C4")
+    assert lines[1].endswith(",C")
+    assert lines[2].endswith(",D")
