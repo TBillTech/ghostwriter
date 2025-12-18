@@ -1,0 +1,406 @@
+=== SYSTEM ===
+Compose a valid notes CSV for this single voice using the specified header: measure,beat,pitch,duration,velocity,tie,articulation.
+
+=== USER ===
+You are an expert narrative composer creating a first-pass motif that aligns with the current chapter touch-point.
+
+Global music directive and context:
+{
+  "directive": "a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.",
+  "tempo_summary": "110, 120",
+  "time_signature_summary": "4/4",
+  "key_summary": "C",
+  "voices": [
+    {
+      "token": "minor.alto.flute.red.melody",
+      "chord": "minor",
+      "register": "alto",
+      "instrument": "flute",
+      "idea": "red",
+      "role": "melody",
+      "characters": [
+        "red"
+      ],
+      "character_names": [
+        "Little Red Riding Hood"
+      ],
+      "factoids": [],
+      "issues": [],
+      "metadata": {}
+    },
+    {
+      "token": "minor.tenor.base.wolf.harmony",
+      "chord": "minor",
+      "register": "tenor",
+      "instrument": "base",
+      "idea": "wolf",
+      "role": "harmony",
+      "characters": [
+        "wolf"
+      ],
+      "character_names": [
+        "The Wolf"
+      ],
+      "factoids": [],
+      "issues": [],
+      "metadata": {}
+    },
+    {
+      "token": "minor.beat.drum.axe",
+      "chord": "minor",
+      "register": "beat",
+      "instrument": "drum",
+      "idea": "axe",
+      "role": "",
+      "characters": [],
+      "character_names": [],
+      "factoids": [],
+      "issues": [],
+      "metadata": {}
+    },
+    {
+      "token": "minor.bass.base.forest_path",
+      "chord": "minor",
+      "register": "bass",
+      "instrument": "base",
+      "idea": "forest_path",
+      "role": "",
+      "characters": [],
+      "character_names": [],
+      "factoids": [
+        "Forest Path"
+      ],
+      "issues": [],
+      "metadata": {}
+    }
+  ],
+  "score_summaries": [
+    {
+      "voice_token": "minor.alto.flute.red.melody",
+      "score_path": "/home/tom/code/ghostwriter/testdata/SongTest/iterations/CHAPTER_001/pipeline_v1/06_music/06_track_minor.alto.flute.red.melody_import/score.musiccsv",
+      "tempos": [
+        "120"
+      ],
+      "time_signatures": [
+        "4/4"
+      ],
+      "key_signatures": [
+        "C"
+      ],
+      "measure_count": 18,
+      "duration_quarter_length": 67.9
+    },
+    {
+      "voice_token": "minor.beat.drum.axe",
+      "score_path": "/home/tom/code/ghostwriter/testdata/SongTest/iterations/CHAPTER_001/pipeline_v1/06_music/06_track_minor.beat.drum.axe_import/score.musiccsv",
+      "tempos": [
+        "110"
+      ],
+      "time_signatures": [
+        "4/4"
+      ],
+      "key_signatures": [
+        "C"
+      ],
+      "measure_count": 8,
+      "duration_quarter_length": 31.75
+    }
+  ],
+  "touch_point_title": "The Forest Path",
+  "touch_point_description": "a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.",
+  "touch_point_prior_paragraph": "Sunlight slides behind the pines as the path narrows and the forest seems to lean in. Red steadies the basket at her elbow, a quiet ritual of courage.\n\nRed murmured and tucked her chin. \"Mama said the woods are tricksy. But the path is safe—I'm taking these to Grandmother.\"\n\nShe glances toward the path, fingers tightening on the basket handle, and forces a small, polite smile.\n\nWolf's ruff stirred; he purred, \"The trees notice what they like. That scarlet cloak makes you easy to keep an eye on.\" A flash of white as a breeze ruffled his ruff.\n\nA jay cries; pebbles and loose dirt slip from the bank. The wolf's shadow stretches across the path and brushes her boots.\n\nWolf's eyes flicked; his voice smoothed. \"Imagine arriving sooner—Grandmother grateful, and no one to ask questions. A small detour, for a large kindness, perhaps?\"\n\nWolf let out a low, pleased sound; he sniffed the warm scent of jam and bread as if testing the air, and his eyes lingered on the bread in her basket.",
+  "touch_point_voices": [
+    "minor.tenor.base.wolf.harmony",
+    "minor.alto.flute.red.melody",
+    "minor.beat.drum.axe",
+    "minor.bass.base.forest_path"
+  ],
+  "touch_point_metadata": {
+    "title": "The Forest Path",
+    "description": "a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.",
+    "voices": [
+      "minor.tenor.base.wolf.harmony",
+      "minor.alto.flute.red.melody",
+      "minor.beat.drum.axe",
+      "minor.bass.base.forest_path"
+    ]
+  }
+}
+
+Target voice for this pass:
+- token: minor.tenor.base.wolf.harmony
+- chord: minor
+- register: tenor
+- instrument: base
+- idea: wolf
+- role: harmony
+
+Touch-point metadata:
+- index: 6
+- type: music
+- text:
+a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.
+
+Existing sanitized score material for this voice (if any). Try to duplicate the feeling, texture, and loop structure (if given). You will need to adjust note lengths/measures, and possibly transpose notes to harmonize correctly:
+
+
+Shared global music metadata (derived from earlier steps):
+- metadata.json:
+{
+  "title": "The Forest Path",
+  "tempo": 116,
+  "time_signature": "4/4",
+  "key_signature": "C minor",
+  "divisions_per_quarter": 480,
+  "duration_seconds_estimate": 180,
+  "tags": [
+    "cinematic",
+    "haunting",
+    "fast-tempo",
+    "steady-bass",
+    "rapid-percussion",
+    "storypoint-6"
+  ],
+  "notes": "Fast cinematic touch point for Red and the Wolf with steady bass and rapid percussion"
+}
+
+Ten-measure block focus (leave blank fields if composing the entire score at once):
+- Measure window: Measures 21-30 (block 3 of 14)
+- Block position (index / total): 3/14
+
+Melody guidance for this block:
+- Current block slice (10 measures):
+measure,beat,element,duration
+21,1,G3,0.9
+21,2,Bb3,0.9
+21,3,G3,1.9
+22,1,G3,0.9
+22,2,Bb3,0.4
+22,2.5,D4,0.25
+22,3,Bb3,0.25
+22,3.5,D4,0.9
+22,4.5,G3,0.4
+23,1,A3,2.9
+23,4,G3,0.9
+24,1,G3,0.9
+24,2,Bb3,0.4
+24,2.5,D4,0.4
+24,3,G3,0.25
+24,3.5,A3,0.4
+24,4,D4,0.25
+24,4.5,G3,0.4
+25,1,Bb3,0.25
+25,1.5,D4,0.4
+25,2,D4,0.25
+25,2.5,Bb3,0.4
+25,3,G3,0.25
+25,3.5,A3,0.4
+25,4,G3,0.25
+25,4.5,D3,0.4
+26,1,G3,2.9
+26,4,G3,0.9
+27,1,G3,0.9
+27,2,Bb3,0.9
+27,3,D4,0.9
+27,4,G3,0.9
+28,1,D4,1.9
+28,3,Bb3,1.9
+29,1,A3,1.9
+29,3,G3,1.9
+30,1,Bb3,1.9
+30,3,D4,0.25
+30,3.5,A3,0.25
+30,4,G3,0.9
+- Previous block slice (for continuity, if available):
+measure,beat,element,duration
+11,1,G3,1.9
+11,3,Bb3,1.9
+12,1,D4,1.9
+12,3,G3,1.9
+13,1,Bb3,1.9
+13,3,D4,0.25
+13,3.5,G4,0.25
+13,4,G3,0.9
+14,1,Bb3,1.9
+14,3,D4,1.9
+15,1,G3,1.9
+15,3,Bb3,1.9
+16,1,D4,0.25
+16,1.5,Bb3,0.4
+16,2,G3,1.9
+17,1,Bb3,1.9
+17,3,G3,1.9
+18,1,D4,0.9
+18,2,B3,1.9
+18,4,G3,0.9
+19,1,G3,3.9
+20,1,G3,0.9
+20,2,Bb3,0.4
+20,2.5,G3,0.4
+20,3,D4,1.9
+
+Other voices locked for this window:
+# voice: minor.alto.flute.red.melody
+measure,beat,pitch,duration,velocity,tie,articulation
+21,1,G3,0.9,90,,
+21,2,Bb3,0.9,90,,
+21,3,G3,1.9,90,,
+22,1,G3,0.9,90,,
+22,2,Bb3,0.4,90,,
+22,2.5,D4,0.25,90,,
+22,3,Bb3,0.25,90,,
+22,3.5,D4,0.9,90,,
+22,4.5,G3,0.4,90,,
+23,1,A3,2.9,90,,
+23,4,G3,0.9,90,,
+24,1,G3,0.9,90,,
+24,2,Bb3,0.4,90,,
+24,2.5,D4,0.4,90,,
+24,3,G3,0.25,90,,
+24,3.5,A3,0.4,90,,
+24,4,D4,0.25,90,,
+24,4.5,G3,0.4,90,,
+25,1,Bb3,0.25,90,,
+25,1.5,D4,0.4,90,,
+25,2,D4,0.25,90,,
+25,2.5,Bb3,0.4,90,,
+25,3,G3,0.25,90,,
+25,3.5,A3,0.4,90,,
+25,4,G3,0.25,90,,
+25,4.5,D3,0.4,90,,
+26,1,G3,2.9,90,,
+26,4,G3,0.9,90,,
+27,1,G3,0.9,90,,
+27,2,Bb3,0.9,90,,
+27,3,D4,0.9,90,,
+27,4,G3,0.9,90,,
+28,1,D4,1.9,90,,
+28,3,Bb3,1.9,90,,
+29,1,A3,1.9,90,,
+29,3,G3,1.9,90,,
+30,1,Bb3,1.9,90,,
+30,3,D4,0.25,90,,
+30,3.5,A3,0.25,90,,
+30,4,G3,0.9,90,,
+
+Other voices from the immediately preceding block:
+# voice: minor.alto.flute.red.melody
+measure,beat,pitch,duration,velocity,tie,articulation
+11,1,G3,1.9,90,,
+11,3,Bb3,1.9,90,,
+12,1,D4,1.9,90,,
+12,3,G3,1.9,90,,
+13,1,Bb3,1.9,90,,
+13,3,D4,0.25,90,,
+13,3.5,G4,0.25,90,,
+13,4,G3,0.9,90,,
+14,1,Bb3,1.9,90,,
+14,3,D4,1.9,90,,
+15,1,G3,1.9,90,,
+15,3,Bb3,1.9,90,,
+16,1,D4,0.25,90,,
+16,1.5,Bb3,0.4,90,,
+16,2,G3,1.9,90,,
+17,1,Bb3,1.9,90,,
+17,3,G3,1.9,90,,
+18,1,D4,0.9,90,,
+18,2,B3,1.9,90,,
+18,4,G3,0.9,90,,
+19,1,G3,3.9,90,,
+20,1,G3,0.9,90,,
+20,2,Bb3,0.4,90,,
+20,2.5,G3,0.4,90,,
+20,3,D4,1.9,90,,
+
+Current voice continuity (previous block rows, do not rewrite unless blanks are supplied). If this is a drum track or base or anything other than melody or harmony, be extra careful to keep the timing and textrue in the same style as the previous block (if supplied here):
+measure,beat,pitch,duration,velocity,tie,articulation
+11,1,G2,1.9,76,,tenuto
+11,3,Bb2,1.9,76,,tenuto
+12,1,D3,1.9,76,,tenuto
+12,3,G2,1.9,76,,tenuto
+13,1,Bb2,1.9,76,,tenuto
+13,3,D3,0.25,76,,tenuto
+13,3.5,G3,0.25,76,,tenuto
+13,4,G2,0.9,76,,tenuto
+14,1,Bb2,1.9,76,,tenuto
+14,3,D3,1.9,76,,tenuto
+15,1,G2,1.9,76,,tenuto
+15,3,Bb2,1.9,76,,tenuto
+16,1,D3,0.25,76,,tenuto
+16,1.5,Bb2,0.4,76,,tenuto
+16,2,G2,1.9,76,,tenuto
+17,1,Bb2,1.9,76,,tenuto
+17,3,G2,1.9,76,,tenuto
+18,1,D3,0.9,76,,tenuto
+18,2,B2,1.9,76,,tenuto
+18,4,G2,0.9,76,,tenuto
+19,1,G2,3.9,76,,tenuto
+20,1,G2,0.9,76,,tenuto
+20,2,Bb2,0.4,76,,tenuto
+20,2.5,G2,0.4,76,,tenuto
+20,3,D3,1.9,76,,tenuto
+
+Instructions:
+1. For this single voice only, output a **CSV table of notes** that copies the provided melody guidance exactly when this voice is the melody, and otherwise meshes cleanly with it when this voice is an accompaniment.
+2. When a measure window is provided, **emit notes only for that window** and leave prior windows untouched. Extend ties with new rows instead of rewriting earlier measures.
+3. If this voice is the melody, do **not** invent or rephrase the line: for every row in the melody guidance, emit a matching note with the identical measure, beat, pitch, and duration. No substitutions, omissions, or reordering are allowed.
+4. When this voice is not the melody, compose material that sounds good with the guided melody, but still treat the guidance as fixed. Note that if the piece is in a minor key, the harmony should form minor chords with the melody.  Only use major chord harmony IF and ONLY IF this is a piece in a major key.
+5. Police dissonance rigorously: never stack the chromatic neighbor of the same letter name against the melody at the same beat (e.g., avoid Ab against a held A natural unless explicitly requested). Default to consonant thirds, fifths, or octaves unless the prompt calls for deliberate tension.
+6. Never split a guided note into multiple notes, tie it across a new boundary, or alter its duration unless the guidance itself already does so. Each provided row should map to one output row starting at the exact beat and lasting the exact duration.
+7. When reduced-note grids for other voices are present, treat them as fixed reference parts. Write the new voice so that it complements these parts (e.g., avoiding collisions, reinforcing cadences, or providing counter-melody), but never assumes they can be changed.
+8. Respect the tempo, key, and time signature from metadata/measures unless there is a strong musical reason to diverge.
+9. Use only the following columns in your CSV output, in this exact order:
+	`measure,beat,pitch,duration,velocity,tie,articulation`
+10. `measure` must be an integer counting up like the measures listed in the shared **main melodic line** block, and it must land within the requested window when one is supplied.
+11. `beat` values are 1-based within each measure (use positive numbers such as 1, 1.5, 3.75, …; never greater than the upper value of the time signature's numerator).
+12. `pitch` must be a scientific pitch name like `C4`, `F#3`, or `Bb2`, or `rest` for no pitch.
+13. `duration` is the number of beats the note should continue for, starting at the `beat` point of the note.
+14. `velocity` must stay within the MIDI range 0–127.
+15. `tie` is either blank (no tie), `start`, `continue`, or `stop`, and is used to indicate notes that sustain across barlines.
+16. `articulation` is a short textual tag such as `legato`, `staccato`, `tenuto`, `accent`, or may be left blank.
+
+Return only a single CSV table using these seven columns and **no other text or commentary**.
+
+
+=== RESPONSE ===
+measure,beat,pitch,duration,velocity,tie,articulation
+21,1,G2,0.9,76,,tenuto
+21,2,Bb2,0.9,76,,tenuto
+21,3,G2,1.9,76,,tenuto
+22,1,G2,0.9,76,,tenuto
+22,2,Bb2,0.4,76,,tenuto
+22,2.5,D3,0.25,76,,tenuto
+22,3,Bb2,0.25,76,,tenuto
+22,3.5,D3,0.9,76,,tenuto
+22,4.5,G2,0.4,76,,tenuto
+23,1,A2,2.9,76,,tenuto
+23,4,G2,0.9,76,,tenuto
+24,1,G2,0.9,76,,tenuto
+24,2,Bb2,0.4,76,,tenuto
+24,2.5,D3,0.4,76,,tenuto
+24,3,G2,0.25,76,,tenuto
+24,3.5,A2,0.4,76,,tenuto
+24,4,D3,0.25,76,,tenuto
+24,4.5,G2,0.4,76,,tenuto
+25,1,Bb2,0.25,76,,tenuto
+25,1.5,D3,0.4,76,,tenuto
+25,2,D3,0.25,76,,tenuto
+25,2.5,Bb2,0.4,76,,tenuto
+25,3,G2,0.25,76,,tenuto
+25,3.5,A2,0.4,76,,tenuto
+25,4,G2,0.25,76,,tenuto
+25,4.5,D2,0.4,76,,tenuto
+26,1,G2,2.9,76,,tenuto
+26,4,G2,0.9,76,,tenuto
+27,1,G2,0.9,76,,tenuto
+27,2,Bb2,0.9,76,,tenuto
+27,3,D3,0.9,76,,tenuto
+27,4,G2,0.9,76,,tenuto
+28,1,D3,1.9,76,,tenuto
+28,3,Bb2,1.9,76,,tenuto
+29,1,A2,1.9,76,,tenuto
+29,3,G2,1.9,76,,tenuto
+30,1,Bb2,1.9,76,,tenuto
+30,3,D3,0.25,76,,tenuto
+30,3.5,A2,0.25,76,,tenuto
+30,4,G2,0.9,76,,tenuto

@@ -1,0 +1,833 @@
+=== SYSTEM ===
+Compose a valid notes CSV for this single voice using the specified header: measure,beat,pitch,duration,velocity,tie,articulation.
+
+=== USER ===
+You are an expert narrative composer creating a first-pass motif that aligns with the current chapter touch-point.
+
+Global music directive and context:
+{
+  "directive": "a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.",
+  "tempo_summary": "110, 120",
+  "time_signature_summary": "4/4",
+  "key_summary": "C",
+  "voices": [
+    {
+      "token": "minor.alto.flute.red.melody",
+      "chord": "minor",
+      "register": "alto",
+      "instrument": "flute",
+      "idea": "red",
+      "role": "melody",
+      "characters": [
+        "red"
+      ],
+      "character_names": [
+        "Little Red Riding Hood"
+      ],
+      "factoids": [],
+      "issues": [],
+      "metadata": {}
+    },
+    {
+      "token": "minor.tenor.base.wolf.harmony",
+      "chord": "minor",
+      "register": "tenor",
+      "instrument": "base",
+      "idea": "wolf",
+      "role": "harmony",
+      "characters": [
+        "wolf"
+      ],
+      "character_names": [
+        "The Wolf"
+      ],
+      "factoids": [],
+      "issues": [],
+      "metadata": {}
+    },
+    {
+      "token": "minor.beat.drum.axe",
+      "chord": "minor",
+      "register": "beat",
+      "instrument": "drum",
+      "idea": "axe",
+      "role": "",
+      "characters": [],
+      "character_names": [],
+      "factoids": [],
+      "issues": [],
+      "metadata": {}
+    },
+    {
+      "token": "minor.bass.base.forest_path",
+      "chord": "minor",
+      "register": "bass",
+      "instrument": "base",
+      "idea": "forest_path",
+      "role": "",
+      "characters": [],
+      "character_names": [],
+      "factoids": [
+        "Forest Path"
+      ],
+      "issues": [],
+      "metadata": {}
+    }
+  ],
+  "score_summaries": [
+    {
+      "voice_token": "minor.alto.flute.red.melody",
+      "score_path": "/home/tom/code/ghostwriter/testdata/SongTest/iterations/CHAPTER_001/pipeline_v1/06_music/06_track_minor.alto.flute.red.melody_import/score.musiccsv",
+      "tempos": [
+        "120"
+      ],
+      "time_signatures": [
+        "4/4"
+      ],
+      "key_signatures": [
+        "C"
+      ],
+      "measure_count": 18,
+      "duration_quarter_length": 67.9
+    },
+    {
+      "voice_token": "minor.beat.drum.axe",
+      "score_path": "/home/tom/code/ghostwriter/testdata/SongTest/iterations/CHAPTER_001/pipeline_v1/06_music/06_track_minor.beat.drum.axe_import/score.musiccsv",
+      "tempos": [
+        "110"
+      ],
+      "time_signatures": [
+        "4/4"
+      ],
+      "key_signatures": [
+        "C"
+      ],
+      "measure_count": 8,
+      "duration_quarter_length": 31.75
+    }
+  ],
+  "touch_point_title": "The Forest Path",
+  "touch_point_description": "a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.",
+  "touch_point_prior_paragraph": "Sunlight slides behind the pines as the path narrows and the forest seems to lean in. Red steadies the basket at her elbow, a quiet ritual of courage.\n\nRed murmured and tucked her chin. \"Mama said the woods are tricksy. But the path is safe—I'm taking these to Grandmother.\"\n\nShe glances toward the path, fingers tightening on the basket handle, and forces a small, polite smile.\n\nWolf's ruff stirred; he purred, \"The trees notice what they like. That scarlet cloak makes you easy to keep an eye on.\" A flash of white as a breeze ruffled his ruff.\n\nA jay cries; pebbles and loose dirt slip from the bank. The wolf's shadow stretches across the path and brushes her boots.\n\nWolf's eyes flicked; his voice smoothed. \"Imagine arriving sooner—Grandmother grateful, and no one to ask questions. A small detour, for a large kindness, perhaps?\"\n\nWolf let out a low, pleased sound; he sniffed the warm scent of jam and bread as if testing the air, and his eyes lingered on the bread in her basket.",
+  "touch_point_voices": [
+    "minor.tenor.base.wolf.harmony",
+    "minor.alto.flute.red.melody",
+    "minor.beat.drum.axe",
+    "minor.bass.base.forest_path"
+  ],
+  "touch_point_metadata": {
+    "title": "The Forest Path",
+    "description": "a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.",
+    "voices": [
+      "minor.tenor.base.wolf.harmony",
+      "minor.alto.flute.red.melody",
+      "minor.beat.drum.axe",
+      "minor.bass.base.forest_path"
+    ]
+  }
+}
+
+Target voice for this pass:
+- token: minor.bass.base.forest_path
+- chord: minor
+- register: bass
+- instrument: base
+- idea: forest_path
+- role: 
+
+Touch-point metadata:
+- index: 6
+- type: music
+- text:
+a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.
+
+Existing sanitized score material for this voice (if any). Try to duplicate the feeling, texture, and loop structure (if given). You will need to adjust note lengths/measures, and possibly transpose notes to harmonize correctly:
+track,measure,beat,pitch,duration,velocity,tie,articulation,pedal,lyric,ornament,comment,grace,repeat,tuplet
+1,1,1.0,E2,0.25,100,none,,false,,,,false,,
+1,1,1.5,E2,0.25,100,none,,false,,,,false,,
+1,1,2.0,A2,0.25,100,none,,false,,,,false,,
+1,1,2.25,F2,0.25,100,none,,false,,,,false,,
+1,1,3.0,E2,0.25,100,none,,false,,,,false,,
+1,1,3.5,G2,0.25,100,none,,false,,,,false,,
+1,1,4.0,D2,0.25,100,none,,false,,,,false,,
+1,1,4.5,G2,0.25,100,none,,false,,,,false,,
+1,2,1.0,E2,0.25,100,none,,false,,,,false,,
+1,2,1.25,A2,0.25,100,none,,false,,,,false,,
+1,2,1.5,E2,0.25,100,none,,false,,,,false,,
+1,2,1.75,F#2,0.25,100,none,,false,,,,false,,
+1,2,2.0,F2,0.25,100,none,,false,,,,false,,
+1,2,3.0,F2,0.25,100,none,,false,,,,false,,
+1,2,3.25,E2,0.25,100,none,,false,,,,false,,
+1,2,3.75,A2,0.25,100,none,,false,,,,false,,
+1,2,4.0,G2,0.25,100,none,,false,,,,false,,
+1,3,1.0,E2,0.25,100,none,,false,,,,false,,
+1,3,1.5,G2,0.25,100,none,,false,,,,false,,
+1,3,2.0,E2,0.25,100,none,,false,,,,false,,
+1,3,2.25,F2,0.25,100,none,,false,,,,false,,
+1,3,3.0,E2,0.25,100,none,,false,,,,false,,
+1,3,3.5,G2,0.25,100,none,,false,,,,false,,
+1,3,4.0,D2,0.25,100,none,,false,,,,false,,
+1,3,4.5,G2,0.25,100,none,,false,,,,false,,
+1,4,1.0,F2,0.25,100,none,,false,,,,false,,
+1,4,1.25,A2,0.25,100,none,,false,,,,false,,
+1,4,1.5,E2,0.25,100,none,,false,,,,false,,
+1,4,1.75,F#2,0.25,100,none,,false,,,,false,,
+1,4,2.0,F2,0.25,100,none,,false,,,,false,,
+1,4,3.0,F#2,0.25,100,none,,false,,,,false,,
+1,4,3.25,E2,0.25,100,none,,false,,,,false,,
+1,4,3.75,A2,0.25,100,none,,false,,,,false,,
+1,4,4.0,D2,0.25,100,none,,false,,,,false,,
+1,4,4.5,D2,0.25,100,none,,false,,,,false,,
+1,5,1.0,E2,0.25,100,none,,false,,,,false,,
+1,5,1.5,E2,0.25,100,none,,false,,,,false,,
+1,5,2.0,A2,0.25,100,none,,false,,,,false,,
+1,5,2.25,F2,0.25,100,none,,false,,,,false,,
+1,5,3.0,E2,0.25,100,none,,false,,,,false,,
+1,5,3.5,G2,0.25,100,none,,false,,,,false,,
+1,5,4.0,D2,0.25,100,none,,false,,,,false,,
+1,5,4.5,G2,0.25,100,none,,false,,,,false,,
+1,6,1.0,E2,0.25,100,none,,false,,,,false,,
+1,6,1.25,A2,0.25,100,none,,false,,,,false,,
+1,6,1.5,E2,0.25,100,none,,false,,,,false,,
+1,6,1.75,F#2,0.25,100,none,,false,,,,false,,
+1,6,2.0,F2,0.25,100,none,,false,,,,false,,
+1,6,3.0,F2,0.25,100,none,,false,,,,false,,
+1,6,3.25,E2,0.25,100,none,,false,,,,false,,
+1,6,3.75,A2,0.25,100,none,,false,,,,false,,
+1,6,4.0,G2,0.25,100,none,,false,,,,false,,
+1,7,1.0,E2,0.25,100,none,,false,,,,false,,
+1,7,1.5,G2,0.25,100,none,,false,,,,false,,
+1,7,2.0,E2,0.25,100,none,,false,,,,false,,
+1,7,2.25,F2,0.25,100,none,,false,,,,false,,
+1,7,3.0,E2,0.25,100,none,,false,,,,false,,
+1,7,3.5,G2,0.25,100,none,,false,,,,false,,
+1,7,4.0,D2,0.25,100,none,,false,,,,false,,
+1,7,4.5,G2,0.25,100,none,,false,,,,false,,
+1,8,1.0,F2,0.25,100,none,,false,,,,false,,
+1,8,1.25,A2,0.25,100,none,,false,,,,false,,
+1,8,1.5,E2,0.25,100,none,,false,,,,false,,
+1,8,1.75,F#2,0.25,100,none,,false,,,,false,,
+1,8,2.0,F2,0.25,100,none,,false,,,,false,,
+1,8,3.0,F#2,0.25,100,none,,false,,,,false,,
+1,8,3.25,E2,0.25,100,none,,false,,,,false,,
+1,8,3.75,A2,0.25,100,none,,false,,,,false,,
+1,8,4.0,D2,0.25,100,none,,false,,,,false,,
+1,8,4.5,D2,0.25,100,none,,false,,,,false,,
+
+Shared global music metadata (derived from earlier steps):
+- metadata.json:
+{
+  "title": "The Forest Path",
+  "tempo": 116,
+  "time_signature": "4/4",
+  "key_signature": "C minor",
+  "divisions_per_quarter": 480,
+  "duration_seconds_estimate": 180,
+  "tags": [
+    "cinematic",
+    "haunting",
+    "fast-tempo",
+    "steady-bass",
+    "rapid-percussion",
+    "storypoint-6"
+  ],
+  "notes": "Fast cinematic touch point for Red and the Wolf with steady bass and rapid percussion"
+}
+
+Ten-measure block focus (leave blank fields if composing the entire score at once):
+- Measure window: Measures 51-60 (block 6 of 14)
+- Block position (index / total): 6/14
+
+Melody guidance for this block:
+- Current block slice (10 measures):
+measure,beat,element,duration
+51,1,Bb3,1.9
+51,3,D4,0.25
+51,3.5,A3,0.25
+51,4,G3,0.9
+52,1,Bb3,1.9
+52,3,A3,1.9
+53,1,G3,1.9
+53,3,Bb3,1.9
+54,1,A3,0.25
+54,1.5,G3,0.4
+54,2,Bb3,1.9
+55,1,A3,1.9
+55,3,G3,1.9
+56,1,F#3,0.9
+56,2,G3,1.9
+56,4,D3,0.9
+57,1,G3,3.9
+58,1,G3,0.9
+58,2,Bb3,0.4
+58,2.5,G3,0.4
+58,3,D4,1.9
+59,1,G3,0.9
+59,2,Bb3,0.9
+59,3,G3,1.9
+60,1,G3,0.9
+60,2,Bb3,0.4
+60,2.5,D4,0.25
+60,3,Bb3,0.25
+60,3.5,D4,0.9
+60,4.5,G3,0.4
+- Previous block slice (for continuity, if available):
+measure,beat,element,duration
+41,1,G3,0.9
+41,2,Bb3,0.4
+41,2.5,G3,0.4
+41,3,D4,1.9
+42,1,G3,0.9
+42,2,Bb3,0.9
+42,3,G3,1.9
+43,1,G3,0.9
+43,2,Bb3,0.4
+43,2.5,D4,0.25
+43,3,Bb3,0.25
+43,3.5,D4,0.9
+43,4.5,G3,0.4
+44,1,A3,2.9
+44,4,G3,0.9
+45,1,G3,0.9
+45,2,Bb3,0.4
+45,2.5,D4,0.4
+45,3,G3,0.25
+45,3.5,A3,0.4
+45,4,D4,0.25
+45,4.5,G3,0.4
+46,1,Bb3,0.25
+46,1.5,D4,0.4
+46,2,D4,0.25
+46,2.5,Bb3,0.4
+46,3,G3,0.25
+46,3.5,A3,0.4
+46,4,G3,0.25
+46,4.5,D3,0.4
+47,1,G3,2.9
+47,4,G3,0.9
+48,1,G3,0.9
+48,2,Bb3,0.9
+48,3,D4,0.9
+48,4,G3,0.9
+49,1,D4,1.9
+49,3,Bb3,1.9
+50,1,A3,1.9
+50,3,G3,1.9
+
+Other voices locked for this window:
+# voice: minor.alto.flute.red.melody
+measure,beat,pitch,duration,velocity,tie,articulation
+51,1,Bb3,1.9,90,,
+51,3,D4,0.25,90,,
+51,3.5,A3,0.25,90,,
+51,4,G3,0.9,90,,
+52,1,Bb3,1.9,90,,
+52,3,A3,1.9,90,,
+53,1,G3,1.9,90,,
+53,3,Bb3,1.9,90,,
+54,1,A3,0.25,90,,
+54,1.5,G3,0.4,90,,
+54,2,Bb3,1.9,90,,
+55,1,A3,1.9,90,,
+55,3,G3,1.9,90,,
+56,1,F#3,0.9,90,,
+56,2,G3,1.9,90,,
+56,4,D3,0.9,90,,
+57,1,G3,3.9,90,,
+58,1,G3,0.9,90,,
+58,2,Bb3,0.4,90,,
+58,2.5,G3,0.4,90,,
+58,3,D4,1.9,90,,
+59,1,G3,0.9,90,,
+59,2,Bb3,0.9,90,,
+59,3,G3,1.9,90,,
+60,1,G3,0.9,90,,
+60,2,Bb3,0.4,90,,
+60,2.5,D4,0.25,90,,
+60,3,Bb3,0.25,90,,
+60,3.5,D4,0.9,90,,
+60,4.5,G3,0.4,90,,
+
+# voice: minor.tenor.base.wolf.harmony
+measure,beat,pitch,duration,velocity,tie,articulation
+51,1,Bb2,1.9,76,,tenuto
+51,3,D3,0.25,76,,tenuto
+51,3.5,A2,0.25,76,,tenuto
+51,4,G2,0.9,76,,tenuto
+52,1,Bb2,1.9,76,,tenuto
+52,3,A2,1.9,76,,tenuto
+53,1,G2,1.9,76,,tenuto
+53,3,Bb2,1.9,76,,tenuto
+54,1,A2,0.25,76,,tenuto
+54,1.5,G2,0.4,76,,tenuto
+54,2,Bb2,1.9,76,,tenuto
+55,1,A2,1.9,76,,tenuto
+55,3,G2,1.9,76,,tenuto
+56,1,F#2,0.9,76,,tenuto
+56,2,G2,1.9,76,,tenuto
+56,4,D2,0.9,76,,tenuto
+57,1,G2,3.9,76,,tenuto
+58,1,G2,0.9,76,,tenuto
+58,2,Bb2,0.4,76,,tenuto
+58,2.5,G2,0.4,76,,tenuto
+58,3,D3,1.9,76,,tenuto
+59,1,G2,0.9,76,,tenuto
+59,2,Bb2,0.9,76,,tenuto
+59,3,G2,1.9,76,,tenuto
+60,1,G2,0.9,76,,tenuto
+60,2,Bb2,0.4,76,,tenuto
+60,2.5,D3,0.25,76,,tenuto
+60,3,Bb2,0.25,76,,tenuto
+60,3.5,D3,0.9,76,,tenuto
+60,4.5,G2,0.4,76,,tenuto
+
+# voice: minor.beat.drum.axe
+measure,beat,pitch,duration,velocity,tie,articulation
+51,1,C2,0.25,115,,staccato
+51,1.25,F#2,0.25,100,,staccato
+51,1.5,C2,0.25,100,,staccato
+51,1.75,F#2,0.25,100,,staccato
+51,2,C2,0.25,115,,staccato
+51,2.25,F#2,0.25,100,,staccato
+51,2.5,C2,0.25,100,,staccato
+51,2.75,F#2,0.25,100,,staccato
+51,3,C2,0.25,115,,staccato
+51,3.25,F#2,0.25,100,,staccato
+51,3.5,C2,0.25,100,,staccato
+51,3.75,F#2,0.25,100,,staccato
+51,4,C2,0.25,120,,accent
+52,1,C2,0.25,115,,staccato
+52,1.25,F#2,0.25,100,,staccato
+52,1.5,C2,0.25,100,,staccato
+52,1.75,F#2,0.25,100,,staccato
+52,2,C2,0.25,115,,staccato
+52,2.25,F#2,0.25,100,,staccato
+52,2.5,C2,0.25,100,,staccato
+52,2.75,F#2,0.25,100,,staccato
+52,3,C2,0.25,115,,staccato
+52,3.25,F#2,0.25,100,,staccato
+52,3.5,C2,0.25,100,,staccato
+52,3.75,F#2,0.25,100,,staccato
+52,4,C2,0.25,120,,accent
+53,1,C2,0.25,115,,staccato
+53,1.25,F#2,0.25,100,,staccato
+53,1.5,C2,0.25,100,,staccato
+53,1.75,F#2,0.25,100,,staccato
+53,2,C2,0.25,115,,staccato
+53,2.25,F#2,0.25,100,,staccato
+53,2.5,C2,0.25,100,,staccato
+53,2.75,F#2,0.25,100,,staccato
+53,3,C2,0.25,115,,staccato
+53,3.25,F#2,0.25,100,,staccato
+53,3.5,C2,0.25,100,,staccato
+53,3.75,F#2,0.25,100,,staccato
+53,4,C2,0.25,120,,accent
+54,1,C2,0.25,115,,staccato
+54,1.25,F#2,0.25,100,,staccato
+54,1.5,C2,0.25,100,,staccato
+54,1.75,F#2,0.25,100,,staccato
+54,2,C2,0.25,115,,staccato
+54,2.25,F#2,0.25,100,,staccato
+54,2.5,C2,0.25,100,,staccato
+54,2.75,F#2,0.25,100,,staccato
+54,3,C2,0.25,115,,staccato
+54,3.25,F#2,0.25,100,,staccato
+54,3.5,C2,0.25,100,,staccato
+54,3.75,F#2,0.25,100,,staccato
+54,4,C2,0.25,120,,accent
+55,1,C2,0.25,115,,staccato
+55,1.25,F#2,0.25,100,,staccato
+55,1.5,C2,0.25,100,,staccato
+55,1.75,F#2,0.25,100,,staccato
+55,2,C2,0.25,115,,staccato
+55,2.25,F#2,0.25,100,,staccato
+55,2.5,C2,0.25,100,,staccato
+55,2.75,F#2,0.25,100,,staccato
+55,3,C2,0.25,115,,staccato
+55,3.25,F#2,0.25,100,,staccato
+55,3.5,C2,0.25,100,,staccato
+55,3.75,F#2,0.25,100,,staccato
+55,4,C2,0.25,120,,accent
+56,1,C2,0.25,115,,staccato
+56,1.25,F#2,0.25,100,,staccato
+56,1.5,C2,0.25,100,,staccato
+56,1.75,F#2,0.25,100,,staccato
+56,2,C2,0.25,115,,staccato
+56,2.25,F#2,0.25,100,,staccato
+56,2.5,C2,0.25,100,,staccato
+56,2.75,F#2,0.25,100,,staccato
+56,3,C2,0.25,115,,staccato
+56,3.25,F#2,0.25,100,,staccato
+56,3.5,C2,0.25,100,,staccato
+56,3.75,F#2,0.25,100,,staccato
+56,4,C2,0.25,120,,accent
+57,1,C2,0.25,115,,staccato
+57,1.25,F#2,0.25,100,,staccato
+57,1.5,C2,0.25,100,,staccato
+57,1.75,F#2,0.25,100,,staccato
+57,2,C2,0.25,115,,staccato
+57,2.25,F#2,0.25,100,,staccato
+57,2.5,C2,0.25,100,,staccato
+57,2.75,F#2,0.25,100,,staccato
+57,3,C2,0.25,115,,staccato
+57,3.25,F#2,0.25,100,,staccato
+57,3.5,C2,0.25,100,,staccato
+57,3.75,F#2,0.25,100,,staccato
+57,4,C2,0.25,120,,accent
+58,1,C2,0.25,115,,staccato
+58,1.25,F#2,0.25,100,,staccato
+58,1.5,C2,0.25,100,,staccato
+58,1.75,F#2,0.25,100,,staccato
+58,2,C2,0.25,115,,staccato
+58,2.25,F#2,0.25,100,,staccato
+58,2.5,C2,0.25,100,,staccato
+58,2.75,F#2,0.25,100,,staccato
+58,3,C2,0.25,115,,staccato
+58,3.25,F#2,0.25,100,,staccato
+58,3.5,C2,0.25,100,,staccato
+58,3.75,F#2,0.25,100,,staccato
+58,4,C2,0.25,120,,accent
+59,1,C2,0.25,115,,staccato
+59,1.25,F#2,0.25,100,,staccato
+59,1.5,C2,0.25,100,,staccato
+59,1.75,F#2,0.25,100,,staccato
+59,2,C2,0.25,115,,staccato
+59,2.25,F#2,0.25,100,,staccato
+59,2.5,C2,0.25,100,,staccato
+59,2.75,F#2,0.25,100,,staccato
+59,3,C2,0.25,115,,staccato
+59,3.25,F#2,0.25,100,,staccato
+59,3.5,C2,0.25,100,,staccato
+59,3.75,F#2,0.25,100,,staccato
+59,4,C2,0.25,120,,accent
+60,1,C2,0.25,115,,staccato
+60,1.25,F#2,0.25,100,,staccato
+60,1.5,C2,0.25,100,,staccato
+60,1.75,F#2,0.25,100,,staccato
+60,2,C2,0.25,115,,staccato
+60,2.25,F#2,0.25,100,,staccato
+60,2.5,C2,0.25,100,,staccato
+60,2.75,F#2,0.25,100,,staccato
+60,3,C2,0.25,115,,staccato
+60,3.25,F#2,0.25,100,,staccato
+60,3.5,C2,0.25,100,,staccato
+60,3.75,F#2,0.25,100,,staccato
+60,4,C2,0.25,120,,accent
+
+Other voices from the immediately preceding block:
+# voice: minor.alto.flute.red.melody
+measure,beat,pitch,duration,velocity,tie,articulation
+41,1,G3,0.9,90,,
+41,2,Bb3,0.4,90,,
+41,2.5,G3,0.4,90,,
+41,3,D4,1.9,90,,
+42,1,G3,0.9,90,,
+42,2,Bb3,0.9,90,,
+42,3,G3,1.9,90,,
+43,1,G3,0.9,90,,
+43,2,Bb3,0.4,90,,
+43,2.5,D4,0.25,90,,
+43,3,Bb3,0.25,90,,
+43,3.5,D4,0.9,90,,
+43,4.5,G3,0.4,90,,
+44,1,A3,2.9,90,,
+44,4,G3,0.9,90,,
+45,1,G3,0.9,90,,
+45,2,Bb3,0.4,90,,
+45,2.5,D4,0.4,90,,
+45,3,G3,0.25,90,,
+45,3.5,A3,0.4,90,,
+45,4,D4,0.25,90,,
+45,4.5,G3,0.4,90,,
+46,1,Bb3,0.25,90,,
+46,1.5,D4,0.4,90,,
+46,2,D4,0.25,90,,
+46,2.5,Bb3,0.4,90,,
+46,3,G3,0.25,90,,
+46,3.5,A3,0.4,90,,
+46,4,G3,0.25,90,,
+46,4.5,D3,0.4,90,,
+47,1,G3,2.9,90,,
+47,4,G3,0.9,90,,
+48,1,G3,0.9,90,,
+48,2,Bb3,0.9,90,,
+48,3,D4,0.9,90,,
+48,4,G3,0.9,90,,
+49,1,D4,1.9,90,,
+49,3,Bb3,1.9,90,,
+50,1,A3,1.9,90,,
+50,3,G3,1.9,90,,
+
+# voice: minor.tenor.base.wolf.harmony
+measure,beat,pitch,duration,velocity,tie,articulation
+41,1,G2,0.9,76,,tenuto
+41,2,Bb2,0.4,76,,tenuto
+41,2.5,G2,0.4,76,,tenuto
+41,3,D3,1.9,76,,tenuto
+42,1,G2,0.9,76,,tenuto
+42,2,Bb2,0.9,76,,tenuto
+42,3,G2,1.9,76,,tenuto
+43,1,G2,0.9,76,,tenuto
+43,2,Bb2,0.4,76,,tenuto
+43,2.5,D3,0.25,76,,tenuto
+43,3,Bb2,0.25,76,,tenuto
+43,3.5,D3,0.9,76,,tenuto
+43,4.5,G2,0.4,76,,tenuto
+44,1,A2,2.9,76,,tenuto
+44,4,G2,0.9,76,,tenuto
+45,1,G2,0.9,76,,tenuto
+45,2,Bb2,0.4,76,,tenuto
+45,2.5,D3,0.4,76,,tenuto
+45,3,G2,0.25,76,,tenuto
+45,3.5,A2,0.4,76,,tenuto
+45,4,D3,0.25,76,,tenuto
+45,4.5,G2,0.4,76,,tenuto
+46,1,Bb2,0.25,76,,tenuto
+46,1.5,D3,0.4,76,,tenuto
+46,2,D3,0.25,76,,tenuto
+46,2.5,Bb2,0.4,76,,tenuto
+46,3,G2,0.25,76,,tenuto
+46,3.5,A2,0.4,76,,tenuto
+46,4,G2,0.25,76,,tenuto
+46,4.5,D2,0.4,76,,tenuto
+47,1,G2,2.9,76,,tenuto
+47,4,G2,0.9,76,,tenuto
+48,1,G2,0.9,76,,tenuto
+48,2,Bb2,0.9,76,,tenuto
+48,3,D3,0.9,76,,tenuto
+48,4,G2,0.9,76,,tenuto
+49,1,D3,1.9,76,,tenuto
+49,3,Bb2,1.9,76,,tenuto
+50,1,A2,1.9,76,,tenuto
+50,3,G2,1.9,76,,tenuto
+
+# voice: minor.beat.drum.axe
+measure,beat,pitch,duration,velocity,tie,articulation
+41,1,C2,0.25,115,,staccato
+41,1.25,F#2,0.25,100,,staccato
+41,1.5,C2,0.25,100,,staccato
+41,1.75,F#2,0.25,100,,staccato
+41,2,C2,0.25,115,,staccato
+41,2.25,F#2,0.25,100,,staccato
+41,2.5,C2,0.25,100,,staccato
+41,2.75,F#2,0.25,100,,staccato
+41,3,C2,0.25,115,,staccato
+41,3.25,F#2,0.25,100,,staccato
+41,3.5,C2,0.25,100,,staccato
+41,3.75,F#2,0.25,100,,staccato
+41,4,C2,0.25,120,,accent
+42,1,C2,0.25,115,,staccato
+42,1.25,F#2,0.25,100,,staccato
+42,1.5,C2,0.25,100,,staccato
+42,1.75,F#2,0.25,100,,staccato
+42,2,C2,0.25,115,,staccato
+42,2.25,F#2,0.25,100,,staccato
+42,2.5,C2,0.25,100,,staccato
+42,2.75,F#2,0.25,100,,staccato
+42,3,C2,0.25,115,,staccato
+42,3.25,F#2,0.25,100,,staccato
+42,3.5,C2,0.25,100,,staccato
+42,3.75,F#2,0.25,100,,staccato
+42,4,C2,0.25,120,,accent
+43,1,C2,0.25,115,,staccato
+43,1.25,F#2,0.25,100,,staccato
+43,1.5,C2,0.25,100,,staccato
+43,1.75,F#2,0.25,100,,staccato
+43,2,C2,0.25,115,,staccato
+43,2.25,F#2,0.25,100,,staccato
+43,2.5,C2,0.25,100,,staccato
+43,2.75,F#2,0.25,100,,staccato
+43,3,C2,0.25,115,,staccato
+43,3.25,F#2,0.25,100,,staccato
+43,3.5,C2,0.25,100,,staccato
+43,3.75,F#2,0.25,100,,staccato
+43,4,C2,0.25,120,,accent
+44,1,C2,0.25,115,,staccato
+44,1.25,F#2,0.25,100,,staccato
+44,1.5,C2,0.25,100,,staccato
+44,1.75,F#2,0.25,100,,staccato
+44,2,C2,0.25,115,,staccato
+44,2.25,F#2,0.25,100,,staccato
+44,2.5,C2,0.25,100,,staccato
+44,2.75,F#2,0.25,100,,staccato
+44,3,C2,0.25,115,,staccato
+44,3.25,F#2,0.25,100,,staccato
+44,3.5,C2,0.25,100,,staccato
+44,3.75,F#2,0.25,100,,staccato
+44,4,C2,0.25,120,,accent
+45,1,C2,0.25,115,,staccato
+45,1.25,F#2,0.25,100,,staccato
+45,1.5,C2,0.25,100,,staccato
+45,1.75,F#2,0.25,100,,staccato
+45,2,C2,0.25,115,,staccato
+45,2.25,F#2,0.25,100,,staccato
+45,2.5,C2,0.25,100,,staccato
+45,2.75,F#2,0.25,100,,staccato
+45,3,C2,0.25,115,,staccato
+45,3.25,F#2,0.25,100,,staccato
+45,3.5,C2,0.25,100,,staccato
+45,3.75,F#2,0.25,100,,staccato
+45,4,C2,0.25,120,,accent
+46,1,C2,0.25,115,,staccato
+46,1.25,F#2,0.25,100,,staccato
+46,1.5,C2,0.25,100,,staccato
+46,1.75,F#2,0.25,100,,staccato
+46,2,C2,0.25,115,,staccato
+46,2.25,F#2,0.25,100,,staccato
+46,2.5,C2,0.25,100,,staccato
+46,2.75,F#2,0.25,100,,staccato
+46,3,C2,0.25,115,,staccato
+46,3.25,F#2,0.25,100,,staccato
+46,3.5,C2,0.25,100,,staccato
+46,3.75,F#2,0.25,100,,staccato
+46,4,C2,0.25,120,,accent
+47,1,C2,0.25,115,,staccato
+47,1.25,F#2,0.25,100,,staccato
+47,1.5,C2,0.25,100,,staccato
+47,1.75,F#2,0.25,100,,staccato
+47,2,C2,0.25,115,,staccato
+47,2.25,F#2,0.25,100,,staccato
+47,2.5,C2,0.25,100,,staccato
+47,2.75,F#2,0.25,100,,staccato
+47,3,C2,0.25,115,,staccato
+47,3.25,F#2,0.25,100,,staccato
+47,3.5,C2,0.25,100,,staccato
+47,3.75,F#2,0.25,100,,staccato
+47,4,C2,0.25,120,,accent
+48,1,C2,0.25,115,,staccato
+48,1.25,F#2,0.25,100,,staccato
+48,1.5,C2,0.25,100,,staccato
+48,1.75,F#2,0.25,100,,staccato
+48,2,C2,0.25,115,,staccato
+48,2.25,F#2,0.25,100,,staccato
+48,2.5,C2,0.25,100,,staccato
+48,2.75,F#2,0.25,100,,staccato
+48,3,C2,0.25,115,,staccato
+48,3.25,F#2,0.25,100,,staccato
+48,3.5,C2,0.25,100,,staccato
+48,3.75,F#2,0.25,100,,staccato
+48,4,C2,0.25,120,,accent
+49,1,C2,0.25,115,,staccato
+49,1.25,F#2,0.25,100,,staccato
+49,1.5,C2,0.25,100,,staccato
+49,1.75,F#2,0.25,100,,staccato
+49,2,C2,0.25,115,,staccato
+49,2.25,F#2,0.25,100,,staccato
+49,2.5,C2,0.25,100,,staccato
+49,2.75,F#2,0.25,100,,staccato
+49,3,C2,0.25,115,,staccato
+49,3.25,F#2,0.25,100,,staccato
+49,3.5,C2,0.25,100,,staccato
+49,3.75,F#2,0.25,100,,staccato
+49,4,C2,0.25,120,,accent
+50,1,C2,0.25,115,,staccato
+50,1.25,F#2,0.25,100,,staccato
+50,1.5,C2,0.25,100,,staccato
+50,1.75,F#2,0.25,100,,staccato
+50,2,C2,0.25,115,,staccato
+50,2.25,F#2,0.25,100,,staccato
+50,2.5,C2,0.25,100,,staccato
+50,2.75,F#2,0.25,100,,staccato
+50,3,C2,0.25,115,,staccato
+50,3.25,F#2,0.25,100,,staccato
+50,3.5,C2,0.25,100,,staccato
+50,3.75,F#2,0.25,100,,staccato
+50,4,C2,0.25,120,,accent
+
+Current voice continuity (previous block rows, do not rewrite unless blanks are supplied). If this is a drum track or base or anything other than melody or harmony, be extra careful to keep the timing and textrue in the same style as the previous block (if supplied here):
+measure,beat,pitch,duration,velocity,tie,articulation
+41,1,G1,0.9,100,,tenuto
+41,2,Bb1,0.4,100,,tenuto
+41,2.5,G1,0.4,100,,tenuto
+41,3,D2,1.9,100,,tenuto
+42,1,G1,0.9,100,,tenuto
+42,2,Bb1,0.9,100,,tenuto
+42,3,G1,1.9,100,,tenuto
+43,1,G1,0.9,100,,tenuto
+43,2,Bb1,0.4,100,,tenuto
+43,2.5,D2,0.25,100,,tenuto
+43,3,Bb1,0.25,100,,tenuto
+43,3.5,D2,0.9,100,,tenuto
+43,4.5,G1,0.4,100,,tenuto
+44,1,A1,2.9,100,,tenuto
+44,4,G1,0.9,100,,tenuto
+45,1,G1,0.9,100,,tenuto
+45,2,Bb1,0.4,100,,tenuto
+45,2.5,D2,0.4,100,,tenuto
+45,3,G1,0.25,100,,tenuto
+45,3.5,A1,0.4,100,,tenuto
+45,4,D2,0.25,100,,tenuto
+45,4.5,G1,0.4,100,,tenuto
+46,1,Bb1,0.25,100,,tenuto
+46,1.5,D2,0.4,100,,tenuto
+46,2,D2,0.25,100,,tenuto
+46,2.5,Bb1,0.4,100,,tenuto
+46,3,G1,0.25,100,,tenuto
+46,3.5,A1,0.4,100,,tenuto
+46,4,G1,0.25,100,,tenuto
+46,4.5,D1,0.4,100,,tenuto
+47,1,G1,2.9,100,,tenuto
+47,4,G1,0.9,100,,tenuto
+48,1,G1,0.9,100,,tenuto
+48,2,Bb1,0.9,100,,tenuto
+48,3,D2,0.9,100,,tenuto
+48,4,G1,0.9,100,,tenuto
+49,1,D2,1.9,100,,tenuto
+49,3,Bb1,1.9,100,,tenuto
+50,1,A1,1.9,100,,tenuto
+50,3,G1,1.9,100,,tenuto
+
+Instructions:
+1. For this single voice only, output a **CSV table of notes** that copies the provided melody guidance exactly when this voice is the melody, and otherwise meshes cleanly with it when this voice is an accompaniment.
+2. When a measure window is provided, **emit notes only for that window** and leave prior windows untouched. Extend ties with new rows instead of rewriting earlier measures.
+3. If this voice is the melody, do **not** invent or rephrase the line: for every row in the melody guidance, emit a matching note with the identical measure, beat, pitch, and duration. No substitutions, omissions, or reordering are allowed.
+4. When this voice is not the melody, compose material that sounds good with the guided melody, but still treat the guidance as fixed. Note that if the piece is in a minor key, the harmony should form minor chords with the melody.  Only use major chord harmony IF and ONLY IF this is a piece in a major key.
+5. Police dissonance rigorously: never stack the chromatic neighbor of the same letter name against the melody at the same beat (e.g., avoid Ab against a held A natural unless explicitly requested). Default to consonant thirds, fifths, or octaves unless the prompt calls for deliberate tension.
+6. Never split a guided note into multiple notes, tie it across a new boundary, or alter its duration unless the guidance itself already does so. Each provided row should map to one output row starting at the exact beat and lasting the exact duration.
+7. When reduced-note grids for other voices are present, treat them as fixed reference parts. Write the new voice so that it complements these parts (e.g., avoiding collisions, reinforcing cadences, or providing counter-melody), but never assumes they can be changed.
+8. Respect the tempo, key, and time signature from metadata/measures unless there is a strong musical reason to diverge.
+9. Use only the following columns in your CSV output, in this exact order:
+	`measure,beat,pitch,duration,velocity,tie,articulation`
+10. `measure` must be an integer counting up like the measures listed in the shared **main melodic line** block, and it must land within the requested window when one is supplied.
+11. `beat` values are 1-based within each measure (use positive numbers such as 1, 1.5, 3.75, …; never greater than the upper value of the time signature's numerator).
+12. `pitch` must be a scientific pitch name like `C4`, `F#3`, or `Bb2`, or `rest` for no pitch.
+13. `duration` is the number of beats the note should continue for, starting at the `beat` point of the note.
+14. `velocity` must stay within the MIDI range 0–127.
+15. `tie` is either blank (no tie), `start`, `continue`, or `stop`, and is used to indicate notes that sustain across barlines.
+16. `articulation` is a short textual tag such as `legato`, `staccato`, `tenuto`, `accent`, or may be left blank.
+
+Return only a single CSV table using these seven columns and **no other text or commentary**.
+
+
+=== RESPONSE ===
+measure,beat,pitch,duration,velocity,tie,articulation
+51,1,Bb1,1.9,100,,tenuto
+51,3,D2,0.25,100,,tenuto
+51,3.5,A1,0.25,100,,tenuto
+51,4,G1,0.9,100,,tenuto
+52,1,Bb1,1.9,100,,tenuto
+52,3,A1,1.9,100,,tenuto
+53,1,G1,1.9,100,,tenuto
+53,3,Bb1,1.9,100,,tenuto
+54,1,A1,0.25,100,,tenuto
+54,1.5,G1,0.4,100,,tenuto
+54,2,Bb1,1.9,100,,tenuto
+55,1,A1,1.9,100,,tenuto
+55,3,G1,1.9,100,,tenuto
+56,1,F#1,0.9,100,,tenuto
+56,2,G1,1.9,100,,tenuto
+56,4,D1,0.9,100,,tenuto
+57,1,G1,3.9,100,,tenuto
+58,1,G1,0.9,100,,tenuto
+58,2,Bb1,0.4,100,,tenuto
+58,2.5,G1,0.4,100,,tenuto
+58,3,D2,1.9,100,,tenuto
+59,1,G1,0.9,100,,tenuto
+59,2,Bb1,0.9,100,,tenuto
+59,3,G1,1.9,100,,tenuto
+60,1,G1,0.9,100,,tenuto
+60,2,Bb1,0.4,100,,tenuto
+60,2.5,D2,0.25,100,,tenuto
+60,3,Bb1,0.25,100,,tenuto
+60,3.5,D2,0.9,100,,tenuto
+60,4.5,G1,0.4,100,,tenuto

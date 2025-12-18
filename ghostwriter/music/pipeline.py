@@ -3142,11 +3142,11 @@ def run_melody_construction_step(
     variant_safe = (variant or "standard").strip().lower()
     additional_rules = ""
     standard_sequence = (
-        "* Start with this sequence of edges: A-A, A-A, A-B1, B1-B2, B2-A, A-A. "
+        "* Start with this sequence of edges: A-A, A-A, A-B1, B1-B2.  Then be sure to end with A-A at the end. "
         "Follow these edges in order before selecting additional paths to reach the target length."
     )
     complimentary_sequence = (
-        "* Start with this sequence of edges: A-B1, B1-B2, B2-B1, B1-B2, B2-A. "
+        "* Start with this sequence of edges: A-B1, B1-B2, B2-B1, B1-B2, Then be sure to end with A-B1 at the end."
         "Use it as the opening gesture before weaving new material."
     )
     if variant_safe == "complimentary":
@@ -3162,12 +3162,12 @@ def run_melody_construction_step(
         additional_rules += "\n" + complimentary_sequence
     elif variant_safe == "reprise":
         additional_rules = (
-            "* Treat this as a reprise of the standard melody. Before "
-            "constructing the final line, conceptually stretch each edge of "
-            "the melodic graph by roughly one additional measure, adding "
-            "connecting notes that make musical sense so that the total "
+            "* Treat this as a reprise of the standard melody. "
+            "Conceptually alter each edge of "
+            "the melodic graph by changing up the timing in an interesting way, "
+            "and possibly adding notes that make musical sense so that the total "
             "duration expands while preserving the recognizable contour of "
-            "the original melody."
+            "the original melody. Start with Edge A-A, use at least one other edge, and end with edge A-A."
         )
         additional_rules += "\n" + standard_sequence
     else:

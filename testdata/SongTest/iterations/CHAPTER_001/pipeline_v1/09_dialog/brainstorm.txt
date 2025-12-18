@@ -1,33 +1,7 @@
-* red asks wolf how a shortcut could be safer than the path, and wolf answers with soothing details about open clearings and fewer roots to trip on, easing her fear while planting the idea that hurrying to grandmother is an act of love. <0.08>  
-
-* wolf flatters red’s sense of duty, saying only a truly devoted granddaughter would brave a quieter, less-trodden way, making the official path sound lazy and almost ungrateful. <0.06>  
-
-* red hesitates, clutching the basket and glancing back at the bright thread of the main trail, then whispers that mama said not to leave it, showing the rule clearly before she chooses to bend it. <0.07>  
-
-* wolf leans closer and murmurs that the sun is already slipping and that hunters sometimes crowd the main road at dusk, suggesting the shortcut is not only faster but more private and less embarrassing for a little girl in a red hood. <0.05>  
-
-* red finally nods, cheeks warm, convincing herself aloud that mama would understand “just this once” if it means grandmother gets warm bread before it cools, turning her disobedience into a small, earnest sacrifice. <0.09>  
-
-
-
-* wolf casually traces the shortcut in the dust with one claw, drawing a crooked line through imaginary trees, so red can picture exactly how the new route splits off and rejoins, making his lie feel mapped and solid. <0.09>  
-
-* red repeats the directions back in her own words, pointing with her basket—“past the leaning pine, over the little brook, then straight till the birch with the split trunk”—cementing for the reader how she will reach grandmother by a different path. <0.06>  
-
-* wolf keeps his tone soft and almost parental, reminding red that grandmother is old and alone and might grow frightened waiting, linking the shortcut to sparing grandmother worry rather than chasing red’s curiosity. <0.08>  
-
-* red weighs the basket in her hands, noticing how the jam jar clinks and thinking it might spill if she stumbles on the crowded path, making wolf’s “smooth ground” promise sound helpfully practical, not just sneaky. <0.04>  
-
-* red steps off the main trail and instantly feels the moss spring softer under her boots, glancing back with a small, guilty wave to the familiar path as the trees close in around her new, narrower way. <0.07>  
-
-
-
-* wolf pretends to be offended when red says, “Mama told me not to talk to strangers,” then laughs it off and calls himself a neighbor of the woods, subtly reclassifying “stranger” so she can accept his shortcut without feeling she has broken the rule. <0.05>  
-
-* red asks how wolf knows grandmother’s cottage at all, and he smoothly replies that her chimney smoke is famous among forest creatures, giving a plausible reason for his knowledge of a private shortcut. <0.06>  
-
-* wolf hints that the shortcut passes a sunny patch full of wildflowers that no one ever picks, baiting red’s known weakness while still insisting it will not add even “a heartbeat” of delay. <0.09>  
-
-* red, torn between the flowers and her promise to hurry, decides that if the shortcut is truly faster she can pick just one or two along the way, turning the decision into a compromise that logically leads her off the main path. <0.08>  
-
-* as red turns her back to follow the new direction, wolf’s eyes briefly harden and his smile drops, but when she glances over her shoulder he is already bowing with a courteous paw-flourish, preserving his kindly mask for her and the reader. <0.07>
+* wolf pretends sudden concern, asking if red remembers how long Grandmother has been ailing and whether every moment might matter
+* red’s throat tightens; she admits she woke before dawn fearing Grandmother might be worse while she walked
+* wolf seizes on the confession, saying it would be a tragedy if her good intentions were slowed by a needlessly twisty road
+* red glances left where he nods, noticing a faint, trodden seam in the moss, like a secret someone tried to hide with leaves
+* wolf calls it his “careful way,” where the ground is softer and the hills lie flatter, and says he would be honored to share it with such a devoted child
+* red, flattered that a great forest creature trusts her with a secret, promises not to tell, and steps over the root-line that has been her boundary
+DONE

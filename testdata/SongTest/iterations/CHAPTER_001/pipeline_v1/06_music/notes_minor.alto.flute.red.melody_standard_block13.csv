@@ -1,0 +1,4 @@
+measure,beat,pitch,duration,velocity,tie,articulation
+121,1,C4,3.9,90,,legato
+122,1,rest,4,0,,
+123,1,rest,4,0,,

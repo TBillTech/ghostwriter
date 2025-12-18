@@ -6,10 +6,10 @@ This document outlines the tasks currently being worked for this project for new
 
 ### Import-driven melody workflow (Dec 2025)
 
-- [ ] Detect per-voice import folders (`<tp_index>_track_<voice>_import/`) when running the music pipeline. Ignore `*.Zone.Identifier` sidecar files and map each folder to the matching chapter voice so imported MIDI content is available before prompting.
-- [ ] When an import exists for the melody voice, skip `music_melody_emotion_prompt.md` and `music_emotion_chord_prompt.md`. Instead, run a new `music_import_sanitize_prompt.md` that consumes the sanitized `score.musiccsv` (or freshly generated `import.musiccsv`), quantizes timestamps, trims leading/trailing empty measures, and emits CORE-ready rows (`measure,beat,pitch,duration`). The pipeline will enforce `semi_tones=(0)` and derives the `transition` column directly from the provided pitch values so the dwell/root logic follows the imported contour.
-- [ ] Feed the sanitized import output directly into `CORE_MELODY.csv` generation, ensuring the rest of the pipeline (melody edges, reduced grids, score prompts) treat the imported melody as authoritative rather than re-synthesizing it.
-- [ ] Add regression coverage for (a) Zone.Identifier filtering, (b) import detection across melody/bass/beat voices, and (c) the new prompt path so future refactors do not regress the import workflow.
+- [X] Detect per-voice import folders (`<tp_index>_track_<voice>_import/`) when running the music pipeline. Ignore `*.Zone.Identifier` sidecar files and map each folder to the matching chapter voice so imported MIDI content is available before prompting.
+- [X] When an import exists for the melody voice, skip `music_melody_emotion_prompt.md` and `music_emotion_chord_prompt.md`. Instead, run a new `music_import_sanitize_prompt.md` that consumes the sanitized `score.musiccsv` (or freshly generated `import.musiccsv`), quantizes timestamps, trims leading/trailing empty measures, and emits CORE-ready rows (`measure,beat,pitch,duration`). The pipeline will enforce `semi_tones=(0)` and derives the `transition` column directly from the provided pitch values so the dwell/root logic follows the imported contour.
+- [X] Feed the sanitized import output directly into `CORE_MELODY.csv` generation, ensuring the rest of the pipeline (melody edges, reduced grids, score prompts) treat the imported melody as authoritative rather than re-synthesizing it.
+- [X] Add regression coverage for (a) Zone.Identifier filtering, (b) import detection across melody/bass/beat voices, and (c) the new prompt path so future refactors do not regress the import workflow.
 
 
     

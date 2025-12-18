@@ -3,9 +3,6 @@ You are an expert narrative composer creating a first-pass motif that aligns wit
 Global music directive and context:
 [VOICE_CONTEXT_JSON]
 
-Character context (referenced entities):
-[CHARACTER_CONTEXT_JSON]
-
 Target voice for this pass:
 - token: [VOICE_TOKEN]
 - chord: [VOICE_CHORD]
@@ -37,26 +34,20 @@ Melody guidance for this block:
 - Previous block slice (for continuity, if available):
 [MELODY_PREVIOUS_BLOCK_CSV]
 
-Current voice continuity (previous block rows, do not rewrite unless blanks are supplied):
-[VOICE_PREVIOUS_BLOCK_CSV]
-
 Other voices locked for this window:
 [OTHER_VOICES_BLOCK_CSV]
 
 Other voices from the immediately preceding block:
 [OTHER_VOICES_PREVIOUS_BLOCK_CSV]
 
-Reduced notes for alignment (complete, not truncated):
-- Full reduced melody grid for the **main melodic line** (measure, beat, pitch, duration). This may be omitted when the block slice above already covers the needed measures:
-[MELODY_REDUCED_CSV]
-- Reduced-note grids for any voices already scored (if any). Treat these as fixed reference parts that the new voice should complement, not overwrite:
-[OTHER_VOICES_REDUCED_CSV]
+Current voice continuity (previous block rows, do not rewrite unless blanks are supplied). If this is a drum track or base or anything other than melody or harmony, be extra careful to keep the timing and textrue in the same style as the previous block (if supplied here):
+[VOICE_PREVIOUS_BLOCK_CSV]
 
 Instructions:
 1. For this single voice only, output a **CSV table of notes** that copies the provided melody guidance exactly when this voice is the melody, and otherwise meshes cleanly with it when this voice is an accompaniment.
 2. When a measure window is provided, **emit notes only for that window** and leave prior windows untouched. Extend ties with new rows instead of rewriting earlier measures.
 3. If this voice is the melody, do **not** invent or rephrase the line: for every row in the melody guidance, emit a matching note with the identical measure, beat, pitch, and duration. No substitutions, omissions, or reordering are allowed.
-4. When this voice is not the melody, compose material that sounds good with the guided melody, but still treat the guidance as fixed.
+4. When this voice is not the melody, compose material that sounds good with the guided melody, but still treat the guidance as fixed. Note that if the piece is in a minor key, the harmony should form minor chords with the melody.  Only use major chord harmony IF and ONLY IF this is a piece in a major key.
 5. Police dissonance rigorously: never stack the chromatic neighbor of the same letter name against the melody at the same beat (e.g., avoid Ab against a held A natural unless explicitly requested). Default to consonant thirds, fifths, or octaves unless the prompt calls for deliberate tension.
 6. Never split a guided note into multiple notes, tie it across a new boundary, or alter its duration unless the guidance itself already does so. Each provided row should map to one output row starting at the exact beat and lasting the exact duration.
 7. When reduced-note grids for other voices are present, treat them as fixed reference parts. Write the new voice so that it complements these parts (e.g., avoiding collisions, reinforcing cadences, or providing counter-melody), but never assumes they can be changed.

@@ -1,0 +1,5 @@
+track,label,part,instrument,channel,program,role,voice_token
+1,Wolf Harmony,Harmony,French Horn,1,61,dark harmony,minor.tenor.base.wolf.harmony
+2,Red Melody,Melody,Flute,1,73,lead melody,minor.alto.flute.red.melody
+3,Drums,Percussion,Standard Kit,10,0,rapid percussion,minor.beat.drum.axe
+4,Forest Bass,Bass,Acoustic Bass,1,33,steady bass,minor.bass.base.forest_path

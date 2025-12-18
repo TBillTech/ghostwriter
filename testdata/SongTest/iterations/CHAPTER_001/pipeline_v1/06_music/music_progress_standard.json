@@ -1,0 +1,16 @@
+{
+  "voices": {
+    "minor.alto.flute.red.melody": {
+      "next_block": 14
+    },
+    "minor.tenor.base.wolf.harmony": {
+      "next_block": 14
+    },
+    "minor.beat.drum.axe": {
+      "next_block": 14
+    },
+    "minor.bass.base.forest_path": {
+      "next_block": 14
+    }
+  }
+}

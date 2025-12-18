@@ -1,0 +1,9 @@
+- Regenerate the score-level summaries/metadata so measure counts and durations match the shipped MusicCSV (current file uses 140 measures) — update any earlier per-voice summaries that report 8/18 measures.  
+- Normalize accidentals to flats to match the C minor key signature (replace D# → Eb, G# → Ab, etc.) for consistent notation and downstream tooling.  
+- Quantize non-standard quarter-lengths (0.9, 1.9, 3.9, etc.) to conventional values (0.25/0.5/1.0/1.5/2.0/4.0) to avoid timing rounding artifacts with divisions_per_quarter=480.  
+- Lower percussion pitches above C4 into a percussive pitch range (C2–F#2) so channel-10 events read and render as percussion-like timbres (keep scientific names as required).  
+- Change track 1 (Wolf Harmony) to a darker low‑tenor patch (e.g., Tenor Trombone / low horn program) so the instrument timbre better represents the Wolf harmony role.  
+- Remove or deduplicate duplicate rest lines (e.g., repeated rest rows at measure 140) to avoid redundant events.  
+- Document current channel usage (all melodic tracks on channel 1, drums on channel 10) and update touch-point notes so collaborators know this is intentional for later VST assignment.  
+- Update the touch-point / pipeline tempo summary to include the actual file tempo (116 BPM) so story/asset metadata and the exported MusicCSV are consistent.  
+- Regenerate the exported MusicCSV after applying the above fixes and run a quick playback/validation to confirm articulations, velocities, and percussion mapping behave as intended.

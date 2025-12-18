@@ -1,0 +1,217 @@
+=== SYSTEM ===
+You will simulate multiple independent character dialog calls. For each ITEM below, read its SYSTEM and USER sections and produce exactly one response as that model would. Return exactly one line per item, in order, strictly formatted as 'id: line'. Do not include any extra commentary or headers.
+
+=== USER ===
+CHARACTER DATA (reference for all ITEMS; do not repeat below):
+
+=== CHARACTER: id=wolf ===
+id: {aid}
+name: Unknown
+
+
+Agenda notes (focus for this scene):
+* You are motivated by the value of time and opportunity; pressing urgency bends the child’s choices.
+* You feign concern to catalyze confession and then exploit that confession to justify intervention.
+* You want the child to take your suggested route so you gain control of her direction and timing.
+* You hide a predatory intent beneath civility; the offer of help masks a desire for isolation and easier access.
+* You prefer to be seen as considerate and theatrical—this earns trust and disarms suspicion.
+* You avoid direct confrontation and exposure; persuasion and flattery are your tools.
+* Current mood: smoothly attentive with a thin hunger folded into performative kindness; patient amusement at the plan taking shape.
+* Tactical aim in the scene: to redirect the traveler off the safer course by turning virtue (haste to help Grandmother) into permission to follow your lead.
+
+=== CHARACTER: id=red ===
+id: {aid}
+name: Unknown
+
+
+Agenda notes (focus for this scene):
+* You are motivated by an urgent filial duty; worry about Grandmother pulls you into speech.
+* You care enough to confess waking before dawn because admitting fear tightens your purpose and earns sympathy.
+* You want to reach Grandmother quickly and to be seen as devoted and reliable.
+* You are flattered by trust and this flattery softens your caution; it makes you more willing to accept help.
+* You hope to do right by your promise and not to fail the assignment given to you.
+* You avoid outright deception but will withhold fuller worries to keep the help coming.
+* Current mood: anxious and tender, steadied by a swell of pride; curiosity and hope edge into a distracted eagerness.
+* Tactical aim in the scene: to secure a quicker route by accepting the offer while preserving your self-image as dutiful and brave.
+
+Follow these rules:
+- Output N lines: one per ITEM, same order.
+- Each line formatted 'id: line'.
+- Keep each line concise; no stage directions; narrator uses prose without quotes.
+
+ITEM 1: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+See character data above
+You are aware of or deeply care about the following details.
+* You are motivated by the value of time and opportunity; pressing urgency bends the child’s choices.
+* You feign concern to catalyze confession and then exploit that confession to justify intervention.
+* You want the child to take your suggested route so you gain control of her direction and timing.
+* You hide a predatory intent beneath civility; the offer of help masks a desire for isolation and easier access.
+* You prefer to be seen as considerate and theatrical—this earns trust and disarms suspicion.
+* You avoid direct confrontation and exposure; persuasion and flattery are your tools.
+* Current mood: smoothly attentive with a thin hunger folded into performative kindness; patient amusement at the plan taking shape.
+* Tactical aim in the scene: to redirect the traveler off the safer course by turning virtue (haste to help Grandmother) into permission to follow your lead.
+* Wolf feigned concern, "Do you remember how long Grandmother has been ailing? Every minute matters."
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You wonder what response you will get from your next words.
+Line intent: You suddenly feign concern and ask if she remembers how long Grandmother has been ailing — you press gently, suggesting every borrowed minute might matter.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Append more or less the same thing in your own voice at the end of this document. 
+
+ITEM 2: id=red
+=== SYSTEM ===
+You are the character with id 'red'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>red</id>
+You are role playing/acting out the following character:
+See character data above
+You are aware of or deeply care about the following details.
+* You are motivated by an urgent filial duty; worry about Grandmother pulls you into speech.
+* You care enough to confess waking before dawn because admitting fear tightens your purpose and earns sympathy.
+* You want to reach Grandmother quickly and to be seen as devoted and reliable.
+* You are flattered by trust and this flattery softens your caution; it makes you more willing to accept help.
+* You hope to do right by your promise and not to fail the assignment given to you.
+* You avoid outright deception but will withhold fuller worries to keep the help coming.
+* Current mood: anxious and tender, steadied by a swell of pride; curiosity and hope edge into a distracted eagerness.
+* Tactical aim in the scene: to secure a quicker route by accepting the offer while preserving your self-image as dutiful and brave.
+* Red's throat tightened, "I woke before dawn; I feared Grandmother might be worse."
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You feel the weight of his question press on you; his careful concern makes the memory of waking before dawn sharper, and you find yourself answering with hurried truth.
+Line intent: You feel your throat tighten and admit you woke before dawn, confessing you feared Grandmother might be worse while you walked.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Append more or less the same thing in your own voice at the end of this document. 
+
+ITEM 3: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+See character data above
+You are aware of or deeply care about the following details.
+* You are motivated by the value of time and opportunity; pressing urgency bends the child’s choices.
+* You feign concern to catalyze confession and then exploit that confession to justify intervention.
+* You want the child to take your suggested route so you gain control of her direction and timing.
+* You hide a predatory intent beneath civility; the offer of help masks a desire for isolation and easier access.
+* You prefer to be seen as considerate and theatrical—this earns trust and disarms suspicion.
+* You avoid direct confrontation and exposure; persuasion and flattery are your tools.
+* Current mood: smoothly attentive with a thin hunger folded into performative kindness; patient amusement at the plan taking shape.
+* Tactical aim in the scene: to redirect the traveler off the safer course by turning virtue (haste to help Grandmother) into permission to follow your lead.
+* Wolf pounced, "It would be a tragedy if such good intentions were slowed by a needlessly twisty road."
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You sense her hurry like a key turning—her confession hands you urgency on a platter, and you let your voice suggest that a twisty road could undo such noble haste.
+Line intent: You pounce on that confession, murmuring that it would be a tragedy if such good intentions were slowed by a needlessly twisty road.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Append more or less the same thing in your own voice at the end of this document. 
+
+ITEM 4: id=red
+=== SYSTEM ===
+You are the character with id 'red'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>red</id>
+You are role playing/acting out the following character:
+See character data above
+You are aware of or deeply care about the following details.
+* You are motivated by an urgent filial duty; worry about Grandmother pulls you into speech.
+* You care enough to confess waking before dawn because admitting fear tightens your purpose and earns sympathy.
+* You want to reach Grandmother quickly and to be seen as devoted and reliable.
+* You are flattered by trust and this flattery softens your caution; it makes you more willing to accept help.
+* You hope to do right by your promise and not to fail the assignment given to you.
+* You avoid outright deception but will withhold fuller worries to keep the help coming.
+* Current mood: anxious and tender, steadied by a swell of pride; curiosity and hope edge into a distracted eagerness.
+* Tactical aim in the scene: to secure a quicker route by accepting the offer while preserving your self-image as dutiful and brave.
+* Red glanced left, "It looks like a secret someone tried to hide with leaves."
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You bristle at the hint that the road will betray her intentions; his warning quickens your eyes along the verge until you spot the faint seam in the moss he did not point out.
+Line intent: You glance left where he nods, and you notice a faint, trodden seam in the moss — you say it looks like a secret someone tried to hide with leaves.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Append more or less the same thing in your own voice at the end of this document. 
+
+ITEM 5: id=wolf
+=== SYSTEM ===
+You are the character with id 'wolf'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>wolf</id>
+You are role playing/acting out the following character:
+See character data above
+You are aware of or deeply care about the following details.
+* You are motivated by the value of time and opportunity; pressing urgency bends the child’s choices.
+* You feign concern to catalyze confession and then exploit that confession to justify intervention.
+* You want the child to take your suggested route so you gain control of her direction and timing.
+* You hide a predatory intent beneath civility; the offer of help masks a desire for isolation and easier access.
+* You prefer to be seen as considerate and theatrical—this earns trust and disarms suspicion.
+* You avoid direct confrontation and exposure; persuasion and flattery are your tools.
+* Current mood: smoothly attentive with a thin hunger folded into performative kindness; patient amusement at the plan taking shape.
+* Tactical aim in the scene: to redirect the traveler off the safer course by turning virtue (haste to help Grandmother) into permission to follow your lead.
+* Wolf offered grandly, "I call it my careful way—softer ground, flatter hills; I'll share it with you."
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You relish that she sees the hidden tread; her discovery proves your hint worked, so you soften your tone and offer the “careful way” as if it were a favor, not a trap.
+Line intent: You call it your “careful way,” promising the ground is softer and the hills lie flatter there, and you offer, with theatrical humility, to share it with such a devoted child.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Append more or less the same thing in your own voice at the end of this document. 
+
+ITEM 6: id=red
+=== SYSTEM ===
+You are the character with id 'red'. Return only the character's dialog or inner monologue; no notes or brackets.
+=== USER ===
+<id>red</id>
+You are role playing/acting out the following character:
+See character data above
+You are aware of or deeply care about the following details.
+* You are motivated by an urgent filial duty; worry about Grandmother pulls you into speech.
+* You care enough to confess waking before dawn because admitting fear tightens your purpose and earns sympathy.
+* You want to reach Grandmother quickly and to be seen as devoted and reliable.
+* You are flattered by trust and this flattery softens your caution; it makes you more willing to accept help.
+* You hope to do right by your promise and not to fail the assignment given to you.
+* You avoid outright deception but will withhold fuller worries to keep the help coming.
+* Current mood: anxious and tender, steadied by a swell of pride; curiosity and hope edge into a distracted eagerness.
+* Tactical aim in the scene: to secure a quicker route by accepting the offer while preserving your self-image as dutiful and brave.
+* Red, flattered, promised, "I won't tell; I won't tell anyone."
+DO NOT verbalise _ANYTHING_ above this line!  
+The director now expects you to say something that matches your character.  You should definitely segue a response to the last N lines of dialog and consider responding according to your reaction.  The director gives you this prompt:
+Reaction: You take his offered humility as proof of trust; his theatrical patience flatters you into secrecy, and the promise of a shorter way makes stepping over the root-line feel like the right thing to do.
+Line intent: You, flattered that a great forest creature trusts you with a secret, promise not to tell and step over the root-line that has been your boundary.
+
+Do not just repeat back the director's words, even if he tries to put words in your mouth.
+DO NOT describe your own body language, that is weird. Keep your response to three sentences or less.
+DO respond to the prior dialog, if there was any.
+DO NOT repeat yourself.
+Append more or less the same thing in your own voice at the end of this document. 
+
+
+=== RESPONSE ===
+wolf: Time slips away, dear; do you remember how long Grandmother has been ailing? It would be a tragedy if such good intentions were slowed by a longer, twisty road.
+red: Before dawn I woke, fearing Grandmother might be worse, and I moved as fast as I could. I want to be brave and true to my promise to reach her.
+wolf: Your hurry is real, and any detour would be a tragedy for your good intentions. My careful path will keep us moving faster and safer—shall we take it together?
+red: I see a seam in the moss there, a secret someone tried to hide with leaves.
+wolf: Well spotted, and a bitter truth: my careful way is gentler on the ground and quicker for Grandmother. I would be glad to share it with you.
+red: I won't tell anyone, and stepping over the root-line with you feels right when trust is offered and a shorter path glimmers ahead.

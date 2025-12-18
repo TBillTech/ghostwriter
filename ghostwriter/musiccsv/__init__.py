@@ -823,6 +823,7 @@ def _build_measure_context(music: MusicCSV) -> Dict[int, Dict[str, Any]]:
     default_signature = str(music.metadata.get("time_signature") or "4/4")
     measures_sorted = sorted(music.measures, key=lambda row: row.get("measure", 0))
     previous_entry: Optional[Dict[str, Any]] = None
+    previous_number: Optional[int] = None
     tolerance = 1e-6
 
     def _coerce_float(value: Any) -> Optional[float]:
@@ -852,8 +853,11 @@ def _build_measure_context(music: MusicCSV) -> Dict[int, Dict[str, Any]]:
         else:
             prev_start = float(previous_entry["start_beat"])
             prev_length = float(previous_entry.get("length_beats", _beats_per_measure_from_signature(previous_entry["time_signature"])))
-            expected_start = prev_start + prev_length
-            if raw_start is None or raw_start <= prev_start + tolerance or raw_start <= 1.0 + tolerance:
+            gap = 1
+            if previous_number is not None and number > previous_number:
+                gap = max(1, number - previous_number)
+            expected_start = prev_start + prev_length * gap
+            if raw_start is None or raw_start <= prev_start + tolerance or raw_start <= expected_start - tolerance:
                 start_beat = expected_start
             else:
                 start_beat = raw_start
@@ -865,6 +869,7 @@ def _build_measure_context(music: MusicCSV) -> Dict[int, Dict[str, Any]]:
         }
         context[number] = entry
         previous_entry = entry
+        previous_number = number
         fallback_signature = signature
 
     if not context:

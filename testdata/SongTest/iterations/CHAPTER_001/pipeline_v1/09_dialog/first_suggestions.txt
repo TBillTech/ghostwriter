@@ -1,0 +1,31 @@
+- Fix punctuation and beat placement: move action tags outside quotes and remove stray punctuation. Example change:  
+  - From: Wolf feigned concern, "Time slips away, dear; do you remember how long Grandmother has been ailing? It would be a tragedy if such good intentions were slowed by a longer, twisty road.."  
+  - To: Wolf feigned concern. "Time slips away, dear. Has Grandmother been ill long? It would be a pity if kind intentions were delayed by the longer, twisty road."
+
+- Replace the malformed Red tag and tighten her voice.  
+  - From: Red'Before dawn I woke, fearing Grandmother might be worse, and I moved as fast as I could. I want to be brave and true to my promise to reach her."  
+  - To: Red tucked her hood. "Before dawn I woke worrying Grandmother might be worse. I hurried as fast as I could. I promised I'd get there."
+
+- Remove violent/ambiguous verb "pounced" and avoid repeating "tragedy"/"good intentions." Make Wolf persuasive, not theatrical in the same sentence twice.  
+  - From: Wolf pounced, "Your hurry is real, and any detour would be a tragedy for your good intentions. My careful path will keep us moving faster and safer—shall we take it together?."  
+  - To: Wolf leaned in, voice silk-smooth. "Your hurry is plain. There is a quicker, safer way. My path will get you there sooner — shall we take it together?"
+
+- Simplify and literalize Red's observation of the ground; avoid melodramatic metaphors. Move her beat outside the quote.  
+  - From: Red glanced left, "I see a seam in the moss there, a secret someone tried to hide with leaves.."  
+  - To: Red glanced left. "There's a seam in the moss — like a faint track. Could that be a way through?"
+
+- Replace Wolf's "offered grandly" line with a concise flattery+offer that names the shortcut. Make the shortcut explicit and tempting.  
+  - From: Wolf offered grandly, "Well spotted, and a bitter truth: my careful way is gentler on the ground and quicker for Grandmother. I would be glad to share it with you.."  
+  - To: Wolf smiled. "Well spotted. There's a deer-track that cuts through here—gentler on the feet and quicker. I'll show you."
+
+- Recast Red's acceptance into a short, literal decision in-character; split awkward compound sentence into clear beats.  
+  - From: Red, flattered, promised, "I won't tell anyone, and stepping over the root-line with you feels right when trust is offered and a shorter path glimmers ahead.."  
+  - To: Red, flattered, let out a small breath. "All right. If you say it's safe, I'll follow your way. I won't tell anyone."
+
+- Remove redundancy: delete one of the earlier references to "tragedy" / "good intentions" so Wolf doesn't echo the same phrase twice. (Keep the revised single mention from the first suggestion.)
+
+- Replace overly poetic phrases that don't fit Red's cadence: "root-line," "glimmers ahead," and similar lines should be simplified to "roots," "shorter path," or "quicker way."
+
+- Keep stage beats short and outside dialogue. Example formatting rule to apply across the passage: [Action]. "Line." rather than "Action, "Line." or action inside the quote.
+
+- Optionally, add one tiny Wolf flourish to preserve his theatrical menace: a soft chuckle or an elongated sibilant in one line (e.g., end of the line "—shall we take it together?" add a soft chuckle after the tag), but do so only once to avoid excess stage direction.

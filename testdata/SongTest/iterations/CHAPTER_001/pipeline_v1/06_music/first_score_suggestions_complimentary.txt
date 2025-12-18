@@ -1,0 +1,9 @@
+- Update metadata.duration_seconds_estimate to match the file: set it to ~290 s (140 measures × 4 beats = 560 quarter-beats; at 116 BPM = ~289–290 s).
+- Regenerate per-track/voice score summaries so measure_count and duration_quarter_length reflect the current MusicCSV (the embedded score_summaries that reported 18/8 measures are out of date).
+- Quantize all non-standard fractional durations (0.4, 0.9, 1.9, etc.) to consistent subdivisions (use nearest 0.25 quarter = 16th-note grid) to avoid timing/transport rounding issues downstream.
+- Fill any shorter parts with explicit rests so every track explicitly covers all 140 measures (prevents DAW/VST misalignment when voices are shorter).
+- Verify and document percussion pitch → drum-kit mapping (C2, F#2, etc.) in your downstream mapping so these scientific pitches are routed to the intended kit elements (do not convert to MIDI drum numbers).
+- Confirm that the intended key is C minor and update the touch-point/context key_summary to “C minor” for consistency with metadata and measures.
+- Set the canonical tempo to 116 everywhere (metadata, measures, and touch-point tempo_summary) so project-wide tooling uses the same BPM.
+- Annotate tracks.csv (or an accompanying mapping file) with the story voice tokens (e.g., minor.tenor.base.wolf.harmony → track 1) so voice→track assignment is explicit for later VST assignment.
+- Lower extreme drum accent velocities (e.g., 120) to ~100 and check balance against the acoustic bass so percussion reads rapid and aggressive without clipping or overwhelming the steady bass.

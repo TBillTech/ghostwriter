@@ -202,37 +202,164 @@ Responses should each include a numeric <probability>.
 Please sample at random from the tails of the distribution, such that the probability of each response is less than 0.10.
 
 
+* Response 1 <0.07>
+* wolf tilts his head, voice soft, and says he knows a little deer-track that slips between the pines straight to Grandmother’s hill
+* red bites her lip and asks if it is still a proper path, because Mama warned her about leaving the real one
+* wolf chuckles gently, calling it a “secret part of the same road,” only for clever, dutiful girls who wish to hurry
+* red glances at the sinking sun, worrying aloud that Grandmother will be lonely in the dark if she goes the long way
+* wolf steps aside, sweeping his muzzle toward the shadowy gap, promising to guide her to the first bend then vanish so no one need know
+* red hugs her basket, whispers that it is only to help Grandmother, and nods, stepping off the packed dirt onto the softer, needled ground
+
+* Response 2 <0.06>
+* wolf lowers his voice to a conspiratorial murmur, asking whether red has ever wished the walk to Grandmother felt shorter
+* red admits her feet already ache a little, then quickly adds that she does not mind, because love makes it lighter
+* wolf praises her devotion, suggesting that such love deserves a straighter line through the woods, not all these silly winding loops
+* red frowns at the dark space between trunks, asking if hunters use that way, and whether it is truly safe
+* wolf assures her the birds know him there and that no one else bothers with his quiet trail, so she will be quite unseen and quite unhindered
+* red thinks of no one seeing her stumble or dawdle, decides that sounds brave rather than naughty, and steps after him, lifting her hem from the brambles
+
+* Response 3 <0.09>
+* wolf circles her slowly, nose twitching, then remarks that the jam will cool and the bread grow tough if she takes the long, winding path
+* red’s eyes widen; she pictures Grandmother chewing sadly on hard crusts and apologizes to the basket under her breath
+* wolf gently suggests a narrow run between two old oaks that he has trotted a hundred times, “almost a ribbon tied from here to her door”
+* red repeats “straight to her door?” with wonder, peering where he points, seeing only a dim green tunnel pricked with far-off light
+* wolf insists that what looks dark is only the trees standing close to shelter hurried travelers, and he offers to walk just ahead and clear the way
+* red, cheeks hot with guilt at breaking Mama’s rule, whispers that Mama never said anything about oaks and ribbons, and follows, promising herself she will step back onto the proper path as soon as she can
+
+* Response 4 <0.05>
+* wolf pretends sudden concern, asking if red remembers how long Grandmother has been ailing and whether every moment might matter
+* red’s throat tightens; she admits she woke before dawn fearing Grandmother might be worse while she walked
+* wolf seizes on the confession, saying it would be a tragedy if her good intentions were slowed by a needlessly twisty road
+* red glances left where he nods, noticing a faint, trodden seam in the moss, like a secret someone tried to hide with leaves
+* wolf calls it his “careful way,” where the ground is softer and the hills lie flatter, and says he would be honored to share it with such a devoted child
+* red, flattered that a great forest creature trusts her with a secret, promises not to tell, and steps over the root-line that has been her boundary
+
+* Response 5 <0.04>
+* wolf lets a feigned sigh slip out, remarking that the proper path passes a muddy dip that will splash her cloak and stain Grandmother’s lovely gift
+* red gasps and clutches the red hood, smoothing the cloth as if it has already been spattered
+* wolf swiftly adds that he knows a drier way, a high thread of ground under the pines that keeps paws and hems alike clean and quick
+* red hesitates, murmuring that Mama will scold if she is found off the path, then wonders aloud if Mama would mind less than mud on Grandmother’s present
+* wolf leans closer, saying Mama will only see a tidy cloak and a girl home before dark, and that some rules are meant to be bent for kindness
+* red nods slowly, deciding she can step aside “just until the mud is past,” and turns her feet toward his hidden trail
+
+* Response 6 <0.08>
+* wolf comments idly that the path ahead loops around a rocky hill “like a snail’s shell,” wasting time on silly curves
+* red, picturing a snail dragging its house, giggles despite herself, then sobers, saying she should not waste even a shell’s worth of time
+* wolf suggests slipping behind the “snail” instead, through a low, ferny hollow he calls his shortcut, where the air smells fresher and the walk is easier
+* red peers down the hollow, noticing the jam-scent carried strangely stronger on the cool air, and wonders if that means it truly is closer
+* wolf assures her he has seen Grandmother’s chimney smoke from there, pointing to a gap of sky beyond the bracken
+* red, convinced by the hint of destination, declares softly that she will be very quick and very careful, and follows his lead into the green dip
+
+* Response 7 <0.09>
+* wolf praises red’s obedience to her mother, then slyly asks if her mother also said to ignore a friend who knows a better way to help Grandmother
+* red stammers that Mama did not mention wolves at all, only “strangers,” and stares at his eyes as if trying to decide which he is
+* wolf bows his head, calling himself simply a neighbor of the woods who has watched Grandmother’s chimney smoke for many winters
+* red relaxes a fraction at the mention of winters, imagining him as old and wise, and asks almost shyly what this better way might be
+* wolf describes a “hunter’s cut” he has seen men use to hurry home before stormclouds, a line that saves “a dozen long breaths” of walking
+* red, heart tugged by the idea of stealing even a dozen breaths of suffering from Grandmother, agrees that it must be all right, and steps from the worn track to the rougher one beside him
+
+* Response 8 <0.06>
+* wolf glances at the dimming shafts of light, remarking that soon the forest will sing its night-songs and even brave girls might find the main path unfriendly
+* red shivers and admits she dislikes the long stretch where the trees grow so thick the sky almost disappears
+* wolf tells her there is a lane of beeches where the canopy opens, a shorter drift of road where the light lingers and birds stay gossiping longer
+* red brightens at the thought of more light and more birds, asking whether that lane truly leads to Grandmother’s cottage
+* wolf swears it does, with easy confidence, adding that the two paths meet again so neatly that no one could tell which she has walked
+* red, comforted by the idea that she’ll end up where she is meant to be anyway, thanks him softly and chooses her first step toward the promised light
+
+* Response 9 <0.05>
+* wolf notices the ribbon slipping on red’s basket handle and remarks how heavy it looks for such small hands
+* red admits her fingers are sore, showing the faint reddened dents where the wicker has pressed her skin
+* wolf clucks his tongue, saying the ordinary path is cruel to little hands, with its long length and stony bits that jostle each step
+* red asks, half hopeful, if there is a gentler way for the basket, so the bread and jam will not be so shaken when she arrives
+* wolf offers his own smoother track, where the ground is mossy and the turns fewer, promising that Grandmother’s bread will arrive as soft as when it left the oven
+* red, picturing Grandmother smiling over a perfect slice, decides that must be worth a tiny disobedience, and follows where he glides
+
+* Response 10 <0.07>
+* wolf wonders aloud whether red has ever seen Grandmother’s cottage from above, from the high ridge that looks down like a watchful angel
+* red’s curiosity sparks; she confesses she has only ever seen it from the low bend in the main path
+* wolf points his muzzle toward a steep, narrow rise hidden behind spruces, saying it is both a shortcut and a marvel for the eyes
+* red chews her lip, torn between Mama’s rule and the pull of seeing Grandmother’s roof glimmering in the distance
+* wolf soothes her worry by claiming the ridge simply “crosses” the path in the sky and joins it again just before the cottage gate
+* red, dizzy with the idea of walking over her own road and glimpsing the end of her journey early, lets wonder overrule caution and climbs after him up the hidden way
+
+
 === RESPONSE ===
-* red asks wolf how a shortcut could be safer than the path, and wolf answers with soothing details about open clearings and fewer roots to trip on, easing her fear while planting the idea that hurrying to grandmother is an act of love. <0.08>  
+* Response 11 <0.09>
+* wolf lowers his head to sniff the air, then remarks that he can already taste Grandmother’s chimney smoke if he stands just a little off the path
+* red rises on her toes as if she might smell it too, but only catches jam and pine, and says perhaps his nose is cleverer than hers
+* wolf smiles with his eyes, suggesting that if her feet follow where his nose points—through that darker stand of firs—she will reach the cottage before the smoke thins
+* red chews the inside of her cheek, repeating “before the smoke thins” as though it were a spell to keep Grandmother warm
+* wolf adds gently that sometimes the straight ways are hidden so only the truly devoted can see them, and he is sharing it because her love is plain enough
+* red blushes at the praise, tells her basket they are doing this “for Grandmother’s fire,” and lets her boots leave the packed dust for the muffled needles
 
-* wolf flatters red’s sense of duty, saying only a truly devoted granddaughter would brave a quieter, less-trodden way, making the official path sound lazy and almost ungrateful. <0.06>  
+* Response 12 <0.08>
+* wolf asks if red has ever noticed how the path bends away from the sound of the little stream that runs near Grandmother’s garden
+* red listens, hears only faint trickling somewhere far off, and nods slowly, saying she likes the stream but it always sounds so far
+* wolf explains that the regular path foolishly turns its back on the water, but there is a shorter way that walks beside the stream almost the whole distance
+* red’s face softens at the thought of water-song keeping her company, and she asks if the stones there are slippery or cruel
+* wolf assures her the moss lies thick and the stones are broad, and that he will hop ahead to show her where to place each careful foot
+* red murmurs that Mama did not forbid streams, only strangers, and convinces herself the water is a kind of guide as she follows him toward the hidden gurgle
 
-* red hesitates, clutching the basket and glancing back at the bright thread of the main trail, then whispers that mama said not to leave it, showing the rule clearly before she chooses to bend it. <0.07>  
+* Response 13 <0.05>
+* wolf makes a show of peering up at the sky-threads, saying the clouds are already drifting toward evening and the forest owls are early today
+* red glances up too, unsettled by the pearly light, and admits she does not like the way owl calls make the branches feel closer
+* wolf leans nearer, confiding that there is a narrow, quicker glen where the owls do not sit, because the wind there is too lively for them
+* red repeats “quicker” under her breath, weighing it against Mama’s firm “stay,” and asks in a small voice if the wind there is very loud
+* wolf laughs softly, promising it is more like a whisper that will push at her back, urging her swiftly toward Grandmother’s door
+* red, comforted by the idea of the forest itself helping her along, thanks him politely and turns into the unseen glen with her hood fluttering
 
-* wolf leans closer and murmurs that the sun is already slipping and that hunters sometimes crowd the main road at dusk, suggesting the shortcut is not only faster but more private and less embarrassing for a little girl in a red hood. <0.05>  
+* Response 14 <0.06>
+* wolf lets his gaze drift over red’s shoulders, then remarks that the path ahead passes by the old hollow stump where foxes sometimes quarrel
+* red stiffens; she has heard stories of foxes’ sharp tempers and teeth, and asks whether they are likely to be there today
+* wolf shakes his head with a sorrowful sigh, saying he cannot be sure, but there is a shorter back way that avoids the stump altogether
+* red imagines stumbling into a fox fight, her basket knocked from her hands, jam jar broken, and Grandmother left without sweetness
+* wolf gently paints a picture of his quieter route: only pinecones and soft mud, the path bending neatly behind any trouble
+* red decides that avoiding a quarrel is as important as obeying, and steps after him, persuading herself that Mama would approve of “sensible” changes
 
-* red finally nods, cheeks warm, convincing herself aloud that mama would understand “just this once” if it means grandmother gets warm bread before it cools, turning her disobedience into a small, earnest sacrifice. <0.09>  
+* Response 15 <0.07>
+* wolf’s ears prick toward a distant thump—perhaps a woodcutter—and he murmurs that busy men sometimes toss questions at passing girls on the main road
+* red’s eyes widen; she has never imagined someone stopping her, asking what is in her basket, where she is going, and whether she is late
+* wolf speaks with smooth concern, suggesting that a dutiful girl deserves a path where no one delays her with chatter and nosy eyes
+* red glances down at her basket, suddenly shy about her errand, and whispers that Grandmother’s business is not for everyone’s ears
+* wolf offers, almost gallantly, his quieter track where the trunks draw close and “even echoes mind their own affairs”
+* red, eager to keep the journey private and speed unbroken, convinces herself this privacy is a kind of politeness, and joins him off the road
 
+* Response 16 <0.05>
+* wolf observes her careful step around each root and stone, then remarks that the longer path is rude to such small, earnest feet
+* red laugh-sighs that the roots do seem to reach for her toes, and she wonders aloud if the forest is trying to trip her on purpose
+* wolf shakes his head, saying the forest saves its kinder ground for those who know where to look, and that his way is level, like a floor swept just for her
+* red imagines a green corridor laid out like Grandmother’s kitchen, neat and kind, and her shoulders loosen with the picture
+* wolf nods toward a dim, smooth-looking gap between trunks and calls it his “guest path,” one he reserves for special company
+* red, charmed by being called a guest, steps gingerly into the gap, telling herself that being a good guest to the forest is not the same as disobeying Mama
 
+* Response 17 <0.09>
+* wolf comments that the wind ahead tends to steal hoods from unwary girls and send them tumbling into thornbushes
+* red claps a hand to her red hood, horrified at the idea of Grandmother’s gift snagged and torn on bramble claws
+* wolf, seeing her alarm, quickly adds that he knows a closer lane under heavier boughs, where the wind sulks and hardly stirs at all
+* red tests the tie beneath her chin, then whispers that she promised never to spoil the hood, not even a little
+* wolf assures her that one small bend away from the main path will keep both her and the cloak safe, and no one need ever know how close the thorns came
+* red decides that protecting the hood is the same as honoring Grandmother, and lets that thought carry her off the safe dirt into the hush of closer trees
 
-* wolf casually traces the shortcut in the dust with one claw, drawing a crooked line through imaginary trees, so red can picture exactly how the new route splits off and rejoins, making his lie feel mapped and solid. <0.09>  
+* Response 18 <0.08>
+* wolf watches the jam jar wobble inside the basket and muses that the old bridge on the usual path has a plank that likes to jump
+* red winces, remembering how it clattered under her feet last spring, sloshing her milk and making her heart pound
+* wolf says soothingly that there is another way, skipping the bridge altogether—a shorter run where the ground does not suddenly drop away underfoot
+* red asks, a bit trembly, if there are any holes or sudden dips on his way, because she does not like the feeling of the earth falling
+* wolf promises the dips there are gentle and expected, “like bowing to a friend,” and that he will take the first step into each so she can see
+* red, grateful to dodge the scary bridge and thinking of keeping her jam unspilled, follows his paws, telling herself she is choosing the braver road
 
-* red repeats the directions back in her own words, pointing with her basket—“past the leaning pine, over the little brook, then straight till the birch with the split trunk”—cementing for the reader how she will reach grandmother by a different path. <0.06>  
+* Response 19 <0.06>
+* wolf remarks that if she stays on the straight road, she will pass the old willow that creaks and moans when the breeze nudges it
+* red shudders; she has always hurried past that willow, half certain it will lean down and scold her for being late
+* wolf suggests with velvet kindness that a girl already doing her best does not need a tree scolding her as well, especially when there is a faster loop that leaves the willow behind
+* red swallows, thinking of all the scoldings she has already earned for dawdling, and the idea of dodging even one more makes her chest light
+* wolf tilts his muzzle toward a lesser-used track that slips behind a hill, promising it rejoins her road just past the willow’s reach
+* red, hungry for a stretch of walking without feeling judged—even by wood—murmurs an apology to Mama in her head and turns her feet toward the secret loop
 
-* wolf keeps his tone soft and almost parental, reminding red that grandmother is old and alone and might grow frightened waiting, linking the shortcut to sparing grandmother worry rather than chasing red’s curiosity. <0.08>  
-
-* red weighs the basket in her hands, noticing how the jam jar clinks and thinking it might spill if she stumbles on the crowded path, making wolf’s “smooth ground” promise sound helpfully practical, not just sneaky. <0.04>  
-
-* red steps off the main trail and instantly feels the moss spring softer under her boots, glancing back with a small, guilty wave to the familiar path as the trees close in around her new, narrower way. <0.07>  
-
-
-
-* wolf pretends to be offended when red says, “Mama told me not to talk to strangers,” then laughs it off and calls himself a neighbor of the woods, subtly reclassifying “stranger” so she can accept his shortcut without feeling she has broken the rule. <0.05>  
-
-* red asks how wolf knows grandmother’s cottage at all, and he smoothly replies that her chimney smoke is famous among forest creatures, giving a plausible reason for his knowledge of a private shortcut. <0.06>  
-
-* wolf hints that the shortcut passes a sunny patch full of wildflowers that no one ever picks, baiting red’s known weakness while still insisting it will not add even “a heartbeat” of delay. <0.09>  
-
-* red, torn between the flowers and her promise to hurry, decides that if the shortcut is truly faster she can pick just one or two along the way, turning the decision into a compromise that logically leads her off the main path. <0.08>  
-
-* as red turns her back to follow the new direction, wolf’s eyes briefly harden and his smile drops, but when she glances over her shoulder he is already bowing with a courteous paw-flourish, preserving his kindly mask for her and the reader. <0.07>
+* Response 20 <0.07>
+* wolf notes that her humming has grown softer and asks if her song is tiring as well as her steps
+* red blushes, admitting she saves her louder humming for when the path feels friendlier and less long
+* wolf says he knows a brisker lane where the trees stand back just enough to let songs carry easily, and where the journey seems to skip instead of drag
+* red’s eyes brighten at the thought of her tune ringing clear again, as if the forest itself might hum along
+* wolf adds that on that quicker way, the verses might still be on her lips when she reaches Grandmother’s gate, making her arrival feel like the end of a story
+* red, enchanted by the idea of walking her song straight into Grandmother’s arms, decides a song-path cannot possibly be wicked, and follows where he leads

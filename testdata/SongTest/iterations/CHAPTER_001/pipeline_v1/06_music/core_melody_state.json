@@ -1,0 +1,9 @@
+{
+  "core_melody_hash": "55ed6956c2692404f7467842d945cf498a415a0fd83a4c407d6c40593384f8e5",
+  "core_source_hash": "import:426b1a56911562178a00fa6eb82d465485e5d863c64a0b1b98117d5562001247",
+  "core_start_pitch": "C4",
+  "import_core_melody": true,
+  "import_score_hash": "426b1a56911562178a00fa6eb82d465485e5d863c64a0b1b98117d5562001247",
+  "import_voice_token": "minor.alto.flute.red.melody",
+  "version": 1
+}

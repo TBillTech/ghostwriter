@@ -1,0 +1,21 @@
+{
+  "title": "The Forest Path",
+  "description": "a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.",
+  "directive": "a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.",
+  "voice_tokens": [
+    "minor.tenor.base.wolf.harmony",
+    "minor.alto.flute.red.melody",
+    "minor.beat.drum.axe",
+    "minor.bass.base.forest_path"
+  ],
+  "raw_payload": {
+    "title": "The Forest Path",
+    "description": "a cinematic song; fast tempo, haunting melody, steady bass, rapid percussion. Target typical song length of 3 minutes.",
+    "voices": [
+      "minor.tenor.base.wolf.harmony",
+      "minor.alto.flute.red.melody",
+      "minor.beat.drum.axe",
+      "minor.bass.base.forest_path"
+    ]
+  }
+}

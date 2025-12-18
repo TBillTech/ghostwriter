@@ -95,23 +95,15 @@ track,measure,beat,pitch,duration,velocity,tie,articulation,pedal,lyric,ornament
 1,13,1,C4,1.9,66,none,,false,,,,false,,
 1,13,3,D#4,1.9,58,none,,false,,,,false,,
 
-1,15,1,D4,0.24,75,none,,false,,,,false,,
-1,15,1.5,D4,0.4,58,none,,false,,,,false,,
-1,15,2,D#4,1.9,64,none,,false,,,,false,,
+1,14,1,D4,0.24,75,none,,false,,,,false,,
+1,14,1.5,D4,0.4,58,none,,false,,,,false,,
+1,14,2,D#4,1.9,64,none,,false,,,,false,,
 
-1,16,1,D4,1.9,60,none,,false,,,,false,,
-1,16,3,C4,1.9,71,none,,false,,,,false,,
+1,15,1,D4,1.9,60,none,,false,,,,false,,
+1,15,3,C4,1.9,71,none,,false,,,,false,,
 
-1,17,1,B3,0.9,62,none,,false,,,,false,,
-1,17,2,B3,1.9,76,none,,false,,,,false,,
-1,17,4,C4,0.9,76,none,,false,,,,false,,
+1,16,1,B3,0.9,62,none,,false,,,,false,,
+1,16,2,B3,1.9,76,none,,false,,,,false,,
+1,16,4,C4,0.9,76,none,,false,,,,false,,
 
-1,18,1,C4,1.9,74,none,,false,,,,false,,
-1,18,3,B3,0.75,56,none,,false,,,,false,,
-1,18,4,B3,0.75,57,start,,false,,,,false,,
-
-1,19,2,B3,0.9,57,end,,false,,,,false,,
-1,19,3,C4,0.75,68,none,,false,,,,false,,
-1,19,4,C4,2.9,61,none,,false,,,,false,,
-
-1,20,3,rest,1,68,none,,false,,,,false,,
+1,17,1,C4,3.9,74,none,,false,,,,false,,

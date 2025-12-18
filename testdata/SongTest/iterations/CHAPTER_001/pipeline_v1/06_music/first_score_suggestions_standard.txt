@@ -1,0 +1,10 @@
+- Update metadata.json.duration_seconds_estimate to reflect the actual score length at 116 BPM (123 measures × 4 beats = 492 beats → ≈254 s ≈ 4:14) so downstream tools see a correct runtime.
+- Update any external tempo documentation/score summaries to match the file’s single tempo of 116 BPM (measures.csv); do not attempt to split the file into different tempos now.
+- Regenerate the per-voice score_summaries so measure_count and duration_quarter_length match the full notes.csv (the flute/drum summaries in the touch-point are stale: flute shows 18 measures, drums 8 while CSV covers 123).
+- Audit percussion mapping on track 3 (channel 10): verify every pitched name is intentionally mapped to a drum sample (several high melodic pitches like G#6 look out of place) and correct any accidental melodic pitches to the intended drum pitch names.
+- Normalize accidentals across the score to flats (Eb, Bb, etc.) to match C minor so harmonic readouts and chord labelling remain consistent.
+- Update the touch-point/key_summary from “C” to “C minor” (or otherwise document that the piece is in C minor) to remove ambiguity between the narrative summary and the actual key.
+- Confirm beat-position semantics (e.g., 4.5 subdivisions) are valid for your downstream parser and, if not, normalize beat values so they fall within the expected per-measure range.
+- Document the percussion pitch→drum mapping and any nonstandard sample assignments in metadata.json so downstream instruments on channel 10 are unambiguous.
+- Run a quick range-check pass for each melodic instrument (Flute, French Horn, Acoustic Bass) and fix any out-of-range notes (if found) so VST mapping won’t clip or transpose unexpectedly.
+- Regenerate and commit the updated metadata and summaries so all tooling/CI see a consistent tempo, key, measure count and duration.
